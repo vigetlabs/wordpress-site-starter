@@ -1,1 +1,1 @@
-# wordpress-site-starter
+# WordPress Site Starter
