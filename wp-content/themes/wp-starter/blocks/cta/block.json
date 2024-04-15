@@ -10,6 +10,10 @@
     "backgroundColor": {
       "type": "string",
       "default": "alice-blue"
+    },
+    "align": {
+      "type": "string",
+      "default": "full"
     }
   },
   "supports": {
