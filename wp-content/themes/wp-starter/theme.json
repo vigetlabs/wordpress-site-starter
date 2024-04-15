@@ -1,6 +1,7 @@
 {
   "version": 2,
   "settings": {
+    "appearanceTools": true,
     "color": {
       "palette": [
         {
@@ -29,6 +30,10 @@
           "color": "#697885"
         }
       ]
+    },
+    "layout": {
+      "contentSize": "900px",
+      "wideSize": "1400px"
     },
     "spacing": {
       "padding": true,
