@@ -16,22 +16,18 @@ if ( ! function_exists( 'block_attrs' ) ) {
 	 * @param array $attrs
 	 */
 	function block_attrs( array $block, string $custom_class = '', array $attrs = [] ): void {
-		printf(
-			' id="%s"',
-			esc_attr( get_block_id( $block ) )
-		);
+		$extra_attr = [
+			'id'    => get_block_id( $block ),
+			'class' => get_block_class( $block, $custom_class ),
+			'style' => get_core_styles( $block ),
+		];
 
-		printf(
-			' class="%s"',
-			esc_attr( get_block_class( $block, $custom_class ) )
-		);
-
-		if ( ! empty( $block['supports']['jsx'] ) ) {
-			echo ' data-supports-jsx="true"';
+		if ( ! is_preview() ) {
+			$attrs = array_merge( $attrs, $extra_attr );
 		}
 
-		if ( ! empty( $block['data']['limit_visibility'] ) ) {
-			echo ' data-limit_visibility="true"';
+		if ( ! empty( $block['supports']['jsx'] ) ) {
+			$attrs['data-supports-jsx'] = 'true';
 		}
 
 		foreach ( $attrs as $key => $value ) {
@@ -39,6 +35,12 @@ if ( ! function_exists( 'block_attrs' ) ) {
 		}
 
 		do_action( 'acfbt_block_attr', $block );
+
+		if ( is_preview() ) {
+			return;
+		}
+
+		echo wp_kses_data( get_block_wrapper_attributes( $extra_attr ) );
 	}
 }
 
@@ -84,6 +86,12 @@ if ( ! function_exists( 'get_block_class' ) ) {
 			'acf-block',
 			'acf-block-' . str_replace( 'acf/', '', $block['name'] ),
 		];
+
+		$core_classes = get_core_classes( $block );
+
+		if ( $core_classes ) {
+			$classes = array_merge( $classes, $core_classes );
+		}
 
 		if ( ! empty( $block['className'] ) ) {
 			$classes[] = $block['className'];
@@ -330,5 +338,54 @@ if ( ! function_exists( 'is_acf_saving_field' ) ) {
 		}
 
 		return false;
+	}
+}
+
+if ( ! function_exists( 'get_core_classes' ) ) {
+	/**
+	 * Get core block classes
+	 *
+	 * @param array $block
+	 *
+	 * @return array
+	 */
+	function get_core_classes( array $block ): array {
+		$classes = [];
+
+		if ( ! empty( $block['backgroundColor'] ) ) {
+			$classes[] = 'has-' . $block['backgroundColor'] . '-background-color';
+			$classes[] = 'has-background';
+		} elseif ( ! empty( $block['attributes']['backgroundColor']['default'] ) ) {
+			$classes[] = 'has-' . $block['attributes']['backgroundColor']['default'] . '-background-color';
+			$classes[] = 'has-background';
+		}
+
+		if ( ! empty( $block['textColor'] ) ) {
+			$classes[] = 'has-' . $block['textColor'] . '-color';
+			$classes[] = 'has-text-color';
+		} elseif ( ! empty( $block['attributes']['textColor']['default'] ) ) {
+			$classes[] = 'has-' . $block['attributes']['textColor']['default'] . '-color';
+			$classes[] = 'has-text-color';
+		}
+
+		return $classes;
+	}
+}
+
+if ( ! function_exists( 'get_core_styles' ) ) {
+	/**
+	 * Get core block styles
+	 *
+	 * @param array $block
+	 *
+	 * @return string
+	 */
+	function get_core_styles( array $block ): string {
+		if ( ! empty( $block['style'] ) ) {
+			$styles = wp_style_engine_get_styles( $block['style'] );
+			return $styles['css'];
+		}
+
+		return '';
 	}
 }

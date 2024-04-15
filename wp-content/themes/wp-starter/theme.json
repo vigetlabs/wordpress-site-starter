@@ -29,6 +29,26 @@
           "color": "#697885"
         }
       ]
+    },
+    "spacing": {
+      "padding": true,
+      "spacingSizes": [
+        {
+          "name": "1",
+          "size": "1rem",
+          "slug": "10"
+        },
+        {
+          "name": "2",
+          "size": "min(1.5rem, 2vw)",
+          "slug": "20"
+        },
+        {
+          "name": "3",
+          "size": "min(2.5rem, 3vw)",
+          "slug": "30"
+        }
+      ]
     }
   }
 }

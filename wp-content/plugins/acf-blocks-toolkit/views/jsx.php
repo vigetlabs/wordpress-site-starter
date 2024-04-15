@@ -17,8 +17,9 @@ if ( ! isset( $block_template ) ) {
 		],
 	];
 }
-?>
-<InnerBlocks
-	<?php block_attrs( $block ); ?>
-	template="<?php echo esc_attr( wp_json_encode( $block_template ) ); ?>"
-/>
+
+$inner = [
+	'template' => $block_template,
+];
+
+inner_blocks( $inner );

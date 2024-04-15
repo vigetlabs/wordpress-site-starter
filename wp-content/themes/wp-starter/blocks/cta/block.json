@@ -1,0 +1,39 @@
+{
+  "name": "cta",
+  "title": "Call to Action (Default)",
+  "description": "Displays a Call to Action.",
+  "icon": "align-center",
+  "category": "goodbids",
+  "textdomain": "wp-starter",
+  "keywords": ["cta", "button", "heading", "section"],
+  "attributes": {
+    "backgroundColor": {
+      "type": "string",
+      "default": "alice-blue"
+    }
+  },
+  "supports": {
+    "jsx": true,
+    "alignWide": true,
+    "color": {
+      "background": true
+    },
+    "background": {
+      "backgroundImage": true,
+      "backgroundSize": true
+    },
+    "layout": {
+      "default": {
+        "type": "flex",
+        "justifyContent": "center"
+      },
+      "allowOrientation": false
+    },
+    "spacing": {
+      "padding": ["top", "bottom"]
+    }
+  },
+  "acf": {
+    "mode": "preview"
+  }
+}

@@ -28,6 +28,7 @@ class Block_Registration {
 	public static function init(): void {
 		self::register_blocks();
 		self::set_default_callback();
+		self::disable_inner_blocks_wrap();
 	}
 
 	/**
@@ -246,5 +247,25 @@ class Block_Registration {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Disable inner blocks wrap
+	 *
+	 * @return void
+	 */
+	private static function disable_inner_blocks_wrap(): void {
+		add_filter(
+			'acf/blocks/wrap_frontend_innerblocks',
+			function ( bool $wrap, string $name ): bool {
+				if ( ! str_starts_with( $name, 'acf/' ) ) {
+					return $wrap;
+				}
+
+				return false;
+			},
+			10,
+			2
+		);
 	}
 }
