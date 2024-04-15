@@ -1,0 +1,334 @@
+<?php
+/**
+ * ACF Block Helpers
+ *
+ * @package ACFBlocksToolkit
+ */
+
+if ( ! function_exists( 'block_attrs' ) ) {
+	/**
+	 * Render the block attributes.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $block
+	 * @param string $custom_class
+	 * @param array $attrs
+	 */
+	function block_attrs( array $block, string $custom_class = '', array $attrs = [] ): void {
+		printf(
+			' id="%s"',
+			esc_attr( get_block_id( $block ) )
+		);
+
+		printf(
+			' class="%s"',
+			esc_attr( get_block_class( $block, $custom_class ) )
+		);
+
+		if ( ! empty( $block['supports']['jsx'] ) ) {
+			echo ' data-supports-jsx="true"';
+		}
+
+		if ( ! empty( $block['data']['limit_visibility'] ) ) {
+			echo ' data-limit_visibility="true"';
+		}
+
+		foreach ( $attrs as $key => $value ) {
+			echo ' ' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
+		}
+
+		do_action( 'acfbt_block_attr', $block );
+	}
+}
+
+if ( ! function_exists( 'get_block_id' ) ) {
+	/**
+	 * Get the block ID attribute.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $block
+	 *
+	 * @return string
+	 */
+	function get_block_id( array $block ): string {
+		if ( ! empty( $block['anchor'] ) ) {
+			$id = $block['anchor'];
+		} else {
+			$prefix = str_replace( 'acf/', '', $block['name'] );
+			if ( empty( $block['id'] ) ) {
+				$block['id'] = uniqid();
+			}
+			$id = $prefix . '_' . $block['id'];
+		}
+
+		return apply_filters( 'acfbt_block_id', $id, $block );
+	}
+}
+
+if ( ! function_exists( 'get_block_class' ) ) {
+	/**
+	 * Get the block class attribute.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $block
+	 * @param string $custom_class
+	 *
+	 * @return string
+	 */
+	function get_block_class( array $block, string $custom_class = '' ): string {
+		$classes = [
+			'wp-block',
+			'acf-block',
+			'acf-block-' . str_replace( 'acf/', '', $block['name'] ),
+		];
+
+		if ( ! empty( $block['className'] ) ) {
+			$classes[] = $block['className'];
+		}
+
+		if ( ! empty( $custom_class ) ) {
+			$classes[] = $custom_class;
+		}
+
+		if ( ! empty( $block['align'] ) ) {
+			$classes[] = 'align' . $block['align'];
+		}
+
+		if ( ! empty( $block['data']['limit_visibility'] ) ) {
+			$classes[] = 'acfbt-limit-visibility';
+		}
+
+		return apply_filters( 'acfbt_block_class', implode( ' ', $classes ), $block );
+	}
+}
+
+if ( ! function_exists( 'acfbt_render_block' ) ) {
+	/**
+	 * Render an ACF block with specific properties.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $block_name
+	 * @param array $props
+	 */
+	function acfbt_render_block( string $block_name, array $props = [] ): void {
+		if ( ! str_starts_with( $block_name, 'acf/' ) ) {
+			$block_name = 'acf/' . $block_name;
+		}
+
+		$block = array_merge(
+			[
+				'name' => $block_name,
+			],
+			$props
+		);
+
+		if ( empty( $block['id'] ) ) {
+			$block['id'] = uniqid();
+		}
+
+		if ( ! function_exists( 'acf_render_block' ) ) {
+			render_block( $block );
+		} else {
+			acf_render_block( $block );
+		}
+	}
+}
+
+if ( ! function_exists( 'get_block_from_blocks' ) ) {
+	/**
+	 * Retrieves the first instance of the specified block type.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $name The name of block to retrieve.
+	 * @param array $blocks Array of blocks to search through.
+	 *
+	 * @return array|false
+	 */
+	function get_block_from_blocks( string $name, array $blocks ): array|false {
+		foreach ( $blocks as $block ) {
+			if ( $name === $block['blockName'] ) {
+				return $block;
+			}
+
+			if ( ! empty( $block['innerBlocks'] ) ) {
+				$result = get_block_from_blocks( $name, $block['innerBlocks'] );
+
+				if ( $result ) {
+					return $result;
+				}
+			}
+		}
+
+		return false;
+	}
+}
+
+if ( ! function_exists( 'get_block_fields' ) ) {
+	/**
+	 * Get fields for a block
+	 *
+	 * @param string $block_name
+	 *
+	 * @return array
+	 */
+	function get_block_fields( string $block_name ): array {
+		if ( ! str_starts_with( $block_name, 'acf/' ) ) {
+			$block_name = 'acf/' . $block_name;
+		}
+
+		$field_groups = acf_get_field_groups();
+		$fields       = [];
+
+		foreach ( $field_groups as $field_group ) {
+			foreach ( $field_group['location'] as $locations ) {
+				foreach ( $locations as $location ) {
+					if ( empty( $location['operator'] ) || '==' !== $location['operator'] || empty( $location['param'] ) || 'block' !== $location['param'] ) {
+						continue;
+					}
+
+					if ( ! in_array( $location['value'], [ 'all', $block_name ], true ) ) {
+						continue;
+					}
+
+					// Fields may not be loaded yet.
+					if ( empty( $field_group['fields'] ) ) {
+						$group  = json_decode( file_get_contents( $field_group['local_file'] ), true );
+						$fields = array_merge( $fields, $group['fields'] );
+					} else {
+						$fields = array_merge( $fields, $field_group['fields'] );
+					}
+				}
+			}
+		}
+
+		return $fields;
+	}
+}
+
+if ( ! function_exists( 'get_field_property' ) ) {
+	/**
+	 * Get a property from a field.
+	 *
+	 * @param string $selector
+	 * @param string $property
+	 * @param string|null $group_id
+	 *
+	 * @return string
+	 */
+	function get_field_property( string $selector, string $property, string $group_id = null ): string {
+		if ( null !== $group_id ) {
+			$fields = acf_get_fields( $group_id );
+			foreach ( $fields as $field_array ) {
+				if ( $selector === $field_array['name'] ) {
+					$field = $field_array;
+					break;
+				}
+			}
+		} else {
+			$field = get_field_object( $selector );
+		}
+
+		if ( ! $field || ! is_array( $field ) ) {
+			return '';
+		}
+
+		if ( empty( $field[ $property ] ) ) {
+			return '';
+		}
+
+		return $field[ $property ];
+	}
+}
+
+if ( ! function_exists( 'inner_blocks' ) ) {
+	/**
+	 * Escape and encode ACF Block InnerBlocks template and allowed blocks
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $props
+	 *    @param array  allowedBlocks Allowed blocks
+	 *    @param array  template      Block Template
+	 *    @param string templateLock  Template Lock
+	 *    @param string className     Class Name
+	 *
+	 * @return void
+	 */
+	function inner_blocks( array $props = [] ): void {
+		$json_encode = [ 'allowedBlocks', 'template' ];
+		$attributes  = '';
+
+		foreach ( $props as $attr => $value ) {
+			$attr_value  = in_array( $attr, $json_encode, true ) ? wp_json_encode( $value ) : $value;
+			$attributes .= ' ' . esc_attr( $attr ) . '="' . esc_attr( $attr_value ) . '"';
+		}
+
+		printf(
+			'<InnerBlocks%s />',
+			$attributes
+		);
+	}
+}
+
+if ( ! function_exists( 'print_admin_message' ) ) {
+	/**
+	 * Output notice to admins only in Block Editor
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $notice
+	 * @param string $class
+	 *
+	 * @return void
+	 */
+	function print_admin_message( string $notice = '', string $class = 'acfbt-admin-message' ): void {
+		if ( ! is_admin() || ! $notice ) {
+			return;
+		}
+
+		printf(
+			'<div class="%s"><p style="padding: 3em; text-align: center;">%s</p></div>',
+			esc_attr( $class ),
+			nl2br( esc_html( $notice ) )
+		);
+	}
+}
+
+if ( ! function_exists( 'is_acf_saving_field' ) ) {
+	/**
+	 * Check if the current screen is an ACF edit screen.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool
+	 */
+	function is_acf_saving_field(): bool {
+		global $pagenow;
+
+		if ( doing_action( 'acf/update_field_group' ) ) {
+			return true;
+		}
+
+		if ( 'post.php' !== $pagenow ) {
+			return false;
+		}
+
+		if ( empty( $_GET['post'] ) || empty( $_GET['action'] ) ) {
+			return false;
+		}
+
+		$post_id = sanitize_text_field( wp_unslash( $_GET['post'] ) );
+		$action  = sanitize_text_field( wp_unslash( $_GET['action'] ) );
+
+		if ( 'edit' === $action && 'acf-field-group' === get_post_type( $post_id ) ) {
+			return true;
+		}
+
+		return false;
+	}
+}

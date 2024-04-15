@@ -229,6 +229,8 @@ wp-config.php
 
 # Explicitly Allowed Themes and Plugins
 !/wp-content/themes/wp-starter
+!/wp-content/plugins/acf-blocks-toolkit
+!/wp-content/plugins/advanced-custom-fields-pro
 
 # Log files
 *.log
