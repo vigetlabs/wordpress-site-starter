@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "name": "Black",
+          "slug": "black",
+          "color": "#000000"
+        },
+        {
+          "name": "White",
+          "slug": "white",
+          "color": "#ffffff"
+        },
+        {
+          "name": "Purple",
+          "slug": "purple",
+          "color": "#6559F5"
+        },
+        {
+          "name": "Alice Blue",
+          "slug": "alice-blue",
+          "color": "#f3f5f7"
+        },
+        {
+          "name": "Hypnotic",
+          "slug": "hypnotic",
+          "color": "#697885"
+        }
+      ]
+    }
+  }
+}
