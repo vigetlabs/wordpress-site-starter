@@ -1,6 +1,6 @@
 <?php
 /**
- * CTA
+ * CTA (Dynamic) Block Template.
  *
  * @global array $block
  *
@@ -11,7 +11,7 @@ $block_template = [
 	[
 		'core/pattern',
 		[
-			'slug' => 'wp-starter/cta-default',
+			'slug' => 'wp-starter/cta-dynamic',
 		],
 	],
 ];

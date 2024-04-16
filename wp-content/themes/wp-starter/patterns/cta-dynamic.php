@@ -1,9 +1,10 @@
 <?php
 /**
- * Title: CTA (Default)
- * Slug: wp-starter/cta-default
+ * Title: CTA (Dynamic)
+ * Slug: wp-starter/cta-dynamic
  * Categories: call-to-action
  * Viewport width: 1400
+ * Inserter: no
  */
 
 ?>

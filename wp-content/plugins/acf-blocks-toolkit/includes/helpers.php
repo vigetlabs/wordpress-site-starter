@@ -16,16 +16,16 @@ if ( ! function_exists( 'block_attrs' ) ) {
 	 * @param array $attrs
 	 */
 	function block_attrs( array $block, string $custom_class = '', array $attrs = [] ): void {
-		if ( ! empty( $attrs['style'] ) ) {
-			$attrs['style'] .= get_core_styles( $block );
-		} else {
-			$attrs['style'] = get_core_styles( $block );
-		}
-
 		if ( ! empty( $attrs['class'] ) ) {
 			$attrs['class'] .= ' ' . get_block_class( $block, $custom_class );
 		} else {
 			$attrs['class'] = get_block_class( $block, $custom_class );
+		}
+
+		if ( ! empty( $attrs['style'] ) ) {
+			$attrs['style'] .= get_core_styles( $block );
+		} else {
+			$attrs['style'] = get_core_styles( $block );
 		}
 
 		if ( ! empty( $block['supports']['jsx'] ) ) {

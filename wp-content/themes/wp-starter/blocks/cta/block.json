@@ -1,9 +1,9 @@
 {
   "name": "cta",
-  "title": "Call to Action (Default)",
-  "description": "Displays a Call to Action.",
+  "title": "Call to Action (Dynamic)",
+  "description": "Displays the dynamic Call to Action.",
   "icon": "align-center",
-  "category": "goodbids",
+  "category": "components",
   "textdomain": "wp-starter",
   "keywords": ["cta", "button", "heading", "section"],
   "attributes": {
