@@ -28,6 +28,16 @@
           "name": "Hypnotic",
           "slug": "hypnotic",
           "color": "#697885"
+        },
+        {
+          "name": "Prototype Blue 1",
+          "slug": "prototype-blue-1",
+          "color": "#1180A0"
+        },
+        {
+          "name": "Prototype Blue 2",
+          "slug": "prototype-blue-2",
+          "color": "#135C92"
         }
       ]
     },

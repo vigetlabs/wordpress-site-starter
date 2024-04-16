@@ -23,6 +23,10 @@
             "top": "var:preset|spacing|30",
             "bottom": "var:preset|spacing|30"
           }
+        },
+        "background": {
+          "backgroundSize": "cover",
+          "backgroundPosition": "50% 50%"
         }
       }
     }

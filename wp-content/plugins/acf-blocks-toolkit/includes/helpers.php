@@ -16,14 +16,16 @@ if ( ! function_exists( 'block_attrs' ) ) {
 	 * @param array $attrs
 	 */
 	function block_attrs( array $block, string $custom_class = '', array $attrs = [] ): void {
-		$extra_attr = [
-			'id'    => get_block_id( $block ),
-			'class' => get_block_class( $block, $custom_class ),
-			'style' => get_core_styles( $block ),
-		];
+		if ( ! empty( $attrs['style'] ) ) {
+			$attrs['style'] .= get_core_styles( $block );
+		} else {
+			$attrs['style'] = get_core_styles( $block );
+		}
 
-		if ( ! is_preview() ) {
-			$attrs = array_merge( $attrs, $extra_attr );
+		if ( ! empty( $attrs['class'] ) ) {
+			$attrs['class'] .= ' ' . get_block_class( $block, $custom_class );
+		} else {
+			$attrs['class'] = get_block_class( $block, $custom_class );
 		}
 
 		if ( ! empty( $block['supports']['jsx'] ) ) {
@@ -40,7 +42,7 @@ if ( ! function_exists( 'block_attrs' ) ) {
 			return;
 		}
 
-		echo wp_kses_data( get_block_wrapper_attributes( $extra_attr ) );
+		echo wp_kses_data( get_block_wrapper_attributes() );
 	}
 }
 
