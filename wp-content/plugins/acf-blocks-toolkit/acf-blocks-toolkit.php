@@ -20,6 +20,9 @@
 use Viget\ACFBlocksToolkit\Block_Registration;
 use Viget\ACFBlocksToolkit\Settings;
 
+// Plugin version.
+const ACFBT_VERSION = '1.0.0';
+
 // Plugin path.
 define( 'ACFBT_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 
@@ -28,6 +31,9 @@ define( 'ACFBT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 // Helper functions.
 require_once 'includes/helpers.php';
+
+// Assets.
+require_once 'includes/assets.php';
 
 // Registration functions.
 require_once 'includes/register.php';
