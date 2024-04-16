@@ -7,13 +7,24 @@
   "textdomain": "wp-starter",
   "keywords": ["cta", "button", "heading", "section"],
   "attributes": {
+    "align": {
+      "type": "string",
+      "default": "full"
+    },
     "backgroundColor": {
       "type": "string",
       "default": "alice-blue"
     },
-    "align": {
-      "type": "string",
-      "default": "full"
+    "style": {
+      "type": "object",
+      "default": {
+        "spacing": {
+          "padding": {
+            "top": "var:preset|spacing|30",
+            "bottom": "var:preset|spacing|30"
+          }
+        }
+      }
     }
   },
   "supports": {
@@ -28,10 +39,11 @@
     },
     "layout": {
       "default": {
-        "type": "flex",
+        "type": "constrained",
         "justifyContent": "center"
       },
-      "allowOrientation": false
+      "allowOrientation": false,
+      "allowCustomContentAndWideSize": false
     },
     "spacing": {
       "padding": ["top", "bottom"]
