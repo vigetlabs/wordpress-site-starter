@@ -1,18 +1,21 @@
 import { defineConfig } from 'vite'
-import path from 'path'
+import { resolve } from 'path';
 
+const THEME = '/wp-content/themes/wp-starter';
 
-
-export default {
+export default defineConfig(({ command }) => ({
+	root: 'src',
+  base: command === 'serve' ? '' : THEME + '/dist/',
 	plugins: [],
 	build: {
 		// generate manifest.json in outDir
 		manifest: true,
+		emptyOutDir: true,
 		rollupOptions: {
-				// overwrite default .html entry
-				input: 'src/main.js',
+			// overwrite default .html entry
+			input: resolve(__dirname, 'src/main.js'),
 		},
-		outDir: 'dist',
+		outDir: '../dist',
 	},
 	server: {
 		// respond to all network requests:
@@ -22,4 +25,4 @@ export default {
 		// Defines the origin of the generated asset URLs during development
 		origin: "https://wpstarter.ddev.site:5173",
 	},
-};
+}));

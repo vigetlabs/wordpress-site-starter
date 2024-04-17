@@ -16,9 +16,9 @@ mutagen_enabled: false
 use_dns_when_possible: true
 composer_version: "2"
 nodejs_version: "18"
-hooks:
-  post-start:
-    - exec: .ddev/commands/web/vite-serve
+# hooks:
+#   post-start:
+#     - exec: .ddev/commands/web/vite-serve
 web_environment: []
 
 

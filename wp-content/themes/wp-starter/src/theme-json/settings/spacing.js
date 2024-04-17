@@ -1,3 +1,5 @@
+import theme from "../tailwind.js";
+
 export default {
 	"spacingScale": {
 		"steps": 0
