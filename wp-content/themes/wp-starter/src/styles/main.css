@@ -1,10 +1,4 @@
+@import "./fonts.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-
-@layer components {
-	body{
-		@apply bg-black;
-	}
-}

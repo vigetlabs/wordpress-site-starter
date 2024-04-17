@@ -7,34 +7,34 @@ export default {
 	"spacingSizes": [
 		{
 			"name": "1",
-			"size": "1rem",
+			"size": theme.spacing.one,
 			"slug": "10"
 		},
 		{
 			"name": "2",
-			"size": "min(1.5rem, 2vw)",
+			"size": theme.spacing.two,
 			"slug": "20"
 		},
 		{
 			"name": "3",
-			"size": "min(2.5rem, 3vw)",
+			"size": theme.spacing.three,
 			"slug": "30"
 		},
 		{
 			"name": "4",
-			"size": "min(4rem, 5vw)",
+			"size": theme.spacing.four,
 			"slug": "40"
 		},
 		{
 			"name": "5",
-			"size": "min(6.5rem, 8vw)",
+			"size": theme.spacing.five,
 			"slug": "50"
 		},
 		{
 			"name": "6",
-			"size": "min(10.5rem, 13vw)",
+			"size": theme.spacing.six,
 			"slug": "60"
 		}
 	],
-	"units": ["%", "px", "em", "rem", "vh", "vw"]
+	"units": ["%", "px", "rem", "vh", "vw"]
 }
