@@ -9,8 +9,8 @@
 	"scripts": {
 		"dev": "APP_ENV=dev vite",
 		"build": "vite build && npm run json-theme",
-		"json-theme": "node src/theme-json/compile.js",
-		"watch-json-theme": "nodemon --watch src/theme-json --watch tailwind.config.js src/theme-json/compile.js"
+		"json-theme": "node src/theme-json/_index.js",
+		"watch-json-theme": "nodemon --watch src/theme-json --watch tailwind.config.js src/theme-json/_index.js"
 	},
 	"devDependencies": {
 		"@kucrut/vite-for-wp": "^0.8.0",

@@ -25,10 +25,11 @@ export default {
 		'./**/**/*.{php,css,js}',
 	],
 	theme: {
-		contentSmall: toString(minBreakpoint),
-		contentBase: toString(maxBreakpoint),
+		contentSmall: minBreakpoint.toString(),
+		contentBase: maxBreakpoint.toString(),
 		extend: {
 			colors: {
+				transparent: 'transparent',
 				//If you update the names or add more colors you will need to update the file in theme-json/settings/color.js
 				base: {
 					100: "#ffffff",
