@@ -6,6 +6,7 @@ import blocks from "./blocks.js";
 
 const settings = {
 	"appearanceTools": true,
+	"useRootPaddingAwareAlignments": true,
 	color: color,
 	layout: layout,
 	spacing: spacing,

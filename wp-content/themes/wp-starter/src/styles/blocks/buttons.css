@@ -1,0 +1,5 @@
+@layer utilities {
+	.wp-block-button__link {
+		@apply transition-colors;
+	}
+}

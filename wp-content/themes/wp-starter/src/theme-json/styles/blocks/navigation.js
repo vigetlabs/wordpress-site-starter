@@ -9,10 +9,10 @@ export default {
 						"textDecoration": "underline"
 					}
 				},
-				"typography": {
-					"textDecoration": "none"
-				}
 			}
+		},
+		"color": {
+			"text": theme.colors.accent[400]
 		},
 		"typography": {
 			"fontWeight": "500"

@@ -7,7 +7,7 @@
 		"npm": ">=9.0.0"
 	},
 	"scripts": {
-		"dev": "APP_ENV=dev vite",
+		"dev": "APP_ENV=dev vite --host",
 		"build": "vite build && npm run json-theme",
 		"json-theme": "node src/theme-json/_index.js",
 		"watch-json-theme": "nodemon --watch src/theme-json --watch tailwind.config.js src/theme-json/_index.js"
@@ -23,6 +23,7 @@
 		"npm": "^10.5.2",
 		"path": "^0.12.7",
 		"postcss": "^8.4.38",
+		"postcss-import": "^16.1.0",
 		"postcss-nested-import": "^0.2.0",
 		"postcss-nesting": "^10.2.0",
 		"prettier": "^2.8.8",

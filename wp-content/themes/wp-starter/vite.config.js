@@ -1,28 +1,33 @@
 import { defineConfig } from 'vite'
-import { resolve } from 'path';
+import path from 'path';
 
 const THEME = '/wp-content/themes/wp-starter';
 
 export default defineConfig(({ command }) => ({
 	root: 'src',
-	base: command === 'serve' ? '' : THEME + '/dist/',
+	base: command === 'serve' ? '' : '/dist/',
 	plugins: [],
 	build: {
-		// generate manifest.json in outDir
-		manifest: true,
-		emptyOutDir: true,
-		rollupOptions: {
-			// overwrite default .html entry
-			input: resolve(__dirname, 'src/main.js'),
-		},
+		// output dir for production build
 		outDir: '../dist',
+		emptyOutDir: true,
+		// emit manifest so PHP can find the hashed files
+		manifest: true,
+		// our entry
+		rollupOptions: {
+			input: {
+				'main': path.resolve(__dirname, 'src/main.js'),
+				'editor': path.resolve(__dirname, 'src/editor.js'),
+			}
+		},
 	},
 	server: {
-		// respond to all network requests:
 		host: "0.0.0.0",
-		port: parseInt(process.env.VITE_PRIMARY_PORT ?? '5173'),
+		origin: "https://wpstarter.ddev.site:5273",
 		strictPort: true,
-		// Defines the origin of the generated asset URLs during development
-		origin: "https://wpstarter.ddev.site:5173",
+		port: parseInt(process.env.VITE_PRIMARY_PORT ?? '5273'),
+		hmr: {
+			overlay: false,
+		}
 	},
 }));

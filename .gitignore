@@ -239,6 +239,14 @@ wp-config.php
 # htaccess
 /.htaccess
 
+#.ddev
+.allow-upgrade
+.env-frag
+docker-compose.viteserve.yaml
+addon-metadata
+viteserve
+web-build
+
 
 # End of https://www.toptal.com/developers/gitignore/api/wordpress,phpstorm,macos,composer,windows,visualstudiocode
 

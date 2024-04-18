@@ -22,6 +22,8 @@ const fluidSize = (
 export default {
 	content: [
 		'./src/**/*.{css,js,jsx,tsx,php}',
+		'./patterns/**/*.{css,js,jsx,tsx,php}',
+		'./parts/**/*.{css,js,jsx,tsx,php}',
 		'./**/**/*.{php,css,js}',
 	],
 	theme: {

@@ -1,30 +1,39 @@
-import theme from "../import_tailwind.js";
-
+//Hide/show setting in the block editor
 export default {
-	"core/details": {
-		"spacing": {
-			"padding": false,
-			"margin": false,
-			"blockGap": false,
+	"core/button": {
+		"border": {
+			"color": false,
+			"radius": false,
+			"style": false,
+			"width": false,
+		},
+		"color":{
+			"text": false,
+			"background": false,
+			"customDuotone": false,
+			"customGradient": false,
+			"defaultDuotone": false,
+			"defaultGradients": false,
+			"duotone": [],
+			"gradients": [],
+			"palette": []
 		},
 		"typography": {
+			"fontSizes": [],
+			"fontFamilies": [],
 			"customFontSize": false,
 			"dropCap": false,
-			"fluid": false,
-			"fontFamilies": [],
-			"fontSizes": [],
 			"fontStyle": false,
 			"fontWeight": false,
-			"letterSpacing": false,
-			"lineHeight": false,
 			"textDecoration": false,
 			"textTransform": false,
 		},
-		"border": {
-			"radius": false,
-			"color": false,
-			"style": false,
-			"width": false,
+		"spacing": {
+			"padding": true,
+			"margin": false
+		},
+		"shadow": {
+			"defaultPresets": false
 		}
 	}
 }

@@ -14,13 +14,16 @@ database:
 nfs_mount_enabled: false
 mutagen_enabled: false
 use_dns_when_possible: true
+override_config: true
 composer_version: "2"
 nodejs_version: "18"
-# TODO figure this out - turned off for now
-# hooks:
-#   post-start:
-#     - exec: .ddev/commands/web/vite-serve
-web_environment: []
+# TODO figure this out
+hooks:
+  post-start:
+  - exec: bash -c '[ -f .ddev/commands/web/vite-serve ] && .ddev/commands/web/vite-serve'
+web_environment:
+  - ENVIRONMENT=dev
+  - WP_ENVIRONMENT_TYPE=development
 
 
 # Key features of DDEV's config.yaml:
