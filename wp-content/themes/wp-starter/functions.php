@@ -1,5 +1,4 @@
 <?php
-
 /**
  * WP Starter functions
  *
@@ -18,10 +17,10 @@ add_filter(
 	function ( array $categories ): array {
 		array_unshift(
 			$categories,
-			array(
+			[
 				'slug'  => 'components',
 				'title' => __( 'Components', 'wp-starter' ),
-			)
+			]
 		);
 		return $categories;
 	}
@@ -32,9 +31,9 @@ add_action(
 	function () {
 		register_block_pattern_category(
 			'cta',
-			array(
+			[
 				'label' => __( 'Call To Action', 'wp-starter' ),
-			)
+			]
 		);
 	}
 );

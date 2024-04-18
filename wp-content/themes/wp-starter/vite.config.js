@@ -5,7 +5,7 @@ const THEME = '/wp-content/themes/wp-starter';
 
 export default defineConfig(({ command }) => ({
 	root: 'src',
-  base: command === 'serve' ? '' : THEME + '/dist/',
+	base: command === 'serve' ? '' : THEME + '/dist/',
 	plugins: [],
 	build: {
 		// generate manifest.json in outDir

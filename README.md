@@ -14,6 +14,8 @@ Download and install WordPress core files
 Start local server
 `ddev start`
 
+TODO add more info here once we have the full setup completed. 
+
 *We may want to use our Viget plugin to have this be in the CLI*
 1. Open a browser and navigate to [local site](https://wpstarter.ddev.site).
 2. Select English as the language.

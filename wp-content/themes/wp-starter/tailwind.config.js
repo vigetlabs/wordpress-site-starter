@@ -6,21 +6,21 @@ const minBreakpoint = 640;
 const maxBreakpoint = 1440;
 	
 const fluidSize = (
-  minSize,
+	minSize,
 	maxSize,
-  unit = "vw",
+	unit = "vw",
 ) => {
-  const slope = (maxSize - minSize) / (maxBreakpoint - minBreakpoint);
-  const slopeToUnit = (slope * 100).toFixed(2);
-  const interceptRem = (minSize - slope * minBreakpoint).toFixed(2);
+	const slope = (maxSize - minSize) / (maxBreakpoint - minBreakpoint);
+	const slopeToUnit = (slope * 100).toFixed(2);
+	const interceptRem = (minSize - slope * minBreakpoint).toFixed(2);
 
-  return `clamp(${rem(minSize)}, ${slopeToUnit}${unit} + ${rem(
-    interceptRem,
-  )}, ${rem(maxSize)})`;
+	return `clamp(${rem(minSize)}, ${slopeToUnit}${unit} + ${rem(
+		interceptRem,
+	)}, ${rem(maxSize)})`;
 };
 
 export default {
-  content: [
+	content: [
 		'./src/**/*.{css,js,jsx,tsx,php}',
 		'./**/**/*.{php,css,js}',
 	],
@@ -96,7 +96,7 @@ export default {
 				...remPair(128),
 			},
 		},
-  },
-  plugins: [],
+	},
+	plugins: [],
 }
 

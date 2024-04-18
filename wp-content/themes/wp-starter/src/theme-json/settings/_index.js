@@ -8,7 +8,7 @@ const settings = {
 	color: color,
 	layout: layout,
 	spacing: spacing,
-  typography: typography
+	typography: typography
 }
 
 export default settings
