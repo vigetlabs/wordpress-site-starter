@@ -1,0 +1,17 @@
+@layer base {
+  @font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: normal;
+    font-display: swap;
+    src: url('../fonts/RobotoCondensed-VariableFont_wght.ttf') format('tff');
+  }
+
+  @font-face {
+    font-family: 'Roboto';
+    font-style: italic;
+    font-weight: normal;
+    font-display: swap;
+    src: url('../fonts/RobotoCondensed-Italic-VariableFont_wght.ttf') format('tff');
+  }
+}
