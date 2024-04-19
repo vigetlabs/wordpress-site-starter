@@ -1,7 +1,7 @@
 <?php
 /**
- * Title: CTA (Dynamic)
- * Slug: wp-starter/cta-dynamic
+ * Title: CTA (Inner Blocks)
+ * Slug: wp-starter/cta-inner-blocks
  * Categories: call-to-action
  * Viewport width: 1400
  * Inserter: no

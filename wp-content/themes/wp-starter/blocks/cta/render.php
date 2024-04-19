@@ -1,17 +1,17 @@
 <?php
 /**
- * CTA (Dynamic) Block Template.
+ * Block: CTA
  *
  * @global array $block
  *
- * @package ACFBlocksToolkit
+ * @package WPStarter
  */
 
 $block_template = [
 	[
 		'core/pattern',
 		[
-			'slug' => 'wp-starter/cta-dynamic',
+			'slug' => 'wp-starter/cta-inner-blocks',
 		],
 	],
 ];
