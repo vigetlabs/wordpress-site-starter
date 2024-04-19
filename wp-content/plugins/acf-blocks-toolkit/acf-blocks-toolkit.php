@@ -41,5 +41,8 @@ require_once 'includes/register.php';
 // Settings functions.
 require_once 'includes/settings.php';
 
+// Timber functions.
+require_once 'includes/timber.php';
+
 Block_Registration::init();
 Settings::init();

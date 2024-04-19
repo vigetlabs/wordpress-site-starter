@@ -261,11 +261,12 @@ if ( ! function_exists( 'inner_blocks' ) ) {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $props
-	 *    @param array  allowedBlocks Allowed blocks
-	 *    @param array  template      Block Template
-	 *    @param string templateLock  Template Lock
-	 *    @param string className     Class Name
+	 * @param array $props {
+	 *    @type array  $allowedBlocks Allowed blocks
+	 *    @type array  $template      Block Template
+	 *    @type string $templateLock  Template Lock
+	 *    @type string $className     Class Name
+	 * }
 	 *
 	 * @return void
 	 */
