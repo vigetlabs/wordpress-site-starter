@@ -10,6 +10,9 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require_once __DIR__ . '/vendor/autoload.php';
 }
 
+// Init Vite.
+new VigetThemeBoilerplate\Vite();
+
 // Maybe Initialize Timber.
 if ( class_exists( 'Timber\Timber' ) ) {
 	Timber\Timber::init();

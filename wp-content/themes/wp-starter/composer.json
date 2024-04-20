@@ -1,11 +1,18 @@
 {
-	"autoload": {
-		"psr-4": {
-			"VigetThemeBoilerplate\\": "inc/classes/"
-		},
-		"classmap": ["inc/classes/"]
-	},
-	"require": {
-			"idleberg/wordpress-vite-assets": "^1.0"
-	}
+  "type": "project",
+  "require": {
+      "idleberg/wordpress-vite-assets": "^1.0",
+      "timber/timber": "^2.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "VigetThemeBoilerplate\\": "inc/classes/"
+    },
+    "classmap": ["inc/classes/"]
+  },
+  "config": {
+      "allow-plugins": {
+          "composer/installers": true
+      }
+  }
 }

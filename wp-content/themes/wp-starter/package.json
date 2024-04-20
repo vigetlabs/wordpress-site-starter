@@ -8,9 +8,8 @@
 	},
 	"scripts": {
 		"dev": "APP_ENV=dev vite --host",
-		"build": "vite build && npm run json-theme",
-		"json-theme": "node src/theme-json/_index.js",
-		"watch-json-theme": "nodemon --watch src/theme-json --watch tailwind.config.js src/theme-json/_index.js"
+		"build": "vite build",
+		"json-theme": "node src/theme-json/generate_theme.js"
 	},
 	"devDependencies": {
 		"@kucrut/vite-for-wp": "^0.8.0",
@@ -33,6 +32,7 @@
 		"vite": "^4.4.11"
 	},
 	"dependencies": {
-		"@viget/tailwindcss-plugins": "^3.0.0"
+		"@viget/tailwindcss-plugins": "^3.0.0",
+		"alpinejs": "^3.13.9"
 	}
 }

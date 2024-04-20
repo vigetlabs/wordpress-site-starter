@@ -1,12 +1,13 @@
 import { defineConfig } from 'vite'
 import path from 'path';
-
-const THEME = '/wp-content/themes/wp-starter';
+import generateThemeJSON, { buildJSON } from './src/theme-json/generate_theme.js';
 
 export default defineConfig(({ command }) => ({
 	root: 'src',
 	base: command === 'serve' ? '' : '/dist/',
-	plugins: [],
+	plugins: [
+		generateThemeJSON
+	],
 	build: {
 		// output dir for production build
 		outDir: '../dist',
@@ -31,3 +32,6 @@ export default defineConfig(({ command }) => ({
 		}
 	},
 }));
+
+// Call buildJSON to generate the file on build
+buildJSON()

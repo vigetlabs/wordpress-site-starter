@@ -51,8 +51,9 @@ export default {
 				}
 			},
 			fontFamily: {
-				heading: "Roboto, sans-serif",
-				body: "sans-serif",
+				// If you update the names or add more fonts you will need to update the file in theme-json/settings/typography.js
+				// Fonts are handles WP's font loader.
+				'sans': "Roboto Condensed, sans-serif",
 			},
 			fontSize: {
 				// If you update the names or add more fonts sizes you will need to update the file in theme-json/settings/typography.js

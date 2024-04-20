@@ -6,15 +6,33 @@ export default {
 	"lineHeight": false,
 	"writingMode": false,
 	"fontFamilies": [
+		// For more info about loading fonts see https://fullsiteediting.com/lessons/theme-json-typography-options/
 		{
-			"fontFamily": theme.fontFamily.body,
-			"name": "Body " + theme.fontFamily.body.split(',')[0],
-			"slug": "body"
-		},
-		{
-			"fontFamily": theme.fontFamily.heading,
-			"name": "Heading " +theme.fontFamily.heading.split(',')[0],
-			"slug": "heading"
+			"fontFamily": "Roboto Condensed",
+			"name": "Roboto Condensed",
+			"slug": "heading",
+			"fontFace": [
+				{
+					"fontFamily": "Roboto Condensed",
+					"fontStretch": "normal",
+					"fontStyle": "normal",
+					"fontWeight": "300 900",
+					// Fonts have to be woff2 to work with WP's font loader.
+					"src": [
+						"file:./src/fonts/RobotoCondensed-VariableFont_wght.woff2"
+					]
+				},
+				{
+					"fontFamily": "Roboto Condensed Italic",
+					"fontStretch": "normal",
+					"fontStyle": "Italic",
+					"fontWeight": "300 900",
+					// Fonts have to be woff2 to work with WP's font loader.
+					"src": [
+						"file:./src/fonts/RobotoCondensed-Italic-VariableFont_wght.woff2"
+					]
+				}
+			]
 		},
 		{
 			"fontFamily": "-apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif",
@@ -61,6 +79,5 @@ export default {
 			"size": theme.fontSize['2xl'][0][1],
 			"slug": "xx-large"
 		}
-	],
-	"writingMode": true
+	]
 }
