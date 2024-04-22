@@ -1,14 +1,16 @@
 /*
 Theme Name: WP Starter
 Theme URI: https://wpstarter.vigetx.com
-Author: Viget
+Author: Viget, briandichiara
 Author URI: https://viget.com
 Description: Custom block theme built by Viget.
-Requires at least: 6.5
-Tested up to: 6.5
-Requires PHP: 7.0
-Version: 1.0
+Requires at least: 6.0
+Tested up to: 6.5.2
+Requires PHP: 8.0
+Version: 0.1.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: wp-starter
+Tags: boilerplate, starter, theme, block, gutenberg
 */
+

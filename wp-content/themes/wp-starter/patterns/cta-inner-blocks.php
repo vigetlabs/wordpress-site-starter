@@ -1,7 +1,7 @@
 <?php
 /**
- * Title: CTA (Dynamic)
- * Slug: wp-starter/cta-dynamic
+ * Title: CTA (Inner Blocks)
+ * Slug: wp-starter/cta-inner-blocks
  * Categories: call-to-action
  * Viewport width: 1400
  * Inserter: no
@@ -18,6 +18,6 @@
 
 <!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->
 <div class="wp-block-buttons"><!-- wp:button {"backgroundColor":"purple"} -->
-    <div class="wp-block-button"><a class="wp-block-button__link has-purple-background-color has-background wp-element-button">Button</a></div>
-    <!-- /wp:button --></div>
+	<div class="wp-block-button"><a class="wp-block-button__link has-purple-background-color has-background wp-element-button">Button</a></div>
+	<!-- /wp:button --></div>
 <!-- /wp:buttons -->
