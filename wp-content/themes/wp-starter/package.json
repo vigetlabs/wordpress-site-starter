@@ -7,10 +7,9 @@
 		"npm": ">=9.0.0"
 	},
 	"scripts": {
-		"dev": "APP_ENV=dev vite",
-		"build": "vite build && npm run json-theme",
-		"json-theme": "node src/theme-json/_index.js",
-		"watch-json-theme": "nodemon --watch src/theme-json --watch tailwind.config.js src/theme-json/_index.js"
+		"dev": "APP_ENV=dev vite --host",
+		"build": "vite build",
+		"json-theme": "node src/theme-json/generate_theme.js"
 	},
 	"devDependencies": {
 		"@kucrut/vite-for-wp": "^0.8.0",
@@ -23,6 +22,7 @@
 		"npm": "^10.5.2",
 		"path": "^0.12.7",
 		"postcss": "^8.4.38",
+		"postcss-import": "^16.1.0",
 		"postcss-nested-import": "^0.2.0",
 		"postcss-nesting": "^10.2.0",
 		"prettier": "^2.8.8",
@@ -32,6 +32,7 @@
 		"vite": "^4.4.11"
 	},
 	"dependencies": {
-		"@viget/tailwindcss-plugins": "^3.0.0"
+		"@viget/tailwindcss-plugins": "^3.0.0",
+		"alpinejs": "^3.13.9"
 	}
 }
