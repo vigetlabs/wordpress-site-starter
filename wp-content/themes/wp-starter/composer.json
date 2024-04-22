@@ -1,5 +1,11 @@
 {
     "require": {
-        "idleberg/wordpress-vite-assets": "^1.0"
+        "idleberg/wordpress-vite-assets": "^1.0",
+        "timber/timber": "^2.1"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
     }
 }

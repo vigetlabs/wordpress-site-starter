@@ -1,0 +1,16 @@
+{#
+  Block: CTA
+#}
+
+{% set template = [
+  [
+    'core/pattern',
+    {
+      'slug': 'wp-starter/cta-dynamic'
+    }
+  ]
+] %}
+{% set inner = { template: template } %}
+<section {{ block_attrs( attributes ) }}>
+  {{ inner_blocks( inner ) }}
+</section>

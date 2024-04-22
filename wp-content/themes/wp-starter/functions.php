@@ -5,6 +5,16 @@
  * @package WPStarter
  */
 
+// Maybe Load Composer dependencies.
+if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+	require_once __DIR__ . '/vendor/autoload.php';
+}
+
+// Maybe Initialize Timber.
+if ( class_exists( 'Timber\Timber' ) ) {
+	Timber\Timber::init();
+}
+
 add_action(
 	'after_setup_theme',
 	function () {

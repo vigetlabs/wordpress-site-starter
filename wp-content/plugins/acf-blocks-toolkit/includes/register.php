@@ -7,15 +7,12 @@
 
 namespace Viget\ACFBlocksToolkit;
 
+use Timber\Timber;
+
 /**
  * Block Registration Class
  */
 class Block_Registration {
-
-	/**
-	 * @var string
-	 */
-//	const ALL_BLOCKS_TRANSIENT = 'acfbt_all_blocks';
 
 	/**
 	 * @var array
@@ -73,7 +70,7 @@ class Block_Registration {
 					return $metadata;
 				}
 
-				$metadata['acf']['renderCallback'] = function ( array $block ): void {
+				$metadata['acf']['renderCallback'] = function ( array $block, string $content = '', bool $is_preview = false ): void {
 					$block_name    = str_replace( 'acf/', '', $block['name'] );
 					$block['slug'] = sanitize_title( $block_name );
 					if ( empty( $block['path'] ) ) {
@@ -82,6 +79,14 @@ class Block_Registration {
 					if ( empty( $block['url'] ) ) {
 						$block['url'] = self::path_to_url( $block['path'] );
 					}
+
+					$twig = $block['path'] . '/render.twig';
+
+					if ( class_exists( '\Timber\Timber' ) && file_exists( $twig ) ) {
+						self::render_twig_block( $twig, $block, $content, $is_preview );
+						return;
+					}
+
 					$render = $block['path'] . '/render.php';
 
 					if ( ! file_exists( $render ) ) {
@@ -96,7 +101,6 @@ class Block_Registration {
 				};
 
 				return $metadata;
-
 			},
 			5
 		);
@@ -112,20 +116,15 @@ class Block_Registration {
 			return self::$blocks;
 		}
 
-//		$transient = get_transient( self::ALL_BLOCKS_TRANSIENT );
-//		if ( $transient ) {
-//			self::$blocks = $transient;
-//			return $transient;
-//		}
-
 		$locations = self::get_block_locations();
 
 		foreach ( $locations as $location ) {
+			if ( ! is_dir( $location ) ) {
+				continue;
+			}
+
 			self::get_blocks_in_dir( $location, self::$blocks );
 		}
-
-		// Cache for 30min
-//		set_transient( ALL_BLOCKS_TRANSIENT, self::$blocks, MINUTE_IN_SECONDS * 30 );
 
 		return self::$blocks;
 	}
@@ -267,5 +266,34 @@ class Block_Registration {
 			10,
 			2
 		);
+	}
+
+	/**
+	 * Render Twig block
+	 *
+	 * @param string $template
+	 * @param array  $block
+	 * @param string $content
+	 * @param bool   $is_preview
+	 *
+	 * @return void
+	 */
+	public static function render_twig_block( string $template, array $block = [], string $content = '', bool $is_preview = false, int $post_id = 0 ): void {
+		$context = Timber::context();
+
+		// Store block attributes.
+		$context['attributes'] = $block;
+
+		// Store field values. These are the fields from your ACF field group for the block.
+		$context['fields'] = get_fields();
+
+		// Store whether the block is being rendered in the editor or on the frontend.
+		$context['is_preview'] = $is_preview;
+
+		// Store the current post ID.
+		$context['post_id'] = $post_id;
+
+		// Render the block.
+		Timber::render( $template, $context );
 	}
 }
