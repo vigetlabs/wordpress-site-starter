@@ -1,15 +1,10 @@
 <?php
 /**
- * Vite Class
  *
  * Inspired from:
  *
  * @source https://github.com/andrefelipe/vite-php-setup
- *
- * @package VigetThemeBoilerplate
  */
-
-namespace VigetThemeBoilerplate;
 
 /**
  * This class handles loading Vite assets.
@@ -145,7 +140,7 @@ class Vite {
 	 *
 	 * @return string
 	 */
-	public function vite( string $entry ): string {
+	public function vite( string $entry ) {
 		if ( 'dev' === $this->env ) {
 			$scripts = array();
 

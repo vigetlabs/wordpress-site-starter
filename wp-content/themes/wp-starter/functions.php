@@ -30,10 +30,10 @@ add_filter(
 	function ( array $categories ): array {
 		array_unshift(
 			$categories,
-			[
+			array(
 				'slug'  => 'components',
 				'title' => __( 'Components', 'wp-starter' ),
-			]
+			)
 		);
 		return $categories;
 	}
@@ -44,23 +44,23 @@ add_action(
 	function () {
 		register_block_pattern_category(
 			'cta',
-			[
+			array(
 				'label' => __( 'Call To Action', 'wp-starter' ),
-			]
-		);
-        
-		register_block_pattern_category(
-			'accordion',
-			[
-				'label' => __( 'Accordion', 'wp-starter' ),
-			]
+			)
 		);
 
-//		register_block_pattern_category(
-//			'image-caption',
-//			[
-//				'label' => __( 'Image with Caption', 'wp-starter' ),
-//			]
-//		);
+		register_block_pattern_category(
+			'accordion',
+			array(
+				'label' => __( 'Accordion', 'wp-starter' ),
+			)
+		);
+
+		// register_block_pattern_category(
+		// 'image-caption',
+		// [
+		// 'label' => __( 'Image with Caption', 'wp-starter' ),
+		// ]
+		// );
 	}
 );
