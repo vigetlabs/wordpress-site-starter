@@ -1,0 +1,16 @@
+{#
+  Block: Logo Grid
+#}
+
+{% set template = [
+  [
+    'core/pattern',
+    {
+      'slug': 'wp-starter/logo-grid-inner-blocks'
+    }
+  ]
+] %}
+{% set inner = { template: template } %}
+<section {{ block_attrs( attributes ) }}>
+  {{ inner_blocks( inner ) }}
+</section>
