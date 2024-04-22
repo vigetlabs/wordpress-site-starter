@@ -1,7 +1,7 @@
 {
   "name": "cta",
-  "title": "Call to Action (Dynamic)",
-  "description": "Displays the dynamic Call to Action.",
+  "title": "Call to Action",
+  "description": "Displays the Call to Action Component.",
   "icon": "align-center",
   "category": "components",
   "textdomain": "wp-starter",
