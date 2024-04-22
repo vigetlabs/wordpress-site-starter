@@ -16,8 +16,7 @@ $block_template = [
 	],
 ];
 $inner = [
-	'template'      => $block_template,
-	'allowedBlocks' => [ 'core/image' ],
+	'template' => $block_template,
 ];
 ?>
 <section <?php block_attrs( $block ); ?>>

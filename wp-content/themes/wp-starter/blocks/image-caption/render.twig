@@ -10,8 +10,7 @@
     }
   ]
 ] %}
-{% set allowed = [ 'core/image' ] %}
-{% set inner = { template: template, allowedBlocks: allowed } %}
+{% set inner = { template: template } %}
 <section {{ block_attrs( attributes ) }}>
   {{ inner_blocks( inner ) }}
 </section>
