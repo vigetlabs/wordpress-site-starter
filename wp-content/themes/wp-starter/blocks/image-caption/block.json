@@ -1,0 +1,19 @@
+{
+  "name": "image-caption",
+  "title": "Image with Caption",
+  "description": "Displays the Image with Caption Component.",
+  "icon": "format-image",
+  "category": "components",
+  "textdomain": "wp-starter",
+  "keywords": ["photo", "upload", "media", "picture", "image", "caption"],
+  "supports": {
+    "jsx": true,
+    "alignWide": true,
+    "spacing": {
+      "margin": ["top", "bottom"]
+    }
+  },
+  "acf": {
+    "mode": "preview"
+  }
+}
