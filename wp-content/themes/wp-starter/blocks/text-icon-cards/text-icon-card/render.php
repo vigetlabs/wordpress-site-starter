@@ -11,7 +11,7 @@ $block_template = [
 	[
 		'core/pattern',
 		[
-			'slug' => 'wp-starter/text-icon-cards-inner-blocks',
+			'slug' => 'wp-starter/text-icon-card-inner-blocks',
 		],
 	],
 ];

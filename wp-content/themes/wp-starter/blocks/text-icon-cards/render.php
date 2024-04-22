@@ -12,8 +12,10 @@ $block_template = [
 	[ 'acf/text-icon-card' ],
 	[ 'acf/text-icon-card' ],
 ];
-$inner = [
-	'template' => $block_template,
+$allowed        = [ 'acf/text-icon-card' ];
+$inner          = [
+	'template'      => $block_template,
+	'allowedBlocks' => $allowed,
 ];
 ?>
 <section <?php block_attrs( $block ); ?>>
