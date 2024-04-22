@@ -35,5 +35,25 @@ export default {
 		"shadow": {
 			"defaultPresets": false
 		}
+	},
+	"core/details": {
+		"spacing": {
+			"padding": false,
+			"margin": false,
+			"blockGap": false,
+		},
+		"typography": {
+			"fluid": false,
+			"fontFamilies": [],
+			"fontSizes": [],
+			"letterSpacing": false,
+			"lineHeight": false,
+		},
+		"border": {
+			"radius": false,
+			"color": false,
+			"style": false,
+			"width": false,
+		}
 	}
 }
