@@ -11,7 +11,7 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 }
 
 // Init Vite.
-new VigetThemeBoilerplate\Vite();
+require __DIR__ . '/inc/vite.php';
 
 // Maybe Initialize Timber.
 if ( class_exists( 'Timber\Timber' ) ) {
@@ -30,10 +30,10 @@ add_filter(
 	function ( array $categories ): array {
 		array_unshift(
 			$categories,
-			array(
+			[
 				'slug'  => 'components',
 				'title' => __( 'Components', 'wp-starter' ),
-			)
+			]
 		);
 		return $categories;
 	}
@@ -44,9 +44,9 @@ add_action(
 	function () {
 		register_block_pattern_category(
 			'cta',
-			array(
+			[
 				'label' => __( 'Call To Action', 'wp-starter' ),
-			)
+			]
 		);
         
 		register_block_pattern_category(
