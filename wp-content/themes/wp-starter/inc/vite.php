@@ -1,15 +1,10 @@
 <?php
 /**
- * Vite Class
  *
  * Inspired from:
  *
  * @source https://github.com/andrefelipe/vite-php-setup
- *
- * @package VigetThemeBoilerplate
  */
-
-namespace VigetThemeBoilerplate;
 
 /**
  * This class handles loading Vite assets.

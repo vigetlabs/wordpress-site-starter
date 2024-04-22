@@ -48,7 +48,7 @@ add_action(
 				'label' => __( 'Call To Action', 'wp-starter' ),
 			]
 		);
-        
+
 		register_block_pattern_category(
 			'accordion',
 			[
@@ -56,11 +56,11 @@ add_action(
 			]
 		);
 
-//		register_block_pattern_category(
-//			'image-caption',
-//			[
-//				'label' => __( 'Image with Caption', 'wp-starter' ),
-//			]
-//		);
+		// register_block_pattern_category(
+		// 'image-caption',
+		// [
+		// 'label' => __( 'Image with Caption', 'wp-starter' ),
+		// ]
+		// );
 	}
 );
