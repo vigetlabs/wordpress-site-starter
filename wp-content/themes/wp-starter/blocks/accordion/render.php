@@ -9,16 +9,18 @@
 
 $block_template = [
 	[
-		'core/pattern',
+		'core/details',
 		[
-			'slug' => 'wp-starter/accordion-inner-blocks',
+			'showContent' => true,
 		],
 	],
+	[ 'core/details' ],
+	[ 'core/details' ],
 ];
-$allowed = [
+$allowed        = [
 	'core/details',
 ];
-$inner = [
+$inner          = [
 	'template'      => $block_template,
 	'allowedBlocks' => $allowed,
 ];

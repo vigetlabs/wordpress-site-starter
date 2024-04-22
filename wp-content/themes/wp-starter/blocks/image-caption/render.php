@@ -8,15 +8,13 @@
  */
 
 $block_template = [
-	[
-		'core/pattern',
-		[
-			'slug' => 'wp-starter/image-caption-inner-blocks',
-		],
-	],
+	[ 'core/image' ],
 ];
-$inner = [
-	'template' => $block_template,
+$allowed        = [ 'core/image' ];
+$inner          = [
+	'template'      => $block_template,
+	'allowedBlocks' => $allowed,
+	'templateLock'  => 'all',
 ];
 ?>
 <section <?php block_attrs( $block ); ?>>

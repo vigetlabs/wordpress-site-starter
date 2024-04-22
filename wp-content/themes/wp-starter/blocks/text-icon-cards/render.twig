@@ -1,15 +1,16 @@
 {#
-  Block: Image with Caption
+  Block: Text & Icon Cards
 #}
 
 {% set template = [
-  [ 'core/image' ]
+  [ 'acf/text-icon-card' ],
+  [ 'acf/text-icon-card' ],
+  [ 'acf/text-icon-card' ]
 ] %}
-{% set allowed = [ 'core/image' ] %}
+{% set allowed = [ 'acf/text-icon-card' ] %}
 {% set inner = {
 	template: template,
 	allowedBlocks: allowed,
-	templateLock: 'all'
 } %}
 <section {{ block_attrs( attributes ) }}>
   {{ inner_blocks( inner ) }}
