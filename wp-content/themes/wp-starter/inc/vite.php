@@ -140,7 +140,7 @@ class Vite {
 	 *
 	 * @return string
 	 */
-	public function vite( string $entry ) {
+	public function vite( string $entry ): string {
 		if ( 'dev' === $this->env ) {
 			$scripts = array();
 
