@@ -18,3 +18,7 @@ Create Block Theme https://wordpress.org/plugins/create-block-theme/
 == Changelog ==
 = 0.1.0 =
 * Pre-release
+
+== Credits ==
+
+accordion by Moch Rizki Eko Waluyo from <a href="https://thenounproject.com/browse/icons/term/accordion/" target="_blank" title="accordion Icons">Noun Project</a> (CC BY 3.0)
