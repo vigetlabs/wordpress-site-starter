@@ -1,0 +1,17 @@
+{#
+  Block: Accordion
+#}
+
+{% set template = [
+  [
+    'core/pattern',
+    {
+      'slug': 'wp-starter/accordion-inner-blocks'
+    }
+  ]
+] %}
+{% set allowed = [ 'core/details' ] %}
+{% set inner = { template: template, allowedBlocks: allowed } %}
+<section {{ block_attrs( attributes ) }}>
+  {{ inner_blocks( inner ) }}
+</section>
