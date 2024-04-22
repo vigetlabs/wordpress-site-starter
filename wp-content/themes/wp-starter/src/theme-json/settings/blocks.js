@@ -38,20 +38,26 @@ export default {
 	},
 	"core/details": {
 		"spacing": {
-			"padding": false,
-			"margin": false,
 			"blockGap": false,
+			"margin": false,
+			"padding": false,
 		},
 		"typography": {
+			"customFontSize": false,
+			"dropCap": false,
 			"fluid": false,
 			"fontFamilies": [],
 			"fontSizes": [],
+			"fontStyle": false,
+			"fontWeight": false,
 			"letterSpacing": false,
 			"lineHeight": false,
+			"textDecoration": false,
+			"textTransform": false,
 		},
 		"border": {
-			"radius": false,
 			"color": false,
+			"radius": false,
 			"style": false,
 			"width": false,
 		}
