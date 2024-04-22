@@ -1,0 +1,16 @@
+{#
+  Block: Image with Caption
+#}
+
+{% set template = [
+  [
+    'core/pattern',
+    {
+      'slug': 'wp-starter/image-caption-inner-blocks'
+    }
+  ]
+] %}
+{% set inner = { template: template } %}
+<section {{ block_attrs( attributes ) }}>
+  {{ inner_blocks( inner ) }}
+</section>
