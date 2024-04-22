@@ -1,11 +1,9 @@
 <?php
 /**
- * Vite WordPress Setup
  *
  * Inspired from:
- * @source https://github.com/andrefelipe/vite-php-setup
  *
- * @package WPStarter
+ * @source https://github.com/andrefelipe/vite-php-setup
  */
 
 /**
@@ -46,7 +44,7 @@ class Vite {
 	/**
 	 * @var array
 	 */
-	private array $entries = array();
+	private array $entries = [];
 
 	/**
 	 * @var bool
@@ -69,13 +67,13 @@ class Vite {
 		$this->entries['default'] = 'main.js';
 		$this->entries['editor']  = 'editor.js';
 
-		add_action( 'wp_head', array( $this, 'init' ) );
+		add_action( 'wp_head', [ $this, 'init' ] );
 
-		add_action( 'enqueue_block_editor_assets', array( $this, 'block_assets' ) );
-		add_action( 'admin_init', array( $this, 'admin_assets' ), 15 );
+		add_action( 'enqueue_block_editor_assets', [ $this, 'block_assets' ] );
+		add_action( 'admin_init', [ $this, 'admin_assets' ], 15 );
 
-		add_filter( 'script_loader_tag', array( $this, 'script_loader' ), 10, 3 );
-		add_filter( 'style_loader_tag', array( $this, 'style_loader' ), 10, 4 );
+		add_filter( 'script_loader_tag', [ $this, 'script_loader' ], 10, 3 );
+		add_filter( 'style_loader_tag', [ $this, 'style_loader' ], 10, 4 );
 	}
 
 	/**
@@ -92,6 +90,7 @@ class Vite {
 
 		$this->initialized = true;
 
+		/* Print Vite HTML tags */
 		echo $this->vite( $this->get_entry( $entry ) );
 	}
 
@@ -142,9 +141,9 @@ class Vite {
 	 *
 	 * @return string
 	 */
-	public function vite( string $entry ): string {
+	public function vite( string $entry ) {
 		if ( 'dev' === $this->env ) {
-			$scripts = array();
+			$scripts = [];
 
 			if ( ! $this->initialized ) {
 				$scripts[] = "<script type=\"module\" src=\"{$this->dev_server}/@vite/client\"></script>";
@@ -155,15 +154,14 @@ class Vite {
 			return implode( PHP_EOL, $scripts );
 		}
 
-		// TODO this will need to be updated to work with vendor files
-		// Or we can just turn off vendor chunks
+		/* Will need to be updated to work with vendor files */
 		return implode(
 			PHP_EOL,
-			array(
+			[
 				$this->js( $entry ),
 				$this->imports( $entry ),
 				$this->css( $entry ),
-			)
+			]
 		);
 	}
 
@@ -219,7 +217,7 @@ class Vite {
 	}
 
 	/**
-	 * Helper to locate files
+	 * Helper to locate build files
 	 *
 	 * @return array
 	 */
@@ -234,12 +232,12 @@ class Vite {
 						'<div class="notice notice-warning is-dismissible">
 						<p>%s</p>
 					</div>',
-						esc_html__( 'Manifest.json file is missing. Run ddev restart.', 'wp-starter' )
+						esc_html__( 'Manifest.json file is missing. Run "ddev restart" to fix.', 'wp-starter' )
 					);
 				}
 			);
 
-			return array();
+			return [];
 		}
 
 		$content = file_get_contents( $manifest );
@@ -276,7 +274,7 @@ class Vite {
 	 * @return array
 	 */
 	private function get_imports( string $entry ): array {
-		$urls     = array();
+		$urls     = [];
 		$manifest = $this->get_manifest();
 
 		if ( ! empty( $manifest[ $entry ]['imports'] ) ) {
@@ -295,8 +293,8 @@ class Vite {
 	 *
 	 * @return array
 	 */
-	function get_css( string $entry ): array {
-		$urls     = array();
+	private function get_css( string $entry ): array {
+		$urls     = [];
 		$manifest = $this->get_manifest();
 
 		if ( ! empty( $manifest[ $entry ]['css'] ) ) {
@@ -349,6 +347,8 @@ class Vite {
 
 	/**
 	 * Enqueue assets in Admin.
+	 *
+	 * @param string $entry The entry point file.
 	 */
 	public function admin_assets( $entry = 'editor' ): void {
 		if ( ! $entry ) {
@@ -367,6 +367,8 @@ class Vite {
 
 	/**
 	 * Enqueue assets for block editor
+	 *
+	 * @param string $entry The entry point file.
 	 */
 	public function block_assets( $entry = '' ): void {
 		if ( ! $entry ) {
@@ -380,10 +382,10 @@ class Vite {
 		$i    = 0;
 		$file = $this->get_entry( $entry );
 
-		$css_dependencies = array(
+		$css_dependencies = [
 			'wp-block-library-theme',
 			'wp-block-library',
-		);
+		];
 
 		foreach ( $this->get_css( $file ) as $url ) {
 			++$i;
@@ -395,8 +397,8 @@ class Vite {
 			wp_enqueue_style( 'theme-style-preload-editor-' . $i, $url, $css_dependencies, '1.0' );
 		}
 
-		// Theme Gutenberg blocks JS.
-		$js_dependencies = array(
+		/* Theme Gutenberg blocks JS. */
+		$js_dependencies = [
 			'wp-block-editor',
 			'wp-blocks',
 			'wp-editor',
@@ -406,7 +408,7 @@ class Vite {
 			'wp-element',
 			'wp-hooks',
 			'wp-i18n',
-		);
+		];
 
 		$script_url = $this->get_asset_url( $file );
 
@@ -425,7 +427,7 @@ class Vite {
 			wp_enqueue_script(
 				'theme-script-editor-vite-entry',
 				$vite_entry,
-				array( 'theme-script-editor-vite-client' ),
+				[ 'theme-script-editor-vite-client' ],
 				'1.0',
 				true
 			);
@@ -440,3 +442,5 @@ class Vite {
 		}
 	}
 }
+
+new Vite();
