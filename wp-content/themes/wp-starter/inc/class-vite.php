@@ -1,9 +1,11 @@
 <?php
 /**
+ * Vite WordPress Setup
  *
  * Inspired from:
- *
  * @source https://github.com/andrefelipe/vite-php-setup
+ *
+ * @package WPStarter
  */
 
 /**
@@ -232,7 +234,7 @@ class Vite {
 						'<div class="notice notice-warning is-dismissible">
 						<p>%s</p>
 					</div>',
-						esc_html__( 'Manifest.json file is missing. Run ddev restart.', 'viget-theme-boilerplate' )
+						esc_html__( 'Manifest.json file is missing. Run ddev restart.', 'wp-starter' )
 					);
 				}
 			);
@@ -438,5 +440,3 @@ class Vite {
 		}
 	}
 }
-
-new Vite();

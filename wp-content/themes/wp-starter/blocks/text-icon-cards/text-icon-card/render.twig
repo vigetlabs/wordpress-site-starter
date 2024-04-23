@@ -1,0 +1,16 @@
+{#
+  Block: Text & Icon Cards
+#}
+
+{% set template = [
+  [
+    'core/pattern',
+    {
+      'slug': 'wp-starter/text-icon-card-inner-blocks'
+    }
+  ]
+] %}
+{% set inner = { template: template } %}
+<article {{ block_attrs( attributes ) }}>
+  {{ inner_blocks( inner ) }}
+</article>

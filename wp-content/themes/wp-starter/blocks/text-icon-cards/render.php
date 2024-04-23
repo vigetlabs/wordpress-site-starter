@@ -1,6 +1,6 @@
 <?php
 /**
- * Block: Image with Caption
+ * Block: Text & Icon Cards
  *
  * @global array $block
  *
@@ -8,13 +8,14 @@
  */
 
 $block_template = [
-	[ 'core/image' ],
+	[ 'acf/text-icon-card' ],
+	[ 'acf/text-icon-card' ],
+	[ 'acf/text-icon-card' ],
 ];
-$allowed        = [ 'core/image' ];
+$allowed        = [ 'acf/text-icon-card' ];
 $inner          = [
 	'template'      => $block_template,
 	'allowedBlocks' => $allowed,
-	'templateLock'  => 'all',
 ];
 ?>
 <section <?php block_attrs( $block ); ?>>
