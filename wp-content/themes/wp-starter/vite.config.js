@@ -14,7 +14,7 @@ export default defineConfig(({ command }) => ({
 			path.resolve(__dirname, './parts/**/*'),
 			path.resolve(__dirname, './blocks/**/*'),
 			path.resolve(__dirname, './**/*.php'),
-		  ]),
+		]),
 	],
 	build: {
 		// output dir for production build
@@ -35,9 +35,6 @@ export default defineConfig(({ command }) => ({
 		origin: "https://wpstarter.ddev.site:5273",
 		strictPort: true,
 		port: parseInt(process.env.VITE_PRIMARY_PORT ?? '5273'),
-		hmr: {
-			overlay: false,
-		}
 	},
 }));
 
