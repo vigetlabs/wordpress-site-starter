@@ -7,5 +7,13 @@
  */
 
 ?>
-<!-- wp:acf/text-icon-cards {"name":"acf/text-icon-cards","mode":"preview","layout":{"type":"flex","justifyContent":"center","flexWrap":"wrap"}} -->
+<!-- wp:acf/text-icon-cards {"name":"acf/text-icon-cards","data":{},"mode":"preview"} -->
+<!-- wp:acf/text-icon-card {"name":"acf/text-icon-card","data":{},"align":"center","mode":"preview","layout":{"type":"constrained","justifyContent":"center"}} -->
+<!-- /wp:acf/text-icon-card -->
+
+<!-- wp:acf/text-icon-card {"name":"acf/text-icon-card","data":{},"align":"center","mode":"preview","layout":{"type":"constrained","justifyContent":"center"}} -->
+<!-- /wp:acf/text-icon-card -->
+
+<!-- wp:acf/text-icon-card {"name":"acf/text-icon-card","data":{},"align":"center","mode":"preview","layout":{"type":"constrained","justifyContent":"center"}} -->
+<!-- /wp:acf/text-icon-card -->
 <!-- /wp:acf/text-icon-cards -->

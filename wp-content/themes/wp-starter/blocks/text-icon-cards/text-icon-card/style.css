@@ -4,3 +4,12 @@ body .acf-block-text-icon-card figure {
 .acf-block-text-icon-card figure:not([data-block]) {
 	max-width: 120px;
 }
+
+.acf-block-text-icon-card.aligncenter {
+	text-align: center;
+}
+.acf-block-text-icon-card.aligncenter figure img {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
