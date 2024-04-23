@@ -69,8 +69,16 @@ class Vite {
 
 		add_action( 'wp_head', [ $this, 'init' ] );
 
-		add_action( 'enqueue_block_editor_assets', [ $this, 'block_assets' ] );
-		add_action( 'admin_init', [ $this, 'admin_assets' ], 15 );
+		add_action(
+			'admin_head',
+			function () {
+				$screen = get_current_screen();
+				if ( $screen->is_block_editor ) {
+					// $this->init(); // This breaks the block editor styles.
+					$this->init( 'editor' );
+				}
+			}
+		);
 
 		add_filter( 'script_loader_tag', [ $this, 'script_loader' ], 10, 3 );
 		add_filter( 'style_loader_tag', [ $this, 'style_loader' ], 10, 4 );
@@ -350,9 +358,10 @@ class Vite {
 	 *
 	 * @param string $entry The entry point file.
 	 */
-	public function admin_assets( $entry = 'editor' ): void {
+	public function admin_assets( $entry = '' ): void {
 		if ( ! $entry ) {
-			$entry = 'editor';
+			$screen = get_current_screen();
+			$entry  = $screen && 'site-editor' === $screen->base ? 'default' : 'editor';
 		}
 
 		if ( ! $this->get_entry( $entry ) ) {
@@ -372,7 +381,8 @@ class Vite {
 	 */
 	public function block_assets( $entry = '' ): void {
 		if ( ! $entry ) {
-			$entry = 'editor';
+			$screen = get_current_screen();
+			$entry  = $screen && 'site-editor' === $screen->base ? 'default' : 'editor';
 		}
 
 		if ( ! $this->get_entry( $entry ) ) {
