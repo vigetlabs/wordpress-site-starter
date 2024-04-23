@@ -4,8 +4,8 @@ import elements from "./elements.js";
 const styles = {
 	blocks: blocks,
 	"color": {
-		"background": "var(--wp--preset--color--base)",
-		"text": "var(--wp--preset--color--contrast)"
+		"background": "var(--wp--preset--color--white)",
+		"text": "var(--wp--preset--color--black)"
 	},
 	elements: elements,
 	"spacing": {

@@ -1,10 +1,10 @@
 .acf-block-accordion {
-	border-top: 1px solid var(--wp--preset--color--contrast);
+	border-top: 1px solid var(--wp--preset--color--black);
 }
 
 .acf-block-accordion details,
 .acf-block-accordion details[open] {
-	border-bottom: 1px solid var(--wp--preset--color--contrast);
+	border-bottom: 1px solid var(--wp--preset--color--black);
 }
 .acf-block-accordion details[open] {
 	padding-bottom: 1rem;

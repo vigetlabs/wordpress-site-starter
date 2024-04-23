@@ -13,7 +13,7 @@
     },
     "backgroundColor": {
       "type": "string",
-      "default": "alice-blue"
+      "default": "accent"
     },
     "style": {
       "type": "object",

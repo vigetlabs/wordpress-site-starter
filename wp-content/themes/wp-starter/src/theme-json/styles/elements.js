@@ -6,7 +6,7 @@ export default {
 	...buttonElement,
 	"caption": {
 		"color": {
-			"text": "var(--wp--preset--color--contrast-2)"
+			"text": "var(--wp--preset--color--black)"
 		},
 		"typography": {
 			"fontFamily": "var(--wp--preset--font-family--body)",
@@ -15,7 +15,7 @@ export default {
 	},
 	"heading": {
 		"color": {
-			"text": "var(--wp--preset--color--contrast)"
+			"text": "var(--wp--preset--color--black)"
 		},
 		"typography": {
 			"fontFamily": "var(--wp--preset--font-family--heading)",
@@ -30,7 +30,7 @@ export default {
 			}
 		},
 		"color": {
-			"text": "var(--wp--preset--color--contrast)"
+			"text": "var(--wp--preset--color--black)"
 		}
 	}
 }
