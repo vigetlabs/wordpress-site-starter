@@ -56,11 +56,18 @@ add_action(
 			]
 		);
 
-		// register_block_pattern_category(
-		// 'image-caption',
-		// [
-		// 'label' => __( 'Image with Caption', 'wp-starter' ),
-		// ]
-		// );
+//		register_block_pattern_category(
+//			'image-caption',
+//			[
+//				'label' => __( 'Image with Caption', 'wp-starter' ),
+//			]
+//		);
+
+		register_block_pattern_category(
+			'logo-grid',
+			[
+				'label' => __( 'Logo Grid', 'wp-starter' ),
+			]
+		);
 	}
 );

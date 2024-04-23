@@ -1,0 +1,17 @@
+{#
+  Block: Logo Grid
+#}
+
+{% set template = [
+  [ 'core/image' ],
+  [ 'core/image' ],
+  [ 'core/image' ],
+] %}
+{% set allowed = [ 'core/image' ] %}
+{% set inner = {
+	template: template,
+	allowedBlocks: allowed,
+} %}
+<section {{ block_attrs( attributes ) }}>
+  {{ inner_blocks( inner ) }}
+</section>
