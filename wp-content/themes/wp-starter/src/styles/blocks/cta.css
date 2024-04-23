@@ -1,9 +1,15 @@
 @layer components {
 	.acf-block-cta {
-		&.has-accent-background-color,
-		&.has-black-background-color * {
+		/* Variants for background color */
+		&.has-black-background-color,
+		&.has-accent-background-color * {
 			@apply !text-white-100;
+
+			.wp-block-heading {
+				@apply !text-white-100;
+			}
 		}
+
 
 		.wp-block-heading {
 			@apply text-2xl font-bold;
