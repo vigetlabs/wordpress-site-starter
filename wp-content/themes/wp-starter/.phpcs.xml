@@ -63,7 +63,11 @@
     </rule>
 
     <!-- Let's also check that everything is properly documented. -->
-    <rule ref="WordPress-Docs"/>
+    <rule ref="WordPress-Docs">
+        <exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+        <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+    </rule>
+
 
     <!-- Add in some extra rules from other standards. -->
     <rule ref="Generic.Commenting.Todo"/>
