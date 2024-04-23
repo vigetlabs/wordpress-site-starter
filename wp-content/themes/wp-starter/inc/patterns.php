@@ -23,5 +23,12 @@ add_action(
 				'label' => __( 'Call To Action', 'wp-starter' ),
 			]
 		);
+
+		register_block_pattern_category(
+			'text-icon-cards',
+			[
+				'label' => __( 'Text & Icon Cards', 'wp-starter' ),
+			]
+		);
 	}
 );
