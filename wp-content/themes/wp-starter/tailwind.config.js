@@ -4,7 +4,7 @@ import { remPair, rem } from "@viget/tailwindcss-plugins/utilities/fns/index.js"
 // Breakpoints and content widths for the site
 const minBreakpoint = 640;
 const maxBreakpoint = 1440;
-	
+
 const fluidSize = (
 	minSize,
 	maxSize,
@@ -24,7 +24,6 @@ export default {
 		'./src/**/*.{css,js,jsx,tsx,php}',
 		'./patterns/**/*.{css,js,jsx,tsx,php}',
 		'./parts/**/*.{css,js,jsx,tsx,php}',
-		'./**/**/*.{php,css,js}',
 	],
 	theme: {
 		contentSmall: minBreakpoint.toString(),
@@ -35,7 +34,7 @@ export default {
 				//If you update the names or add more colors you will need to update the file in theme-json/settings/color.js
 				base: {
 					100: "#ffffff",
-					200: "#e5e5e5", 
+					200: "#e5e5e5",
 				},
 				contrast: {
 					100: "#0a0a0a",
