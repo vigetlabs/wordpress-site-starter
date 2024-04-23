@@ -13,37 +13,6 @@ export default {
 			"fontSize": "var(--wp--preset--font-size--x-small)"
 		}
 	},
-	"h1": {
-		"typography": {
-			"fontSize": "var(--wp--preset--font-size--xx-large)",
-			"lineHeight": "1.15"
-		}
-	},
-	"h2": {
-		"typography": {
-			"fontSize": "var(--wp--preset--font-size--x-large)"
-		}
-	},
-	"h3": {
-		"typography": {
-			"fontSize": "var(--wp--preset--font-size--large)"
-		}
-	},
-	"h4": {
-		"typography": {
-			"fontSize": "var(--wp--preset--font-size--medium)"
-		}
-	},
-	"h5": {
-		"typography": {
-			"fontSize": "var(--wp--preset--font-size--small)"
-		}
-	},
-	"h6": {
-		"typography": {
-			"fontSize": "var(--wp--preset--font-size--x-small)"
-		}
-	},
 	"heading": {
 		"color": {
 			"text": "var(--wp--preset--color--contrast)"
