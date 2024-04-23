@@ -1,0 +1,4 @@
+.acf-block-text-icon-cards .acf-block-text-icon-card,
+.acf-block-text-icon-cards .wp-block-acf-text-icon-card {
+	flex-basis: calc( 33.333% - 1.2rem );
+}

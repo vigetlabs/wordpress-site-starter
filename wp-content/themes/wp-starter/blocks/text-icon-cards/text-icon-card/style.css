@@ -1,0 +1,6 @@
+body .acf-block-text-icon-card figure {
+	display: block;
+}
+.acf-block-text-icon-card figure:not([data-block]) {
+	max-width: 120px;
+}

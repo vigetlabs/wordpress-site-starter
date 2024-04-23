@@ -1,6 +1,6 @@
 <?php
 /**
- * Block: Text & Icon Cards
+ * Block: Text & Icon Card
  *
  * @global array $block
  *
@@ -19,6 +19,6 @@ $inner = [
 	'template' => $block_template,
 ];
 ?>
-<section <?php block_attrs( $block ); ?>>
+<article <?php block_attrs( $block ); ?>>
 	<?php inner_blocks( $inner ); ?>
-</section>
+</article>

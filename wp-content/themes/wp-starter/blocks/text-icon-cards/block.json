@@ -6,19 +6,28 @@
   "category": "components",
   "textdomain": "wp-starter",
   "keywords": ["text", "card", "icon", "grid"],
+  "attributes": {
+    "align": {
+      "type": "string",
+      "default": "wide"
+    }
+  },
   "supports": {
     "jsx": true,
     "alignWide": true,
     "layout": {
       "default": {
         "type": "flex",
-        "justifyContent": "space-between",
+        "justifyContent": "left",
         "flexWrap": "wrap"
       },
       "allowOrientation": false,
       "allowCustomContentAndWideSize": false
     }
   },
+  "style": [
+    "file:./style.css"
+  ],
   "acf": {
     "mode": "preview"
   }
