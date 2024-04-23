@@ -8,15 +8,16 @@
  */
 
 $block_template = [
-	[
-		'core/pattern',
-		[
-			'slug' => 'wp-starter/logo-grid-inner-blocks',
-		],
-	],
+	[ 'core/image' ],
+	[ 'core/image' ],
+	[ 'core/image' ],
 ];
-$inner = [
-	'template' => $block_template,
+$allowed        = [
+	'core/image',
+];
+$inner          = [
+	'template'      => $block_template,
+	'allowedBlocks' => $allowed,
 ];
 ?>
 <section <?php block_attrs( $block ); ?>>

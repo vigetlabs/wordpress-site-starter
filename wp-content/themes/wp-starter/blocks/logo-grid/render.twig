@@ -3,14 +3,15 @@
 #}
 
 {% set template = [
-  [
-    'core/pattern',
-    {
-      'slug': 'wp-starter/logo-grid-inner-blocks'
-    }
-  ]
+  [ 'core/image' ],
+  [ 'core/image' ],
+  [ 'core/image' ],
 ] %}
-{% set inner = { template: template } %}
+{% set allowed = [ 'core/image' ] %}
+{% set inner = {
+	template: template,
+	allowedBlocks: allowed,
+} %}
 <section {{ block_attrs( attributes ) }}>
   {{ inner_blocks( inner ) }}
 </section>
