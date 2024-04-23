@@ -24,6 +24,7 @@ export default {
 		'./src/**/*.{css,js,jsx,tsx,php}',
 		'./patterns/**/*.{css,js,jsx,tsx,php}',
 		'./parts/**/*.{css,js,jsx,tsx,php}',
+		'./blocks/**/*.{css,js,jsx,tsx,php}',
 	],
 	theme: {
 		contentSmall: minBreakpoint.toString(),

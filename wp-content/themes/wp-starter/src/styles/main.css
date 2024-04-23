@@ -3,4 +3,7 @@
 @import "tailwindcss/utilities";
 
 /*Import custom styles*/
+@import "./base/typography.css";
+
 @import "./blocks/buttons.css";
+@import "./blocks/cta.css";

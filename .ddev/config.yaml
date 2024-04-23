@@ -18,9 +18,9 @@ web_environment:
     - WP_ENVIRONMENT_TYPE=development
 nodejs_version: "18"
 override_config: true
-hooks:
-  post-start:
-    - exec: .ddev/commands/web/vite-serve
+# hooks:
+#   post-start:
+#     - exec: .ddev/commands/web/vite-serve
 
 # Key features of DDEV's config.yaml:
 
