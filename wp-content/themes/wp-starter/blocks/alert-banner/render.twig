@@ -1,0 +1,24 @@
+{#
+Block: Alert Banner
+#}
+
+{% set template = [
+	[
+		'core/paragraph',
+		{
+			'placeholder': 'Enter alert banner message...'
+		}
+	]
+] %}
+{% set allowed = [
+	'core/paragraph',
+	'core/button',
+] %}
+{% set inner = {
+	template: template,
+	allowedBlocks: allowed
+} %}
+<section {{ block_attrs( attributes ) }}>
+	{{ function( 'alert_banner_dismiss_button' ) }}
+	{{ inner_blocks( inner ) }}
+</section>

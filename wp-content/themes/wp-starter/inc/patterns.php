@@ -37,5 +37,12 @@ add_action(
 				'label' => __( 'Text & Image', 'wp-starter' ),
 			]
 		);
+
+		register_block_pattern_category(
+			'alert-banner',
+			[
+				'label' => __( 'Alert Banner', 'wp-starter' ),
+			]
+		);
 	}
 );

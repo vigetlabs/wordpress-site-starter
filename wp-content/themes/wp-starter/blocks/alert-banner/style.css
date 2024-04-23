@@ -1,0 +1,20 @@
+.acf-block-alert-banner:not(.is-style-dismissible) .dismiss {
+	display: none;
+}
+
+.acf-block-alert-banner.is-style-dismissible {
+	position: relative;
+}
+.acf-block-alert-banner.is-style-dismissible .dismiss {
+	background-color: transparent;
+	border: 0;
+	cursor: pointer;
+	position: absolute;
+	right: 0.5rem;
+	top: 50%;
+	transform: translateY( -50% );
+	z-index: 2;
+}
+.acf-block-alert-banner.is-style-dismissible .dismiss:after {
+	content: '\2715';
+}
