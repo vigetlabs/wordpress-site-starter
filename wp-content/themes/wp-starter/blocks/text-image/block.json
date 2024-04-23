@@ -1,0 +1,25 @@
+{
+  "name": "text-image",
+  "title": "Text & Image",
+  "description": "Displays the Text & Image Component.",
+  "icon": "align-left",
+  "category": "components",
+  "textdomain": "wp-starter",
+  "keywords": ["photo", "upload", "media", "picture", "image", "align", "left", "right", "content", "text"],
+  "attributes": {
+    "align": {
+      "type": "string",
+      "default": "wide"
+    }
+  },
+  "supports": {
+    "jsx": true,
+    "alignWide": true,
+    "spacing": {
+      "padding": ["top", "bottom"]
+    }
+  },
+  "acf": {
+    "mode": "preview"
+  }
+}

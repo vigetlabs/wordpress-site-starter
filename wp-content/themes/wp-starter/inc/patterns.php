@@ -30,5 +30,12 @@ add_action(
 				'label' => __( 'Text & Icon Cards', 'wp-starter' ),
 			]
 		);
+
+		register_block_pattern_category(
+			'text-image',
+			[
+				'label' => __( 'Text & Image', 'wp-starter' ),
+			]
+		);
 	}
 );
