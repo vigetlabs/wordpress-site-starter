@@ -8,6 +8,7 @@
   "keywords": ["photo", "upload", "media", "picture", "image", "caption"],
   "supports": {
     "jsx": true,
+    "mode": false,
     "alignWide": true,
     "spacing": {
       "margin": ["top", "bottom"]

@@ -9,6 +9,7 @@
   "parent": [ "acf/text-icon-cards" ],
   "supports": {
     "jsx": true,
+    "mode": false,
     "alignWide": true,
     "layout": {
       "default": {
