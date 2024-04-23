@@ -1,6 +1,6 @@
 <?php
 /**
- * WP Starter functions
+ * Theme functions
  *
  * @package WPStarter
  */
@@ -11,42 +11,18 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 }
 
 // Init Vite.
-require __DIR__ . '/inc/vite.php';
+require_once get_stylesheet_directory() . '/inc/class-vite.php';
+if ( class_exists( 'Vite' ) ) {
+	new Vite();
+}
 
 // Maybe Initialize Timber.
 if ( class_exists( 'Timber\Timber' ) ) {
 	Timber\Timber::init();
 }
 
-add_action(
-	'after_setup_theme',
-	function () {
-		remove_theme_support( 'core-block-patterns' );
-	}
-);
+// Pattern Functions.
+require_once get_stylesheet_directory() . '/inc/patterns.php';
 
-add_filter(
-	'block_categories_all',
-	function ( array $categories ): array {
-		array_unshift(
-			$categories,
-			[
-				'slug'  => 'components',
-				'title' => __( 'Components', 'wp-starter' ),
-			]
-		);
-		return $categories;
-	}
-);
-
-add_action(
-	'init',
-	function () {
-		register_block_pattern_category(
-			'cta',
-			[
-				'label' => __( 'Call To Action', 'wp-starter' ),
-			]
-		);
-	}
-);
+// Block Functions.
+require_once get_stylesheet_directory() . '/inc/blocks.php';
