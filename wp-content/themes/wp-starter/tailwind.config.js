@@ -33,10 +33,10 @@ export default {
 			colors: {
 				transparent: 'transparent',
 				//If you update the names or add more colors you will need to update the file in theme-json/settings/color.js
-				white: {
-					100: "#ffffff",
-				},
+				white: "#ffffff",
 				gray: {
+					100: "#e5e5e5",
+					500: "#737373",
 					900: "#0a0a0a",
 				},
 			},

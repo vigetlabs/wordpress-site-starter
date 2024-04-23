@@ -6,9 +6,19 @@ export default {
 	"defaultGradients": false,
 	"palette": [
 		{
-			"color": theme.colors.white[100],
+			"color": theme.colors.white,
 			"name": "White",
 			"slug": "white"
+		},
+		{
+			"color": theme.colors.gray[100],
+			"name": "Gray 100",
+			"slug": "gray-100"
+		},
+		{
+			"color": theme.colors.gray[500],
+			"name": "Gray 500",
+			"slug": "gray-500"
 		},
 		{
 			"color": theme.colors.gray[900],
