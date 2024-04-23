@@ -33,22 +33,12 @@ export default {
 			colors: {
 				transparent: 'transparent',
 				//If you update the names or add more colors you will need to update the file in theme-json/settings/color.js
-				base: {
+				white: {
 					100: "#ffffff",
-					200: "#e5e5e5",
 				},
-				contrast: {
-					100: "#0a0a0a",
-					200: "#737373",
-					300: "#a3a3a3",
+				gray: {
+					900: "#0a0a0a",
 				},
-				accent: {
-					100: "#cfcabe",
-					200: "#c2a990",
-					300: "#0ea5e9",
-					400: "#0369a1",
-					500: "#0c4a6e",
-				}
 			},
 			fontFamily: {
 				// If you update the names or add more fonts you will need to update the file in theme-json/settings/typography.js

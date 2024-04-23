@@ -12,7 +12,7 @@ export default {
 			}
 		},
 		"color": {
-			"text": theme.colors.accent[400]
+			"text": theme.colors.sky[600]
 		},
 		"typography": {
 			"fontWeight": "500"

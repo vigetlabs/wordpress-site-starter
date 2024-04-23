@@ -3,41 +3,13 @@ import theme from "../../import_tailwind.js";
 // Button Element
 export const buttonElement = {
 	"button": {
-		":active": {
-			"color": {
-				"background": theme.colors.accent[200],
-				"text": theme.colors.contrast[100]
-			}
-		},
-		":focus": {
-			"color": {
-				"background": theme.colors.accent[100],
-				"text": theme.colors.contrast[100]
-			},
-			"outline": {
-				"color": theme.colors.contrast[100],
-				"offset": theme.spacing[1]
-			},
-			"border": {
-				"color":  theme.colors.accent[200]
-			}
-		},
-		":hover": {
-			"color": {
-				"background": theme.colors.accent[100],
-				"text": theme.colors.contrast[100]
-			},
-			"border": {
-				"color": theme.colors.accent[400]
-			},
-		},
 		"border": {
-			"radius": theme.borderRadius.md,
-			"color": theme.colors.contrast[100]
+			"radius":"0",
+			"color": theme.colors.sky[600]
 		},
 		"color": {
-			"background": theme.colors.accent[400],
-			"text": theme.colors.base[100]
+			"background": theme.colors.sky[600],
+			"text": theme.colors.white[100]
 		},
 		"spacing": {
 			"padding": {
@@ -48,6 +20,7 @@ export const buttonElement = {
 			}
 		},
 		"typography": {
+			"fontFamily": "var(--wp--preset--font-family--body)",
 			"fontSize": "var(--wp--preset--font-size--small)",
 			"fontStyle": "normal",
 			"fontWeight": "500"
@@ -70,7 +43,11 @@ export const coreButtons = {
 				},
 				"border": {
 					"width": theme.spacing[1]
-				}
+				},
+				"color": {
+					"background": theme.colors.transparent,
+					"text": theme.colors.sky[600]
+				},
 			}
 		},
 	},
