@@ -10,7 +10,10 @@
 $block_template = [
 	[
 		'core/media-text',
-		[],
+		[
+			'imageFill'         => true,
+			'verticalAlignment' => 'center',
+		],
 		[
 			[
 				'core/pattern',
