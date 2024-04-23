@@ -33,6 +33,7 @@
 	},
 	"dependencies": {
 		"@viget/tailwindcss-plugins": "^3.0.0",
-		"alpinejs": "^3.13.9"
+		"alpinejs": "^3.13.9",
+		"vite-plugin-live-reload": "^3.0.3"
 	}
 }

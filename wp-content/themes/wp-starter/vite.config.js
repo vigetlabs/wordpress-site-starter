@@ -1,12 +1,20 @@
 import { defineConfig } from 'vite'
 import path from 'path';
+import liveReload from 'vite-plugin-live-reload';
 import generateThemeJSON, { buildJSON } from './src/theme-json/generate_theme.js';
 
 export default defineConfig(({ command }) => ({
 	root: 'src',
 	base: command === 'serve' ? '' : '/dist/',
 	plugins: [
-		generateThemeJSON
+		generateThemeJSON,
+		liveReload([
+			path.resolve(__dirname, './src/**/*'),
+			path.resolve(__dirname, './templates/**/*'),
+			path.resolve(__dirname, './parts/**/*'),
+			path.resolve(__dirname, './blocks/**/*'),
+			path.resolve(__dirname, './**/*.php'),
+		  ]),
 	],
 	build: {
 		// output dir for production build
