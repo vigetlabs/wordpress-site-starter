@@ -44,5 +44,8 @@ require_once 'includes/settings.php';
 // Timber functions.
 require_once 'includes/timber.php';
 
+// Timber functions.
+require_once 'includes/button-icons.php';
+
 Block_Registration::init();
 Settings::init();
