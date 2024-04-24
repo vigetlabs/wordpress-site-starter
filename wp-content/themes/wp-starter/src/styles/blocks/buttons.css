@@ -1,5 +1,13 @@
 @layer utilities {
-	.wp-block-button__link {
-		@apply transition-colors;
+	.wp-block-button {
+		.wp-block-button__link {
+			@apply btn-contained;
+		}
+
+		&.is-style-outline{
+			.wp-block-button__link {
+				@apply btn-outlined;
+			}
+		}
 	}
 }
