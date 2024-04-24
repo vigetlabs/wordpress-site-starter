@@ -1,6 +1,6 @@
 const plugin = require("tailwindcss/plugin")
 
-module.exports = plugin(({ addComponents }) => {
+module.exports = plugin(({ addComponents, addVariant }) => {
   // Base Styles
   const base = {
     // core
@@ -29,10 +29,10 @@ module.exports = plugin(({ addComponents }) => {
         hover:bg-sky-700
         active:bg-sky-800
         focus-visible:bg-sky-700 focus-visible:ring-sky-600/50
-        dark:bg-sky-200 dark:text-sky-800
-        dark:hover:bg-sky-50
-        dark:active:bg-sky-100
-        dark:focus-visible:bg-sky-50 dark:focus-visible:ring-white/50`]: {},
+        has-background:bg-sky-200 has-background:text-sky-800
+        has-background:hover:bg-sky-50
+        has-background:active:bg-sky-100
+        has-background:focus-visible:bg-sky-50 has-background:focus-visible:ring-white/50`]: {},
     },
 
     '.btn-outlined': {
@@ -42,10 +42,10 @@ module.exports = plugin(({ addComponents }) => {
         hover:bg-sky-100 hover:border-sky-700 hover:text-sky-700
         active:bg-sky-200/80 active:text-sky-800
         focus-visible:bg-sky-100 focus-visible:border-sky-700 focus-visible:ring-sky-600/50
-        dark:!border-white dark:!text-white
-        dark:hover:bg-white/25
-        dark:active:bg-white/30
-        dark:focus-visible:bg-sky-100/30 dark:focus-visible:ring-white/50`]: {},
+        has-background:!border-white has-background:!text-white
+        has-background:hover:bg-white/25
+        has-background:active:bg-white/30
+        has-background:focus-visible:bg-sky-100/30 has-background:focus-visible:ring-white/50`]: {},
     },
 
     '.btn-subtle': {
@@ -55,10 +55,10 @@ module.exports = plugin(({ addComponents }) => {
         hover:bg-sky-100 hover:text-sky-700
         active:bg-sky-200/80 active:text-sky-800
         focus-visible:bg-sky-100 focus-visible:border-sky-700 focus-visible:ring-sky-600/50
-        dark:!text-white
-        dark:hover:bg-white/25
-        dark:active:bg-white/30
-        dark:focus-visible:bg-sky-100/30 dark:focus-visible:ring-white/75`]: {},
+        has-background:!text-white
+        has-background:hover:bg-white/25
+        has-background:active:bg-white/30
+        has-background:focus-visible:bg-sky-100/30 has-background:focus-visible:ring-white/75`]: {},
     },
 
     '.btn-text': {
@@ -68,10 +68,10 @@ module.exports = plugin(({ addComponents }) => {
         hover:text-sky-700 hover:underline
         active:text-sky-800
         focus-visible:bg-sky-100 focus-visible:ring-sky-600/50
-        dark:border-white dark:text-white
-        dark:hover:text-white/90
-        dark:active:text-white/80
-        dark:focus-visible:bg-sky-100/30  dark:focus-visible:ring-white/75`]:
+        has-background:border-white has-background:text-white
+        has-background:hover:text-white/90
+        has-background:active:text-white/80
+        has-background:focus-visible:bg-sky-100/30  has-background:focus-visible:ring-white/75`]:
         {},
     },
 
@@ -103,5 +103,6 @@ module.exports = plugin(({ addComponents }) => {
     },
   }
 
+  addVariant("has-background", ".has-background &")
   addComponents(buttons)
 })
