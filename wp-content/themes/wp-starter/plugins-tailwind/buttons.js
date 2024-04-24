@@ -4,7 +4,7 @@ module.exports = plugin(({ addComponents }) => {
   // Base Styles
   const base = {
     // core
-    '@apply inline-flex items-center rounded font-bold transition text-base gap-12':
+    '@apply inline-flex items-center rounded transition text-base gap-12':
       {},
     // focus
     '@apply focus:outline-none focus-visible:ring-4': {},
