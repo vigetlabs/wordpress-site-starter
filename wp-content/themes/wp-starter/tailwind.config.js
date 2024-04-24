@@ -24,6 +24,7 @@ export default {
 		'./src/**/*.{css,js,jsx,tsx,php}',
 		'./patterns/**/*.{css,js,jsx,tsx,php}',
 		'./parts/**/*.{css,js,jsx,tsx,php}',
+		'./blocks/**/*.{css,js,jsx,tsx,php}',
 	],
 	theme: {
 		contentSmall: minBreakpoint.toString(),
@@ -32,22 +33,12 @@ export default {
 			colors: {
 				transparent: 'transparent',
 				//If you update the names or add more colors you will need to update the file in theme-json/settings/color.js
-				base: {
-					100: "#ffffff",
-					200: "#e5e5e5",
+				white: "#ffffff",
+				gray: {
+					100: "#e5e5e5",
+					500: "#737373",
+					900: "#0a0a0a",
 				},
-				contrast: {
-					100: "#0a0a0a",
-					200: "#737373",
-					300: "#a3a3a3",
-				},
-				accent: {
-					100: "#cfcabe",
-					200: "#c2a990",
-					300: "#0ea5e9",
-					400: "#0369a1",
-					500: "#0c4a6e",
-				}
 			},
 			fontFamily: {
 				// If you update the names or add more fonts you will need to update the file in theme-json/settings/typography.js

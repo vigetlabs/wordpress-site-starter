@@ -21,12 +21,12 @@ const blocks = {
 	},
 	"core/code": {
 		"border": {
-			"color": "var(--wp--preset--color--contrast)",
+			"color": "var(--wp--preset--color--black)",
 			"radius": "var(--wp--preset--spacing--20)"
 		},
 		"color": {
-			"background": "var(--wp--preset--color--base-2)",
-			"text": "var(--wp--preset--color--contrast-2)"
+			"background": "var(--wp--preset--color--white)",
+			"text": "var(--wp--preset--color--black)"
 		},
 		"spacing": {
 			"padding": {
@@ -45,12 +45,12 @@ const blocks = {
 	},
 	"core/comment-author-name": {
 		"color": {
-			"text": "var(--wp--preset--color--contrast)"
+			"text": "var(--wp--preset--color--black)"
 		},
 		"elements": {
 			"link": {
 				"color": {
-					"text": "var(--wp--preset--color--contrast)"
+					"text": "var(--wp--preset--color--black)"
 				},
 				"typography": {
 					"textDecoration": "none"
@@ -81,12 +81,12 @@ const blocks = {
 	},
 	"core/comment-date": {
 		"color": {
-			"text": "var(--wp--preset--color--contrast-2)"
+			"text": "var(--wp--preset--color--black)"
 		},
 		"elements": {
 			"link": {
 				"color": {
-					"text": "var(--wp--preset--color--contrast-2)"
+					"text": "var(--wp--preset--color--black)"
 				},
 				"typography": {
 					"textDecoration": "none"
@@ -112,7 +112,7 @@ const blocks = {
 		"elements": {
 			"link": {
 				"color": {
-					"text": "var(--wp--preset--color--contrast-2)"
+					"text": "var(--wp--preset--color--black)"
 				},
 				"typography": {
 					"textDecoration": "none"
@@ -132,7 +132,7 @@ const blocks = {
 		"elements": {
 			"link": {
 				"color": {
-					"text": "var(--wp--preset--color--contrast-2)"
+					"text": "var(--wp--preset--color--black)"
 				},
 				"typography": {
 					"textDecoration": "none"
@@ -219,7 +219,7 @@ const blocks = {
 	},
 	"core/post-date": {
 		"color": {
-			"text": "var(--wp--preset--color--contrast-2)"
+			"text": "var(--wp--preset--color--black)"
 		},
 		"elements": {
 			"link": {
@@ -229,7 +229,7 @@ const blocks = {
 					}
 				},
 				"color": {
-					"text": "var(--wp--preset--color--contrast-2)"
+					"text": "var(--wp--preset--color--black)"
 				},
 				"typography": {
 					"textDecoration": "none"
@@ -266,7 +266,7 @@ const blocks = {
 		"typography": {
 			"fontSize": "var(--wp--preset--font-size--small)"
 		},
-		"css":"& .wp-block-post-terms__prefix{color: var(--wp--preset--color--contrast-2);}"
+		"css":"& .wp-block-post-terms__prefix{color: var(--wp--preset--color--black);}"
 	},
 	"core/post-title": {
 		"elements": {
@@ -325,7 +325,7 @@ const blocks = {
 			"radius": "var(--wp--preset--spacing--20)"
 		},
 		"color": {
-			"background": "var(--wp--preset--color--base-2)"
+			"background": "var(--wp--preset--color--white)"
 		},
 		"css": "& :where(p) {margin-block-start:0;margin-block-end:calc(var(--wp--preset--spacing--10) + 0.5rem);} & :where(:last-child) {margin-block-end:0;} &.has-text-align-right.is-style-plain, .rtl .is-style-plain.wp-block-quote:not(.has-text-align-center):not(.has-text-align-left){border-width: 0 2px 0 0;padding-left:calc(var(--wp--preset--spacing--20) + 0.5rem);padding-right:calc(var(--wp--preset--spacing--20) + 0.5rem);} &.has-text-align-left.is-style-plain, body:not(.rtl) .is-style-plain.wp-block-quote:not(.has-text-align-center):not(.has-text-align-right){border-width: 0 0 0 2px;padding-left:calc(var(--wp--preset--spacing--20) + 0.5rem);padding-right:calc(var(--wp--preset--spacing--20) + 0.5rem)}",
 		"elements": {
@@ -354,7 +354,7 @@ const blocks = {
 		"variations": {
 			"plain": {
 				"border": {
-					"color": "var(--wp--preset--color--contrast)",
+					"color": "var(--wp--preset--color--black)",
 					"radius": "0",
 					"style": "solid",
 					"width": "0"
@@ -399,13 +399,13 @@ const blocks = {
 			"width": "0 0 1px 0"
 		},
 		"color": {
-			"text": "var(--wp--preset--color--contrast)"
+			"text": "var(--wp--preset--color--black)"
 		},
 		"css": " &:not(.is-style-wide):not(.is-style-dots):not(.alignwide):not(.alignfull){width: var(--wp--preset--spacing--60)}"
 	},
 	"core/site-tagline": {
 		"color": {
-			"text": "var(--wp--preset--color--contrast-2)"
+			"text": "var(--wp--preset--color--black)"
 		},
 		"typography": {
 			"fontSize": "var(--wp--preset--font-size--small)"

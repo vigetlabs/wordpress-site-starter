@@ -11,10 +11,6 @@
       "type": "string",
       "default": "full"
     },
-    "backgroundColor": {
-      "type": "string",
-      "default": "alice-blue"
-    },
     "style": {
       "type": "object",
       "default": {
