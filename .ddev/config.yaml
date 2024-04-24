@@ -13,11 +13,16 @@ database:
     version: "8.0"
 use_dns_when_possible: true
 composer_version: "2"
+nodejs_version: "18"
+override_config: true
 web_environment:
     - ENVIRONMENT=dev
     - WP_ENVIRONMENT_TYPE=development
-nodejs_version: "18"
-override_config: true
+web_extra_exposed_ports:
+  - name: vite-serve
+    container_port: 5173
+    http_port: 5172
+    https_port: 5173
 
 # Key features of DDEV's config.yaml:
 
