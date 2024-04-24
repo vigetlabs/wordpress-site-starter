@@ -1,0 +1,12 @@
+@layer components {
+	.acf-block-accordion {
+		.wp-block-details {
+			@apply border-t last-of-type:border-b;
+
+			> summary {
+				@apply mr-12 text-lg font-bold flex cursor-pointer justify-between py-24;
+				@apply marker:content-none focus:outline-none
+			}
+		}
+	}
+}
