@@ -3,7 +3,7 @@
 @import "tailwindcss/utilities";
 
 /*Import custom styles*/
-@import "./base/dark-bg.css";
+@import "./base/has-bg.css";
 @import "./base/typography.css";
 
 @import "./blocks/buttons.css";

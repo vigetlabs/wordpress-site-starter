@@ -1,13 +1,16 @@
-@layer utilities {
-	.wp-block-button {
-		.wp-block-button__link {
-			@apply btn-contained;
-		}
-
-		&.is-style-outline{
+@layer components {
+	:not(.has-black-background-color),
+	:not(.has-gray-500-background-color),
+	:not(.has-accent-background-color) {
+		.wp-block-button {
 			.wp-block-button__link {
-				@apply btn-outlined;
+				@apply btn-contained;
+			}
 
+			&.is-style-outline{
+				.wp-block-button__link {
+					@apply btn-outlined;
+				}
 			}
 		}
 	}
