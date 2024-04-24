@@ -1,0 +1,17 @@
+@layer components {
+	.acf-block-logo-grid figure {
+		@apply flex items-center justify-center;
+		@apply object-contain;
+		@apply lg:max-w-240;
+	}
+
+	.acf-block-logo-grid figure img {
+		@apply block;
+		@apply max-w-full;
+	}
+
+	/* Fix for image sizing in editor */
+	.acf-block-logo-grid .components-resizable-box__container {
+		@apply !shrink;
+	}
+}

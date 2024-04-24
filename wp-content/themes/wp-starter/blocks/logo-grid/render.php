@@ -20,6 +20,6 @@ $inner          = [
 	'allowedBlocks' => $allowed,
 ];
 ?>
-<section <?php block_attrs( $block ); ?>>
+<section <?php block_attrs( $block, 'gap-16' ); ?>>
 	<?php inner_blocks( $inner ); ?>
 </section>
