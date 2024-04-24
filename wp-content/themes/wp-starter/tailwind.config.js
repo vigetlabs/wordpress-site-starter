@@ -40,6 +40,10 @@ export default {
 					900: "#0a0a0a",
 				},
 			},
+			flexBasis: {
+				'1/2-gap': 'calc((100%/2) - var(--wp--style--block-gap))',
+				'1/4-gap': 'calc((100%/4) - var(--wp--style--block-gap))',
+			},
 			fontFamily: {
 				// If you update the names or add more fonts you will need to update the file in theme-json/settings/typography.js
 				// Fonts are handles WP's font loader.
@@ -87,7 +91,7 @@ export default {
 				...remPair(96),
 				...remPair(112),
 				...remPair(128),
-				...remPair(240),
+				...remPair(320),
 			},
 		},
 	},
