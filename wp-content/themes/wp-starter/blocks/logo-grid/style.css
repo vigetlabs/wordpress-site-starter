@@ -1,11 +1,10 @@
 .acf-block-logo-grid figure {
-	max-width: 240px;
-	display: flex;
-	object-fit: contain;
-	align-items: center;
-	justify-content: center;
+	@apply flex items-center justify-center;
+	@apply object-contain;
+	@apply max-w-240;
 }
+
 .acf-block-logo-grid figure img {
-	display: block;
-	max-width: 100%;
+	@apply block;
+	@apply max-w-full;
 }

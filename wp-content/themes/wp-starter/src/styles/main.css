@@ -2,6 +2,9 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+/* ACF Block styles */
+@import '../../blocks/logo-grid/style.css';
+
 /*Import custom styles*/
 @import "./base/has-bg.css";
 @import "./base/typography.css";
