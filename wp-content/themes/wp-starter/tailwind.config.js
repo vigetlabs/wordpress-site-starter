@@ -20,7 +20,6 @@ const fluidSize = (
 };
 
 export default {
-	darkMode: 'class',
 	content: [
 		'./src/**/*.{css,js,jsx,tsx,php}',
 		'./patterns/**/*.{css,js,jsx,tsx,php}',

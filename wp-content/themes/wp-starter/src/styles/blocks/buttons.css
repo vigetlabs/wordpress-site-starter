@@ -4,9 +4,10 @@
 			@apply btn-contained;
 		}
 
-		&.is-style-outline {
+		&.is-style-outline{
 			.wp-block-button__link {
 				@apply btn-outlined;
+
 			}
 		}
 	}
