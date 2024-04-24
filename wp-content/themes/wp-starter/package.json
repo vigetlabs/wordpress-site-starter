@@ -1,6 +1,7 @@
 {
 	"name": "wp-starter",
 	"version": "0.1.0",
+  "type": "module",
 	"engines": {
 		"node": ">=18.0.0",
 		"npm": ">=9.0.0"
