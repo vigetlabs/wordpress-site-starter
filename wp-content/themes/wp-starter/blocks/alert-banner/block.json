@@ -37,6 +37,7 @@
     "jsx": true,
     "mode": false,
     "alignWide": true,
+    "anchor": true,
     "color": {
       "background": true
     },
