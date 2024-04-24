@@ -1,0 +1,29 @@
+{
+  "name": "video-embed",
+  "title": "Video Embed",
+  "description": "Displays the Video Embed Component.",
+  "icon": "embed-video",
+  "category": "components",
+  "textdomain": "wp-starter",
+  "keywords": ["video", "embed", "youtube", "vimeo", "url", "play"],
+  "supports": {
+    "jsx": true,
+    "mode": false,
+    "alignWide": true,
+    "layout": {
+      "default": {
+        "type": "constrained",
+        "justifyContent": "center"
+      },
+      "allowEditing": false,
+      "allowSwitching": false,
+      "allowCustomContentAndWideSize": false
+    }
+  },
+  "style": [
+    "file:./style.css"
+  ],
+  "acf": {
+    "mode": "preview"
+  }
+}
