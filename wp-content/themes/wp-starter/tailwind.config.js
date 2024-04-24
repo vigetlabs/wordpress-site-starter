@@ -91,7 +91,6 @@ export default {
 				...remPair(96),
 				...remPair(112),
 				...remPair(128),
-				...remPair(320),
 			},
 		},
 	},
