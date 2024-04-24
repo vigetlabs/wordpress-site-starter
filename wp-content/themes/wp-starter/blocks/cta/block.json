@@ -11,10 +11,6 @@
       "type": "string",
       "default": "full"
     },
-    "backgroundColor": {
-      "type": "string",
-      "default": "accent"
-    },
     "style": {
       "type": "object",
       "default": {
