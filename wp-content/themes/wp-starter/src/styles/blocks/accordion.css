@@ -11,9 +11,12 @@
 				@apply focus:text-sky-600 focus:after:text-sky-600 focus:outline-sky-600;
 			}
 
-			&[open] > summary {
-				@apply after:content-['\2212'];
-				@apply after:text-sky-600;
+			&[open] {
+				@apply pb-24;
+
+				> summary {
+					@apply after:content-['\2212'] after:text-sky-600;
+				}
 			}
 		}
 	}

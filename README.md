@@ -8,11 +8,11 @@ To use this, clone the WordPress Site Starter into the new project repo. Update 
 
 ## Setup and Running
 
-Download and install WordPress core files
+Download and install WordPress core files if this is the first time running DDEV
 `ddev wp core download`
 
 Start local server
-`ddev start`
+`bin/start`
 
 TODO add more info here once we have the full setup completed. 
 
@@ -24,3 +24,15 @@ TODO add more info here once we have the full setup completed.
 
 
 ## Block Documentation
+
+TODO
+
+## Commands
+
+```
+ddev npm run dev #builds local files
+ddev npm run build  #builds production files
+ddev npm run json-theme #builds the theme.json
+```
+
+In order to run Vite you need to run it inside of DDEV by running `ddev npm run dev` inside of your theme folder. 
