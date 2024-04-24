@@ -1,0 +1,34 @@
+{#
+  Block: Text & Image
+#}
+
+{% set template = [
+	[
+		'core/media-text',
+		{
+			'imageFill': true,
+			'verticalAlignment': 'center',
+		},
+		[
+			[
+				'core/pattern',
+				{
+					'slug': 'wp-starter/text-image-inner-blocks',
+				}
+			]
+		]
+	]
+] %}
+{% set allowed = [
+	'core/media-text',
+	'core/paragraph',
+	'core/heading',
+	'core/group',
+] %}
+{% set inner = {
+	template: template,
+	allowedBlocks: allowed
+} %}
+<section {{ block_attrs( attributes ) }}>
+  {{ inner_blocks( inner ) }}
+</section>
