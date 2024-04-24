@@ -1,0 +1,24 @@
+.wp-block-embed__wrapper {
+	position: relative;
+	padding-bottom: 56.25%; /* 16:9 */
+	height: 0;
+	display: flex;
+	justify-content: center;
+}
+
+.wp-block-embed__wrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+body .acf-block-video-embed.alignfull > .wp-block-embed {
+	padding-right: 0;
+	padding-left: 0
+}
+
+.acf-block-video-embed .wp-block-embed[data-block] {
+	width: 100%;
+}
