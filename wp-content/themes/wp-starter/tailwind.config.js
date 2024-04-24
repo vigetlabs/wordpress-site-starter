@@ -49,7 +49,7 @@ export default {
 				// If you update the names or add more fonts sizes you will need to update the file in theme-json/settings/typography.js
 				"2xl": [["32px", fluidSize(32, 60)],"1.1",],
 				"xl": [["24px", fluidSize(24, 44)], "1.1"],
-				"lg": [["21px", fluidSize(21, 34)], "1.1"],
+				"lg": [["20px", fluidSize(20, 34)], "1.1"],
 				"base": [["16px", fluidSize(16, 18)], "1.1"],
 				"sm": [["12px", fluidSize(12, 16)], "1.1"],
 				"xs": [["8px", fluidSize(8, 10)], "1.1"],
