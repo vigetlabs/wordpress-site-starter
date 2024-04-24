@@ -31,6 +31,7 @@
   },
   "supports": {
     "jsx": true,
+    "mode": false,
     "alignWide": true,
     "color": {
       "background": true

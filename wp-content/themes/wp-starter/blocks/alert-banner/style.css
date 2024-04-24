@@ -1,0 +1,41 @@
+.acf-block-alert-banner:not(.is-style-dismissible) .dismiss {
+	display: none;
+}
+
+.acf-block-alert-banner.is-style-dismissible {
+	position: relative;
+}
+.acf-block-alert-banner.is-style-dismissible .dismiss {
+	background-color: transparent;
+	border: 0;
+	cursor: pointer;
+	position: absolute;
+	right: 0.5rem;
+	top: 50%;
+	transform: translateY( -50% );
+	z-index: 2;
+}
+.acf-block-alert-banner.is-style-dismissible .dismiss:after {
+	content: '\2715';
+}
+
+.wp-block-acf-alert-banner .acf-block-alert-banner.is-style-dismissible:before {
+	border-radius: 3px;
+	color: #fff;
+	font-size: 11px;
+	left: 15px;
+	padding: 2px 5px;
+	pointer-events: none;
+	position: absolute;
+	top: -10px;
+	z-index: 3;
+}
+.wp-block-acf-alert-banner .acf-block-alert-banner.is-style-dismissible:not([data-id]):before {
+	background-color: red;
+	content: 'ID Required: See Advanced > HTML Anchor';
+	text-transform: uppercase;
+}
+.wp-block-acf-alert-banner .acf-block-alert-banner.is-style-dismissible[data-id]:before {
+	background-color: #000;
+	content: '#' attr(data-id);
+}

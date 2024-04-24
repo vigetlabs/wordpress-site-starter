@@ -8,6 +8,7 @@
   "keywords": ["toggle", "details", "summary", "accordion"],
   "supports": {
     "jsx": true,
+    "mode": false,
     "alignWide": true
   },
   "style": [
