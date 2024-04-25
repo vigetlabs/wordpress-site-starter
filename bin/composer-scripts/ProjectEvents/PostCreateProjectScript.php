@@ -112,7 +112,7 @@ class PostCreateProjectScript extends ComposerScript {
 	 */
 	public static function getProjectInfo(): void {
 		// Project Name.
-		$default_name = ucwords( str_replace( [ '-', '_' ], ' ', dirname( getcwd() ) ) );
+		$default_name = ucwords( str_replace( [ '-', '_' ], ' ', basename( getcwd() ) ) );
 		$name = ! empty( self::$info['name'] ) ? self::$info['name'] : $default_name;
 		self::$info['name'] = self::ask( 'What is the name of your project?', $name );
 
