@@ -1,5 +1,5 @@
 //Move any block that you are working to a new file to make it easyer to maintain
-import { coreButtons } from "./blocks/buttons.js";
+import theme from "../import_tailwind.js";
 import image from "./blocks/image.js";
 import navigation from "./blocks/navigation.js";
 
@@ -9,7 +9,11 @@ const blocks = {
 			"radius": "90px"
 		}
 	},
-	...coreButtons,
+	"core/buttons": {
+		"spacing": {
+			"blockGap": theme.spacing[12]
+		},
+	},
 	"core/categories": {
 		"spacing": {
 			"padding": {

@@ -1,9 +1,6 @@
 import theme from "../import_tailwind.js";
-import { buttonElement } from "./blocks/buttons.js"
-
 
 export default {
-	...buttonElement,
 	"caption": {
 		"color": {
 			"text": "var(--wp--preset--color--black)"

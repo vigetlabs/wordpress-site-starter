@@ -90,6 +90,8 @@ export default {
 			},
 		},
 	},
-	plugins: [],
+	plugins: [
+		require('./plugins-tailwind/buttons.js'),
+	],
 }
 

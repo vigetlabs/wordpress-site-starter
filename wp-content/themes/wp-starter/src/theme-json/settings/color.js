@@ -26,7 +26,7 @@ export default {
 			"slug": "black"
 		},
 		{
-			"color": theme.colors.sky[600],
+			"color": theme.colors.sky[800],
 			"name": "Accent",
 			"slug": "accent"
 		}
