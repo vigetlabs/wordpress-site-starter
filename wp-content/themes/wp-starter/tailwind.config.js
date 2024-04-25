@@ -30,6 +30,9 @@ export default {
 		contentSmall: minBreakpoint.toString(),
 		contentBase: maxBreakpoint.toString(),
 		extend: {
+			aspectRatio: {
+				'grid-image': '5/3',
+			},
 			colors: {
 				transparent: 'transparent',
 				//If you update the names or add more colors you will need to update the file in theme-json/settings/color.js
@@ -39,6 +42,10 @@ export default {
 					500: "#737373",
 					900: "#0a0a0a",
 				},
+			},
+			flexBasis: {
+				'1/2-gap': 'calc((100%/2) - var(--wp--style--block-gap))',
+				'1/4-gap': 'calc((100%/4) - var(--wp--style--block-gap))',
 			},
 			fontFamily: {
 				// If you update the names or add more fonts you will need to update the file in theme-json/settings/typography.js
