@@ -1,16 +1,20 @@
 @layer components {
-	.acf-block-logo-grid figure {
-		@apply flex;
-		@apply basis-1/2-gap lg:basis-1/4-gap;
-	}
+	.acf-block-logo-grid {
+		& figure {
+			@apply flex;
+			@apply aspect-grid-image;
+			@apply basis-1/2-gap lg:basis-1/4-gap;
 
-	.acf-block-logo-grid figure img {
-		@apply block;
-		@apply max-w-full;
-	}
+			& img {
+				@apply block;
+				@apply max-w-full h-full;
+				@apply object-contain;
+			}
+		}
 
-	/* Fix for image sizing in editor */
-	.acf-block-logo-grid .components-resizable-box__container {
-		@apply !shrink;
+		/* Fix for image sizing in editor */
+		& .components-resizable-box__container {
+			@apply !shrink;
+		}
 	}
 }

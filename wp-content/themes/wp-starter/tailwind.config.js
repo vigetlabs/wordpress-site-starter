@@ -30,6 +30,9 @@ export default {
 		contentSmall: minBreakpoint.toString(),
 		contentBase: maxBreakpoint.toString(),
 		extend: {
+			aspectRatio: {
+				'grid-image': '5/3',
+			},
 			colors: {
 				transparent: 'transparent',
 				//If you update the names or add more colors you will need to update the file in theme-json/settings/color.js
