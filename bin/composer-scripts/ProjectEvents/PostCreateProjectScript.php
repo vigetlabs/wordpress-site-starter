@@ -83,6 +83,9 @@ class PostCreateProjectScript extends ComposerScript {
 		// Perform project string replacements
 		self::updateProjectFiles();
 
+		// Require ACF if auth.json file is present.
+		self::maybeRequireACF();
+
 		// Modify the description in the composer.json file.
 		self::updateComposerDescription();
 
@@ -245,6 +248,27 @@ class PostCreateProjectScript extends ComposerScript {
 		}
 
 		self::writeInfo( 'All set!' );
+	}
+
+	/**
+	 * Require ACF if auth.json file is present.
+	 *
+	 * @return void
+	 */
+	public static function maybeRequireACF(): void {
+		$auth_path = self::translatePath( 'auth.json' );
+
+		if ( ! file_exists( $auth_path ) ) {
+			return;
+		}
+
+		$composer_path = self::translatePath( 'composer.json' );
+		$composer_json = file_get_contents( $composer_path );
+		$composer_data = json_decode( $composer_json, true );
+
+		$composer_data['require']['wpengine/advanced-custom-fields-pro'] = "*";
+
+		file_put_contents( $composer_path, json_encode( $composer_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) );
 	}
 
 	/**

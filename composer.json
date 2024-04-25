@@ -36,8 +36,8 @@
       "Viget\\ComposerScripts\\ProjectEventHandler::postCreateProject",
       "@composer install"
     ],
-    "post-install-cmd": [
-      "Viget\\ComposerScripts\\ProjectEventHandler::postInstall"
+    "pre-install-cmd": [
+      "Viget\\ComposerScripts\\ProjectEventHandler::preInstall"
     ],
     "generate-docs": "Viget\\ComposerScripts\\WPDocsGeneratorScript::make"
   },
@@ -55,8 +55,7 @@
     "php": ">=8.2.0",
     "ext-json": "*",
     "squizlabs/php_codesniffer": "^3.9",
-    "wpackagist-plugin/svg-support": "^2.5",
-    "wpengine/advanced-custom-fields-pro": "^6.2"
+    "wpackagist-plugin/svg-support": "^2.5"
   },
   "require-dev": {
     "composer/composer": "^2.7",

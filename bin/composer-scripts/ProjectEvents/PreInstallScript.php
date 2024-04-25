@@ -1,6 +1,6 @@
 <?php
 /**
- * Perform some post-install actions with Composer.
+ * Perform some pre-install actions with Composer.
  */
 
 namespace Viget\ComposerScripts\ProjectEvents;
@@ -9,9 +9,9 @@ use Composer\Script\Event;
 use Viget\ComposerScripts\ComposerScript;
 
 /**
- * Post Install Composer Script
+ * Pre Install Composer Script
  */
-class PostInstallScript extends ComposerScript {
+class PreInstallScript extends ComposerScript {
 
 	/**
 	 * Perform the actions within this file.
