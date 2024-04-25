@@ -80,14 +80,14 @@ class PostCreateProjectScript extends ComposerScript {
 		// Gather project info.
 		self::getProjectInfo();
 
+		// Modify the description in the composer.json file.
+		self::updateComposerDescription();
+
 		// Perform project string replacements
 		self::updateProjectFiles();
 
 		// Require ACF if auth.json file is present.
 		self::maybeRequireACF();
-
-		// Modify the description in the composer.json file.
-		self::updateComposerDescription();
 	}
 
 	/**
