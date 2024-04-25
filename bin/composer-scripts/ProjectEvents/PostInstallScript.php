@@ -23,6 +23,31 @@ class PostInstallScript extends ComposerScript {
 	public static function execute( Event $event ): void {
 		self::setEvent( $event );
 
+		// Download WordPress
+		self::maybeDownloadWordPress();
+	}
+
+	/**
+	 * Download WordPress if it doesn't exist.
+	 *
+	 * @return void
+	 */
+	public static function maybeDownloadWordPress(): void {
+		if ( file_exists( self::translatePath( './wp-load.php' ) ) ) {
+			return;
+		}
+
+		$wordpress_dir     = self::translatePath( './' );
+		$wordpress_version = 'latest';
+
+		$cmd = sprintf(
+			'ddev wp core download --path=%s --version=%s',
+			escapeshellarg( $wordpress_dir ),
+			escapeshellarg( $wordpress_version )
+		);
+
+		self::runCommand( $cmd );
+
 		// Remove the core Twenty-X themes.
 		self::deleteCoreThemes();
 	}

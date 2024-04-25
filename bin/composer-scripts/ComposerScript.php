@@ -198,6 +198,21 @@ class ComposerScript {
 	}
 
 	/**
+	 * Run a command in the terminal.
+	 *
+	 * @param string $cmd
+	 *
+	 * @return void
+	 */
+	protected static function runCommand( string $cmd ): void {
+		$output = shell_exec( $cmd );
+
+		if ( $output ) {
+			self::writeOutput( $output );
+		}
+	}
+
+	/**
 	 * Get the project folder.
 	 *
 	 * @return ?string
