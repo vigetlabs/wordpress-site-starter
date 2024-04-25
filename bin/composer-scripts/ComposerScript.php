@@ -241,8 +241,6 @@ class ComposerScript {
 			return;
 		}
 
-		self::writeInfo( sprintf( 'Updating %s', $path ) );
-
 		$contents = file_get_contents( $path );
 		$contents = str_replace( $search, $replace, $contents );
 		file_put_contents( $path, $contents );
