@@ -112,7 +112,8 @@ class PostCreateProjectScript extends ComposerScript {
 	 */
 	public static function getProjectInfo(): void {
 		// Project Name.
-		$name = ! empty( self::$info['name'] ) ? self::$info['name'] : 'My Project';
+		$default_name = ucwords( str_replace( [ '-', '_' ], ' ', dirname( getcwd() ) ) );
+		$name = ! empty( self::$info['name'] ) ? self::$info['name'] : $default_name;
 		self::$info['name'] = self::ask( 'What is the name of your project?', $name );
 
 		// Project Slug.
@@ -124,7 +125,7 @@ class PostCreateProjectScript extends ComposerScript {
 		self::$info['text_domain'] = self::ask( 'Should the text domain match the project slug?', self::$info['text_domain'] );
 
 		// Project Package.
-		self::$info['package'] = str_replace( ' ', '', self::$info['name'] );
+		self::$info['package'] = str_replace( ' ', '', ucwords( self::$info['name'] ) );
 		self::$info['package'] = self::ask( 'Do you want to customize the package name?', self::$info['package'] );
 
 		// Function Prefix.
