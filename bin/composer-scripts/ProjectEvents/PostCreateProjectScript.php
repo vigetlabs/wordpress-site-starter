@@ -88,9 +88,6 @@ class PostCreateProjectScript extends ComposerScript {
 
 		// Modify the description in the composer.json file.
 		self::updateComposerDescription();
-
-		// Remove the Twenty- themes.
-		self::deleteCoreThemes();
 	}
 
 	/**
@@ -323,53 +320,5 @@ class PostCreateProjectScript extends ComposerScript {
 		$theme_html_files = glob( $theme_dir . '/**/*.html' );
 
 		return array_merge( $files, $theme_php_files, $theme_html_files );
-	}
-
-	/**
-	 * Delete the core themes.
-	 *
-	 * @return void
-	 */
-	private static function deleteCoreThemes(): void {
-		$themes = [
-			'twentytwenty',
-			'twentytwentyone',
-			'twentytwentytwo',
-			'twentytwentythree',
-			'twentytwentyfour',
-		];
-
-		foreach ( $themes as $theme ) {
-			$theme_dir = self::translatePath( 'wp-content/themes/' . $theme );
-
-			if ( ! is_dir( $theme_dir ) ) {
-				continue;
-			}
-
-			self::deleteDirectory( $theme_dir );
-		}
-	}
-
-	/**
-	 * Delete a directory and all of its contents.
-	 *
-	 * @param string $path
-	 *
-	 * @return void
-	 */
-	private static function deleteDirectory( string $path ): void {
-		$files = array_diff( scandir( $path ), [ '.', '..' ] );
-
-		foreach ( $files as $file ) {
-			$item = $path . '/' . $file;
-
-			if ( is_dir( $item ) ) {
-				self::deleteDirectory( $item );
-			} else {
-				unlink( $item );
-			}
-		}
-
-		rmdir( $path );
 	}
 }

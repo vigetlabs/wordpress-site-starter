@@ -49,7 +49,7 @@ class ComposerScript {
 	 * @param Event $event
 	 * @return void
 	 */
-	public static function setEvent( Event $event ): void
+	protected static function setEvent( Event $event ): void
 	{
 		self::$event    = $event;
 		self::$composer = self::$event->getComposer();
@@ -62,7 +62,7 @@ class ComposerScript {
 	 * @param string $path
 	 * @return string
 	 */
-	public static function translatePath( string $path ): string
+	protected static function translatePath( string $path ): string
 	{
 		// Support relative paths.
 		if ( in_array( $path, [ './', '.' ] ) ) {
@@ -85,7 +85,7 @@ class ComposerScript {
 	 * @param array  $options
 	 * @return void
 	 */
-	public static function customStyle( string $tag, string $color, string $background = '', array $options = [] ): void
+	protected static function customStyle( string $tag, string $color, string $background = '', array $options = [] ): void
 	{
 		$style = new OutputFormatterStyle( $color, $background, $options );
 		self::$output->getFormatter()->setStyle( $tag, $style );
@@ -100,7 +100,7 @@ class ComposerScript {
 	 *
 	 * @return void
 	 */
-	public static function writeOutput( string $content, string $type = '', bool $extraLine = false ): void
+	protected static function writeOutput( string $content, string $type = '', bool $extraLine = false ): void
 	{
 		if ( ! self::$event ) {
 			echo 'Missing event object.' . PHP_EOL;
@@ -124,7 +124,7 @@ class ComposerScript {
 	 *
 	 * @return void
 	 */
-	public static function writeInfo( string $content ): void
+	protected static function writeInfo( string $content ): void
 	{
 		self::writeOutput( $content, 'info' );
 	}
@@ -136,7 +136,7 @@ class ComposerScript {
 	 *
 	 * @return void
 	 */
-	public static function writeComment( string $content ): void
+	protected static function writeComment( string $content ): void
 	{
 		self::writeOutput( $content, 'comment' );
 	}
@@ -148,7 +148,7 @@ class ComposerScript {
 	 *
 	 * @return void
 	 */
-	public static function writeError( string $content ): void
+	protected static function writeError( string $content ): void
 	{
 		self::writeOutput( $content, 'error' );
 	}
@@ -160,7 +160,7 @@ class ComposerScript {
 	 *
 	 * @return void
 	 */
-	public static function writeWarning( string $content ): void
+	protected static function writeWarning( string $content ): void
 	{
 		self::writeOutput( $content, 'warning' );
 	}
@@ -173,7 +173,7 @@ class ComposerScript {
 	 *
 	 * @return string
 	 */
-	public static function ask( string $question, string $default = '' ): string
+	protected static function ask( string $question, string $default = '' ): string
 	{
 		$defaultText = $default ? sprintf( ' <comment>[%s]</comment>', $default ) : '';
 		$ask          = sprintf( '<question>%s</question>%s ', trim( $question ), $defaultText );
@@ -189,7 +189,7 @@ class ComposerScript {
 	 *
 	 * @return string
 	 */
-	public static function confirm( string $question, bool $default = true ): string
+	protected static function confirm( string $question, bool $default = true ): string
 	{
 		$options      = $default ? 'Y/n' : 'y/N';
 		$confirmation = sprintf( '<info>%s</info> <comment>[%s]</comment> ', trim( $question ), $options );
@@ -202,7 +202,7 @@ class ComposerScript {
 	 *
 	 * @return ?string
 	 */
-	public static function getProjectFolder(): ?string {
+	protected static function getProjectFolder(): ?string {
 		if ( ! self::$event ) {
 			echo 'Missing event object.' . PHP_EOL;
 			return null;
@@ -222,7 +222,7 @@ class ComposerScript {
 	 *
 	 * @return void
 	 */
-	public static function searchReplaceFile( string|array $search, string|array $replace, string $file ): void {
+	protected static function searchReplaceFile( string|array $search, string|array $replace, string $file ): void {
 		if ( file_exists( $file ) ) {
 			$path = $file;
 		} else {
@@ -236,5 +236,28 @@ class ComposerScript {
 		$contents = file_get_contents( $path );
 		$contents = str_replace( $search, $replace, $contents );
 		file_put_contents( $path, $contents );
+	}
+
+	/**
+	 * Delete a directory and all of its contents.
+	 *
+	 * @param string $path
+	 *
+	 * @return void
+	 */
+	protected static function deleteDirectory( string $path ): void {
+		$files = array_diff( scandir( $path ), [ '.', '..' ] );
+
+		foreach ( $files as $file ) {
+			$item = $path . '/' . $file;
+
+			if ( is_dir( $item ) ) {
+				self::deleteDirectory( $item );
+			} else {
+				unlink( $item );
+			}
+		}
+
+		rmdir( $path );
 	}
 }

@@ -7,6 +7,7 @@ namespace Viget\ComposerScripts;
 
 use Composer\Script\Event;
 use Viget\ComposerScripts\ProjectEvents\PostCreateProjectScript;
+use Viget\ComposerScripts\ProjectEvents\PostInstallScript;
 use Viget\ComposerScripts\ProjectEvents\PreInstallScript;
 
 /**
@@ -36,4 +37,14 @@ class ProjectEventHandler {
 		PostCreateProjectScript::execute( $event );
 	}
 
+	/**
+	 * Post install event.
+	 *
+	 * @param Event $event
+	 *
+	 * @return void
+	 */
+	public static function postInstall( Event $event ): void {
+		PostInstallScript::execute( $event );
+	}
 }
