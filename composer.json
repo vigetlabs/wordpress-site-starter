@@ -40,7 +40,8 @@
       "Viget\\ComposerScripts\\ProjectEventHandler::preInstall"
     ],
     "post-install-cmd": [
-      "ddev start && ddev wp core download",
+      "ddev start",
+      "ddev wp core download",
       "Viget\\ComposerScripts\\ProjectEventHandler::postInstall"
     ],
     "generate-docs": "Viget\\ComposerScripts\\WPDocsGeneratorScript::make"
