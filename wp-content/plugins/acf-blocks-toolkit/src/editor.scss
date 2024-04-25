@@ -1,0 +1,65 @@
+// Add icons to Button blocks and style appropriately.
+.wp-block-button[class*="has-icon__"] {
+	.wp-block-button__link {
+		&::after {
+			content: "";
+		}
+
+		// Styles the icon.
+		&::after,
+		&::before {
+			display: inline-block;
+			background-color: currentColor;
+			-webkit-mask-size: contain;
+			mask-size: contain;
+			-webkit-mask-position: center;
+			mask-position: center;
+			-webkit-mask-repeat: no-repeat;
+			mask-repeat: no-repeat;
+			height: 0.8em;
+			width: 0.45em;
+		}
+	}
+
+	&.has-icon-position__left {
+		.wp-block-button__link {
+			&::before {
+				content: "";
+			}
+		}
+	}
+}
+
+// Style "Icon Settings" panel.
+.button-icon-picker {
+	.components-panel__row {
+		&:not(:nth-child(2)) {
+			margin-top: 16px;
+		}
+	}
+
+	.button-icon-picker__grid {
+		border-radius: 2px;
+		border: 1px solid rgb(148, 148, 148);
+		max-height: 150px;
+		overflow: auto;
+		padding: 2px;
+		width: 100%;
+	}
+
+	&__button span {
+		align-items: center;
+		display: flex;
+		height: 100%;
+		justify-content: center;
+		width: 100%;
+
+		svg {
+			object-fit: contain;
+			display: block;
+			width: 100%;
+			height: 100%;
+			aspect-ratio: 1/1;
+		}
+	}
+}

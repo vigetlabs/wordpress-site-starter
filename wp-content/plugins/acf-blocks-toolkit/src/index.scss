@@ -1,0 +1,18 @@
+.wp-block-button[class*="has-icon__"] {
+	.wp-block-button__link {
+		display: flex;
+		gap: 0.5em;
+		align-items: center;
+
+		span {
+			line-height: 0;
+		}
+
+		svg {
+			color: currentColor;
+			fill: currentColor;
+			height: 0.7em;
+			width: 1em;
+		}
+	}
+}

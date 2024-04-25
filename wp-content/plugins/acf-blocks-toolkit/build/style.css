@@ -1,0 +1,19 @@
+/*!***************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/index.scss ***!
+  \***************************************************************************************************************************************************************************************************************************************/
+.wp-block-button[class*=has-icon__] .wp-block-button__link {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+}
+.wp-block-button[class*=has-icon__] .wp-block-button__link span {
+  line-height: 0;
+}
+.wp-block-button[class*=has-icon__] .wp-block-button__link svg {
+  color: currentColor;
+  fill: currentColor;
+  height: 0.7em;
+  width: 1em;
+}
+
+/*# sourceMappingURL=style.css.map*/
