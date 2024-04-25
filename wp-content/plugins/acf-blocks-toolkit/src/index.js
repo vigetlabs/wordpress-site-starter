@@ -94,27 +94,31 @@ function addInspectorControls( BlockEdit ) {
 							>
 								{ ICONS.map( ( icon, index ) => (
 									<Button
-										key={index}
-										label={icon?.label}
-										isPressed={currentIcon === icon.value}
+										key={ index }
+										label={ icon?.label }
+										isPressed={ currentIcon === icon.value }
 										className="button-icon-picker__button"
-										onClick={() =>
-											setAttributes({
+										onClick={ () =>
+											setAttributes( {
 												// Allow user to disable icons.
 												icon:
 													currentIcon === icon.value
 														? null
 														: icon.value,
-											})
+											} )
 										}
 									>
-										<span dangerouslySetInnerHTML={{__html: icon.icon ?? icon.value}}/>
+										<span
+											dangerouslySetInnerHTML={ {
+												__html: icon.icon ?? icon.value,
+											} }
+										/>
 									</Button>
-								))}
+								) ) }
 							</Grid>
 						</PanelRow>
 						<PanelRow>
-						<ToggleControl
+							<ToggleControl
 								label={ __(
 									'Show icon on left',
 									'acf-blocks-toolkit'
