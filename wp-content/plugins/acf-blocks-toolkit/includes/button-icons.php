@@ -136,6 +136,11 @@ add_filter(
  * @return array
  */
 function acfbt_get_icons(): array {
+	/**
+	 * Filter the available button icons.
+	 *
+	 * @param array $icons The available button icons.
+	 */
 	return apply_filters(
 		'acfbt_button_icons',
 		[
