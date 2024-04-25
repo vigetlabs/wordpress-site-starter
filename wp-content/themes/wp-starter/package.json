@@ -2,13 +2,15 @@
 	"name": "wp-starter",
 	"version": "0.1.0",
 	"engines": {
-		"node": ">=18.0.0",
-		"npm": ">=9.0.0"
+		"node": ">=20.0.0",
+		"npm": ">=10.0.0"
 	},
 	"scripts": {
 		"dev": "APP_ENV=dev vite --host",
 		"build": "vite build",
-		"json-theme": "node src/theme-json/generate_theme.js"
+		"json-theme": "node src/theme-json/generate_theme.js",
+		"format": "prettier \"./src/**/*.{css,ts,tsx,js}\" --check",
+		"format:fix": "prettier \"./src/**/*.{css,ts,tsx,js}\" --write"
 	},
 	"devDependencies": {
 		"@kucrut/vite-for-wp": "^0.8.0",

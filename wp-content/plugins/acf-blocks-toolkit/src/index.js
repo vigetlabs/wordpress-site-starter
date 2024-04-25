@@ -1,23 +1,23 @@
 /**
  * External dependencies
  */
-import classnames from "classnames";
+import classnames from 'classnames';
 
 /**
  * WordPress dependencies
  */
-import { __ } from "@wordpress/i18n";
-import { addFilter } from "@wordpress/hooks";
-import { InspectorControls } from "@wordpress/block-editor";
+import { __ } from '@wordpress/i18n';
+import { addFilter } from '@wordpress/hooks';
+import { InspectorControls } from '@wordpress/block-editor';
 import {
 	Button,
 	PanelBody,
 	PanelRow,
 	ToggleControl,
 	__experimentalGrid as Grid, // eslint-disable-line
-} from "@wordpress/components";
+} from '@wordpress/components';
 
-import icons from "../build/icons.json";
+import icons from '../build/icons.json';
 
 /**
  * All available icons.
@@ -32,17 +32,17 @@ export const ICONS = icons;
  * @param {Object} settings
  */
 function addAttributes(settings) {
-	if ("core/button" !== settings.name) {
+	if ('core/button' !== settings.name) {
 		return settings;
 	}
 
 	// Add the block visibility attributes.
 	const iconAttributes = {
 		icon: {
-			type: "string",
+			type: 'string',
 		},
 		iconPositionLeft: {
-			type: "boolean",
+			type: 'boolean',
 			default: false,
 		},
 	};
@@ -57,8 +57,8 @@ function addAttributes(settings) {
 }
 
 addFilter(
-	"blocks.registerBlockType",
-	"acf-blocks-toolkit/add-attributes",
+	'blocks.registerBlockType',
+	'acf-blocks-toolkit/add-attributes',
 	addAttributes,
 );
 
@@ -70,7 +70,7 @@ addFilter(
  */
 function addInspectorControls(BlockEdit) {
 	return (props) => {
-		if (props.name !== "core/button") {
+		if (props.name !== 'core/button') {
 			return <BlockEdit {...props} />;
 		}
 
@@ -82,16 +82,12 @@ function addInspectorControls(BlockEdit) {
 				<BlockEdit {...props} />
 				<InspectorControls>
 					<PanelBody
-						title={__("Icon", "acf-blocks-toolkit")}
+						title={__('Icon', 'acf-blocks-toolkit')}
 						className="button-icon-picker"
 						initialOpen={true}
 					>
 						<PanelRow>
-							<Grid
-								className="button-icon-picker__grid"
-								columns="5"
-								gap="0"
-							>
+							<Grid className="button-icon-picker__grid" columns="5" gap="0">
 								{ICONS.map((icon, index) => (
 									<Button
 										key={index}
@@ -101,10 +97,7 @@ function addInspectorControls(BlockEdit) {
 										onClick={() =>
 											setAttributes({
 												// Allow user to disable icons.
-												icon:
-													currentIcon === icon.value
-														? null
-														: icon.value,
+												icon: currentIcon === icon.value ? null : icon.value,
 											})
 										}
 									>
@@ -119,10 +112,7 @@ function addInspectorControls(BlockEdit) {
 						</PanelRow>
 						<PanelRow>
 							<ToggleControl
-								label={__(
-									"Show icon on left",
-									"acf-blocks-toolkit",
-								)}
+								label={__('Show icon on left', 'acf-blocks-toolkit')}
 								checked={iconPositionLeft}
 								onChange={() => {
 									setAttributes({
@@ -139,8 +129,8 @@ function addInspectorControls(BlockEdit) {
 }
 
 addFilter(
-	"editor.BlockEdit",
-	"acf-blocks-toolkit/add-inspector-controls",
+	'editor.BlockEdit',
+	'acf-blocks-toolkit/add-inspector-controls',
 	addInspectorControls,
 );
 
@@ -154,13 +144,13 @@ function addClasses(BlockListBlock) {
 	return (props) => {
 		const { name, attributes } = props;
 
-		if ("core/button" !== name || !attributes?.icon) {
+		if ('core/button' !== name || !attributes?.icon) {
 			return <BlockListBlock {...props} />;
 		}
 
 		const classes = classnames(props?.className, {
 			[`has-icon__${attributes?.icon}`]: attributes?.icon,
-			"has-icon-position__left": attributes?.iconPositionLeft,
+			'has-icon-position__left': attributes?.iconPositionLeft,
 		});
 
 		return <BlockListBlock {...props} className={classes} />;
@@ -168,7 +158,7 @@ function addClasses(BlockListBlock) {
 }
 
 addFilter(
-	"editor.BlockListBlock",
-	"acf-blocks-toolkit/add-classes",
+	'editor.BlockListBlock',
+	'acf-blocks-toolkit/add-classes',
 	addClasses,
 );
