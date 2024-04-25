@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# bin/start: Start local dev 
+#
+# When to use:
+#  - When you want to run the WP server
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+ddev start
+echo "DDEV started"
+echo "Starting Vite..."
+cd wp-content/themes/wp-starter && ddev npm run dev

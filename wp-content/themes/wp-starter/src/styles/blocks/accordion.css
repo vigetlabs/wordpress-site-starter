@@ -1,0 +1,23 @@
+@layer components {
+	.acf-block-accordion {
+		details.wp-block-details {
+			@apply border-t last-of-type:border-b px-4;
+
+			> summary {
+				@apply relative my-12 text-base font-bold flex cursor-pointer justify-between py-12 pr-24;
+				@apply marker:content-none focus:outline-none;
+				@apply after:content-['\002B'] after:absolute after:right-0 after:top-0 after:bottom-0 after:flex after:items-center after:text-lg after:font-mono;
+				@apply hover:text-sky-600 hover:after:text-sky-600;
+				@apply focus:text-sky-600 focus:after:text-sky-600 focus:outline-sky-600;
+			}
+
+			&[open] {
+				@apply pb-24;
+
+				> summary {
+					@apply after:content-['\2212'] after:text-sky-600;
+				}
+			}
+		}
+	}
+}
