@@ -8,13 +8,13 @@ export default defineConfig(({ command }) => ({
 	base: command === 'serve' ? '' : '/dist/',
 	plugins: [
 		generateThemeJSON,
-		liveReload([
-			path.resolve(__dirname, './src/**/*'),
-			path.resolve(__dirname, './templates/**/*'),
-			path.resolve(__dirname, './parts/**/*'),
-			path.resolve(__dirname, './blocks/**/*'),
-			path.resolve(__dirname, './**/*.php'),
-		]),
+		//Turn on if you want Vite to update with php files
+		// liveReload([
+		// 	path.resolve(__dirname, './templates/**/*'),
+		// 	path.resolve(__dirname, './parts/**/*'),
+		// 	path.resolve(__dirname, './blocks/**/*'),
+		// 	path.resolve(__dirname, './**/*.php'),
+		// ]),
 	],
 	build: {
 		// output dir for production build
