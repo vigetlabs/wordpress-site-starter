@@ -1,0 +1,22 @@
+@layer components {
+	.acf-block-text-image {
+		.wp-block-media-text {
+			@apply gap-fluid-sm;
+		}
+		.wp-block-media-text__media {
+			@apply aspect-5/4 w-full;
+		}
+
+		.wp-block-media-text__content {
+			@apply flex flex-col items-start gap-16 p-0;
+
+			.is-style-eyebrow {
+				@apply m-0 text-sm font-bold uppercase tracking-tighter;
+			}
+
+			.wp-block-heading {
+				@apply m-0 text-lg font-bold leading-tight;
+			}
+		}
+	}
+}

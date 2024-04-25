@@ -31,7 +31,8 @@ module.exports = {
 		contentBase: maxBreakpoint.toString(),
 		extend: {
 			aspectRatio: {
-				'grid-image': '5/3',
+				'5/3': '5/3',
+				'5/4': '5/4',
 			},
 			colors: {
 				transparent: 'transparent',
@@ -63,12 +64,12 @@ module.exports = {
 			},
 			spacing: {
 				// If you update the names or add more spacing you will need to update the file in theme-json/settings/spacing.js
-				one: fluidSize(2, 16),
-				two: fluidSize(20, 40),
-				three: fluidSize(32, 64),
-				four: fluidSize(56, 112),
-				five: fluidSize(96, 160),
-				six: fluidSize(144, 240),
+				"fluid-xs": fluidSize(2, 16),
+				"fluid-sm": fluidSize(20, 40),
+				"fluid-md": fluidSize(32, 64),
+				"fluid-lg": fluidSize(56, 112),
+				"fluid-xl": fluidSize(96, 160),
+				"fluid-2xl": fluidSize(144, 240),
 				//These are not pulled into WordPress theme.json
 				...remPair(0),
 				...remPair(1),
