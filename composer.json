@@ -33,6 +33,11 @@
   },
   "scripts": {
     "post-create-project-cmd": [
+      "@composer install",
+      "Viget\\ComposerScripts\\ProjectEventHandler::postCreateProject",
+      "@composer install"
+    ],
+    "post-install-cmd": [
       "Viget\\ComposerScripts\\ProjectEventHandler::postCreateProject",
       "@composer install"
     ]
