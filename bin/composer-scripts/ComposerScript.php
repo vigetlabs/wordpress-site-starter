@@ -223,15 +223,25 @@ class ComposerScript {
 	 * @return void
 	 */
 	protected static function searchReplaceFile( string|array $search, string|array $replace, string $file ): void {
-		if ( file_exists( $file ) ) {
-			$path = $file;
-		} else {
-			if ( ! file_exists( self::getProjectFolder() . '/' . $file ) ) {
-				return;
-			}
+		$path_options = [
+			$file,
+			self::getProjectFolder() . '/' . $file,
+			self::translatePath( $file ),
+		];
 
-			$path = self::getProjectFolder() . '/' . $file;
+		foreach ( $path_options as $path ) {
+			if ( ! file_exists( $path ) ) {
+				continue;
+			}
+			break;
 		}
+
+		if ( ! file_exists( $path ) ) {
+			self::writeWarning( sprintf( 'File does not exist: %s', $file ) );
+			return;
+		}
+
+		self::writeInfo( sprintf( 'Updating %s', $path ) );
 
 		$contents = file_get_contents( $path );
 		$contents = str_replace( $search, $replace, $contents );
