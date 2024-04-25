@@ -2,6 +2,9 @@
 /**
  * Add Button Icon Support
  *
+ * Inspired by Nick Diego's Enable Button Icons plugin.
+ * @link https://github.com/ndiego/enable-button-icons
+ *
  * @package ACFBlocksToolkit
  */
 
@@ -93,8 +96,8 @@ add_filter(
 			return $block_content;
 		}
 
-		$icon         = $block['attrs']['icon'];
-		$positionLeft = isset( $block['attrs']['iconPositionLeft'] ) ? $block['attrs']['iconPositionLeft'] : false;
+		$icon          = $block['attrs']['icon'];
+		$position_left = $block['attrs']['iconPositionLeft'] ?? false;
 
 		// All available icon SVGs.
 		$icons = acfbt_get_icons();
@@ -111,12 +114,17 @@ add_filter(
 		}
 		$block_content = $p->get_updated_html();
 
-		$markup = '<span class="wp-block-button__link-icon has-icon__' . $icon . '" aria-hidden="true">' . $icons[ $icon ]['icon'] . '</span>';
+		$pattern = '/(<a[^>]*>)(.*?)(<\/a>)/i';
+		$markup  = sprintf(
+			'<span class="wp-block-button__link-icon has-icon__%s" aria-hidden="true">%s</span>',
+			esc_attr( $icon ),
+			$icons[ $icon ]['icon']
+		);
 
 		// Add the SVG icon either to the left of right of the button text.
-		return $positionLeft
-			? preg_replace( '/(<a[^>]*>)(.*?)(<\/a>)/i', '$1' . $markup . '$2$3', $block_content )
-			: preg_replace( '/(<a[^>]*>)(.*?)(<\/a>)/i', '$1$2' . $markup . '$3', $block_content );
+		return $position_left
+			? preg_replace( $pattern, '$1' . $markup . '$2$3', $block_content )
+			: preg_replace( $pattern, '$1$2' . $markup . '$3', $block_content );
 	},
 	10,
 	2
