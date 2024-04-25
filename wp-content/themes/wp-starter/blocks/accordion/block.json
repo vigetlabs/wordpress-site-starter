@@ -11,9 +11,6 @@
     "mode": false,
     "alignWide": true
   },
-  "style": [
-    "file:./style.css"
-  ],
   "acf": {
     "mode": "preview"
   }
