@@ -24,7 +24,11 @@ $inner          = [
 	'allowedBlocks' => $allowed,
 ];
 ?>
-<section <?php block_attrs( $block, "gap-24 lg:gap-48" ); ?>>
-	<div class="flex flex-col gap-24 items-start lg:flex-row lg:gap-48 lg:items-center"><?php inner_blocks( $inner ); ?></div>
-	<?php alert_banner_dismiss_button(); ?>
+<section
+	x-data="{ <?php echo $block['id']?>: $persist(true) }"
+	x-show="<?php echo $block['id']?>"
+ 	<?php block_attrs( $block, "gap-24 lg:gap-48" ); ?>
+ >
+	<div class="flex flex-col items-start gap-24 lg:flex-row lg:gap-48 lg:items-center"><?php inner_blocks( $inner ); ?></div>
+	<?php alert_banner_dismiss_button( $block['id'] ); ?>
 </section>
