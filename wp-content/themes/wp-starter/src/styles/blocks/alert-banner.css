@@ -7,9 +7,6 @@
 				@apply bg-transparent;
 				@apply border-none;
 				@apply cursor-pointer;
-				@apply absolute;
-				@apply right-2 top-1/2;
-				@apply -translate-y-1/2;
 				@apply z-10;
 
 				&:after {
@@ -23,8 +20,13 @@
 				@apply hidden;
 			}
 		}
+
+		& p {
+			@apply flex-1;
+		}
 	}
 
+	/* Editor styles */
 	.wp-block-acf-alert-banner .acf-block-alert-banner.is-style-dismissible {
 		&:before {
 			@apply rounded;
@@ -40,12 +42,12 @@
 		&:not([data-id]):before {
 			@apply bg-red-700;
 			@apply uppercase;
-			content: "ID_Required: See Advanced > HTML Anchor";
+			@apply content-['ID_Required:_See_Advanced_>_HTML_Anchor'];
 		}
 
 		&[data-id]:before {
 			@apply bg-black;
-			content: '#' attr(data-id);
+			@apply content-['#'_attr(data-id)];
 		}
 	}
 }

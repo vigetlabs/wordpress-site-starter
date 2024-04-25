@@ -24,7 +24,7 @@ $inner          = [
 	'allowedBlocks' => $allowed,
 ];
 ?>
-<section <?php block_attrs( $block ); ?>>
+<section <?php block_attrs( $block, "gap-24 lg:gap-48" ); ?>>
+	<div class="flex flex-col gap-24 items-start lg:flex-row lg:gap-48 lg:items-center"><?php inner_blocks( $inner ); ?></div>
 	<?php alert_banner_dismiss_button(); ?>
-	<?php inner_blocks( $inner ); ?>
 </section>

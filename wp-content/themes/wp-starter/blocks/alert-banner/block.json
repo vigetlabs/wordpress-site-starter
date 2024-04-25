@@ -5,7 +5,15 @@
   "icon": "bell",
   "category": "components",
   "textdomain": "wp-starter",
-  "keywords": ["notification", "alert", "banner", "information", "bar", "important", "dismiss"],
+  "keywords": [
+    "notification",
+    "alert",
+    "banner",
+    "information",
+    "bar",
+    "important",
+    "dismiss"
+  ],
   "attributes": {
     "align": {
       "type": "string",
@@ -30,8 +38,15 @@
     }
   },
   "styles": [
-    { "name": "default", "label": "Default", "isDefault": true },
-    { "name": "dismissible", "label": "Dismissible" }
+    {
+      "name": "default",
+      "label": "Default",
+      "isDefault": true
+    },
+    {
+      "name": "dismissible",
+      "label": "Dismissible"
+    }
   ],
   "supports": {
     "jsx": true,
