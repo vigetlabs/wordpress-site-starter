@@ -256,6 +256,7 @@ class PostCreateProjectScript extends ComposerScript {
 		$auth_path = self::translatePath( 'auth.json' );
 
 		if ( ! file_exists( $auth_path ) ) {
+			self::writeWarning( 'auth.json file not found. Skipping ACF requirement.' );
 			return;
 		}
 
