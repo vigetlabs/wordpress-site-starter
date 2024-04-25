@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-import { remPair, rem } from "@viget/tailwindcss-plugins/utilities/fns/index.js";
+const { remPair, rem } = require('@viget/tailwindcss-plugins/utilities/fns')
 
 // Breakpoints and content widths for the site
 const minBreakpoint = 640;
@@ -19,7 +19,7 @@ const fluidSize = (
 	)}, ${rem(maxSize)})`;
 };
 
-export default {
+module.exports = {
 	content: [
 		'./src/**/*.{css,js,jsx,tsx,php}',
 		'./patterns/**/*.{css,js,jsx,tsx,php}',

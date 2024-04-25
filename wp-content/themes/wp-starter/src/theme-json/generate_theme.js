@@ -1,8 +1,8 @@
 import * as fs from 'fs';
-import settings from "./settings/_index.js";
-import styles from "./styles/_index.js";
+import settings from './settings/_index.js';
+import styles from './styles/_index.js';
 
-const CONTENT_PATH = 'src/theme-json'
+const CONTENT_PATH = 'src/theme-json';
 
 export default {
 	name: 'generate-theme-json',
@@ -10,20 +10,19 @@ export default {
 		// Watch the `CONTENT_PATH` directory for changes
 		fs.watch(CONTENT_PATH, () => {
 			// Regenerate the file when a change is detected
-			buildJSON()
-		})
-	}
-}
-
+			buildJSON();
+		});
+	},
+};
 
 function buildJSON() {
 	const data = {
-		"$schema": "https://schemas.wp.org/trunk/theme.json",
-		"version": 2,
+		$schema: 'https://schemas.wp.org/trunk/theme.json',
+		version: 2,
 		settings: settings,
-		styles: styles
-	}
+		styles: styles,
+	};
 
-	fs.writeFileSync('theme.json', JSON.stringify(data))
+	fs.writeFileSync('theme.json', JSON.stringify(data));
 }
-export { buildJSON }
+export { buildJSON };

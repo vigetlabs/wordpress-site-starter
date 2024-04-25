@@ -1,5 +1,6 @@
 @layer components {
-	.wp-block, .acf-block {
+	.wp-block,
+	.acf-block {
 		/* Add in custom bg colors here */
 		&.has-black-background-color,
 		&.has-gray-500-background-color,
@@ -17,7 +18,7 @@
 					@apply btn-contained-light;
 				}
 
-				&.is-style-outline{
+				&.is-style-outline {
 					.wp-block-button__link {
 						@apply btn-outlined-light;
 					}
