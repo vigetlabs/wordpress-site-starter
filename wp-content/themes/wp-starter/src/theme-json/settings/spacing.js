@@ -7,32 +7,32 @@ export default {
 	spacingSizes: [
 		{
 			name: '1',
-			size: theme.spacing.one,
+			size: theme.spacing['fluid-xs'],
 			slug: '10',
 		},
 		{
 			name: '2',
-			size: theme.spacing.two,
+			size: theme.spacing['fluid-sm'],
 			slug: '20',
 		},
 		{
 			name: '3',
-			size: theme.spacing.three,
+			size: theme.spacing['fluid-md'],
 			slug: '30',
 		},
 		{
 			name: '4',
-			size: theme.spacing.four,
+			size: theme.spacing['fluid-lg'],
 			slug: '40',
 		},
 		{
 			name: '5',
-			size: theme.spacing.five,
+			size: theme.spacing['fluid-xl'],
 			slug: '50',
 		},
 		{
 			name: '6',
-			size: theme.spacing.six,
+			size: theme.spacing['fluid-2xl'],
 			slug: '60',
 		},
 	],

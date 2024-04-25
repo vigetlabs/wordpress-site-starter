@@ -2,12 +2,12 @@
 	.acf-block-logo-grid {
 		& figure {
 			@apply flex;
-			@apply aspect-grid-image;
+			@apply aspect-5/3;
 			@apply basis-1/2-gap lg:basis-1/4-gap;
 
 			& img {
 				@apply block;
-				@apply max-w-full h-full;
+				@apply h-full max-w-full;
 				@apply object-contain;
 			}
 		}
