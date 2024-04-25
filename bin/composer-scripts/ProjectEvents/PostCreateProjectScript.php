@@ -33,15 +33,15 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return void
 	 */
 	public static function replaceComposerFile(): void {
-		$composer_file    = self::translatePath( 'composer.json' );
-		$replacement_file = self::translatePath( 'composer.json.dist' );
+		$composer_file      = self::translatePath( 'composer.json' );
+		$composer_dist_file = self::translatePath( 'composer.json.dist' );
 
-		if ( ! file_exists( $replacement_file ) ) {
-			return;
+		if ( file_exists( $composer_dist_file ) ) {
+			copy( $composer_dist_file, $composer_file );
 		}
 
-		copy( $replacement_file, $composer_file );
-		unlink( $replacement_file );
+		// Remove the composer.json.dist file.
+		unlink( $composer_dist_file );
 	}
 
 	/**

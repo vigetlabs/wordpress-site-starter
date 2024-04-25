@@ -54,6 +54,11 @@ class PostInstallScript extends ComposerScript {
 	private static string $default_function_prefix = 'wpstarter_';
 
 	/**
+	 * @var string
+	 */
+	private static string $default_text_domain = 'wp-starter';
+
+	/**
 	 * Perform the actions within this file.
 	 *
 	 * @param Event $event
@@ -75,6 +80,9 @@ class PostInstallScript extends ComposerScript {
 
 		// Modify the description in the composer.json file.
 		self::updateComposerDescription();
+
+		// Remove the Twenty- themes.
+		self::deleteCoreThemes();
 	}
 
 	/**
@@ -98,15 +106,32 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	public static function getProjectInfo(): void {
+		// Project Name.
 		$name = ! empty( self::$info['name'] ) ? self::$info['name'] : 'My Project';
-
 		self::$info['name'] = self::ask( 'What is the name of your project?', $name );
-		self::$info['slug'] = self::slugify( self::$info['name'] );
 
+		// Project Slug.
+		self::$info['slug'] = self::slugify( self::$info['name'] );
 		self::$info['slug'] = self::ask( 'Do you want to use a custom project slug?', self::$info['slug'] );
 
+		// Text Domain.
+		self::$info['text_domain'] = self::$info['slug'];
+		self::$info['text_domain'] = self::ask( 'Should the text domain match the project slug?', self::$info['text_domain'] );
+
+		// Project Package.
+		self::$info['package'] = str_replace( ' ', '', self::$info['name'] );
+		self::$info['package'] = self::ask( 'Do you want to customize the package name?', self::$info['package'] );
+
+		// Function Prefix.
+		self::$info['function'] = str_replace( '-', '_', self::$info['slug'] ) . '_';
+		self::$info['function'] = self::ask( 'Do you want to customize the function prefix?', self::$info['function'] );
+
+		// Summary
 		$summary  = PHP_EOL . ' - Name: ' . self::$info['name'];
 		$summary .= PHP_EOL . ' - Slug: ' . self::$info['slug'];
+		$summary .= PHP_EOL . ' - Text Domain: ' . self::$info['text_domain'];
+		$summary .= PHP_EOL . ' - Package: ' . self::$info['package'];
+		$summary .= PHP_EOL . ' - Function Prefix: ' . self::$info['function'];
 
 		self::writeOutput( '<info>Summary:</info>' . $summary );
 
@@ -161,17 +186,56 @@ class PostInstallScript extends ComposerScript {
 			return;
 		}
 
-		$files = [
-			'.ddev/config.yml',
-			'composer.json',
-			'phpcs.xml',
+		$default_theme_dir = self::translatePath( 'wp-content/themes/' . self::$default_theme_slug );
+		$theme_dir         = self::translatePath( 'wp-content/themes/' . self::$info['slug'] );
+
+		if ( ! is_dir( $default_theme_dir ) ) {
+			self::writeError( 'Missing theme directory.' );
+			return;
+		}
+
+		// Change the theme directory name.
+		rename( $default_theme_dir, $theme_dir );
+
+		$files = self::getFilesToChange( $theme_dir );
+
+		$search = [
+			[
+				self::$default_function_prefix,
+			],
+			[
+				'\'' . self::$default_text_domain . '\'',
+				'Text Domain: ' . self::$default_text_domain,
+			],
+			[
+				self::$default_project_slug,
+				self::$default_host_name,
+				self::$default_theme_slug,
+			],
+			[
+				self::$default_project_name,
+				self::$default_theme_name,
+			],
+			[
+				self::$default_package_name,
+			],
 		];
 
-		$search  = self::$default_project_slug;
-		$replace = self::$info['slug'];
+		$replace = [
+			self::$info['function'], // Function prefix.
+			[
+				'\'' . self::$info['text_domain'] . '\'', // Text Domain.
+				'Text Domain: ' . self::$info['text_domain'],
+			],
+			self::$info['slug'], // Project Slug.
+			self::$info['name'], // Project Name.
+			self::$info['package'], // Package name.
+		];
 
 		foreach ( $files as $file ) {
-			self::searchReplaceFile( $search, $replace, $file );
+			foreach ( $search as $index => $group ) {
+				self::searchReplaceFile( $group, $replace[ $index ], $file );
+			}
 		}
 
 		self::writeInfo( 'All set!' );
@@ -182,7 +246,7 @@ class PostInstallScript extends ComposerScript {
 	 *
 	 * @return void
 	 */
-	public static function updateComposerDescription() {
+	public static function updateComposerDescription(): void {
 		if ( empty( self::$info['name'] ) ) {
 			self::writeError( 'Missing project name.' );
 			return;
@@ -192,5 +256,82 @@ class PostInstallScript extends ComposerScript {
 		$replace = sprintf( 'A custom WordPress Site for %s by Viget.', self::$info['name'] );
 
 		self::searchReplaceFile( $search, $replace, 'composer.json' );
+	}
+
+	/**
+	 * Get all the files that need to be updated.
+	 *
+	 * @param string $theme_dir
+	 *
+	 * @return array
+	 */
+	private static function getFilesToChange( string $theme_dir ): array {
+		$files = [
+			'.ddev/config.yml',
+			'composer.json',
+			$theme_dir . '/composer.json',
+			$theme_dir . '/package.json',
+			$theme_dir . '/package-lock.json',
+			'.phpcs.xml',
+			$theme_dir . '/.phpcs.xml',
+			$theme_dir . '/readme.txt',
+			'README.md',
+			$theme_dir . '/README.md',
+			$theme_dir . '/style.css',
+			$theme_dir . '/vite.config.js',
+		];
+
+		$theme_php_files  = glob( $theme_dir . '/**/*.php' );
+		$theme_html_files = glob( $theme_dir . '/**/*.html' );
+
+		return array_merge( $files, $theme_php_files, $theme_html_files );
+	}
+
+	/**
+	 * Delete the core themes.
+	 *
+	 * @return void
+	 */
+	private static function deleteCoreThemes(): void {
+		$themes = [
+			'twentytwenty',
+			'twentytwentyone',
+			'twentytwentytwo',
+			'twentytwentythree',
+			'twentytwentyfour',
+		];
+
+		foreach ( $themes as $theme ) {
+			$theme_dir = self::translatePath( 'wp-content/themes/' . $theme );
+
+			if ( ! is_dir( $theme_dir ) ) {
+				continue;
+			}
+
+			self::deleteDirectory( $theme_dir );
+		}
+	}
+
+	/**
+	 * Delete a directory and all of its contents.
+	 *
+	 * @param string $path
+	 *
+	 * @return void
+	 */
+	private static function deleteDirectory( string $path ): void {
+		$files = array_diff( scandir( $path ), [ '.', '..' ] );
+
+		foreach ( $files as $file ) {
+			$item = $path . '/' . $file;
+
+			if ( is_dir( $item ) ) {
+				self::deleteDirectory( $item );
+			} else {
+				unlink( $item );
+			}
+		}
+
+		rmdir( $path );
 	}
 }

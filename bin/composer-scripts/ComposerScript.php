@@ -216,14 +216,23 @@ class ComposerScript {
 	/**
 	 * Replace a string in a file.
 	 *
-	 * @param string $search
-	 * @param string $replace
+	 * @param string|array $search
+	 * @param string|array $replace
 	 * @param string $file
 	 *
 	 * @return void
 	 */
-	public static function searchReplaceFile( string $search, string $replace, string $file ): void {
-		$path     = self::getProjectFolder() . '/' . $file;
+	public static function searchReplaceFile( string|array $search, string|array $replace, string $file ): void {
+		if ( file_exists( $file ) ) {
+			$path = $file;
+		} else {
+			if ( ! file_exists( self::getProjectFolder() . '/' . $file ) ) {
+				return;
+			}
+
+			$path = self::getProjectFolder() . '/' . $file;
+		}
+
 		$contents = file_get_contents( $path );
 		$contents = str_replace( $search, $replace, $contents );
 		file_put_contents( $path, $contents );
