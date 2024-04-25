@@ -304,15 +304,15 @@ class PostCreateProjectScript extends ComposerScript {
 	 */
 	private static function getFilesToChange( string $theme_dir ): array {
 		$files = [
-			'.ddev/config.yml',
-			'composer.json',
+			self::translatePath( '.ddev/config.yml' ),
+			self::translatePath( 'composer.json' ),
 			$theme_dir . '/composer.json',
 			$theme_dir . '/package.json',
 			$theme_dir . '/package-lock.json',
-			'.phpcs.xml',
+			self::translatePath( '.phpcs.xml' ),
 			$theme_dir . '/.phpcs.xml',
 			$theme_dir . '/readme.txt',
-			'README.md',
+			self::translatePath( 'README.md' ),
 			$theme_dir . '/README.md',
 			$theme_dir . '/style.css',
 			$theme_dir . '/vite.config.js',
