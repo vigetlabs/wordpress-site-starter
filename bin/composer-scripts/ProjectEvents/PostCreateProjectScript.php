@@ -262,13 +262,21 @@ class PostCreateProjectScript extends ComposerScript {
 			return;
 		}
 
+		$acf_package   = 'wpengine/advanced-custom-fields-pro';
 		$composer_path = self::translatePath( 'composer.json' );
 		$composer_json = file_get_contents( $composer_path );
 		$composer_data = json_decode( $composer_json, true );
 
-		$composer_data['require']['wpengine/advanced-custom-fields-pro'] = "*";
+		if ( ! empty( $composer_data['require'][ $acf_package ] ) ){
+			return;
+		}
 
-		file_put_contents( $composer_path, json_encode( $composer_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) );
+		$composer_data['require'][ $acf_package ] = "*";
+
+		file_put_contents(
+			$composer_path,
+			json_encode( $composer_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES )
+		);
 	}
 
 	/**
