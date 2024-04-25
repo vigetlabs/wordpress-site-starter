@@ -34,21 +34,24 @@
     "post-install-cmd": [
       "Viget\\ComposerScripts\\ProjectEventHandler::postInstall"
     ],
-    "post-create-project-cmd": [
-      "Viget\\ComposerScripts\\ProjectEventHandler::postCreateProject"
-    ],
     "generate-docs": "Viget\\ComposerScripts\\WPDocsGeneratorScript::make"
   },
   "repositories": [
     {
       "type": "composer",
       "url": "https://wpackagist.org"
+    },
+    {
+      "type":"composer",
+      "url":"https://connect.advancedcustomfields.com"
     }
   ],
   "require": {
     "php": ">=8.2.0",
     "ext-json": "*",
-    "squizlabs/php_codesniffer": "^3.9"
+    "squizlabs/php_codesniffer": "^3.9",
+    "wpackagist-plugin/svg-support": "^2.5",
+    "wpengine/advanced-custom-fields-pro": "^6.2"
   },
   "require-dev": {
     "composer/composer": "^2.7",
