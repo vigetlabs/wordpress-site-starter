@@ -40,7 +40,7 @@
 		&:not([data-id]):before {
 			@apply bg-red-700;
 			@apply uppercase;
-			@apply content-['ID Required: See Advanced > HTML Anchor'];
+			content: "ID_Required: See Advanced > HTML Anchor";
 		}
 
 		&[data-id]:before {
