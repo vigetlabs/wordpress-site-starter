@@ -20,9 +20,6 @@
       "allowCustomContentAndWideSize": false
     }
   },
-  "style": [
-    "file:./style.css"
-  ],
   "acf": {
     "mode": "preview"
   }
