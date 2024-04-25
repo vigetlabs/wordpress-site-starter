@@ -31,6 +31,11 @@ class PostInstallScript extends ComposerScript {
 	/**
 	 * @var string
 	 */
+	private static string $default_alt_project_name = 'WordPress Site Starter';
+
+	/**
+	 * @var string
+	 */
 	private static string $default_host_name = 'wpstarter';
 
 	/**
@@ -214,6 +219,7 @@ class PostInstallScript extends ComposerScript {
 			],
 			[
 				self::$default_project_name,
+				self::$default_alt_project_name,
 				self::$default_theme_name,
 			],
 			[
