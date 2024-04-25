@@ -20,8 +20,10 @@ Block: Alert Banner
 } %}
 
 <section
-	x-data="{ {{ attributes.id }}: $persist(true) }"
-	x-show="{{ attributes.id }}"
+	{% if function('is_admin') == false %}
+		x-data="{ {{ attributes.id }}: $persist(true) }"
+		x-show="{{ attributes.id }}"
+	{% endif %}
 	{{ block_attrs( attributes, 'gap-24 lg:gap-48' ) }}
 >
 	<div class="flex flex-col items-start gap-24 lg:flex-row lg:gap-48 lg:items-center">{{ inner_blocks( inner ) }}</div>

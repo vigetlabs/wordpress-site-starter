@@ -25,8 +25,10 @@ $inner          = [
 ];
 ?>
 <section
-	x-data="{ <?php echo $block['id']?>: $persist(true) }"
-	x-show="<?php echo $block['id']?>"
+	<?php if ( !is_admin() ): ?>
+		x-data="{ <?php echo $block['id']?>: $persist(true) }"
+		x-show="<?php echo $block['id']?>"
+	<?php endif; ?>
  	<?php block_attrs( $block, "gap-24 lg:gap-48" ); ?>
  >
 	<div class="flex flex-col items-start gap-24 lg:flex-row lg:gap-48 lg:items-center"><?php inner_blocks( $inner ); ?></div>

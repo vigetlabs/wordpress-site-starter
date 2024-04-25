@@ -20,5 +20,5 @@ function alert_banner_dismiss_button($id = 'alert-banner'): void {
 	);
 	$dismiss_button .= '</button>';
 
-	echo wp_kses_post( $dismiss_button );
+	echo ( $dismiss_button );
 }
