@@ -1,18 +1,19 @@
 // Add icons to Button blocks and style appropriately.
-.wp-block-button[class*=has-icon__] {
+.wp-block-button[class*="has-icon__"] {
 	.wp-block-button__link {
 		&::after {
 			content: "";
 		}
 
 		// Styles the icon.
-		&::after, &::before {
+		&::after,
+		&::before {
 			display: inline-block;
 			background-color: currentColor;
 			-webkit-mask-size: contain;
 			mask-size: contain;
-			-webkit-mask-position:center;
-			mask-position:center;
+			-webkit-mask-position: center;
+			mask-position: center;
 			-webkit-mask-repeat: no-repeat;
 			mask-repeat: no-repeat;
 			height: 0.8em;
