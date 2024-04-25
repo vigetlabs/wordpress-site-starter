@@ -22,10 +22,6 @@
 
 	&.has-icon-position__left {
 		.wp-block-button__link {
-			&::after {
-				content: none;
-			}
-
 			&::before {
 				content: "";
 			}
