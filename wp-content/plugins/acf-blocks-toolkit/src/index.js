@@ -16,143 +16,14 @@ import {
 	ToggleControl,
 	__experimentalGrid as Grid, // eslint-disable-line
 } from '@wordpress/components';
-import {
-	arrowRight,
-	arrowLeft,
-	chevronLeft,
-	chevronLeftSmall,
-	chevronRight,
-	chevronRightSmall,
-	cloud,
-	cloudUpload,
-	commentAuthorAvatar,
-	download,
-	external,
-	help,
-	info,
-	lockOutline,
-	login,
-	next,
-	previous,
-	shuffle,
-	wordpress,
-} from '@wordpress/icons';
+
+import icons from '../build/icons.json';
 
 /**
  * All available icons.
  * (Order determines presentation order)
  */
-export const ICONS = [
-	{
-		label: __( 'Chevron Right', 'acf-blocks-toolkit' ),
-		value: 'chevron-right',
-		icon: chevronRight,
-	},
-	{
-		label: __( 'Chevron Left', 'acf-blocks-toolkit' ),
-		value: 'chevron-left',
-		icon: chevronLeft,
-	},
-	{
-		label: __( 'Chevron Right (Small)', 'acf-blocks-toolkit' ),
-		value: 'chevron-right-small',
-		icon: chevronRightSmall,
-	},
-	{
-		label: __( 'Chevron Left (Small)', 'acf-blocks-toolkit' ),
-		value: 'chevron-left-small',
-		icon: chevronLeftSmall,
-	},
-	{
-		label: __( 'Shuffle', 'acf-blocks-toolkit' ),
-		value: 'shuffle',
-		icon: shuffle,
-	},
-	{
-		label: __( 'Arrow Right', 'acf-blocks-toolkit' ),
-		value: 'arrow-right',
-		icon: arrowRight,
-	},
-	{
-		label: __( 'Arrow Left', 'acf-blocks-toolkit' ),
-		value: 'arrow-left',
-		icon: arrowLeft,
-	},
-	{
-		label: __( 'Next', 'acf-blocks-toolkit' ),
-		value: 'next',
-		icon: next,
-	},
-	{
-		label: __( 'Previous', 'acf-blocks-toolkit' ),
-		value: 'previous',
-		icon: previous,
-	},
-	{
-		label: __( 'Download', 'acf-blocks-toolkit' ),
-		value: 'download',
-		icon: download,
-	},
-	{
-		label: __( 'External Arrow', 'acf-blocks-toolkit' ),
-		value: 'external-arrow',
-		icon: (
-			<svg
-				width="24"
-				height="24"
-				viewBox="0 0 24 24"
-				xmlns="http://www.w3.org/2000/svg"
-			>
-				<polygon points="18 6 8.15240328 6 8.15240328 8.1101993 14.3985932 8.1101993 6 16.5087925 7.4912075 18 15.8898007 9.6014068 15.8898007 15.8475967 18 15.8475967"></polygon>
-			</svg>
-		),
-	},
-	{
-		label: __( 'External', 'acf-blocks-toolkit' ),
-		value: 'external',
-		icon: external,
-	},
-	{
-		label: __( 'Login', 'acf-blocks-toolkit' ),
-		value: 'login',
-		icon: login,
-	},
-	{
-		label: __( 'Lock', 'acf-blocks-toolkit' ),
-		value: 'lock-outline',
-		icon: lockOutline,
-	},
-	{
-		label: __( 'Avatar', 'acf-blocks-toolkit' ),
-		value: 'comment-author-avatar',
-		icon: commentAuthorAvatar,
-	},
-	{
-		label: __( 'Cloud', 'acf-blocks-toolkit' ),
-		value: 'cloud',
-		icon: cloud,
-	},
-	{
-		label: __( 'Cloud Upload', 'acf-blocks-toolkit' ),
-		value: 'cloud-upload',
-		icon: cloudUpload,
-	},
-	{
-		label: __( 'Help', 'acf-blocks-toolkit' ),
-		value: 'help',
-		icon: help,
-	},
-	{
-		label: __( 'Info', 'acf-blocks-toolkit' ),
-		value: 'info',
-		icon: info,
-	},
-	{
-		label: __( 'WordPress', 'acf-blocks-toolkit' ),
-		value: 'wordpress',
-		icon: wordpress,
-	},
-];
+export const ICONS = icons;
 
 /**
  * Add the attributes needed for button icons.
@@ -223,27 +94,27 @@ function addInspectorControls( BlockEdit ) {
 							>
 								{ ICONS.map( ( icon, index ) => (
 									<Button
-										key={ index }
-										label={ icon?.label }
-										isPressed={ currentIcon === icon.value }
+										key={index}
+										label={icon?.label}
+										isPressed={currentIcon === icon.value}
 										className="button-icon-picker__button"
-										onClick={ () =>
-											setAttributes( {
+										onClick={() =>
+											setAttributes({
 												// Allow user to disable icons.
 												icon:
 													currentIcon === icon.value
 														? null
 														: icon.value,
-											} )
+											})
 										}
 									>
-										{ icon.icon ?? icon.value }
+										<span dangerouslySetInnerHTML={{__html: icon.icon ?? icon.value}}/>
 									</Button>
-								) ) }
+								))}
 							</Grid>
 						</PanelRow>
 						<PanelRow>
-							<ToggleControl
+						<ToggleControl
 								label={ __(
 									'Show icon on left',
 									'acf-blocks-toolkit'
