@@ -1,6 +1,6 @@
 @layer components {
 	.acf-block-accordion {
-		details.wp-block-details {
+		& details.wp-block-details {
 			@apply border-t px-4 last-of-type:border-b;
 
 			> summary {

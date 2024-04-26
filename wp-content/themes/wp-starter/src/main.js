@@ -3,7 +3,10 @@ import 'vite/modulepreload-polyfill';
 
 // Alpine Docs - https://alpinejs.dev/start-here
 import Alpine from 'alpinejs';
+import persist from '@alpinejs/persist'
 window.Alpine = Alpine;
+
+Alpine.plugin(persist);
 Alpine.start();
 
 // Import styles

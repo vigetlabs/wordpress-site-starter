@@ -23,8 +23,19 @@ $inner          = [
 	'template'      => $block_template,
 	'allowedBlocks' => $allowed,
 ];
+
+$attrs = [];
+
+if ( ! is_admin() ) {
+	$attrs['x-data'] = '{ ' . $block['id'] . ': $persist(true) }';
+	$attrs['x-show'] = $block['id'];
+}
 ?>
-<section <?php block_attrs( $block, "gap-24 lg:gap-48" ); ?>>
-	<div class="flex flex-col gap-24 items-start lg:flex-row lg:gap-48 lg:items-center"><?php inner_blocks( $inner ); ?></div>
-	<?php alert_banner_dismiss_button(); ?>
+<section
+ 	<?php block_attrs( $block, "gap-24 lg:gap-48", $attrs ); ?>
+ >
+	<div class="flex flex-col items-start gap-24 lg:flex-row lg:gap-48 lg:items-center">
+		<?php inner_blocks( $inner ); ?>
+	</div>
+	<?php alert_banner_dismiss_button( $block['id'] ); ?>
 </section>
