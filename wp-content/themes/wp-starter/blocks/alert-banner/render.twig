@@ -18,7 +18,20 @@ Block: Alert Banner
 	template: template,
 	allowedBlocks: allowed
 } %}
-<section {{ block_attrs( attributes ) }}>
-	{{ function( 'alert_banner_dismiss_button' ) }}
-	{{ inner_blocks( inner ) }}
+
+{% set attrs = {} %}
+
+{% if function('is_admin') == false %}
+	{% set attrs = {
+		'x-data': '{ ' ~ attributes.id ~ ': $persist(true) }',
+		'x-show': attributes.id
+	} %}
+{% endif %}
+<section
+	{{ block_attrs( attributes, 'gap-24 lg:gap-48', attrs ) }}
+>
+	<div class="flex flex-col items-start gap-24 lg:flex-row lg:gap-48 lg:items-center">
+		{{ inner_blocks( inner ) }}
+	</div>
+	{{ function( 'alert_banner_dismiss_button', attributes.id ) }}
 </section>

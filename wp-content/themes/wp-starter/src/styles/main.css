@@ -6,8 +6,9 @@
 @import './base/has-bg.css';
 @import './base/typography.css';
 
+@import './blocks/accordion.css';
+@import './blocks/alert-banner.css';
 @import './blocks/buttons.css';
 @import './blocks/cta.css';
-@import './blocks/accordion.css';
 @import './blocks/logo-grid.css';
 @import './blocks/text-image.css';
