@@ -26,5 +26,5 @@ $inner          = [
 ];
 ?>
 <section <?php block_attrs( $block ); ?>>
-	<?php inner_blocks( $inner ); ?>
+	<div class="flex flex-col"><?php inner_blocks( $inner ); ?></div>
 </section>
