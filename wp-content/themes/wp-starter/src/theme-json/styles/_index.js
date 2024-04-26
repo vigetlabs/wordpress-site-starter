@@ -1,3 +1,4 @@
+import theme from '../import_tailwind.js';
 import blocks from './blocks.js';
 import elements from './elements.js';
 
@@ -9,7 +10,7 @@ const styles = {
 	},
 	elements: elements,
 	spacing: {
-		blockGap: '1.2rem',
+		blockGap: theme.spacing[24],
 		padding: {
 			left: 'var(--wp--preset--spacing--50)',
 			right: 'var(--wp--preset--spacing--50)',

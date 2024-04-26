@@ -46,6 +46,7 @@ module.exports = {
 			},
 			flexBasis: {
 				'1/2-gap': 'calc((100%/2) - var(--wp--style--block-gap))',
+				'1/3-gap': 'calc((100%/3) - var(--wp--style--block-gap))',
 				'1/4-gap': 'calc((100%/4) - var(--wp--style--block-gap))',
 			},
 			fontFamily: {
