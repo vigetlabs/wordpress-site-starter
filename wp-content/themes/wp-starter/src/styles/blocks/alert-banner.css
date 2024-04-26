@@ -3,7 +3,7 @@
 		&.is-style-dismissible {
 			@apply relative;
 
-			& .dismiss {
+			.dismiss {
 				@apply bg-transparent;
 				@apply border-none;
 				@apply cursor-pointer;
@@ -35,7 +35,7 @@
 			@apply left-16 -top-10;
 			@apply absolute;
 			@apply pointer-events-none;
-			@apply py-2 px-5;
+			@apply py-2 px-2.5;
 			@apply z-20;
 		}
 
@@ -48,6 +48,10 @@
 		&[data-id]:before {
 			@apply bg-black;
 			@apply content-['#'_attr(data-id)];
+		}
+
+		.dismiss {
+			@apply cursor-default;
 		}
 	}
 }
