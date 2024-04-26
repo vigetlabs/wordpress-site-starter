@@ -9,7 +9,8 @@
 			@apply mt-8;
 		}
 
-		& figure {
+		& p + .wp-block-embed,
+		& .wp-block-heading + .wp-block-embed {
 			@apply mt-48;
 		}
 
