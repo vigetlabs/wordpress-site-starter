@@ -12,37 +12,3 @@ add_action(
 		remove_theme_support( 'core-block-patterns' );
 	}
 );
-
-// Register Pattern Categories.
-add_action(
-	'init',
-	function () {
-		register_block_pattern_category(
-			'cta',
-			[
-				'label' => __( 'Call To Action', 'wp-starter' ),
-			]
-		);
-
-		register_block_pattern_category(
-			'text-icon-cards',
-			[
-				'label' => __( 'Text & Icon Cards', 'wp-starter' ),
-			]
-		);
-
-		register_block_pattern_category(
-			'text-image',
-			[
-				'label' => __( 'Text & Image', 'wp-starter' ),
-			]
-		);
-
-		register_block_pattern_category(
-			'alert-banner',
-			[
-				'label' => __( 'Alert Banner', 'wp-starter' ),
-			]
-		);
-	}
-);
