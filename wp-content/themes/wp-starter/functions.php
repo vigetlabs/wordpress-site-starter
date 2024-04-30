@@ -21,9 +21,6 @@ if ( class_exists( 'Timber\Timber' ) ) {
 	Timber\Timber::init();
 }
 
-// General Functions.
-require_once get_stylesheet_directory() . '/inc/general.php';
-
 // Pattern Functions.
 require_once get_stylesheet_directory() . '/inc/patterns.php';
 
