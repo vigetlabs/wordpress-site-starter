@@ -1,6 +1,6 @@
 <?php
 /**
- * General Functions
+ * Video Embed Block
  *
  * @package WPStarter
  */
