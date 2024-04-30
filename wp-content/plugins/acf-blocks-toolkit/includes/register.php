@@ -26,6 +26,7 @@ class Block_Registration {
 		self::register_blocks();
 		self::set_default_callback();
 		self::disable_inner_blocks_wrap();
+		self::register_block_patterns();
 	}
 
 	/**
@@ -275,6 +276,7 @@ class Block_Registration {
 	 * @param array  $block
 	 * @param string $content
 	 * @param bool   $is_preview
+	 * @param int    $post_id
 	 *
 	 * @return void
 	 */
@@ -295,5 +297,94 @@ class Block_Registration {
 
 		// Render the block.
 		Timber::render( $template, $context );
+	}
+
+	/**
+	 * Register Custom Block Patterns
+	 *
+	 * @return void
+	 */
+	public static function register_block_patterns(): void {
+		add_action(
+			'init',
+			function () {
+				$blocks      = self::get_all_blocks();
+				$registry    = \WP_Block_Patterns_Registry::get_instance();
+				$text_domain = wp_get_theme()->get( 'TextDomain' );
+
+				$default_headers     = array(
+					'title'         => 'Title',
+					'slug'          => 'Slug',
+					'description'   => 'Description',
+					'viewportWidth' => 'Viewport Width',
+					'inserter'      => 'Inserter',
+					'categories'    => 'Categories',
+					'keywords'      => 'Keywords',
+					'blockTypes'    => 'Block Types',
+					'postTypes'     => 'Post Types',
+					'templateTypes' => 'Template Types',
+				);
+				$properties_to_parse = array(
+					'categories',
+					'keywords',
+					'blockTypes',
+					'postTypes',
+					'templateTypes',
+				);
+
+				foreach ( $blocks as $block ) {
+					$patterns = glob( $block['path'] . '/patterns/*.php' );
+
+					if ( empty( $patterns ) ) {
+						continue;
+					}
+
+					foreach ( $patterns as $pattern_path ) {
+						$pattern = get_file_data( $pattern_path, $default_headers );
+
+						if ( $registry->is_registered( $pattern['slug'] ) ) {
+							continue;
+						}
+
+						foreach ( $properties_to_parse as $property ) {
+							if ( ! empty( $pattern[ $property ] ) ) {
+								$pattern[ $property ] = array_filter( wp_parse_list( (string) $pattern[ $property ] ) );
+							} else {
+								unset( $pattern[ $property ] );
+							}
+						}
+
+						// Parse properties of type int.
+						$property = 'viewportWidth';
+						if ( ! empty( $pattern[ $property ] ) ) {
+							$pattern[ $property ] = (int) $pattern[ $property ];
+						} else {
+							unset( $pattern[ $property ] );
+						}
+
+						// Parse properties of type bool.
+						$property = 'inserter';
+						if ( ! empty( $pattern[ $property ] ) ) {
+							$pattern[ $property ] = in_array(
+								strtolower( $pattern[ $property ] ),
+								array( 'yes', 'true' ),
+								true
+							);
+						} else {
+							unset( $pattern[ $property ] );
+						}
+
+						$pattern['filePath'] = $pattern_path;
+						$pattern['title']    = translate_with_gettext_context( $pattern['title'], 'Pattern title', $text_domain );
+						if ( ! empty( $pattern['description'] ) ) {
+							$pattern['description'] = translate_with_gettext_context( $pattern['description'], 'Pattern description', $text_domain );
+						}
+
+						register_block_pattern( $pattern['slug'], $pattern );
+					}
+				}
+			},
+			11
+		);
 	}
 }

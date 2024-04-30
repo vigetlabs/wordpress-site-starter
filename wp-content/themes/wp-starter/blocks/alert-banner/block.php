@@ -5,6 +5,19 @@
  * @package WPStarter
  */
 
+// Register Pattern Category.
+add_action(
+	'init',
+	function () {
+		register_block_pattern_category(
+			'alert-banner',
+			[
+				'label' => __( 'Alert Banner', 'wp-starter' ),
+			]
+		);
+	}
+);
+
 /**
  * Alert Banner Dismiss Button
  *
