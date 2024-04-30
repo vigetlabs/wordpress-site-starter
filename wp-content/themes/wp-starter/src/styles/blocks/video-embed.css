@@ -1,0 +1,30 @@
+@layer components {
+	.acf-block-video-embed {
+		@apply relative;
+		& .wp-block-embed[data-block] {
+			@apply w-full;
+		}
+
+		& .wp-block-heading + p {
+			@apply mt-8;
+		}
+
+		& p + .wp-block-embed,
+		& .wp-block-heading + .wp-block-embed {
+			@apply mt-48;
+		}
+
+		&.alignfull > .wp-block-embed {
+			@apply px-0;
+		}
+	}
+
+	.wp-block-embed__wrapper {
+		@apply relative;
+
+		& iframe {
+			@apply aspect-video;
+			@apply size-full;
+		}
+	}
+}
