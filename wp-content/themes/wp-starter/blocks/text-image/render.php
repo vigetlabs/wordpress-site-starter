@@ -9,18 +9,9 @@
 
 $block_template = [
 	[
-		'core/media-text',
+		'core/pattern',
 		[
-			'imageFill'         => true,
-			'verticalAlignment' => 'center',
-		],
-		[
-			[
-				'core/pattern',
-				[
-					'slug' => 'wp-starter/text-image-inner-blocks',
-				]
-			]
+			'slug' => 'wp-starter/text-image-inner-blocks',
 		],
 	],
 ];

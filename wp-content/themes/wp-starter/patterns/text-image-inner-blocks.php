@@ -8,22 +8,8 @@
  */
 
 ?>
-<!-- wp:paragraph {"className":"is-style-eyebrow"} -->
-<p class="is-style-eyebrow">Eyebrow Text</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading">Headline Text</h3>
-<!-- /wp:heading -->
-
-<!-- wp:group {"layout":{"type":"constrained"}} -->
-<div class="wp-block-group"><!-- wp:paragraph -->
-	<p>Body Text</p>
-	<!-- /wp:paragraph -->
-
-	<!-- wp:buttons -->
-	<div class="wp-block-buttons"><!-- wp:button -->
-		<div class="wp-block-button"><a class="wp-block-button__link wp-element-button">Button</a></div>
-		<!-- /wp:button --></div>
-	<!-- /wp:buttons --></div>
-<!-- /wp:group -->
+<!-- wp:media-text {"imageFill":true,"verticalAlignment":"center"} -->
+<div class="wp-block-media-text is-stacked-on-mobile is-vertically-aligned-center is-image-fill"><figure class="wp-block-media-text__media"></figure><div class="wp-block-media-text__content"><?php
+	require get_stylesheet_directory() . '/patterns/text-image-media-content.php';
+?></div></div>
+<!-- /wp:media-text -->
