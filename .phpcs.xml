@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="WP Starter" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PHPCSStandards/PHP_CodeSniffer/master/phpcs.xsd">
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="WP Site Starter" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PHPCSStandards/PHP_CodeSniffer/master/phpcs.xsd">
 
     <description>A custom set of rules to check for a WPized WordPress project</description>
 
@@ -13,18 +13,19 @@
     <file>.</file>
 
     <!-- Exclude WP Core folders and files from being checked. -->
-    <exclude-pattern>/docroot/wp-admin/*</exclude-pattern>
-    <exclude-pattern>/docroot/wp-includes/*</exclude-pattern>
-    <exclude-pattern>/docroot/wp-*.php</exclude-pattern>
-    <exclude-pattern>/docroot/index.php</exclude-pattern>
-    <exclude-pattern>/docroot/xmlrpc.php</exclude-pattern>
-    <exclude-pattern>/docroot/wp-content/plugins/*</exclude-pattern>
+    <exclude-pattern>/wp-admin/*</exclude-pattern>
+    <exclude-pattern>/wp-includes/*</exclude-pattern>
+    <exclude-pattern>/wp-*.php</exclude-pattern>
+    <exclude-pattern>/index.php</exclude-pattern>
+    <exclude-pattern>/xmlrpc.php</exclude-pattern>
+    <exclude-pattern>/wp-content/plugins/*</exclude-pattern>
 
     <!-- Exclude the Composer Vendor directory. -->
     <exclude-pattern>/vendor/*</exclude-pattern>
+    <exclude-pattern>/wp-content/themes/wp-starter/vendor/*</exclude-pattern>
 
     <!-- Exclude the Node Modules directory. -->
-    <exclude-pattern>/node_modules/*</exclude-pattern>
+    <exclude-pattern>/wp-content/themes/wp-starter/node_modules/*</exclude-pattern>
 
     <!-- Exclude minified Javascript files. -->
     <exclude-pattern>*.min.js</exclude-pattern>

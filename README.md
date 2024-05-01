@@ -2,6 +2,7 @@
 To use this, clone the WordPress Site Starter into the new project repo. Update this to have info about things to note how to be successful using the starter. 
 
 ## Requirements
+* [Composer](https://getcomposer.org/) - [Installation](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos)
 * [DDEV](https://ddev.readthedocs.io/en/stable/) - [Installation](https://ddev.readthedocs.io/en/stable/users/install/ddev-installation/)
 * [Docker](https://docs.docker.com/desktop/install/mac-install/) (or compatible container alternative)
 * For ACF Pro, create an `auth.json` file in `wp-content/mu-plugins/viget-base/` from the [ACF Website](https://www.advancedcustomfields.com/my-account/view-licenses/). (Credentials are in 1Password)
