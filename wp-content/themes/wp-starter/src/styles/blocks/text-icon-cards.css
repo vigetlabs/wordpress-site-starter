@@ -9,7 +9,7 @@
 			&.aligncenter {
 				@apply text-center;
 
-				figure img {
+				& figure img {
 					@apply mx-auto;
 				}
 			}
