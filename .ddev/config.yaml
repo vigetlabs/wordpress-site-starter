@@ -16,6 +16,7 @@ composer_version: "2"
 nodejs_version: "20"
 web_environment:
     - ENVIRONMENT=dev
+    #- ENVIRONMENT=prod # This loads the production environment scripts
     - WP_ENVIRONMENT_TYPE=development
 corepack_enable: false
 web_extra_exposed_ports:

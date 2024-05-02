@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# bin/build: Builds CSS and JS files.
+#
+# When to use:
+#  - When you want to check for complitation errors
+
+set -euo pipefail
+IFS=$'\n\t'
+
+cd "$(dirname "$0")/.."
+
+echo "$(tput setaf 5)"Starting DDEV..."$(tput sgr0)"
+ddev start
+echo "$(tput setaf 2)"DDEV started"$(tput sgr0)"
+echo ""
+
+echo "$(tput setaf 5)"Starting Vite..."$(tput sgr0)"
+cd wp-content/themes/wp-starter
+ddev npm install
+echo "$(tput setaf 5)"Building files..."$(tput sgr0)"
+ddev npm run build

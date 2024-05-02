@@ -12,10 +12,8 @@ To use this, clone the WordPress Site Starter into the new project repo. Update 
 Download and install WordPress core files if this is the first time running DDEV
 `ddev wp core download`
 
-Start local server
+Start local developement server
 `bin/start`
-
-TODO add more info here once we have the full setup completed. 
 
 1. Open a browser and navigate to [local site](https://wpstarter.ddev.site).
 2. Select English as the language.
@@ -23,10 +21,20 @@ TODO add more info here once we have the full setup completed.
 4. Then click "Install WordPress"
 5. Once WordPress has been set up login with your user information.
 
+If you need to build production files. Change the DDEV config.yaml `ENVIRONMENT`
+to `prod` and then run `bin/build`. Which will build the JS and CSS files in the dist folder and out put a manifest file. 
 
-## Block Documentation
+## Blocks
+Builds are build using ACF and core WordPress blocks. Styles for the blocks are in `src/styles/blocks`.
 
-TODO
+- Accordion
+- Alert Banner
+- CTA
+- Image Caption
+- Logo Grid
+- Text Icon Cards
+- Text Image
+- Video Embed
 
 ## Commands
 
