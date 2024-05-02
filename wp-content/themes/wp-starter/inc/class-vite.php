@@ -64,8 +64,11 @@ class Vite {
 
 		$this->env = getenv( 'ENVIRONMENT' );
 
+		//set frontend css/js
 		$this->entries['default'] = 'main.js';
-		$this->entries['editor']  = 'editor.js';
+
+		//set editor css/js
+		$this->entries['editor']  = 'main.js';
 
 		add_action( 'wp_head', [ $this, 'init' ] );
 
