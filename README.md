@@ -1,46 +1,45 @@
 # WordPress Site Starter
-To use this, clone the WordPress Site Starter into the new project repo. Update this to have info about things to note how to be successful using the starter. 
+
+This is a WordPress starter project that includes a basic custom theme, including some essential custom components, and a project setup designed for fast local setup and development.
 
 ## Requirements
 * [Composer](https://getcomposer.org/) - [Installation](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos)
 * [DDEV](https://ddev.readthedocs.io/en/stable/) - [Installation](https://ddev.readthedocs.io/en/stable/users/install/ddev-installation/)
 * [Docker](https://docs.docker.com/desktop/install/mac-install/) (or compatible container alternative)
-* For ACF Pro, create an `auth.json` file in `wp-content/mu-plugins/viget-base/` from the [ACF Website](https://www.advancedcustomfields.com/my-account/view-licenses/). (Credentials are in 1Password)
+* For ACF Pro, create an `auth.json` file in the project root directory, which can be downloaded from the [ACF Website](https://www.advancedcustomfields.com/my-account/view-licenses/).
 
-## Setup and Running
+## Using this Project
 
-Download and install WordPress core files if this is the first time running DDEV
-`ddev wp core download`
+To begin using this on a new project, simply call the following command from the root of your project:
 
-Start local developement server
-`bin/start`
-
-1. Open a browser and navigate to [local site](https://wpstarter.ddev.site).
-2. Select English as the language.
-3. Fill out the site information.
-4. Then click "Install WordPress"
-5. Once WordPress has been set up login with your user information.
-
-If you need to build production files. Change the DDEV config.yaml `ENVIRONMENT`
-to `prod` and then run `bin/build`. Which will build the JS and CSS files in the dist folder and out put a manifest file. 
-
-## Blocks
-Builds are build using ACF and core WordPress blocks. Styles for the blocks are in `src/styles/blocks`.
-
-- Accordion
-- Alert Banner
-- CTA
-- Image Caption
-- Logo Grid
-- Text Icon Cards
-- Text Image
-- Video Embed
-
-## Commands
-
-```
-ddev npm run dev #builds local files
-ddev npm run build  #builds production files
+```bash
+$ composer create-project vigetlabs/wordpress-site-starter
 ```
 
-In order to run Vite you need to run it inside of DDEV by running `ddev npm run dev` inside of your theme folder. 
+Follow the prompts to set up your project with the desired information. You will be asked:
+
+1. **The name of the project** (`My Project`): This will serve as the name of the WordPress Theme.
+2. **The project slug** (`my-project`): This will be used as the directory name for the theme as well as the local DDEV site name.
+3. **The text domain** (`my-project`): This will be used for internationalization and localization and defaults to the project slug.
+4. **The project Package name** (`MyProject`): This is referenced in the PhpDoc blocks and default project namespace. It defaults to the project name.
+5. The function prefix (`my_project_`): This is used to prefix all custom theme functions and defaults to the project slug.
+
+## Automated Setup
+
+Following the series of prompts, the project will be set up with the following:
+
+1. **Composer Dependencies**: All necessary dependencies for WordPress and the theme.
+2. **WordPress Core**: The latest version of WordPress will be downloaded.
+3. **Local Development Environment**: A DDEV configuration file will be created and the local environment will be started.
+4. **Theme Setup**: The theme will be set up with the project name and slug.
+5. **ACF Pro**: If an `auth.json` file is present in the project root, ACF Pro will be installed.
+6. **`package.json` Dependencies**: All necessary script and style build dependencies for the theme will be installed and initialized.
+7. **Cleanup**: Any setup files will be removed and the project will be ready for development.
+
+After the setup is complete, it is recommended to perform your initial commit and push to your project repository.
+
+# Development
+
+```bash
+$ composer create-project viget/wordpress-site-starter my-project --repository="{\"url\": \"https://github.com/vigetlabs/wordpress-site-starter\", \"type\": \"vcs\"}" --stability=dev --remove-vcs
+```
