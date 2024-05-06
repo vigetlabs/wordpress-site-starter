@@ -60,7 +60,7 @@ class Vite {
 		$this->dev_server = "{$this->site_url}:{$this->port}";
 
 		$this->dist_url  = get_stylesheet_directory_uri() . '/dist/';
-		$this->dist_path = get_stylesheet_directory() . '/dist/';
+		$this->dist_path = get_stylesheet_directory() . '/dist/.vite/';
 
 		$this->env = getenv( 'ENVIRONMENT' );
 
