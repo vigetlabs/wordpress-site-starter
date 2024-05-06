@@ -41,7 +41,6 @@ Builds are build using ACF and core WordPress blocks. Styles for the blocks are 
 ```
 ddev npm run dev #builds local files
 ddev npm run build  #builds production files
-ddev npm run json-theme #builds the theme.json
 ```
 
 In order to run Vite you need to run it inside of DDEV by running `ddev npm run dev` inside of your theme folder. 
