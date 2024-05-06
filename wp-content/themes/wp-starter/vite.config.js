@@ -3,9 +3,11 @@ import path from 'path';
 import liveReload from 'vite-plugin-live-reload';
 import generateThemeJSON, { buildJSON } from './src/theme-json/generate_theme.js';
 
+const THEME = '/wp-content/themes/wp-starter';
+
 export default defineConfig(({ command }) => ({
 	root: 'src',
-	base: command === 'serve' ? '' : '/dist/',
+	base: command === 'serve' ? '' : THEME + '/dist/',
 	plugins: [
 		generateThemeJSON,
 		//Turn on if you want Vite to update with php files
@@ -26,7 +28,6 @@ export default defineConfig(({ command }) => ({
 		rollupOptions: {
 			input: {
 				'main': path.resolve(__dirname, 'src/main.js'),
-				'editor': path.resolve(__dirname, 'src/editor.js'),
 			}
 		},
 	},
