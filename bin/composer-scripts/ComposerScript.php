@@ -287,4 +287,37 @@ class ComposerScript {
 
 		rmdir( $path );
 	}
+
+	/**
+	 * Get the composer data.
+	 *
+	 * @return array
+	 */
+	public static function getComposerData(): array {
+		$path = self::translatePath( 'composer.json' );
+		$json = file_get_contents( $path );
+		$data = json_decode( $json, true );
+
+		if ( ! $data ) {
+			return [];
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Update the composer data.
+	 *
+	 * @param array $data
+	 *
+	 * @return void
+	 */
+	public static function updateComposerData( array $data ): void {
+		$path = self::translatePath( 'composer.json' );
+
+		file_put_contents(
+			$path,
+			json_encode( $data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES )
+		);
+	}
 }
