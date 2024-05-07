@@ -339,10 +339,10 @@ class PostCreateProjectScript extends ComposerScript {
 		$composerData = self::getComposerData();
 
 		// Remove post-create-project-cmd
-		unset( $composerData['post-create-project-cmd'] );
+		unset( $composerData['scripts']['post-create-project-cmd'] );
 
 		// Remove pre-install-cmd
-		unset( $composerData['pre-install-cmd'] );
+		unset( $composerData['scripts']['pre-install-cmd'] );
 
 		// Remove Composer
 		unset( $composerData['require-dev']['composer/composer'] );
