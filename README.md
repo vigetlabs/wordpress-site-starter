@@ -41,5 +41,5 @@ After the setup is complete, it is recommended to perform your initial commit an
 # Development
 
 ```bash
-$ composer create-project viget/wordpress-site-starter my-project --repository="{\"url\": \"https://github.com/vigetlabs/wordpress-site-starter\", \"type\": \"vcs\"}" --stability=dev --remove-vcs
+$ mkdir project-name && cd project-name && composer create-project --repository-url="/Users/briandichiara/Sites/wpstarter.vigetx.com/public_html/packages.json" vigetlabs/wordpress-site-starter . --stability=dev --remove-vcs
 ```

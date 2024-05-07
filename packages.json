@@ -1,0 +1,11 @@
+{
+  "package": {
+    "name": "vigetlabs/wordpress-site-starter",
+    "version": "0.1.0",
+    "source": {
+      "url": "/Users/briandichiara/Sites/wpstarter.vigetx.com/public_html/.git",
+      "type": "git",
+      "reference": "main"
+    }
+  }
+}

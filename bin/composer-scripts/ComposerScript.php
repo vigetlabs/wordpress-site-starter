@@ -60,17 +60,21 @@ class ComposerScript {
 	 * Translate a relative path to an absolute path.
 	 *
 	 * @param string $path
+	 * @param bool   $in_docker
+	 *
 	 * @return string
 	 */
-	protected static function translatePath( string $path ): string
+	protected static function translatePath( string $path, bool $in_docker = false ): string
 	{
+		$base = $in_docker ? '/var/www/html' : getcwd();
+
 		// Support relative paths.
 		if ( in_array( $path, [ './', '.' ] ) ) {
-			$path = getcwd();
+			$path = $base;
 		} elseif ( str_starts_with( $path, './' ) ) {
-			$path = getcwd() . ltrim( $path, '.' );
+			$path = $base . ltrim( $path, '.' );
 		} elseif ( ! str_starts_with( $path, '/' ) ) {
-			$path = getcwd() . '/' . $path;
+			$path = $base . '/' . $path;
 		}
 
 		return $path;
@@ -207,7 +211,7 @@ class ComposerScript {
 	protected static function runCommand( string $cmd ): void {
 		$output = shell_exec( $cmd );
 
-		if ( $output ) {
+		if ( null !== $output ) {
 			self::writeOutput( $output );
 		}
 	}

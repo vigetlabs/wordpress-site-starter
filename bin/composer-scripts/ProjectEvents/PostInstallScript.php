@@ -33,20 +33,22 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	public static function maybeDownloadWordPress(): void {
-		if ( file_exists( self::translatePath( './wp-load.php' ) ) ) {
+		if ( file_exists( self::translatePath( './wp-load.php', true ) ) ) {
 			return;
 		}
 
-		$wordpress_dir     = self::translatePath( './' );
-		$wordpress_version = 'latest';
+		$wordpress_dir = self::translatePath( './', true );
+
+		self::writeInfo( 'Downloading the last version of WordPress...' );
 
 		$cmd = sprintf(
-			'ddev wp core download --path=%s --version=%s',
-			escapeshellarg( $wordpress_dir ),
-			escapeshellarg( $wordpress_version )
+			'ddev wp core download --path=%s --version=latest',
+			escapeshellarg( $wordpress_dir )
 		);
 
 		self::runCommand( $cmd );
+
+		self::writeInfo( 'Deleting stock WordPress themes...' );
 
 		// Remove the core Twenty-X themes.
 		self::deleteCoreThemes();

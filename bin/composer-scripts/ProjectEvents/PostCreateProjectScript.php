@@ -77,6 +77,11 @@ class PostCreateProjectScript extends ComposerScript {
 			return;
 		}
 
+		if ( ! self::meetsRequirements() ) {
+			self::writeWarning( 'Requirements not met. Exiting.' );
+			return;
+		}
+
 		// Gather project info.
 		self::getProjectInfo();
 
@@ -99,6 +104,21 @@ class PostCreateProjectScript extends ComposerScript {
 		$package = self::$event->getComposer()->getPackage()->getName();
 
 		if ( ! str_contains( $package, self::$default_project_slug ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check if the requirements are met.
+	 *
+	 * @return bool
+	 */
+	private static function meetsRequirements(): bool {
+		// Check if DDEV is installed
+		if ( ! shell_exec( 'which ddev' ) ) {
+			self::writeError( 'DDEV is required for this script. Please install DDEV and try again.' );
 			return false;
 		}
 
@@ -200,6 +220,8 @@ class PostCreateProjectScript extends ComposerScript {
 			return;
 		}
 
+		self::writeInfo( 'Changing theme directory name...' );
+
 		// Change the theme directory name.
 		rename( $default_theme_dir, $theme_dir );
 
@@ -238,6 +260,8 @@ class PostCreateProjectScript extends ComposerScript {
 			self::$info['name'], // Project Name.
 			self::$info['package'], // Package name.
 		];
+
+		self::writeInfo( 'Performing string replacements...' );
 
 		foreach ( $files as $file ) {
 			foreach ( $search as $index => $group ) {
