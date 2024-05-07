@@ -221,9 +221,15 @@ class PostCreateProjectScript extends ComposerScript {
 		}
 
 		self::writeInfo( 'Changing theme directory name...' );
+		self::writeComment( 'Theme Directory: ' . $theme_dir );
 
 		// Change the theme directory name.
-		rename( $default_theme_dir, $theme_dir );
+		if ( ! rename( $default_theme_dir, $theme_dir ) ) {
+			self::writeError( 'Failed to rename theme directory.' );
+			return;
+		}
+
+		self::writeInfo( 'Theme directory name changed.' );
 
 		$files = self::getFilesToChange( $theme_dir );
 
@@ -265,6 +271,7 @@ class PostCreateProjectScript extends ComposerScript {
 
 		foreach ( $files as $file ) {
 			foreach ( $search as $index => $group ) {
+				self::writeComment( 'Updating File: ' . $file );
 				self::searchReplaceFile( $group, $replace[ $index ], $file );
 			}
 		}
