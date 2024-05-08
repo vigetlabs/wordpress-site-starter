@@ -28,11 +28,31 @@ class PostInstallScript extends ComposerScript {
 	public static function execute( Event $event ): void {
 		self::setEvent( $event );
 
+		if ( ! self::needsSetup() ) {
+			return;
+		}
+
 		// Load DDEV Environment variables.
 		self::loadDDEVEnvironmentVars();
 
 		// Download WordPress
-		self::maybeDownloadWordPress();
+		self::downloadWordPress();
+
+		// Remove the core Twenty-X themes.
+		self::deleteCoreThemes();
+	}
+
+	/**
+	 * Check if the setup is needed.
+	 *
+	 * @return bool
+	 */
+	private static function needsSetup(): bool {
+		if ( file_exists( self::translatePath( './wp-load.php', true ) ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -51,6 +71,8 @@ class PostInstallScript extends ComposerScript {
 		self::writeInfo( 'Loading DDEV environment variables...' );
 
 		self::$env = parse_ini_file( $envPath );
+
+		self::writeInfo( 'DDEV environment variables loaded.' );
 	}
 
 	/**
@@ -58,26 +80,19 @@ class PostInstallScript extends ComposerScript {
 	 *
 	 * @return void
 	 */
-	public static function maybeDownloadWordPress(): void {
-		if ( file_exists( self::translatePath( './wp-load.php', true ) ) ) {
-			return;
-		}
-
+	public static function downloadWordPress(): void {
 		$wordpress_dir = self::translatePath( './', true );
 
 		self::writeInfo( 'Downloading the last version of WordPress...' );
 
 		$cmd = sprintf(
-			'ddev wp core download --path=%s --version=latest',
+			'wp core download --path=%s --version=latest',
 			escapeshellarg( $wordpress_dir )
 		);
 
 		self::runCommand( $cmd );
 
-		self::writeInfo( 'Deleting stock WordPress themes...' );
-
-		// Remove the core Twenty-X themes.
-		self::deleteCoreThemes();
+		self::writeInfo( 'WordPress Download complete.' );
 	}
 
 	/**
@@ -86,6 +101,8 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function deleteCoreThemes(): void {
+		self::writeInfo( 'Deleting stock WordPress themes...' );
+
 		$themes = [
 			'twentytwenty',
 			'twentytwentyone',
@@ -103,5 +120,7 @@ class PostInstallScript extends ComposerScript {
 
 			self::deleteDirectory( $theme_dir );
 		}
+
+		self::writeInfo( 'Stock WordPress themes deleted.' );
 	}
 }
