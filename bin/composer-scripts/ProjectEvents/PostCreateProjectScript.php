@@ -44,12 +44,12 @@ class PostCreateProjectScript extends ComposerScript {
 		self::setEvent( $event );
 
 		if ( ! self::needsSetup() ) {
-			exit(1);
+			return;
 		}
 
 		if ( ! self::meetsRequirements() ) {
 			self::writeWarning( 'Requirements not met. Exiting.' );
-			exit(1);
+			return;
 		}
 
 		// Gather project info.
@@ -58,8 +58,8 @@ class PostCreateProjectScript extends ComposerScript {
 		// Modify the description in the composer.json file.
 		self::updateComposerDescription();
 
-		// Modify the description in the composer.json file.
-		self::updateRemoveUnnecessaryDependencies();
+		// Remove site-starter dependencies from the composer.json file.
+		self::removeUnnecessaryDependencies();
 
 		// Remove dev-only packages file.
 		self::removePackagesFile();
@@ -77,8 +77,6 @@ class PostCreateProjectScript extends ComposerScript {
 		self::destruct();
 
 		self::writeInfo( 'All set!' );
-
-		exit(1);
 	}
 
 	/**
@@ -102,11 +100,15 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return bool
 	 */
 	private static function meetsRequirements(): bool {
+		self::writeInfo( 'Checking requirements...' );
+
 		// Check if DDEV is installed
 		if ( ! shell_exec( 'which ddev' ) ) {
 			self::writeError( 'DDEV is required for this script. Please install DDEV and try again.' );
 			return false;
 		}
+
+		self::writeInfo( 'Requirement Passed!' );
 
 		return true;
 	}
@@ -193,14 +195,15 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function swapReadmeFiles(): void {
+		self::writeInfo( 'Swapping README files...' );
+
 		$readmePath    = self::translatePath( 'README.md' );
 		$projectReadme = self::translatePath( 'README.dist.md' );
 
 		if ( ! file_exists( $readmePath ) ||  ! file_exists( $projectReadme ) ) {
+			self::writeWarning( 'Missing one or more README files - Skipping README swap.' );
 			return;
 		}
-
-		self::writeInfo( 'Swapping README files...' );
 
 		// Swap the README files.
 		unlink( $readmePath );
@@ -215,6 +218,8 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return void
 	 */
 	public static function updateProjectFiles(): void {
+		self::writeInfo( 'Updating project files...' );
+
 		if ( empty( self::$info['slug'] ) ) {
 			self::writeError( 'Missing project slug.' );
 			return;
@@ -229,7 +234,6 @@ class PostCreateProjectScript extends ComposerScript {
 		}
 
 		self::writeInfo( 'Changing theme directory name...' );
-		self::writeComment( 'Theme Directory: ' . $themeDir );
 
 		// Change the theme directory name.
 		if ( ! rename( $defaultThemeDir, $themeDir ) ) {
@@ -282,6 +286,8 @@ class PostCreateProjectScript extends ComposerScript {
 				self::searchReplaceFile( $group, $replace[ $index ], $file );
 			}
 		}
+
+		self::writeInfo( 'Project files updated!' );
 	}
 
 	/**
@@ -290,6 +296,8 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return void
 	 */
 	public static function maybeRequireACF(): void {
+		self::writeInfo( 'Checking for ACF auth.json...' );
+
 		$authPath = self::translatePath( 'auth.json' );
 
 		if ( ! file_exists( $authPath ) ) {
@@ -300,13 +308,16 @@ class PostCreateProjectScript extends ComposerScript {
 		$acfPackage   = 'wpengine/advanced-custom-fields-pro';
 		$composerData = self::getComposerData();
 
-		if ( ! empty( $composerData['require'][ $acfPackage ] ) ){
+		if ( ! empty( $composerData['require'][ $acfPackage ] ) ) {
+			self::writeInfo( 'ACF already required in composer.json.' );
 			return;
 		}
 
 		$composerData['require'][ $acfPackage ] = "*";
 
 		self::updateComposerData( $composerData );
+
+		self::writeInfo( 'ACF Composer dependency updated!' );
 	}
 
 	/**
@@ -315,6 +326,8 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return void
 	 */
 	public static function updateComposerDescription(): void {
+		self::writeInfo( 'Updating Composer Description...' );
+
 		if ( empty( self::$info['name'] ) ) {
 			self::writeError( 'Missing project name.' );
 			return;
@@ -323,6 +336,8 @@ class PostCreateProjectScript extends ComposerScript {
 		$composerData = self::getComposerData();
 		$composerData['description'] = sprintf( 'A custom WordPress Site for %s by Viget.', self::$info['name'] );
 		self::updateComposerData( $composerData );
+
+		self::writeInfo( 'Composer Description Updated!' );
 	}
 
 	/**
@@ -330,11 +345,8 @@ class PostCreateProjectScript extends ComposerScript {
 	 *
 	 * @return void
 	 */
-	public static function updateRemoveUnnecessaryDependencies(): void {
-		if ( empty( self::$info['name'] ) ) {
-			self::writeError( 'Missing project name.' );
-			return;
-		}
+	public static function removeUnnecessaryDependencies(): void {
+		self::writeInfo( 'Removing Unnecessary Composer Dependencies...' );
 
 		$composerData = self::getComposerData();
 
@@ -351,6 +363,8 @@ class PostCreateProjectScript extends ComposerScript {
 		unset( $composerData['require-dev']['symfony/console'] );
 
 		self::updateComposerData( $composerData );
+
+		self::writeInfo( 'Composer file updated!' );
 	}
 
 	/**
@@ -359,6 +373,8 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function removePackagesFile(): void {
+		self::writeInfo( 'Removing packages.json...' );
+
 		$packagesFile = self::translatePath( 'packages.json' );
 
 		if ( ! file_exists( $packagesFile ) ) {
@@ -367,6 +383,8 @@ class PostCreateProjectScript extends ComposerScript {
 		}
 
 		unlink( $packagesFile );
+
+		self::writeInfo( 'packages.json file removed!' );
 	}
 
 	/**
@@ -405,6 +423,8 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function destruct(): void {
+		self::writeInfo( 'Self-destructing...' );
+
 		// Remove PostCreateProjectScript file
 		$createProject = self::translatePath( 'bin/composer-scripts/ProjectEvents/PostCreateProjectScript.php' );
 		unlink( $createProject );
@@ -412,5 +432,7 @@ class PostCreateProjectScript extends ComposerScript {
 		// Remove PreInstallScript file
 		$preInstall = self::translatePath( 'bin/composer-scripts/ProjectEvents/PreInstallScript.php' );
 		unlink( $preInstall );
+
+		self::writeInfo( 'Self-destruction complete.' );
 	}
 }
