@@ -19,49 +19,19 @@ class PostCreateProjectScript extends ComposerScript {
 	private static array $info = [];
 
 	/**
-	 * @var string
+	 * @var array
 	 */
-	private static string $default_project_slug = 'wordpress-site-starter';
-
-	/**
-	 * @var string
-	 */
-	private static string $default_project_name = 'WP Site Starter';
-
-	/**
-	 * @var string
-	 */
-	private static string $default_alt_project_name = 'WordPress Site Starter';
-
-	/**
-	 * @var string
-	 */
-	private static string $default_host_name = 'wpstarter';
-
-	/**
-	 * @var string
-	 */
-	private static string $default_theme_name = 'WP Starter';
-
-	/**
-	 * @var string
-	 */
-	private static string $default_theme_slug = 'wp-starter';
-
-	/**
-	 * @var string
-	 */
-	private static string $default_package_name = 'WPStarter';
-
-	/**
-	 * @var string
-	 */
-	private static string $default_function_prefix = 'wpstarter_';
-
-	/**
-	 * @var string
-	 */
-	private static string $default_text_domain = 'wp-starter';
+	private static array $defaults = [
+		'project-slug'     => 'wordpress-site-starter',
+		'project-name'     => 'WP Site Starter',
+		'alt-project-name' => 'WordPress Site Starter',
+		'host-name'        => 'wpstarter',
+		'theme-name'       => 'WP Starter',
+		'theme-slug'       => 'wp-starter',
+		'package-name'     => 'WPStarter',
+		'function-prefix'  => 'wpstarter_',
+		'text-domain'      => 'wp-starter',
+	];
 
 	/**
 	 * Perform actions within this file.
@@ -74,12 +44,12 @@ class PostCreateProjectScript extends ComposerScript {
 		self::setEvent( $event );
 
 		if ( ! self::needsSetup() ) {
-			return;
+			exit(1);
 		}
 
 		if ( ! self::meetsRequirements() ) {
 			self::writeWarning( 'Requirements not met. Exiting.' );
-			return;
+			exit(1);
 		}
 
 		// Gather project info.
@@ -91,6 +61,12 @@ class PostCreateProjectScript extends ComposerScript {
 		// Modify the description in the composer.json file.
 		self::updateRemoveUnnecessaryDependencies();
 
+		// Remove dev-only packages file.
+		self::removePackagesFile();
+
+		// Swap README files
+		self::swapReadmeFiles();
+
 		// Perform project string replacements
 		self::updateProjectFiles();
 
@@ -99,6 +75,10 @@ class PostCreateProjectScript extends ComposerScript {
 
 		// Self Destruct.
 		self::destruct();
+
+		self::writeInfo( 'All set!' );
+
+		exit(1);
 	}
 
 	/**
@@ -109,7 +89,7 @@ class PostCreateProjectScript extends ComposerScript {
 	public static function needsSetup(): bool {
 		$package = self::$event->getComposer()->getPackage()->getName();
 
-		if ( ! str_contains( $package, self::$default_project_slug ) ) {
+		if ( ! str_contains( $package, self::$defaults['project-slug'] ) ) {
 			return false;
 		}
 
@@ -138,8 +118,8 @@ class PostCreateProjectScript extends ComposerScript {
 	 */
 	public static function getProjectInfo(): void {
 		// Project Name.
-		$default_name = ucwords( str_replace( [ '-', '_' ], ' ', basename( getcwd() ) ) );
-		$name = ! empty( self::$info['name'] ) ? self::$info['name'] : $default_name;
+		$defaultName = ucwords( str_replace( [ '-', '_' ], ' ', basename( getcwd() ) ) );
+		$name = ! empty( self::$info['name'] ) ? self::$info['name'] : $defaultName;
 		self::$info['name'] = self::ask( 'What is the name of your project?', $name );
 
 		// Project Slug.
@@ -147,8 +127,8 @@ class PostCreateProjectScript extends ComposerScript {
 		self::$info['slug'] = self::ask( 'Do you want to use a custom project slug?', self::$info['slug'] );
 
 		// Text Domain.
-		self::$info['text_domain'] = self::$info['slug'];
-		self::$info['text_domain'] = self::ask( 'Should the text domain match the project slug?', self::$info['text_domain'] );
+		self::$info['text-domain'] = self::$info['slug'];
+		self::$info['text-domain'] = self::ask( 'Should the text domain match the project slug?', self::$info['text-domain'] );
 
 		// Project Package.
 		self::$info['package'] = str_replace( ' ', '', ucwords( self::$info['name'] ) );
@@ -161,7 +141,7 @@ class PostCreateProjectScript extends ComposerScript {
 		// Summary
 		$summary  = PHP_EOL . ' - Name: ' . self::$info['name'];
 		$summary .= PHP_EOL . ' - Slug: ' . self::$info['slug'];
-		$summary .= PHP_EOL . ' - Text Domain: ' . self::$info['text_domain'];
+		$summary .= PHP_EOL . ' - Text Domain: ' . self::$info['text-domain'];
 		$summary .= PHP_EOL . ' - Package: ' . self::$info['package'];
 		$summary .= PHP_EOL . ' - Function Prefix: ' . self::$info['function'];
 
@@ -208,6 +188,28 @@ class PostCreateProjectScript extends ComposerScript {
 	}
 
 	/**
+	 * Swap the README files.
+	 *
+	 * @return void
+	 */
+	private static function swapReadmeFiles(): void {
+		$readmePath    = self::translatePath( 'README.md' );
+		$projectReadme = self::translatePath( 'README.dist.md' );
+
+		if ( ! file_exists( $readmePath ) ||  ! file_exists( $projectReadme ) ) {
+			return;
+		}
+
+		self::writeInfo( 'Swapping README files...' );
+
+		// Swap the README files.
+		unlink( $readmePath );
+		rename( $projectReadme, $readmePath );
+
+		self::writeInfo( 'README files swapped.' );
+	}
+
+	/**
 	 * Change wordpress-starter-project to match new project
 	 *
 	 * @return void
@@ -218,55 +220,55 @@ class PostCreateProjectScript extends ComposerScript {
 			return;
 		}
 
-		$default_theme_dir = self::translatePath( 'wp-content/themes/' . self::$default_theme_slug );
-		$theme_dir         = self::translatePath( 'wp-content/themes/' . self::$info['slug'] );
+		$defaultThemeDir = self::translatePath( 'wp-content/themes/' . self::$defaults['theme-slug'] );
+		$themeDir         = self::translatePath( 'wp-content/themes/' . self::$info['slug'] );
 
-		if ( ! is_dir( $default_theme_dir ) ) {
+		if ( ! is_dir( $defaultThemeDir ) ) {
 			self::writeError( 'Missing theme directory.' );
 			return;
 		}
 
 		self::writeInfo( 'Changing theme directory name...' );
-		self::writeComment( 'Theme Directory: ' . $theme_dir );
+		self::writeComment( 'Theme Directory: ' . $themeDir );
 
 		// Change the theme directory name.
-		if ( ! rename( $default_theme_dir, $theme_dir ) ) {
+		if ( ! rename( $defaultThemeDir, $themeDir ) ) {
 			self::writeError( 'Failed to rename theme directory.' );
 			return;
 		}
 
 		self::writeInfo( 'Theme directory name changed.' );
 
-		$files = self::getFilesToChange( $theme_dir );
+		$files = self::getFilesToChange( $themeDir );
 
 		$search = [
 			[
-				self::$default_function_prefix,
+				self::$defaults['function-prefix'],
 			],
 			[
-				'\'' . self::$default_text_domain . '\'',
-				'Text Domain: ' . self::$default_text_domain,
+				'\'' . self::$defaults['text-domain'] . '\'',
+				'Text Domain: ' . self::$defaults['text-domain'],
 			],
 			[
-				self::$default_project_slug,
-				self::$default_host_name,
-				self::$default_theme_slug,
+				self::$defaults['project-slug'],
+				self::$defaults['host-name'],
+				self::$defaults['theme-slug'],
 			],
 			[
-				self::$default_project_name,
-				self::$default_alt_project_name,
-				self::$default_theme_name,
+				self::$defaults['project-name'],
+				self::$defaults['alt-project-name'],
+				self::$defaults['theme-name'],
 			],
 			[
-				self::$default_package_name,
+				self::$defaults['package-name'],
 			],
 		];
 
 		$replace = [
 			self::$info['function'], // Function prefix.
 			[
-				'\'' . self::$info['text_domain'] . '\'', // Text Domain.
-				'Text Domain: ' . self::$info['text_domain'],
+				'\'' . self::$info['text-domain'] . '\'', // Text Domain.
+				'Text Domain: ' . self::$info['text-domain'],
 			],
 			self::$info['slug'], // Project Slug.
 			self::$info['name'], // Project Name.
@@ -280,8 +282,6 @@ class PostCreateProjectScript extends ComposerScript {
 				self::searchReplaceFile( $group, $replace[ $index ], $file );
 			}
 		}
-
-		self::writeInfo( 'All set!' );
 	}
 
 	/**
@@ -290,9 +290,9 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return void
 	 */
 	public static function maybeRequireACF(): void {
-		$auth_path = self::translatePath( 'auth.json' );
+		$authPath = self::translatePath( 'auth.json' );
 
-		if ( ! file_exists( $auth_path ) ) {
+		if ( ! file_exists( $authPath ) ) {
 			self::writeWarning( 'auth.json file not found. Skipping ACF requirement.' );
 			return;
 		}
@@ -354,32 +354,49 @@ class PostCreateProjectScript extends ComposerScript {
 	}
 
 	/**
+	 * Remove the packages.json file.
+	 *
+	 * @return void
+	 */
+	private static function removePackagesFile(): void {
+		$packagesFile = self::translatePath( 'packages.json' );
+
+		if ( ! file_exists( $packagesFile ) ) {
+			self::writeWarning( 'packages.json file not found. Skipping removal.' );
+			return;
+		}
+
+		unlink( $packagesFile );
+	}
+
+	/**
 	 * Get all the files that need to be updated.
 	 *
-	 * @param string $theme_dir
+	 * @param string $themeDir
 	 *
 	 * @return array
 	 */
-	private static function getFilesToChange( string $theme_dir ): array {
+	private static function getFilesToChange( string $themeDir ): array {
 		$files = [
+			self::translatePath( 'bin/start' ),
 			self::translatePath( '.ddev/config.yaml' ),
 			self::translatePath( 'composer.json' ),
-			$theme_dir . '/composer.json',
-			$theme_dir . '/package.json',
-			$theme_dir . '/package-lock.json',
+			$themeDir . '/composer.json',
+			$themeDir . '/package.json',
+			$themeDir . '/package-lock.json',
 			self::translatePath( '.phpcs.xml' ),
-			$theme_dir . '/.phpcs.xml',
-			$theme_dir . '/readme.txt',
+			$themeDir . '/.phpcs.xml',
+			$themeDir . '/readme.txt',
 			self::translatePath( 'README.md' ),
-			$theme_dir . '/README.md',
-			$theme_dir . '/style.css',
-			$theme_dir . '/vite.config.js',
+			$themeDir . '/README.md',
+			$themeDir . '/style.css',
+			$themeDir . '/vite.config.js',
 		];
 
-		$theme_php_files  = glob( $theme_dir . '/**/*.php' );
-		$theme_html_files = glob( $theme_dir . '/**/*.html' );
+		$themePhpFiles  = glob( $themeDir . '/**/*.php' );
+		$themeHtmlFiles = glob( $themeDir . '/**/*.html' );
 
-		return array_merge( $files, $theme_php_files, $theme_html_files );
+		return array_merge( $files, $themePhpFiles, $themeHtmlFiles );
 	}
 
 	/**

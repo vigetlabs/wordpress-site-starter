@@ -32,18 +32,19 @@
     }
   },
   "scripts": {
-    "post-create-project-cmd": [
-      "Viget\\ComposerScripts\\ProjectEventHandler::postCreateProject",
-      "@composer install"
-    ],
-    "pre-install-cmd": [
-      "Viget\\ComposerScripts\\ProjectEventHandler::preInstall"
-    ],
-    "post-install-cmd": [
-      "ddev start",
-      "Viget\\ComposerScripts\\ProjectEventHandler::postInstall",
-      "ddev launch"
-    ],
+      "post-create-project-cmd": [
+        "Viget\\ComposerScripts\\ProjectEventHandler::postCreateProject",
+        "@composer install"
+      ],
+      "pre-install-cmd": [
+        "Viget\\ComposerScripts\\ProjectEventHandler::preInstall"
+      ],
+      "post-install-cmd": [
+        "ddev start",
+        "Viget\\ComposerScripts\\ProjectEventHandler::postInstall",
+        "ddev stop",
+        "exit(1) && bin/start"
+      ],
     "generate-docs": "Viget\\ComposerScripts\\WPDocsGeneratorScript::make"
   },
   "repositories": [

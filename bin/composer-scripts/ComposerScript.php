@@ -261,6 +261,11 @@ class ComposerScript {
 		}
 
 		$contents = file_get_contents( $path );
+
+		if ( is_string( $search ) && ! str_contains( $contents, $search ) ) {
+			return;
+		}
+
 		$contents = str_replace( $search, $replace, $contents );
 		file_put_contents( $path, $contents );
 	}
