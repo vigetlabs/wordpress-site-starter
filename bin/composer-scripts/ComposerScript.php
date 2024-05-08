@@ -296,10 +296,12 @@ class ComposerScript {
 	/**
 	 * Get the composer data.
 	 *
+	 * @param string $themePath
+	 *
 	 * @return array
 	 */
-	public static function getComposerData(): array {
-		$path = self::translatePath( 'composer.json' );
+	public static function getComposerData( string $themePath ): array {
+		$path = self::translatePath( $themePath . 'composer.json' );
 		$json = file_get_contents( $path );
 		$data = json_decode( $json, true );
 
@@ -314,11 +316,12 @@ class ComposerScript {
 	 * Update the composer data.
 	 *
 	 * @param array $data
+	 * @param string $themePath
 	 *
 	 * @return void
 	 */
-	public static function updateComposerData( array $data ): void {
-		$path = self::translatePath( 'composer.json' );
+	public static function updateComposerData( array $data, string $themePath ): void {
+		$path = self::translatePath( $themePath . 'composer.json' );
 
 		file_put_contents(
 			$path,

@@ -44,10 +44,10 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function loadDDEVEnvironmentVars(): void {
-		$envPath = self::translatePath( '.ddev/.env', true );
+		$envPath = self::translatePath( './.ddev/.env', true );
 
 		if ( ! file_exists( $envPath ) ) {
-			self::writeError( 'DDEV .env file not found.' );
+			self::writeError( 'DDEV .env file not found (' . $envPath . ')' );
 			return;
 		}
 

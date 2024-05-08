@@ -15,7 +15,6 @@ ddev start
 echo "$(tput setaf 2)"DDEV started"$(tput sgr0)"
 echo ""
 
-
 echo "$(tput setaf 5)"Launching Project in browser..."$(tput sgr0)"
 ddev launch
 echo ""

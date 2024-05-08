@@ -58,12 +58,6 @@ class PostCreateProjectScript extends ComposerScript {
 		// Modify the description in the composer.json file.
 		self::updateComposerDescription();
 
-		// Remove site-starter dependencies from the composer.json file.
-		self::removeUnnecessaryDependencies();
-
-		// Remove dev-only packages file.
-		self::removePackagesFile();
-
 		// Swap README files
 		self::swapReadmeFiles();
 
@@ -72,6 +66,12 @@ class PostCreateProjectScript extends ComposerScript {
 
 		// Require ACF if auth.json file is present.
 		self::maybeRequireACF();
+
+		// Remove dev-only packages file.
+		self::removePackagesFile();
+
+		// Remove site-starter composer file
+		self::removeRootComposer();
 
 		// Self Destruct.
 		self::destruct();
@@ -298,7 +298,7 @@ class PostCreateProjectScript extends ComposerScript {
 	public static function maybeRequireACF(): void {
 		self::writeInfo( 'Checking for ACF auth.json...' );
 
-		$authPath = self::translatePath( 'auth.json' );
+		$authPath = self::translatePath( 'wp-content/themes/' . self::$info['slug'] . '/auth.json' );
 
 		if ( ! file_exists( $authPath ) ) {
 			self::writeWarning( 'auth.json file not found. Skipping ACF requirement.' );
@@ -306,7 +306,8 @@ class PostCreateProjectScript extends ComposerScript {
 		}
 
 		$acfPackage   = 'wpengine/advanced-custom-fields-pro';
-		$composerData = self::getComposerData();
+		$themePath    = self::translatePath( 'wp-content/themes/' . self::$info['slug'] . '/' );
+		$composerData = self::getComposerData( $themePath );
 
 		if ( ! empty( $composerData['require'][ $acfPackage ] ) ) {
 			self::writeInfo( 'ACF already required in composer.json.' );
@@ -315,7 +316,7 @@ class PostCreateProjectScript extends ComposerScript {
 
 		$composerData['require'][ $acfPackage ] = "*";
 
-		self::updateComposerData( $composerData );
+		self::updateComposerData( $composerData, $themePath );
 
 		self::writeInfo( 'ACF Composer dependency updated!' );
 	}
@@ -333,38 +334,34 @@ class PostCreateProjectScript extends ComposerScript {
 			return;
 		}
 
-		$composerData = self::getComposerData();
+		$themePath    = self::translatePath( 'wp-content/themes/' . self::$info['slug'] . '/' );
+		$composerData = self::getComposerData( $themePath );
+
+		// Update the Description.
 		$composerData['description'] = sprintf( 'A custom WordPress Site for %s by Viget.', self::$info['name'] );
-		self::updateComposerData( $composerData );
+		self::updateComposerData( $composerData, $themePath );
 
 		self::writeInfo( 'Composer Description Updated!' );
 	}
 
 	/**
-	 * Modify the composer.json to remove unnecessary dependencies
+	 * Remove the root composer.json file.
 	 *
 	 * @return void
 	 */
-	public static function removeUnnecessaryDependencies(): void {
-		self::writeInfo( 'Removing Unnecessary Composer Dependencies...' );
+	private static function removeRootComposer(): void {
+		self::writeInfo( 'Removing root composer.json...' );
 
-		$composerData = self::getComposerData();
+		$composerFile = self::translatePath( 'composer.json' );
 
-		// Remove post-create-project-cmd
-		unset( $composerData['scripts']['post-create-project-cmd'] );
+		if ( ! file_exists( $composerFile ) ) {
+			self::writeWarning( 'composer.json file not found. Skipping removal.' );
+			return;
+		}
 
-		// Remove pre-install-cmd
-		unset( $composerData['scripts']['pre-install-cmd'] );
+		unlink( $composerFile );
 
-		// Remove Composer
-		unset( $composerData['require-dev']['composer/composer'] );
-
-		// Remove Symfony Console
-		unset( $composerData['require-dev']['symfony/console'] );
-
-		self::updateComposerData( $composerData );
-
-		self::writeInfo( 'Composer file updated!' );
+		self::writeInfo( 'composer.json file removed!' );
 	}
 
 	/**
