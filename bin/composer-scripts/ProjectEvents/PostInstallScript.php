@@ -33,9 +33,6 @@ class PostInstallScript extends ComposerScript {
 
 		// Download WordPress
 		self::maybeDownloadWordPress();
-
-		// Run composer install in the theme directory.
-		self::themeComposerInstall();
 	}
 
 	/**
@@ -106,33 +103,5 @@ class PostInstallScript extends ComposerScript {
 
 			self::deleteDirectory( $theme_dir );
 		}
-	}
-
-	/**
-	 * Run composer install in the theme directory.
-	 *
-	 * @return void
-	 */
-	private static function themeComposerInstall(): void {
-		if ( empty( self::$env['VITE_PROJECT_DIR'] ) ) {
-			self::writeError( 'Missing VITE_PROJECT_DIR environment variable.' );
-			return;
-		}
-
-		$themeDir = self::translatePath( self::$env['VITE_PROJECT_DIR'], true );
-
-		if ( ! is_dir( $themeDir ) ) {
-			self::writeError( 'Theme directory not found: ' . $themeDir );
-			return;
-		}
-
-		self::writeInfo( 'Running composer install in the theme directory...' );
-
-		$cmd = sprintf(
-			'cd %s && ddev composer install',
-			escapeshellarg( $themeDir )
-		);
-
-		self::runCommand( $cmd );
 	}
 }
