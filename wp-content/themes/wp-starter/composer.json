@@ -51,10 +51,6 @@
     }
   ],
   "scripts": {
-    "post-install-cmd": [
-      "ddev start",
-      "Viget\\ComposerScripts\\ProjectEventHandler::postInstall"
-    ],
     "generate-docs": "Viget\\ComposerScripts\\WPDocsGeneratorScript::make"
   },
   "extra": {
