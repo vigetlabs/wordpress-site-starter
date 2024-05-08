@@ -18,8 +18,8 @@ corepack_enable: false
 override_config: true
 hooks:
   post-start:
-    - composer: install --working-dir=/var/www/html/wp-content/themes/wp-starter
-    - wp: wp core download --version=latest
+    - exec: composer install --working-dir=/var/www/html/wp-content/themes/wp-starter
+    - exec: wp core download --version=latest
 web_environment:
   - ENVIRONMENT=dev
   #- ENVIRONMENT=prod # This loads the production environment scripts
