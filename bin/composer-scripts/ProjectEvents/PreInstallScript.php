@@ -28,6 +28,6 @@ class PreInstallScript extends ComposerScript {
 		}
 
 		PostCreateProjectScript::execute( $event );
-	}
 
+	}
 }

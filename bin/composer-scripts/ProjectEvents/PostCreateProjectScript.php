@@ -77,17 +77,28 @@ class PostCreateProjectScript extends ComposerScript {
 			return;
 		}
 
+		if ( ! self::meetsRequirements() ) {
+			self::writeWarning( 'Requirements not met. Exiting.' );
+			return;
+		}
+
 		// Gather project info.
 		self::getProjectInfo();
 
 		// Modify the description in the composer.json file.
 		self::updateComposerDescription();
 
+		// Modify the description in the composer.json file.
+		self::updateRemoveUnnecessaryDependencies();
+
 		// Perform project string replacements
 		self::updateProjectFiles();
 
 		// Require ACF if auth.json file is present.
 		self::maybeRequireACF();
+
+		// Self Destruct.
+		self::destruct();
 	}
 
 	/**
@@ -99,6 +110,21 @@ class PostCreateProjectScript extends ComposerScript {
 		$package = self::$event->getComposer()->getPackage()->getName();
 
 		if ( ! str_contains( $package, self::$default_project_slug ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check if the requirements are met.
+	 *
+	 * @return bool
+	 */
+	private static function meetsRequirements(): bool {
+		// Check if DDEV is installed
+		if ( ! shell_exec( 'which ddev' ) ) {
+			self::writeError( 'DDEV is required for this script. Please install DDEV and try again.' );
 			return false;
 		}
 
@@ -200,8 +226,16 @@ class PostCreateProjectScript extends ComposerScript {
 			return;
 		}
 
+		self::writeInfo( 'Changing theme directory name...' );
+		self::writeComment( 'Theme Directory: ' . $theme_dir );
+
 		// Change the theme directory name.
-		rename( $default_theme_dir, $theme_dir );
+		if ( ! rename( $default_theme_dir, $theme_dir ) ) {
+			self::writeError( 'Failed to rename theme directory.' );
+			return;
+		}
+
+		self::writeInfo( 'Theme directory name changed.' );
 
 		$files = self::getFilesToChange( $theme_dir );
 
@@ -239,6 +273,8 @@ class PostCreateProjectScript extends ComposerScript {
 			self::$info['package'], // Package name.
 		];
 
+		self::writeInfo( 'Performing string replacements...' );
+
 		foreach ( $files as $file ) {
 			foreach ( $search as $index => $group ) {
 				self::searchReplaceFile( $group, $replace[ $index ], $file );
@@ -261,21 +297,16 @@ class PostCreateProjectScript extends ComposerScript {
 			return;
 		}
 
-		$acf_package   = 'wpengine/advanced-custom-fields-pro';
-		$composer_path = self::translatePath( 'composer.json' );
-		$composer_json = file_get_contents( $composer_path );
-		$composer_data = json_decode( $composer_json, true );
+		$acfPackage   = 'wpengine/advanced-custom-fields-pro';
+		$composerData = self::getComposerData();
 
-		if ( ! empty( $composer_data['require'][ $acf_package ] ) ){
+		if ( ! empty( $composerData['require'][ $acfPackage ] ) ){
 			return;
 		}
 
-		$composer_data['require'][ $acf_package ] = "*";
+		$composerData['require'][ $acfPackage ] = "*";
 
-		file_put_contents(
-			$composer_path,
-			json_encode( $composer_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES )
-		);
+		self::updateComposerData( $composerData );
 	}
 
 	/**
@@ -289,10 +320,37 @@ class PostCreateProjectScript extends ComposerScript {
 			return;
 		}
 
-		$search  = self::$event->getComposer()->getPackage()->getDescription();
-		$replace = sprintf( 'A custom WordPress Site for %s by Viget.', self::$info['name'] );
+		$composerData = self::getComposerData();
+		$composerData['description'] = sprintf( 'A custom WordPress Site for %s by Viget.', self::$info['name'] );
+		self::updateComposerData( $composerData );
+	}
 
-		self::searchReplaceFile( $search, $replace, 'composer.json' );
+	/**
+	 * Modify the composer.json to remove unnecessary dependencies
+	 *
+	 * @return void
+	 */
+	public static function updateRemoveUnnecessaryDependencies(): void {
+		if ( empty( self::$info['name'] ) ) {
+			self::writeError( 'Missing project name.' );
+			return;
+		}
+
+		$composerData = self::getComposerData();
+
+		// Remove post-create-project-cmd
+		unset( $composerData['scripts']['post-create-project-cmd'] );
+
+		// Remove pre-install-cmd
+		unset( $composerData['scripts']['pre-install-cmd'] );
+
+		// Remove Composer
+		unset( $composerData['require-dev']['composer/composer'] );
+
+		// Remove Symfony Console
+		unset( $composerData['require-dev']['symfony/console'] );
+
+		self::updateComposerData( $composerData );
 	}
 
 	/**
@@ -322,5 +380,20 @@ class PostCreateProjectScript extends ComposerScript {
 		$theme_html_files = glob( $theme_dir . '/**/*.html' );
 
 		return array_merge( $files, $theme_php_files, $theme_html_files );
+	}
+
+	/**
+	 * Self Destruct
+	 *
+	 * @return void
+	 */
+	private static function destruct(): void {
+		// Remove PostCreateProjectScript file
+		$createProject = self::translatePath( 'bin/composer-scripts/ProjectEvents/PostCreateProjectScript.php' );
+		unlink( $createProject );
+
+		// Remove PreInstallScript file
+		$preInstall = self::translatePath( 'bin/composer-scripts/ProjectEvents/PreInstallScript.php' );
+		unlink( $preInstall );
 	}
 }
