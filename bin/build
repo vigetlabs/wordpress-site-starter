@@ -3,7 +3,7 @@
 # bin/build: Builds CSS and JS files.
 #
 # When to use:
-#  - When you want to check for complitation errors
+#  - When you want to check for complication errors
 
 set -euo pipefail
 IFS=$'\n\t'

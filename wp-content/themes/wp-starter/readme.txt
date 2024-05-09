@@ -12,10 +12,6 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Custom block theme built by Viget.
 
 == Changelog ==
-= 0.1.1 =
-* Composer Script Updates
-* Vite/Tailwind/DDEV Updates
-
 = 0.1.0 =
 * Pre-release
 

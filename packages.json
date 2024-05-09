@@ -3,7 +3,7 @@
     "name": "vigetlabs/wordpress-site-starter",
     "version": "0.1.1",
     "source": {
-      "url": "/root/path/to/wordpress-site-starter/.git",
+      "url": "/root/path/not/relative/path/to/wordpress-site-starter/.git",
       "type": "git",
       "reference": "main"
     }

@@ -14,6 +14,11 @@ use Viget\ComposerScripts\ComposerScript;
 class PostInstallScript extends ComposerScript {
 
 	/**
+	 * @var array
+	 */
+	private static array $env = [];
+
+	/**
 	 * Perform the actions within this file.
 	 *
 	 * @param Event $event
@@ -23,8 +28,53 @@ class PostInstallScript extends ComposerScript {
 	public static function execute( Event $event ): void {
 		self::setEvent( $event );
 
-		// Download WordPress
-		self::maybeDownloadWordPress();
+		// Load DDEV Environment variables.
+		self::loadDDEVEnvironmentVars();
+
+		if ( self::needsSetup() ) {
+
+			// Download WordPress
+			self::downloadWordPress();
+
+			// Remove the core Twenty-X themes.
+			self::deleteCoreThemes();
+
+			// Remove Hello Dolly.
+			self::deleteCorePlugins();
+		}
+	}
+
+	/**
+	 * Check if the setup is needed.
+	 *
+	 * @return bool
+	 */
+	private static function needsSetup(): bool {
+		if ( file_exists( self::translatePath( './wp-load.php', true ) ) ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Read DDEV .env file and load the environment variables.
+	 *
+	 * @return void
+	 */
+	private static function loadDDEVEnvironmentVars(): void {
+		$envPath = self::translatePath( './.ddev/.env', true );
+
+		if ( ! file_exists( $envPath ) ) {
+			self::writeError( 'DDEV .env file not found (' . $envPath . ')' );
+			return;
+		}
+
+		self::writeInfo( 'Loading DDEV environment variables...' );
+
+		self::$env = parse_ini_file( $envPath );
+
+		self::writeInfo( 'DDEV environment variables loaded.' );
 	}
 
 	/**
@@ -32,26 +82,19 @@ class PostInstallScript extends ComposerScript {
 	 *
 	 * @return void
 	 */
-	public static function maybeDownloadWordPress(): void {
-		if ( file_exists( self::translatePath( './wp-load.php', true ) ) ) {
-			return;
-		}
-
+	public static function downloadWordPress(): void {
 		$wordpress_dir = self::translatePath( './', true );
 
 		self::writeInfo( 'Downloading the last version of WordPress...' );
 
 		$cmd = sprintf(
-			'ddev wp core download --path=%s --version=latest',
+			'wp core download --path=%s --version=latest',
 			escapeshellarg( $wordpress_dir )
 		);
 
 		self::runCommand( $cmd );
 
-		self::writeInfo( 'Deleting stock WordPress themes...' );
-
-		// Remove the core Twenty-X themes.
-		self::deleteCoreThemes();
+		self::writeInfo( 'WordPress Download complete.' );
 	}
 
 	/**
@@ -60,6 +103,8 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function deleteCoreThemes(): void {
+		self::writeInfo( 'Deleting stock WordPress themes...' );
+
 		$themes = [
 			'twentytwenty',
 			'twentytwentyone',
@@ -69,13 +114,51 @@ class PostInstallScript extends ComposerScript {
 		];
 
 		foreach ( $themes as $theme ) {
-			$theme_dir = self::translatePath( 'wp-content/themes/' . $theme );
+			$themeDir = self::translatePath( 'wp-content/themes/' . $theme );
 
-			if ( ! is_dir( $theme_dir ) ) {
+			if ( ! is_dir( $themeDir ) ) {
 				continue;
 			}
 
-			self::deleteDirectory( $theme_dir );
+			self::deleteDirectory( $themeDir );
 		}
+
+		self::writeInfo( 'Stock WordPress themes deleted.' );
+	}
+
+	/**
+	 * Delete the core plugins.
+	 *
+	 * @return void
+	 */
+	private static function deleteCorePlugins(): void {
+		self::writeInfo( 'Deleting stock WordPress plugins...' );
+
+		$plugins = [
+			'hello.php',
+		];
+
+		foreach ( $plugins as $plugin ) {
+			$pluginFile = self::translatePath( 'wp-content/plugins/' . $plugin );
+
+			if ( file_exists( $pluginFile ) ) {
+				unlink( $pluginFile );
+				continue;
+			}
+
+			if ( str_ends_with( $pluginFile, '.php' ) ) {
+				$pluginDir = str_replace( basename( $pluginFile ), '', $pluginFile );
+			} else {
+				$pluginDir = $pluginFile;
+			}
+
+			if ( ! is_dir( $pluginDir ) ) {
+				continue;
+			}
+
+			self::deleteDirectory( $pluginDir );
+		}
+
+		self::writeInfo( 'Stock WordPress themes deleted.' );
 	}
 }
