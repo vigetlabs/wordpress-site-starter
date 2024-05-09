@@ -28,18 +28,20 @@ class PostInstallScript extends ComposerScript {
 	public static function execute( Event $event ): void {
 		self::setEvent( $event );
 
-		if ( ! self::needsSetup() ) {
-			return;
-		}
-
 		// Load DDEV Environment variables.
 		self::loadDDEVEnvironmentVars();
 
-		// Download WordPress
-		self::downloadWordPress();
+		if ( self::needsSetup() ) {
 
-		// Remove the core Twenty-X themes.
-		self::deleteCoreThemes();
+			// Download WordPress
+			self::downloadWordPress();
+
+			// Remove the core Twenty-X themes.
+			self::deleteCoreThemes();
+		}
+
+		// Run ddev launch command.
+		self::ddevLaunch();
 	}
 
 	/**
@@ -122,5 +124,15 @@ class PostInstallScript extends ComposerScript {
 		}
 
 		self::writeInfo( 'Stock WordPress themes deleted.' );
+	}
+
+	/**
+	 * Run the ddev launch command.
+	 *
+	 * @return void
+	 */
+	private static function ddevLaunch(): void {
+		self::writeInfo( 'Launching DDEV...' );
+		self::runCommand( 'ddev launch' );
 	}
 }
