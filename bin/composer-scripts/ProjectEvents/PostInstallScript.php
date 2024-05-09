@@ -38,6 +38,9 @@ class PostInstallScript extends ComposerScript {
 
 			// Remove the core Twenty-X themes.
 			self::deleteCoreThemes();
+
+			// Remove Hello Dolly.
+			self::deleteCorePlugins();
 		}
 
 		// Run ddev launch command.
@@ -114,13 +117,49 @@ class PostInstallScript extends ComposerScript {
 		];
 
 		foreach ( $themes as $theme ) {
-			$theme_dir = self::translatePath( 'wp-content/themes/' . $theme );
+			$themeDir = self::translatePath( 'wp-content/themes/' . $theme );
 
-			if ( ! is_dir( $theme_dir ) ) {
+			if ( ! is_dir( $themeDir ) ) {
 				continue;
 			}
 
-			self::deleteDirectory( $theme_dir );
+			self::deleteDirectory( $themeDir );
+		}
+
+		self::writeInfo( 'Stock WordPress themes deleted.' );
+	}
+
+	/**
+	 * Delete the core plugins.
+	 *
+	 * @return void
+	 */
+	private static function deleteCorePlugins(): void {
+		self::writeInfo( 'Deleting stock WordPress plugins...' );
+
+		$plugins = [
+			'hello.php',
+		];
+
+		foreach ( $plugins as $plugin ) {
+			$pluginFile = self::translatePath( 'wp-content/plugins/' . $plugin );
+
+			if ( file_exists( $pluginFile ) ) {
+				unlink( $pluginFile );
+				continue;
+			}
+
+			if ( str_ends_with( $pluginFile, '.php' ) ) {
+				$pluginDir = str_replace( basename( $pluginFile ), '', $pluginFile );
+			} else {
+				$pluginDir = $pluginFile;
+			}
+
+			if ( ! is_dir( $pluginDir ) ) {
+				continue;
+			}
+
+			self::deleteDirectory( $pluginDir );
 		}
 
 		self::writeInfo( 'Stock WordPress themes deleted.' );

@@ -58,6 +58,9 @@ class PostCreateProjectScript extends ComposerScript {
 		// Swap README files
 		self::swapReadmeFiles();
 
+		// Swap Composer Event Handler files
+		self::swapComposerScripts();
+
 		// Perform project string replacements
 		self::updateProjectFiles();
 
@@ -204,6 +207,29 @@ class PostCreateProjectScript extends ComposerScript {
 		rename( $projectReadme, $readmePath );
 
 		self::writeInfo( 'README files swapped.' );
+	}
+
+	/**
+	 * Swap the README files.
+	 *
+	 * @return void
+	 */
+	private static function swapComposerScripts(): void {
+		self::writeInfo( 'Swapping Composer Event Scripts...' );
+
+		$handlerPath    = self::translatePath( 'bin/composer-scripts/ProjectEventHandler.php' );
+		$projectHandler = self::translatePath( 'bin/composer-scripts/ProjectEventHandler.dist.php' );
+
+		if ( ! file_exists( $handlerPath ) ||  ! file_exists( $projectHandler ) ) {
+			self::writeWarning( 'Missing one or more Composer Event scripts - Skipping Composer Script swap.' );
+			return;
+		}
+
+		// Swap the Handler files.
+		unlink( $handlerPath );
+		rename( $projectHandler, $handlerPath );
+
+		self::writeInfo( 'Composer Scripts swapped.' );
 	}
 
 	/**
