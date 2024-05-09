@@ -54,6 +54,10 @@ class PostInstallScript extends ComposerScript {
 	 * @return bool
 	 */
 	private static function needsSetup(): bool {
+		if ( shell_exec( 'wp core is-installed' ) ) {
+			return false;
+		}
+
 		if ( file_exists( self::translatePath( './wp-load.php', true ) ) ) {
 			return false;
 		}
@@ -97,6 +101,11 @@ class PostInstallScript extends ComposerScript {
 		);
 
 		self::runCommand( $cmd );
+
+		if ( self::needsSetup() ) {
+			self::writeError( 'WordPress download seems to have failed. Verify you currently have internet access and try again.' );
+			exit( 1 );
+		}
 
 		self::writeInfo( 'WordPress Download complete.' );
 	}
