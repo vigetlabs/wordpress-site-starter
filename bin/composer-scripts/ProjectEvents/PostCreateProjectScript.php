@@ -453,12 +453,10 @@ class PostCreateProjectScript extends ComposerScript {
 			$themeDir . '/vite.config.js',
 		];
 
-		// TODO: Search directories recursively.
-		$themePhpFiles  = glob( $themeDir . '/**/*.php' );
-		$themeHtmlFiles = glob( $themeDir . '/**/*.html' );
-		$themeJsonFiles = glob( $themeDir . '/**/*.json' );
+		// TODO: Search theme directory recursively.
+		$themeFiles = glob( $themeDir . '/{,*/,*/*/,*/*/*/,*/*/*/*/}*.{php,html,json}', GLOB_BRACE );
 
-		return array_merge( $files, $themePhpFiles, $themeHtmlFiles, $themeJsonFiles );
+		return array_merge( $files, $themeFiles );
 	}
 
 	/**
