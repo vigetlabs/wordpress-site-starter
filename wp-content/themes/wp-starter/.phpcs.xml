@@ -22,9 +22,11 @@
 
     <!-- Exclude the Composer Vendor directory. -->
     <exclude-pattern>/vendor/*</exclude-pattern>
+	<exclude-pattern>/wp-content/themes/wp-starter/vendor/*</exclude-pattern>
 
     <!-- Exclude the Node Modules directory. -->
     <exclude-pattern>/node_modules/*</exclude-pattern>
+	<exclude-pattern>/wp-content/themes/wp-starter/node_modules/*</exclude-pattern>
 
     <!-- Exclude minified Javascript files. -->
     <exclude-pattern>*.min.js</exclude-pattern>
