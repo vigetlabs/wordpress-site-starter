@@ -426,9 +426,11 @@ class PostCreateProjectScript extends ComposerScript {
 		$createProject = self::translatePath( 'bin/composer-scripts/ProjectEvents/PostCreateProjectScript.php' );
 		unlink( $createProject );
 
-		// Remove PreInstallScript file
-		$preInstall = self::translatePath( 'bin/composer-scripts/ProjectEvents/PreInstallScript.php' );
-		unlink( $preInstall );
+		// Remove root composer files
+		$composerJson = self::translatePath( 'composer.json' );
+		unlink( $composerJson );
+		$composerLock = self::translatePath( 'composer.lock' );
+		unlink( $composerLock );
 
 		self::writeInfo( 'Self-destruction complete.' );
 	}
