@@ -67,12 +67,6 @@ class PostCreateProjectScript extends ComposerScript {
 		// Require ACF if auth.json file is present.
 		self::maybeRequireACF();
 
-		// Remove dev-only packages file.
-		self::removePackagesFile();
-
-		// Remove site-starter composer file
-		self::removeRootComposer();
-
 		// Self Destruct.
 		self::destruct();
 
@@ -345,23 +339,51 @@ class PostCreateProjectScript extends ComposerScript {
 	}
 
 	/**
-	 * Remove the root composer.json file.
+	 * Remove the root composer files.
 	 *
 	 * @return void
 	 */
 	private static function removeRootComposer(): void {
 		self::writeInfo( 'Removing root composer.json...' );
 
-		$composerFile = self::translatePath( 'composer.json' );
+		// Remove root composer.json file
+		$composerJson = self::translatePath( 'composer.json' );
 
-		if ( ! file_exists( $composerFile ) ) {
+		if ( ! file_exists( $composerJson ) ) {
 			self::writeWarning( 'composer.json file not found. Skipping removal.' );
-			return;
+		} else {
+			unlink( $composerJson );
+			self::writeInfo( 'Root composer.json file removed!' );
 		}
 
-		unlink( $composerFile );
+		// Remove root composer.lock file
+		$composerLock = self::translatePath( 'composer.lock' );
 
-		self::writeInfo( 'composer.json file removed!' );
+		if ( ! file_exists( $composerLock ) ) {
+			self::writeWarning( 'composer.lock file not found. Skipping removal.' );
+		} else {
+			unlink( $composerLock );
+			self::writeInfo( 'Root composer.lock file removed!' );
+		}
+	}
+
+	/**
+	 * Remove the composer setup scripts.
+	 *
+	 * @return void
+	 */
+	private static function removeComposerScripts(): void {
+		self::writeInfo( 'Removing composer setup scripts...' );
+
+		// Remove PostCreateProjectScript file
+		$createProject = self::translatePath( 'bin/composer-scripts/ProjectEvents/PostCreateProjectScript.php' );
+
+		if ( ! file_exists( $createProject ) ) {
+			self::writeWarning( 'PostCreateProjectScript.php file not found. Skipping removal.' );
+		} else {
+			unlink( $createProject );
+			self::writeInfo( 'PostCreateProjectScript.php file removed!' );
+		}
 	}
 
 	/**
@@ -418,15 +440,14 @@ class PostCreateProjectScript extends ComposerScript {
 	private static function destruct(): void {
 		self::writeInfo( 'Self-destructing...' );
 
-		// Remove PostCreateProjectScript file
-		$createProject = self::translatePath( 'bin/composer-scripts/ProjectEvents/PostCreateProjectScript.php' );
-		unlink( $createProject );
+		// Remove the setup script.
+		self::removeComposerScripts();
 
-		// Remove root composer files
-		$composerJson = self::translatePath( 'composer.json' );
-		unlink( $composerJson );
-		$composerLock = self::translatePath( 'composer.lock' );
-		unlink( $composerLock );
+		// Remove dev-only packages file.
+		self::removePackagesFile();
+
+		// Remove site-starter composer file
+		self::removeRootComposer();
 
 		self::writeInfo( 'Self-destruction complete.' );
 	}
