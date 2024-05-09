@@ -393,12 +393,9 @@ class PostCreateProjectScript extends ComposerScript {
 	 */
 	private static function getFilesToChange( string $themeDir ): array {
 		$files = [
-			self::translatePath( 'bin/start' ),
+			self::translatePath( 'bin/build' ),
 			self::translatePath( '.ddev/config.yaml' ),
 			self::translatePath( 'README.md' ),
-			$themeDir . '/composer.json',
-			$themeDir . '/package.json',
-			$themeDir . '/package-lock.json',
 			$themeDir . '/.phpcs.xml',
 			$themeDir . '/readme.txt',
 			$themeDir . '/README.md',
@@ -408,8 +405,9 @@ class PostCreateProjectScript extends ComposerScript {
 
 		$themePhpFiles  = glob( $themeDir . '/**/*.php' );
 		$themeHtmlFiles = glob( $themeDir . '/**/*.html' );
+		$themeJsonFiles = glob( $themeDir . '/**/*.json' );
 
-		return array_merge( $files, $themePhpFiles, $themeHtmlFiles );
+		return array_merge( $files, $themePhpFiles, $themeHtmlFiles, $themeJsonFiles );
 	}
 
 	/**
