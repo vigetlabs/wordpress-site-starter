@@ -441,6 +441,7 @@ class PostCreateProjectScript extends ComposerScript {
 	 */
 	private static function getFilesToChange( string $themeDir ): array {
 		$files = [
+			self::translatePath( '.gitignore' ),
 			self::translatePath( 'bin/build' ),
 			self::translatePath( '.ddev/.env' ),
 			self::translatePath( '.ddev/config.yaml' ),
