@@ -42,9 +42,6 @@ class PostInstallScript extends ComposerScript {
 			// Remove Hello Dolly.
 			self::deleteCorePlugins();
 		}
-
-		// Run ddev launch command.
-		self::ddevLaunch();
 	}
 
 	/**
@@ -163,15 +160,5 @@ class PostInstallScript extends ComposerScript {
 		}
 
 		self::writeInfo( 'Stock WordPress themes deleted.' );
-	}
-
-	/**
-	 * Run the ddev launch command.
-	 *
-	 * @return void
-	 */
-	private static function ddevLaunch(): void {
-		self::writeInfo( 'Launching DDEV...' );
-		self::runCommand( 'ddev launch' );
 	}
 }
