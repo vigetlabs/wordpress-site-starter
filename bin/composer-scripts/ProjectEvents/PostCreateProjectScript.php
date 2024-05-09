@@ -442,6 +442,7 @@ class PostCreateProjectScript extends ComposerScript {
 	private static function getFilesToChange( string $themeDir ): array {
 		$files = [
 			self::translatePath( 'bin/build' ),
+			self::translatePath( '.ddev/.env' ),
 			self::translatePath( '.ddev/config.yaml' ),
 			self::translatePath( 'README.md' ),
 			$themeDir . '/.phpcs.xml',
