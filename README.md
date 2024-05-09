@@ -44,11 +44,14 @@ The following command will create a directory (`project-name`) and run `composer
 
 Also, in `packages.json`, you can change the name of the branch from `main` to use your current working branch.
 
+**Note:** Be sure to update the paths in `packages.json` as well as the command below to point to the location of your local repository. `~/` will not work, you must use the full path.
+
 ```bash
 $ mkdir project-name && cd project-name && composer create-project --repository-url="/root/path/not/relative/path/to/wordpress-site-starter/packages.json" vigetlabs/wordpress-site-starter . --stability=dev --remove-vcs --no-install
 ```
 
 ## Changelog
+
 ### 0.1.2
 * Better Composer Script Handling
 * Improvements to post-create project setup
