@@ -54,10 +54,6 @@ class PostInstallScript extends ComposerScript {
 	 * @return bool
 	 */
 	private static function needsSetup(): bool {
-		if ( shell_exec( 'wp core is-installed' ) ) {
-			return false;
-		}
-
 		if ( file_exists( self::translatePath( './wp-load.php', true ) ) ) {
 			return false;
 		}
