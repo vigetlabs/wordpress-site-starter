@@ -31,10 +31,14 @@ class PostInstallScript extends ComposerScript {
 		// Load DDEV Environment variables.
 		self::loadDDEVEnvironmentVars();
 
+		self::wait();
+
 		if ( self::needsSetup() ) {
 
 			// Download WordPress
 			self::downloadWordPress();
+
+			self::wait( 2 );
 
 			// Remove the core Twenty-X themes.
 			self::deleteCoreThemes();
@@ -78,7 +82,7 @@ class PostInstallScript extends ComposerScript {
 	}
 
 	/**
-	 * Download WordPress if it doesn't exist.
+	 * Download WordPress
 	 *
 	 * @return void
 	 */

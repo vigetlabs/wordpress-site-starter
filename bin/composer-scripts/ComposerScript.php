@@ -328,4 +328,15 @@ class ComposerScript {
 			json_encode( $data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES )
 		);
 	}
+
+	/**
+	 * Wait for a specified number of seconds.
+	 *
+	 * @param int $seconds
+	 *
+	 * @return void
+	 */
+	protected static function wait( int $seconds = 1 ): void {
+		sleep( $seconds );
+	}
 }
