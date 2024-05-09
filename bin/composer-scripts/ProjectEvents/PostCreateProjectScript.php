@@ -55,14 +55,14 @@ class PostCreateProjectScript extends ComposerScript {
 		// Gather project info.
 		self::getProjectInfo();
 
+		// Swap README files
+		self::swapReadmeFiles();
+
 		// Perform project string replacements
 		self::updateProjectFiles();
 
 		// Modify the description in the composer.json file.
 		self::updateComposerDescription();
-
-		// Swap README files
-		self::swapReadmeFiles();
 
 		// Require ACF if auth.json file is present.
 		self::maybeRequireACF();
@@ -395,14 +395,12 @@ class PostCreateProjectScript extends ComposerScript {
 		$files = [
 			self::translatePath( 'bin/start' ),
 			self::translatePath( '.ddev/config.yaml' ),
-			self::translatePath( 'composer.json' ),
+			self::translatePath( 'README.md' ),
 			$themeDir . '/composer.json',
 			$themeDir . '/package.json',
 			$themeDir . '/package-lock.json',
-			self::translatePath( '.phpcs.xml' ),
 			$themeDir . '/.phpcs.xml',
 			$themeDir . '/readme.txt',
-			self::translatePath( 'README.md' ),
 			$themeDir . '/README.md',
 			$themeDir . '/style.css',
 			$themeDir . '/vite.config.js',
