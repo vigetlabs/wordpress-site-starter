@@ -49,10 +49,14 @@ $ mkdir project-name && cd project-name && composer create-project --repository-
 ```
 
 ## Changelog
+### 0.1.2
+* Better Composer Script Handling
+* Improvements to post-create project setup
+* Cleaner Initialization of Vite
 
-= 0.1.1 =
+### 0.1.1
 * Composer Script Updates
 * Vite/Tailwind/DDEV Updates
 
-= 0.1.0 =
+### 0.1.0
 * Initial Release
