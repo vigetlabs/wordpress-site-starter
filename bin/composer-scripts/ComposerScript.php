@@ -111,14 +111,27 @@ class ComposerScript {
 			return;
 		}
 
+		$eol = $extraLine ? PHP_EOL : '';
+
 		if ( ! $type ) {
-			self::$event->getIO()->write( $content );
+			self::$event->getIO()->write( $content . $eol );
 			return;
 		}
 
-		$eol = $extraLine ? PHP_EOL : '';
-
 		self::$event->getIO()->write( sprintf( '<%1$s>%2$s</%1$s>' . $eol, $type, $content ) );
+	}
+
+	/**
+	 * Output a general message to the terminal window.
+	 *
+	 * @param string $content
+	 * @param bool   $newLine
+	 *
+	 * @return void
+	 */
+	protected static function writeLine( string $content, bool $newLine = true ): void
+	{
+		self::writeOutput( $content, '', $newLine );
 	}
 
 	/**
@@ -327,5 +340,16 @@ class ComposerScript {
 			$path,
 			json_encode( $data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES )
 		);
+	}
+
+	/**
+	 * Wait for a specified number of seconds.
+	 *
+	 * @param int $seconds
+	 *
+	 * @return void
+	 */
+	protected static function wait( int $seconds = 1 ): void {
+		sleep( $seconds );
 	}
 }

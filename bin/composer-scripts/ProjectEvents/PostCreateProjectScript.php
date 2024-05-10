@@ -97,7 +97,7 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return bool
 	 */
 	private static function meetsRequirements(): bool {
-		self::writeInfo( 'Checking requirements...' );
+		self::writeLine( 'Checking requirements...' );
 
 		// Check if DDEV is installed
 		if ( ! shell_exec( 'which ddev' ) ) {
@@ -192,7 +192,7 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function swapReadmeFiles(): void {
-		self::writeInfo( 'Swapping README files...' );
+		self::writeLine( 'Swapping README files...' );
 
 		$readmePath    = self::translatePath( 'README.md' );
 		$projectReadme = self::translatePath( 'README.dist.md' );
@@ -215,7 +215,7 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function swapComposerScripts(): void {
-		self::writeInfo( 'Swapping Composer Event Scripts...' );
+		self::writeLine( 'Swapping Composer Event Scripts...' );
 
 		$handlerPath    = self::translatePath( 'bin/composer-scripts/ProjectEventHandler.php' );
 		$projectHandler = self::translatePath( 'bin/composer-scripts/ProjectEventHandler.dist.php' );
@@ -238,7 +238,7 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return void
 	 */
 	public static function updateProjectFiles(): void {
-		self::writeInfo( 'Updating project files...' );
+		self::writeLine( 'Updating project files...' );
 
 		if ( empty( self::$info['slug'] ) ) {
 			self::writeError( 'Missing project slug.' );
@@ -253,7 +253,7 @@ class PostCreateProjectScript extends ComposerScript {
 			return;
 		}
 
-		self::writeInfo( 'Changing theme directory name...' );
+		self::writeLine( 'Changing theme directory name...' );
 
 		// Change the theme directory name.
 		if ( ! rename( $defaultThemeDir, $themeDir ) ) {
@@ -299,7 +299,7 @@ class PostCreateProjectScript extends ComposerScript {
 			self::$info['package'], // Package name.
 		];
 
-		self::writeInfo( 'Performing string replacements...' );
+		self::writeLine( 'Performing string replacements...' );
 
 		foreach ( $files as $file ) {
 			foreach ( $search as $index => $group ) {
@@ -316,7 +316,7 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return void
 	 */
 	public static function maybeRequireACF(): void {
-		self::writeInfo( 'Checking for ACF auth.json...' );
+		self::writeLine( 'Checking for ACF auth.json...' );
 
 		$authPath = self::translatePath( 'wp-content/themes/' . self::$info['slug'] . '/auth.json' );
 
@@ -347,7 +347,7 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return void
 	 */
 	public static function updateComposerDescription(): void {
-		self::writeInfo( 'Updating Composer Description...' );
+		self::writeLine( 'Updating Composer Description...' );
 
 		if ( empty( self::$info['name'] ) ) {
 			self::writeError( 'Missing project name.' );
@@ -370,7 +370,7 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function removeRootComposer(): void {
-		self::writeInfo( 'Removing root composer.json...' );
+		self::writeLine( 'Removing root composer.json...' );
 
 		// Remove root composer.json file
 		$composerJson = self::translatePath( 'composer.json' );
@@ -381,6 +381,8 @@ class PostCreateProjectScript extends ComposerScript {
 			unlink( $composerJson );
 			self::writeInfo( 'Root composer.json file removed!' );
 		}
+
+		self::writeLine( 'Removing root composer.lock...' );
 
 		// Remove root composer.lock file
 		$composerLock = self::translatePath( 'composer.lock' );
@@ -399,7 +401,7 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function removeComposerScripts(): void {
-		self::writeInfo( 'Removing composer setup scripts...' );
+		self::writeLine( 'Removing composer setup scripts...' );
 
 		// Remove PostCreateProjectScript file
 		$createProject = self::translatePath( 'bin/composer-scripts/ProjectEvents/PostCreateProjectScript.php' );
@@ -418,7 +420,7 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function removePackagesFile(): void {
-		self::writeInfo( 'Removing packages.json...' );
+		self::writeLine( 'Removing packages.json...' );
 
 		$packagesFile = self::translatePath( 'packages.json' );
 
@@ -465,7 +467,7 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function destruct(): void {
-		self::writeInfo( 'Self-destructing...' );
+		self::writeLine( 'Self-destructing...' );
 
 		// Remove the setup script.
 		self::removeComposerScripts();
