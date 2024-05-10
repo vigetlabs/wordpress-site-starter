@@ -52,6 +52,12 @@ $ mkdir project-name && cd project-name && composer create-project --repository-
 
 ## Changelog
 
+### 0.1.3
+* Fix issue where Vite was crashing web server
+* Rearranged a few things/commands to work better.
+* Adjustments to comment formatting.
+* Added a "wait" to account for slow network traffic.
+
 ### 0.1.2
 * Better Composer Script Handling
 * Improvements to post-create project setup
