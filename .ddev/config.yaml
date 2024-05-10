@@ -18,7 +18,7 @@ corepack_enable: false
 override_config: true
 hooks:
   post-start:
-    - composer: install -d=/var/www/html/wp-content/themes/wp-starter
+    - composer: install -d /var/www/html/wp-content/themes/wp-starter
     - exec-host: ddev launch && exit
 web_environment:
   - ENVIRONMENT=dev
