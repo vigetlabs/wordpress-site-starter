@@ -31,7 +31,7 @@ web_extra_exposed_ports:
     https_port: 5173
 web_extra_daemons:
   - name: 'vite'
-    command: "npm install && npm run build"
+    command: "npm install && npm run dev"
     directory: /var/www/html/wp-content/themes/wp-starter
 
 
