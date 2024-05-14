@@ -427,7 +427,7 @@ class PostInstallScript extends ComposerScript {
 
 		$success = [
 			'Congratulations!',
-			'Project has been setup successfully!',
+			'Project has been set up successfully!',
 			'<fg=#F26D20>Important!</> Make a note of the Admin Password:',
 			'<fg=#F26D20>' . self::$info['password'] . '</>',
 		];
