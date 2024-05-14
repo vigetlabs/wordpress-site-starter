@@ -210,7 +210,7 @@ class PostInstallScript extends ComposerScript {
 			self::SKIP_DB_OPT    => 'Skip',
 		];
 
-		$dbSource = intval( self::select( 'Please select a database source.', $options, 'Install WordPress' ) );
+		$dbSource = intval( self::select( 'Select a database source:', $options, 'Install WordPress' ) );
 
 		if ( ! $dbSource || self::SKIP_DB_OPT === $dbSource ) {
 			return;
@@ -424,6 +424,16 @@ class PostInstallScript extends ComposerScript {
 	 */
 	public static function renderSuccessMessage(): void {
 		self::renderVigetLogo();
-//		self::writeInfo( 'Admin Password: ' . self::$info['password'] );
+
+		$success = [
+			'Congratulations!',
+			'Project has been setup successfully!',
+			'Important! Make a note of the Admin Password:',
+			self::$info['password'],
+		];
+
+		$success = self::centeredText( $success, 2, '*',  );
+
+		self::writeLine( $success );
 	}
 }

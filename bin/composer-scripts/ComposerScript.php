@@ -388,21 +388,115 @@ class ComposerScript {
 	 */
 	protected static function renderVigetLogo(): void {
 		$logo = <<<VIGET
-                          <fg=#F26D20>.::::.
-                        <fg=#F26D20>-========-
-                       <fg=#F26D20>-===========
-       <fg=#1296BB>..:::::::..     <fg=#F26D20>:==========-
-    <fg=#1296BB>.:-===========--.   <fg=#F26D20>.-======-:
-  <fg=#1296BB>.-=================-.     <fg=#F26D20>..
- <fg=#1296BB>.=====================.
- <fg=#1296BB>:=====================-
- <fg=#1296BB>:=-===================-
-  <fg=#1296BB>-===================-
-   <fg=#1296BB>:-================:
-     <fg=#1296BB>.:-=========--:
-         <fg=#1296BB>.......
+                          <fg=#F26D20>.::::.</>
+                        <fg=#F26D20>-========-</>
+                       <fg=#F26D20>-===========</>
+       <fg=#1296BB>..:::::::..</>     <fg=#F26D20>:==========-</>
+    <fg=#1296BB>.:-===========--.</>   <fg=#F26D20>.-======-:</>
+  <fg=#1296BB>.-=================-.</>     <fg=#F26D20>..</>
+ <fg=#1296BB>.=====================.</>
+ <fg=#1296BB>:=====================-</>
+ <fg=#1296BB>:=-===================-</>
+  <fg=#1296BB>-===================-</>
+   <fg=#1296BB>:-================:</>
+     <fg=#1296BB>.:-=========--:</>
+         <fg=#1296BB>.......</>
 VIGET;
 
 		self::writeOutput( $logo . PHP_EOL );
+	}
+
+	/**
+	 * Render a centered message.
+	 *
+	 * @param array $lines
+	 * @param int $padding
+	 * @param ?string $border
+	 * @param ?string $borderColor
+	 *
+	 * @return string
+	 */
+	protected static function centeredText( array $lines, int $padding = 2, ?string $border = null, ?string $borderColor = null ): string {
+		$maxLength = 0;
+
+		foreach ( $lines as $line ) {
+			$plain = strip_tags( $line );
+			if ( strlen( $plain ) > $maxLength ) {
+				$maxLength = strlen( $plain );
+			}
+		}
+
+		// Calculate the total length of each line with padding and border
+		$borderLength = $border ? strlen( $border ) * 2 : 0;
+		$totalLength = $maxLength + ( $padding * 2 ) + $borderLength;
+		$borderStartTag = $borderColor ? "<fg=$borderColor>" : '';
+		$borderEndTag = $borderColor ? '</>' : '';
+		$borderText = $border ? $borderStartTag . $border . $borderEndTag : '';
+		$borderLine = $borderStartTag . str_repeat( $border, $totalLength ) . $borderEndTag . PHP_EOL;
+
+		$output = '';
+
+		// Add the top border.
+		if ( $border ) {
+			$output .= $borderLine;
+		}
+
+		// Add each line with padding and centering
+		foreach ( $lines as $line ) {
+			if ( $border ) {
+				$output .= $borderText;
+			}
+
+			$output .= self::getPaddedLine( $line, $maxLength, $padding );
+
+			if ( $border ) {
+				$output .= $borderText;
+			}
+
+			$output .= PHP_EOL;
+		}
+
+		// Add the bottom border
+		if ( $border ) {
+			$output .= $borderLine;
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Get a line with padding and centering.
+	 *
+	 * @param string $line
+	 * @param int $maxLength
+	 * @param int $padding
+	 *
+	 * @return string
+	 */
+	private static function getPaddedLine( string $line, int $maxLength, int $padding ): string {
+		$plain = strip_tags( $line );
+		$paddedPlain = str_pad( $plain, $maxLength, ' ', STR_PAD_BOTH );
+
+		// Reinsert the HTML tags
+		$formattedLine = '';
+		$paddedIndex = 0;
+		$htmlTag = false;
+		for ( $i = 0, $j = 0; $i < strlen( $line ); $i++ ) {
+			if ( $line[ $i ] === '<' ) {
+				$htmlTag = true;
+				$formattedLine .= '<';
+			} elseif ( $line[ $i ] === '>' ) {
+				$htmlTag = false;
+				$formattedLine .= '>';
+				$j = $paddedIndex; // synchronize indexes
+			} elseif ( $htmlTag ) {
+				$formattedLine .= $line[ $i ];
+			} else {
+				$formattedLine .= $paddedPlain[ $paddedIndex++ ];
+			}
+		}
+
+		// Add padding
+		return str_repeat( ' ', $padding ) . $formattedLine . str_repeat( ' ', $padding );
 	}
 }
