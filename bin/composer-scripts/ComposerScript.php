@@ -125,13 +125,13 @@ class ComposerScript {
 	 * Output a general message to the terminal window.
 	 *
 	 * @param string $content
-	 * @param bool   $newLine
+	 * @param bool   $extraLine
 	 *
 	 * @return void
 	 */
-	protected static function writeLine( string $content, bool $newLine = true ): void
+	protected static function writeLine( string $content, bool $extraLine = false ): void
 	{
-		self::writeOutput( $content, '', $newLine );
+		self::writeOutput( $content, '', $extraLine );
 	}
 
 	/**
@@ -212,6 +212,23 @@ class ComposerScript {
 		$confirmation = sprintf( '<info>%s</info> <comment>[%s]</comment> ', trim( $question ), $options );
 
 		return self::$event->getIO()->askConfirmation( $confirmation, $default );
+	}
+
+	/**
+	 * Get a selection from user input.
+	 *
+	 * @param string $question
+	 * @param array  $options
+	 * @param string $default
+	 *
+	 * @return string
+	 */
+	protected static function select( string $question, array $options, string $default = '' ): string
+	{
+		$defaultText = $default ? sprintf( ' <comment>[%s]</comment>', $default ) : '';
+		$question    = sprintf( '<question>%s</question>%s ', trim( $question ), $defaultText );
+
+		return self::$event->getIO()->select( $question, $options, $default );
 	}
 
 	/**
@@ -351,5 +368,138 @@ class ComposerScript {
 	 */
 	protected static function wait( int $seconds = 1 ): void {
 		sleep( $seconds );
+	}
+
+	/**
+	 * Escape quotes in a string.
+	 *
+	 * @param string $string
+	 *
+	 * @return string
+	 */
+	protected static function escapeQuotes( string $string ): string {
+		return str_replace( '"', '\"', $string );
+	}
+
+	/**
+	 * Render the Viget logo.
+	 *
+	 * @return void
+	 */
+	protected static function renderVigetLogo(): void {
+		$logo = <<<VIGET
+                          <fg=#F26D20>.::::.</>
+                        <fg=#F26D20>-========-</>
+                       <fg=#F26D20>-===========</>
+       <fg=#1296BB>..:::::::..</>     <fg=#F26D20>:==========-</>
+    <fg=#1296BB>.:-===========--.</>   <fg=#F26D20>.-======-:</>
+  <fg=#1296BB>.-=================-.</>     <fg=#F26D20>..</>
+ <fg=#1296BB>.=====================.</>
+ <fg=#1296BB>:=====================-</>
+ <fg=#1296BB>:=-===================-</>
+  <fg=#1296BB>-===================-</>
+   <fg=#1296BB>:-================:</>
+     <fg=#1296BB>.:-=========--:</>
+         <fg=#1296BB>.......</>
+VIGET;
+
+		self::writeOutput( $logo . PHP_EOL );
+	}
+
+	/**
+	 * Render a centered message.
+	 *
+	 * @param array $lines
+	 * @param int $padding
+	 * @param ?string $border
+	 * @param ?string $borderColor
+	 *
+	 * @return string
+	 */
+	protected static function centeredText( array $lines, int $padding = 2, ?string $border = null, ?string $borderColor = null ): string {
+		$maxLength = 0;
+
+		foreach ( $lines as $line ) {
+			$plain = strip_tags( $line );
+			if ( strlen( $plain ) > $maxLength ) {
+				$maxLength = strlen( $plain );
+			}
+		}
+
+		// Calculate the total length of each line with padding and border
+		$borderLength = $border ? strlen( $border ) * 2 : 0;
+		$totalLength = $maxLength + ( $padding * 2 ) + $borderLength;
+		$borderStartTag = $borderColor ? "<fg=$borderColor>" : '';
+		$borderEndTag = $borderColor ? '</>' : '';
+		$borderText = $border ? $borderStartTag . $border . $borderEndTag : '';
+		$borderLine = $borderStartTag . str_repeat( $border, $totalLength ) . $borderEndTag . PHP_EOL;
+
+		$output = '';
+
+		// Add the top border.
+		if ( $border ) {
+			$output .= $borderLine;
+		}
+
+		// Add each line with padding and centering
+		foreach ( $lines as $line ) {
+			if ( $border ) {
+				$output .= $borderText;
+			}
+
+			$output .= self::getPaddedLine( $line, $maxLength, $padding );
+
+			if ( $border ) {
+				$output .= $borderText;
+			}
+
+			$output .= PHP_EOL;
+		}
+
+		// Add the bottom border
+		if ( $border ) {
+			$output .= $borderLine;
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Get a line with padding and centering.
+	 *
+	 * @param string $line
+	 * @param int $maxLength
+	 * @param int $padding
+	 *
+	 * @return string
+	 */
+	private static function getPaddedLine( string $line, int $maxLength, int $padding ): string {
+		$plainText = strip_tags($line);
+		$plainLength = strlen($plainText);
+
+		$totalPadding = $maxLength - $plainLength;
+		$leftPadding = str_repeat(' ', floor($totalPadding / 2) + $padding);
+		$rightPadding = str_repeat(' ', ceil($totalPadding / 2) + $padding);
+
+		$result = $leftPadding;
+		$htmlTag = false;
+
+		for ($i = 0; $i < strlen($line); $i++) {
+			if ($line[$i] === '<') {
+				$htmlTag = true;
+				$result .= '<';
+			} elseif ($line[$i] === '>') {
+				$htmlTag = false;
+				$result .= '>';
+			} elseif ($htmlTag) {
+				$result .= $line[$i];
+			} else {
+				$result .= $line[$i];
+			}
+		}
+
+		$result .= $rightPadding;
+
+		return $result;
 	}
 }

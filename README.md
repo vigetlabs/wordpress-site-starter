@@ -50,6 +50,11 @@ Also, in `packages.json`, you can change the name of the branch from `main` to u
 $ mkdir project-name && cd project-name && composer create-project --repository-url="/root/path/not/relative/path/to/wordpress-site-starter/packages.json" vigetlabs/wordpress-site-starter . --stability=dev --remove-vcs --no-install
 ```
 
+You can quickly remove the project by using:
+```bash
+$ ddev delete project-name -O -y && cd ../ && rm -rf project-name
+```
+
 ## Changelog
 
 ### 0.1.3

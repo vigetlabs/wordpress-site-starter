@@ -6,6 +6,7 @@
 namespace Viget\ComposerScripts\ProjectEvents;
 
 use Composer\Script\Event;
+use Exception;
 use Viget\ComposerScripts\ComposerScript;
 
 /**
@@ -14,9 +15,29 @@ use Viget\ComposerScripts\ComposerScript;
 class PostInstallScript extends ComposerScript {
 
 	/**
+	 * Skip Database Option
+	 */
+	const SKIP_DB_OPT = 0;
+
+	/**
+	 * Install WordPress Option
+	 */
+	const INSTALL_WP_OPT = 1;
+
+	/**
+	 * Import Database Option
+	 */
+	const IMPORT_DB_OPT = 2;
+
+	/**
 	 * @var array
 	 */
 	private static array $env = [];
+
+	/**
+	 * @var array
+	 */
+	private static array $info = [];
 
 	/**
 	 * Perform the actions within this file.
@@ -24,6 +45,7 @@ class PostInstallScript extends ComposerScript {
 	 * @param Event $event
 	 *
 	 * @return void
+	 * @throws Exception
 	 */
 	public static function execute( Event $event ): void {
 		self::setEvent( $event );
@@ -45,6 +67,9 @@ class PostInstallScript extends ComposerScript {
 
 			// Remove Hello Dolly.
 			self::deleteCorePlugins();
+
+			// Populate the database.
+			self::populateDatabase();
 		}
 	}
 
@@ -169,5 +194,246 @@ class PostInstallScript extends ComposerScript {
 		}
 
 		self::writeInfo( 'Stock WordPress themes deleted.' );
+	}
+
+	/**
+	 * Populate the database.
+	 *
+	 * @return void
+	 * @throws Exception
+	 */
+	private static function populateDatabase(): void {
+		$options = [
+			self::INSTALL_WP_OPT => 'Install WordPress',
+			self::IMPORT_DB_OPT  => 'Import Local Database File',
+			// TODO: Pull from remote environment.
+			self::SKIP_DB_OPT    => 'Skip',
+		];
+
+		$dbSource = intval( self::select( 'Select a database source:', $options, 'Install WordPress' ) );
+
+		if ( ! $dbSource || self::SKIP_DB_OPT === $dbSource ) {
+			return;
+		}
+
+		if ( self::IMPORT_DB_OPT === $dbSource ) {
+			self::importDatabase();
+			return;
+		}
+
+		// Run the WordPress Installation
+		self::installWordPress();
+
+		// Wait for WordPress to complete installation.
+		self::wait( 2 );
+
+		// Make sure WordPress was installed successfully.
+		if ( ! self::isWordPressInstalled() ) {
+			self::writeError( 'WordPress installation failed.' );
+			return;
+		}
+
+		// Update the Site Description
+		self::updateSiteDescription();
+
+		// Activate our Custom Theme
+		self::activateTheme();
+
+		// Show the success message.
+		self::renderSuccessMessage();
+	}
+
+	/**
+	 * Install WordPress
+	 *
+	 * @return void
+	 * @throws Exception
+	 */
+	private static function installWordPress(): void {
+		self::getSiteInfo();
+
+		$command = sprintf(
+			'wp core install --url=%s --title=%s --admin_user=viget --admin_email=%s --admin_password=%s',
+			escapeshellarg( self::$info['url'] ),
+			escapeshellarg( self::$info['title'] ),
+			escapeshellarg( self::$info['email'] ),
+			escapeshellarg( self::$info['password'] )
+		);
+
+		self::runCommand( $command );
+	}
+
+	/**
+	 * Gather site info.
+	 *
+	 * @return void
+	 * @throws Exception
+	 */
+	public static function getSiteInfo(): void {
+		// Site Title.
+		$defaultTitle = self::$env['PROJECT_NAME'] ?? 'WordPress Site';
+		$title = ! empty( self::$info['title'] ) ? self::$info['title'] : $defaultTitle;
+		self::$info['title'] = self::ask( 'What is the Site Title?*', $title );
+
+		// Site Description.
+		$name = self::$env['PROJECT_NAME'] ?? self::$info['title'];
+		$description = ! empty( self::$info['description'] ) ? self::$info['description'] : sprintf( 'A custom WordPress Site for %s by Viget.', $name );
+		self::$info['description'] = self::ask( 'What is the Site Description (tagline)?', $description );
+
+		// Site URL.
+		$defaultURL = ! empty( self::$env['PROJECT_SLUG'] ) ? 'https://' . self::$env['PROJECT_SLUG'] . '.ddev.site' : '';
+		$url = ! empty( self::$info['url'] ) ? self::$info['url'] : $defaultURL;
+		self::$info['url'] = self::ask( 'What is the URL?*', $url );
+
+		// Admin Email.
+		self::$info['email'] = self::$info['email'] ?? 'fed+wp@viget.com';
+		self::$info['email'] = self::ask( 'What is the admin email address?*', self::$info['email'] );
+
+		// Admin Password.
+		self::$info['password'] = self::$info['password'] ?? self::generatePassword();
+		self::$info['password'] = self::ask( 'Set the Admin User (viget) password:*', self::$info['password'] );
+
+		// Check Required fields
+		if ( empty( self::$info['title'] ) || empty( self::$info['url'] ) || empty( self::$info['email'] ) || empty( self::$info['password'] ) ) {
+			self::writeError( 'Please complete all required fields.' );
+			self::getSiteInfo();
+		}
+
+		// Summary
+		$summary  = PHP_EOL . ' - Site Title: ' . self::$info['title'];
+		$summary .= PHP_EOL . ' - Site Description: ' . ( self::$info['description'] ?: '[none]' );
+		$summary .= PHP_EOL . ' - URL: ' . self::$info['url'];
+		$summary .= PHP_EOL . ' - Admin Email: ' . self::$info['email'];
+		$summary .= PHP_EOL . ' - Admin Password: ' . self::$info['password'];
+
+		self::writeOutput( '<info>Summary:</info>' . $summary );
+
+		if ( ! self::confirm( 'Does everything look right?' ) ) {
+			self::getSiteInfo();
+		}
+	}
+
+	/**
+	 * Generate a random password.
+	 *
+	 * @param int $length
+	 *
+	 * @return string
+	 * @throws Exception
+	 */
+	private static function generatePassword( int $length = 16 ): string {
+		$characters = 'abcdefghijkmnpqrstuvwxyzCDEFGHJKLMNPQRTUVWXY3679!@#%^&*?,.()[]{}';
+
+		$pass = '';
+		$max = strlen( $characters ) - 1;
+
+		for ( $i = 0; $i < $length; ++$i ) {
+			$pass .= $characters[ mt_rand( 0, $max ) ];
+		}
+
+		return $pass;
+	}
+
+	/**
+	 * Check if WordPress is installed.
+	 *
+	 * @return bool
+	 */
+	private static function isWordPressInstalled(): bool {
+		return false !== shell_exec( 'wp core is-installed' );
+	}
+
+	/**
+	 * Import database file
+	 *
+	 * @return void
+	 */
+	private static function importDatabase(): void {
+		$databaseFile = self::ask( 'Please specify the path to the database file' );
+
+		if ( ! $databaseFile ) {
+			self::writeError( 'No database file provided.' );
+			return;
+		}
+
+		$dbFilePath = self::translatePath( $databaseFile, true );
+
+		if ( ! file_exists( $dbFilePath ) ) {
+			self::writeError( 'Could not locate database file: ' . $dbFilePath );
+			return;
+		}
+
+		self::writeInfo( 'Importing database...' );
+
+		$cmd = sprintf(
+			'wp db import %s',
+			escapeshellarg( $databaseFile )
+		);
+
+		self::runCommand( $cmd );
+
+		self::writeInfo( 'Database imported.' );
+	}
+
+	/**
+	 * Update the site description.
+	 *
+	 * @return void
+	 */
+	private static function updateSiteDescription(): void {
+		self::writeLine( 'Updating site description...' );
+
+		$cmd = sprintf(
+			'wp option update blogdescription "%s"',
+			escapeshellarg( self::$info['description'] )
+		);
+
+		self::runCommand( $cmd );
+
+		self::writeInfo( 'Site description updated.' );
+	}
+
+	/**
+	 * Activate the custom theme.
+	 *
+	 * @return void
+	 */
+	private static function activateTheme(): void {
+		$slug = self::$env['PROJECT_SLUG'] ?? basename( self::$env['VITE_PROJECT_DIR'] ) ?? '';
+		if ( ! $slug || false === shell_exec( sprintf( 'wp theme is-installed %s', escapeshellarg( $slug ) ) ) ) {
+			self::writeWarning( 'Skipping theme activation. Theme "' . $slug . '" not found.' );
+			return;
+		}
+
+		self::writeInfo( 'Activating theme...' );
+
+		$cmd = sprintf(
+			'wp theme activate %s',
+			escapeshellarg( $slug )
+		);
+
+		self::runCommand( $cmd );
+
+		self::writeInfo( 'Theme activated.' );
+	}
+
+	/**
+	 * Show the success message upon completion.
+	 *
+	 * @return void
+	 */
+	public static function renderSuccessMessage(): void {
+		self::renderVigetLogo();
+
+		$success = [
+			'Congratulations!',
+			'Project has been set up successfully!',
+			'<fg=#F26D20>Important!</> Make a note of the Admin Password:',
+			'<fg=#F26D20>' . self::$info['password'] . '</>',
+		];
+
+		$success = self::centeredText( $success, 2, '*', '#1296BB' );
+
+		self::writeLine( $success );
 	}
 }

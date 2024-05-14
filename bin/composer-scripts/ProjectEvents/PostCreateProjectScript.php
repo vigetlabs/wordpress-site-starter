@@ -55,6 +55,9 @@ class PostCreateProjectScript extends ComposerScript {
 		// Gather project info.
 		self::getProjectInfo();
 
+		// Save some of the vars to the .ddev/.env file
+		self::storeProjectInfo();
+
 		// Swap README files
 		self::swapReadmeFiles();
 
@@ -184,6 +187,26 @@ class PostCreateProjectScript extends ComposerScript {
 		}
 
 		return $text;
+	}
+
+	/**
+	 * Store project info in the .ddev/.env file.
+	 *
+	 * @return void
+	 */
+	private static function storeProjectInfo(): void {
+		$envPath = self::translatePath( '.ddev/.env' );
+		$envData = file_get_contents( $envPath );
+
+		$envData .= PHP_EOL . '# start project info';
+		$envData .= PHP_EOL . 'PROJECT_NAME="' . self::escapeQuotes( self::$info['name'] ) . '"';
+		$envData .= PHP_EOL . 'PROJECT_SLUG="' . self::escapeQuotes( self::$info['slug'] ) . '"';
+		$envData .= PHP_EOL . 'PROJECT_TEXT_DOMAIN="' . self::escapeQuotes( self::$info['text-domain'] ) . '"';
+		$envData .= PHP_EOL . 'PROJECT_PACKAGE="' . self::escapeQuotes( self::$info['package'] ) . '"';
+		$envData .= PHP_EOL . 'PROJECT_FUNCTION_PREFIX="' . self::escapeQuotes( self::$info['function'] ) . '"';
+		$envData .= PHP_EOL . '# end project info';
+
+		file_put_contents( $envPath, $envData );
 	}
 
 	/**
@@ -382,14 +405,11 @@ class PostCreateProjectScript extends ComposerScript {
 			self::writeInfo( 'Root composer.json file removed!' );
 		}
 
-		self::writeLine( 'Removing root composer.lock...' );
-
-		// Remove root composer.lock file
+		// Remove root composer.lock file if exists.
 		$composerLock = self::translatePath( 'composer.lock' );
 
-		if ( ! file_exists( $composerLock ) ) {
-			self::writeWarning( 'composer.lock file not found. Skipping removal.' );
-		} else {
+		if ( file_exists( $composerLock ) ) {
+			self::writeLine( 'Removing root composer.lock...' );
 			unlink( $composerLock );
 			self::writeInfo( 'Root composer.lock file removed!' );
 		}
