@@ -380,4 +380,29 @@ class ComposerScript {
 	protected static function escapeQuotes( string $string ): string {
 		return str_replace( '"', '\"', $string );
 	}
+
+	/**
+	 * Render the Viget logo.
+	 *
+	 * @return void
+	 */
+	protected static function renderVigetLogo(): void {
+		$logo = <<<VIGET
+                          <fg=#F26D20>.::::.
+                        <fg=#F26D20>-========-
+                       <fg=#F26D20>-===========
+       <fg=#1296BB>..:::::::..     <fg=#F26D20>:==========-
+    <fg=#1296BB>.:-===========--.   <fg=#F26D20>.-======-:
+  <fg=#1296BB>.-=================-.     <fg=#F26D20>..
+ <fg=#1296BB>.=====================.
+ <fg=#1296BB>:=====================-
+ <fg=#1296BB>:=-===================-
+  <fg=#1296BB>-===================-
+   <fg=#1296BB>:-================:
+     <fg=#1296BB>.:-=========--:
+         <fg=#1296BB>.......
+VIGET;
+
+		self::writeOutput( $logo . PHP_EOL );
+	}
 }
