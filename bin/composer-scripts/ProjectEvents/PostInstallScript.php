@@ -30,6 +30,7 @@ class PostInstallScript extends ComposerScript {
 	 * @param Event $event
 	 *
 	 * @return void
+	 * @throws Exception
 	 */
 	public static function execute( Event $event ): void {
 		self::setEvent( $event );
