@@ -341,48 +341,6 @@ class PostInstallScript extends ComposerScript {
 	}
 
 	/**
-	 * Update the site description.
-	 *
-	 * @return void
-	 */
-	private static function updateSiteDescription(): void {
-		self::writeLine( 'Updating site description...' );
-
-		$cmd = sprintf(
-			'wp option update blogdescription "%s"',
-			escapeshellarg( self::$info['description'] )
-		);
-
-		self::runCommand( $cmd );
-
-		self::writeInfo( 'Site description updated.' );
-	}
-
-	/**
-	 * Activate the custom theme.
-	 *
-	 * @return void
-	 */
-	private static function activateTheme(): void {
-		$slug = self::$env['PROJECT_SLUG'] ?? basename( self::$env['VITE_PROJECT_DIR'] ) ?? '';
-		if ( ! $slug || ! shell_exec( sprintf( 'wp theme is-installed %s', escapeshellarg( $slug ) ) ) ) {
-			self::writeWarning( 'Skipping theme activation. Theme "' . $slug . '" not found.' );
-			return;
-		}
-
-		self::writeInfo( 'Activating theme...' );
-
-		$cmd = sprintf(
-			'wp theme activate %s',
-			escapeshellarg( $slug )
-		);
-
-		self::runCommand( $cmd );
-
-		self::writeInfo( 'Theme activated.' );
-	}
-
-	/**
 	 * Import database file
 	 *
 	 * @return void
@@ -412,5 +370,47 @@ class PostInstallScript extends ComposerScript {
 		self::runCommand( $cmd );
 
 		self::writeInfo( 'Database imported.' );
+	}
+
+	/**
+	 * Update the site description.
+	 *
+	 * @return void
+	 */
+	private static function updateSiteDescription(): void {
+		self::writeLine( 'Updating site description...' );
+
+		$cmd = sprintf(
+			'wp option update blogdescription "%s"',
+			escapeshellarg( self::$info['description'] )
+		);
+
+		self::runCommand( $cmd );
+
+		self::writeInfo( 'Site description updated.' );
+	}
+
+	/**
+	 * Activate the custom theme.
+	 *
+	 * @return void
+	 */
+	private static function activateTheme(): void {
+		$slug = self::$env['PROJECT_SLUG'] ?? basename( self::$env['VITE_PROJECT_DIR'] ) ?? '';
+		if ( ! $slug || false === shell_exec( sprintf( 'wp theme is-installed %s', escapeshellarg( $slug ) ) ) ) {
+			self::writeWarning( 'Skipping theme activation. Theme "' . $slug . '" not found.' );
+			return;
+		}
+
+		self::writeInfo( 'Activating theme...' );
+
+		$cmd = sprintf(
+			'wp theme activate %s',
+			escapeshellarg( $slug )
+		);
+
+		self::runCommand( $cmd );
+
+		self::writeInfo( 'Theme activated.' );
 	}
 }
