@@ -125,13 +125,13 @@ class ComposerScript {
 	 * Output a general message to the terminal window.
 	 *
 	 * @param string $content
-	 * @param bool   $newLine
+	 * @param bool   $extraLine
 	 *
 	 * @return void
 	 */
-	protected static function writeLine( string $content, bool $newLine = true ): void
+	protected static function writeLine( string $content, bool $extraLine = false ): void
 	{
-		self::writeOutput( $content, '', $newLine );
+		self::writeOutput( $content, '', $extraLine );
 	}
 
 	/**
