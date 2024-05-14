@@ -241,11 +241,11 @@ class PostInstallScript extends ComposerScript {
 		self::getSiteInfo();
 
 		$command = sprintf(
-			'wp core install --url="%s" --title="%s" --admin_user="viget" --admin_email="%s" --admin_password="%s"',
+			'wp core install --url=%" --title=%s --admin_user=viget --admin_email=%s --admin_password=%s',
 			escapeshellarg( self::$info['url'] ),
 			escapeshellarg( self::$info['title'] ),
 			escapeshellarg( self::$info['email'] ),
-			escapeshellarg( self::escapeQuotes( self::$info['password'] ) )
+			escapeshellarg( self::$info['password'] )
 		);
 
 		self::runCommand( $command );
