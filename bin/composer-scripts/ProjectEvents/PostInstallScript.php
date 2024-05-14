@@ -224,6 +224,15 @@ class PostInstallScript extends ComposerScript {
 		// Run the WordPress Installation
 		self::installWordPress();
 
+		// Wait for WordPress to complete installation.
+		self::wait( 2 );
+
+		// Make sure WordPress was installed successfully.
+		if ( ! self::isWordPressInstalled() ) {
+			self::writeError( 'WordPress installation failed.' );
+			return;
+		}
+
 		// Update the Site Description
 		self::updateSiteDescription();
 
@@ -320,6 +329,15 @@ class PostInstallScript extends ComposerScript {
 		}
 
 		return $pass;
+	}
+
+	/**
+	 * Check if WordPress is installed.
+	 *
+	 * @return bool
+	 */
+	private static function isWordPressInstalled(): bool {
+		return shell_exec( 'wp core is-installed' );
 	}
 
 	/**
