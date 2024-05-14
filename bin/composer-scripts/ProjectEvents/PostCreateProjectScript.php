@@ -405,14 +405,11 @@ class PostCreateProjectScript extends ComposerScript {
 			self::writeInfo( 'Root composer.json file removed!' );
 		}
 
-		self::writeLine( 'Removing root composer.lock...' );
-
-		// Remove root composer.lock file
+		// Remove root composer.lock file if exists.
 		$composerLock = self::translatePath( 'composer.lock' );
 
-		if ( ! file_exists( $composerLock ) ) {
-			self::writeWarning( 'composer.lock file not found. Skipping removal.' );
-		} else {
+		if ( file_exists( $composerLock ) ) {
+			self::writeLine( 'Removing root composer.lock...' );
 			unlink( $composerLock );
 			self::writeInfo( 'Root composer.lock file removed!' );
 		}
