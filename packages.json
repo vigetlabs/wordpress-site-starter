@@ -3,9 +3,9 @@
     "name": "vigetlabs/wordpress-site-starter",
     "version": "0.1.3",
     "source": {
-      "url": "/Users/briandichiara/Sites/wpstarter.vigetx.com/public_html/.git",
+      "url": "/root/path/not/relative/path/to/wordpress-site-starter/.git",
       "type": "git",
-      "reference": "bd/52-wordpress-install"
+      "reference": "main"
     }
   }
 }
