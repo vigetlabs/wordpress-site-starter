@@ -238,6 +238,9 @@ class PostInstallScript extends ComposerScript {
 
 		// Activate our Custom Theme
 		self::activateTheme();
+
+		// Show the success message.
+		self::renderSuccessMessage();
 	}
 
 	/**
@@ -412,5 +415,31 @@ class PostInstallScript extends ComposerScript {
 		self::runCommand( $cmd );
 
 		self::writeInfo( 'Theme activated.' );
+	}
+
+	/**
+	 * Show the success message upon completion.
+	 *
+	 * @return void
+	 */
+	public static function renderSuccessMessage(): void {
+		$logo = <<<VIGET
+                          <fg=#F26D20>.::::.</fg>
+                        <fg=#F26D20>-========-</fg>
+                       <fg=#F26D20>-===========</fg>
+       <fg=#1296BB>..:::::::..</fg>     <fg=#F26D20>:==========-</fg>
+    <fg=#1296BB>.:-===========--.</fg>   <fg=#F26D20>.-======-:</fg>
+  <fg=#1296BB>.-=================-.</fg>     <fg=#F26D20>..</fg>
+ <fg=#1296BB>.=====================.</fg>
+ <fg=#1296BB>:=====================-</fg>
+ <fg=#1296BB>:=-===================-</fg>
+  <fg=#1296BB>-===================-</fg>
+   <fg=#1296BB>:-================:</fg>
+     <fg=#1296BB>.:-=========--:</fg>
+         <fg=#1296BB>.......</fg>
+VIGET;
+
+		self::writeOutput( $logo . PHP_EOL );
+//		self::writeInfo( 'Admin Password: ' . self::$info['password'] );
 	}
 }
