@@ -474,45 +474,32 @@ VIGET;
 	 * @return string
 	 */
 	private static function getPaddedLine( string $line, int $maxLength, int $padding ): string {
-		$plainText = strip_tags( $line );
-		$plainLength = strlen( $plainText );
+		$plainText = strip_tags($line);
+		$plainLength = strlen($plainText);
 
-		$leftPadding = floor( ( $maxLength - $plainLength ) / 2 );
-		$rightPadding = $maxLength - $plainLength - $leftPadding;
-		$totalLength = strlen( $leftPadding ) + strlen( $rightPadding ) + $plainLength + ( $padding * 2 );
+		$totalPadding = $maxLength - $plainLength;
+		$leftPadding = str_repeat(' ', floor($totalPadding / 2) + $padding);
+		$rightPadding = str_repeat(' ', ceil($totalPadding / 2) + $padding);
 
-		if ( $totalLength < $maxLength ) {
-			$rightPadding += $maxLength - $totalLength;
-		}
-
-		$leftPadding = str_repeat( ' ', $padding + $leftPadding );
-		$rightPadding = str_repeat( ' ', $padding + $rightPadding );
-
-		$output = '';
+		$result = $leftPadding;
 		$htmlTag = false;
-		$plainIndex = 0;
 
-		for ( $i = 0; $i < strlen( $line ); $i++ ) {
-			if ( $line[ $i ] === '<' ) {
+		for ($i = 0; $i < strlen($line); $i++) {
+			if ($line[$i] === '<') {
 				$htmlTag = true;
-				$output .= '<';
-			} elseif ( $line[ $i ] === '>' ) {
+				$result .= '<';
+			} elseif ($line[$i] === '>') {
 				$htmlTag = false;
-				$output .= '>';
-			} elseif ( $htmlTag ) {
-				$output .= $line[ $i ];
+				$result .= '>';
+			} elseif ($htmlTag) {
+				$result .= $line[$i];
 			} else {
-				if ( $plainIndex == 0 ) {
-					$output .= $leftPadding;
-				}
-				$output .= $line[ $i ];
-				$plainIndex++;
-				if ( $plainIndex == $plainLength ) {
-					$output .= $rightPadding;
-				}
+				$result .= $line[$i];
 			}
 		}
 
-		return $output;
+		$result .= $rightPadding;
+
+		return $result;
 	}
 }
