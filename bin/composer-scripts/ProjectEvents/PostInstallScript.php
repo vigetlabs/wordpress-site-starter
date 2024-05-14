@@ -331,7 +331,7 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function activateTheme(): void {
-		$slug = self::$env['PROJECT_SLUG'] ?? '';
+		$slug = self::$env['PROJECT_SLUG'] ?? basename( self::$env['VITE_PROJECT_DIR'] ) ?? '';
 		if ( ! $slug || ! shell_exec( sprintf( 'wp theme is-installed %s', escapeshellarg( $slug ) ) ) ) {
 			self::writeWarning( 'Skipping theme activation. Theme "' . $slug . '" not found.' );
 			return;
