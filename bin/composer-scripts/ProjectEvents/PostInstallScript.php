@@ -337,7 +337,7 @@ class PostInstallScript extends ComposerScript {
 	 * @return bool
 	 */
 	private static function isWordPressInstalled(): bool {
-		return shell_exec( 'wp core is-installed' );
+		return false !== shell_exec( 'wp core is-installed' );
 	}
 
 	/**
