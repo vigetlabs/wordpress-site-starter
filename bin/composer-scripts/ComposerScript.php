@@ -215,6 +215,23 @@ class ComposerScript {
 	}
 
 	/**
+	 * Get a selection from user input.
+	 *
+	 * @param string $question
+	 * @param array  $options
+	 * @param string $default
+	 *
+	 * @return string
+	 */
+	protected static function select( string $question, array $options, string $default = '' ): string
+	{
+		$defaultText = $default ? sprintf( ' <comment>[%s]</comment>', $default ) : '';
+		$question    = sprintf( '<question>%s</question>%s ', trim( $question ), $defaultText );
+
+		return self::$event->getIO()->select( $question, $options, $default );
+	}
+
+	/**
 	 * Run a command in the terminal.
 	 *
 	 * @param string $cmd
@@ -351,5 +368,16 @@ class ComposerScript {
 	 */
 	protected static function wait( int $seconds = 1 ): void {
 		sleep( $seconds );
+	}
+
+	/**
+	 * Escape quotes in a string.
+	 *
+	 * @param string $string
+	 *
+	 * @return string
+	 */
+	protected static function escapeQuotes( string $string ): string {
+		return str_replace( '"', '\"', $string );
 	}
 }
