@@ -15,6 +15,21 @@ use Viget\ComposerScripts\ComposerScript;
 class PostInstallScript extends ComposerScript {
 
 	/**
+	 * Skip Database Option
+	 */
+	const SKIP_DB_OPT = 0;
+
+	/**
+	 * Install WordPress Option
+	 */
+	const INSTALL_WP_OPT = 1;
+
+	/**
+	 * Import Database Option
+	 */
+	const IMPORT_DB_OPT = 2;
+
+	/**
 	 * @var array
 	 */
 	private static array $env = [];
@@ -189,19 +204,19 @@ class PostInstallScript extends ComposerScript {
 	 */
 	private static function populateDatabase(): void {
 		$options = [
-			'Install WordPress',
-			'Import Local Database File',
+			self::INSTALL_WP_OPT => 'Install WordPress',
+			self::IMPORT_DB_OPT  => 'Import Local Database File',
 			// TODO: Pull from remote environment.
-			'Skip',
+			self::SKIP_DB_OPT    => 'Skip',
 		];
 
-		$dbSource = self::select( 'Please select a database source.', $options, 'Install WordPress' );
+		$dbSource = intval( self::select( 'Please select a database source.', $options, 'Install WordPress' ) );
 
-		if ( ! $dbSource || 'Skip' === $dbSource ) {
+		if ( ! $dbSource || self::SKIP_DB_OPT === $dbSource ) {
 			return;
 		}
 
-		if ( 'Import Local Database File' === $dbSource ) {
+		if ( self::IMPORT_DB_OPT === $dbSource ) {
 			self::importDatabase();
 			return;
 		}
