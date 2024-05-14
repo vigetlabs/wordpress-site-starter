@@ -207,7 +207,7 @@ class PostInstallScript extends ComposerScript {
 			self::deleteDirectory( $pluginDir );
 		}
 
-		self::writeInfo( 'Stock WordPress themes deleted.' );
+		self::writeInfo( 'Stock WordPress plugins deleted.' );
 	}
 
 	/**
