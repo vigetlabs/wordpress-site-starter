@@ -428,11 +428,11 @@ class PostInstallScript extends ComposerScript {
 		$success = [
 			'Congratulations!',
 			'Project has been setup successfully!',
-			'Important! Make a note of the Admin Password:',
-			self::$info['password'],
+			'<fg=#F26D20>Important!</> Make a note of the Admin Password:',
+			'<fg=#F26D20>' . self::$info['password'] . '</>',
 		];
 
-		$success = self::centeredText( $success, 2, '*',  );
+		$success = self::centeredText( $success, 2, '*', '#1296BB' );
 
 		self::writeLine( $success );
 	}
