@@ -24,20 +24,16 @@ const blocks = {
 		css: '& {list-style-type:none;} & li{margin-bottom: 0.5rem;}',
 	},
 	'core/code': {
-		border: {
-			color: 'var(--wp--preset--color--black)',
-			radius: 'var(--wp--preset--spacing--20)',
-		},
 		color: {
 			background: 'var(--wp--preset--color--white)',
-			text: 'var(--wp--preset--color--black)',
+			text: 'var(--wp--preset--color--gray-500)',
 		},
 		spacing: {
 			padding: {
-				bottom: 'calc(var(--wp--preset--spacing--30) + 0.75rem)',
-				left: 'calc(var(--wp--preset--spacing--30) + 0.75rem)',
-				right: 'calc(var(--wp--preset--spacing--30) + 0.75rem)',
-				top: 'calc(var(--wp--preset--spacing--30) + 0.75rem)',
+				bottom: 'var(--wp--preset--spacing--20)',
+				left: 'var(--wp--preset--spacing--20)',
+				right: 'var(--wp--preset--spacing--20)',
+				top: 'var(--wp--preset--spacing--20)',
 			},
 		},
 		typography: {
