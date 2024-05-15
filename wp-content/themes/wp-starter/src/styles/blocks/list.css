@@ -1,0 +1,7 @@
+@layer components {
+	.block-editor-block-list__block {
+		.block-editor-rich-text__editable.rich-text {
+			@apply inline-block;
+		}
+	}
+}
