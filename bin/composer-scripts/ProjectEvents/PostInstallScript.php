@@ -438,6 +438,7 @@ class PostInstallScript extends ComposerScript {
 			'wp rewrite structure "/%postname%/"',
 			'wp option update rss_use_excerpt 1',
 			'wp option update blog_public 0',
+			'wp user meta update 1 show_welcome_panel 0',
 		];
 
 		self::writeLine( 'Configuring general settings...' );
