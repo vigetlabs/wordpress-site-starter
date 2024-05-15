@@ -305,6 +305,7 @@ const blocks = {
 		typography: {
 			fontFamily: 'var(--wp--preset--font-family--heading)',
 			fontSize: 'var(--wp--preset--font-size--x-large)',
+			lineHeight: "1"
 		},
 	},
 	'core/query-title': {
