@@ -42,7 +42,7 @@ class PostInstallScript extends ComposerScript {
 	 * @var array
 	 */
 	private static array $deletePlugins = [
-		'hello.php',
+		'hello',
 	];
 
 	/**
@@ -187,27 +187,30 @@ class PostInstallScript extends ComposerScript {
 		self::writeInfo( 'Deleting stock WordPress plugins...' );
 
 		foreach ( self::$deletePlugins as $plugin ) {
-			$pluginFile = self::translatePath( 'wp-content/plugins/' . $plugin );
-
-			if ( file_exists( $pluginFile ) ) {
-				unlink( $pluginFile );
-				continue;
-			}
-
-			if ( str_ends_with( $pluginFile, '.php' ) ) {
-				$pluginDir = str_replace( basename( $pluginFile ), '', $pluginFile );
-			} else {
-				$pluginDir = $pluginFile;
-			}
-
-			if ( ! is_dir( $pluginDir ) ) {
-				continue;
-			}
-
-			self::deleteDirectory( $pluginDir );
+			self::deletePlugin( $plugin );
 		}
 
 		self::writeInfo( 'Stock WordPress plugins deleted.' );
+	}
+
+	/**
+	 * @param string $plugin
+	 *
+	 * @return void
+	 */
+	private static function deletePlugin( string $plugin ): void {
+		if ( false === shell_exec( sprintf( 'wp plugin is-installed %s', escapeshellarg( $plugin ) ) ) ) {
+			return;
+		}
+
+		$cmd = sprintf(
+			'wp plugin delete %s',
+			escapeshellarg( $plugin )
+		);
+
+		self::runCommand( $cmd );
+
+		self::writeInfo( $plugin . ' deleted.' );
 	}
 
 	/**
