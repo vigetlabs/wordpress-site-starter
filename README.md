@@ -5,7 +5,7 @@ This is a WordPress starter project that includes a basic custom theme, includin
 ## Requirements
 * [Composer](https://getcomposer.org/) - [Installation](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos)
 * [DDEV](https://ddev.readthedocs.io/en/stable/) - [Installation](https://ddev.readthedocs.io/en/stable/users/install/ddev-installation/)
-* [Docker](https://docs.docker.com/desktop/install/mac-install/) (or compatible container alternative)
+* [Docker](https://docs.docker.com/desktop/install/mac-install/) (or compatible container alternative like OrbStack)
 * For ACF Pro, create an `auth.json` file in the project root directory, which can be downloaded from the [ACF Website](https://www.advancedcustomfields.com/my-account/view-licenses/).
 
 ## Using this Project
@@ -54,6 +54,12 @@ You can quickly remove the project by using:
 ```bash
 $ ddev delete project-name -O -y && cd ../ && rm -rf project-name
 ```
+
+## Theme.json
+The `theme.json` holds a lot of the core WordPress theme settings. The `theme.json` is build using several js files in `/src/theme-json`, Vite builds all of these files and exports a `theme.json` for both `dev` and `build`. Do not edit directly `theme.json` as it will be over written on build. 
+
+Several of the Tailwind variables are pulled in and Tailwind should be used as the primary way to style elements. If you need to, you can pull in more Tailwind variable for custom styling in `theme.json`.
+
 
 ## Changelog
 
