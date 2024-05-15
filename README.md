@@ -57,6 +57,11 @@ $ ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### 0.1.4
+* Post Create-Project WordPress Installation
+* Post WordPress Installation General Cleanup
+* Automatic Theme and Plugin Activation
+
 ### 0.1.3
 * Fix issue where Vite was crashing web server
 * Rearranged a few things/commands to work better.
