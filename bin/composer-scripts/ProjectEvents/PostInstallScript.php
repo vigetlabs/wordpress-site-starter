@@ -6,7 +6,6 @@
 namespace Viget\ComposerScripts\ProjectEvents;
 
 use Composer\Script\Event;
-use Exception;
 use Viget\ComposerScripts\ComposerScript;
 
 /**
@@ -40,12 +39,31 @@ class PostInstallScript extends ComposerScript {
 	private static array $info = [];
 
 	/**
+	 * @var array
+	 */
+	private static array $deletePlugins = [
+		'hello',
+	];
+
+	/**
+	 * @var array
+	 */
+	private static array $activatePlugins = [
+		'acf-blocks-toolkit' => [
+			'name' => 'ACF Blocks Toolkit',
+			'dependencies' => [
+				'advanced-custom-fields-pro' => 'Advanced Custom Fields Pro',
+			],
+		],
+		'svg-support' => 'SVG Support',
+	];
+
+	/**
 	 * Perform the actions within this file.
 	 *
 	 * @param Event $event
 	 *
 	 * @return void
-	 * @throws Exception
 	 */
 	public static function execute( Event $event ): void {
 		self::setEvent( $event );
@@ -168,39 +186,39 @@ class PostInstallScript extends ComposerScript {
 	private static function deleteCorePlugins(): void {
 		self::writeInfo( 'Deleting stock WordPress plugins...' );
 
-		$plugins = [
-			'hello.php',
-		];
-
-		foreach ( $plugins as $plugin ) {
-			$pluginFile = self::translatePath( 'wp-content/plugins/' . $plugin );
-
-			if ( file_exists( $pluginFile ) ) {
-				unlink( $pluginFile );
-				continue;
-			}
-
-			if ( str_ends_with( $pluginFile, '.php' ) ) {
-				$pluginDir = str_replace( basename( $pluginFile ), '', $pluginFile );
-			} else {
-				$pluginDir = $pluginFile;
-			}
-
-			if ( ! is_dir( $pluginDir ) ) {
-				continue;
-			}
-
-			self::deleteDirectory( $pluginDir );
+		foreach ( self::$deletePlugins as $plugin ) {
+			self::deletePlugin( $plugin );
 		}
 
-		self::writeInfo( 'Stock WordPress themes deleted.' );
+		self::writeInfo( 'Stock WordPress plugins deleted.' );
+	}
+
+	/**
+	 * Delete a plugin.
+	 *
+	 * @param string $plugin
+	 *
+	 * @return void
+	 */
+	private static function deletePlugin( string $plugin ): void {
+		if ( false === shell_exec( sprintf( 'wp plugin is-installed %s', escapeshellarg( $plugin ) ) ) ) {
+			return;
+		}
+
+		$cmd = sprintf(
+			'wp plugin delete %s',
+			escapeshellarg( $plugin )
+		);
+
+		self::runCommand( $cmd );
+
+		self::writeInfo( $plugin . ' deleted.' );
 	}
 
 	/**
 	 * Populate the database.
 	 *
 	 * @return void
-	 * @throws Exception
 	 */
 	private static function populateDatabase(): void {
 		$options = [
@@ -239,6 +257,12 @@ class PostInstallScript extends ComposerScript {
 		// Activate our Custom Theme
 		self::activateTheme();
 
+		// Perform some post-install cleanup actions.
+		self::installationCleanup();
+
+		// Activate plugins.
+		self::activatePlugins();
+
 		// Show the success message.
 		self::renderSuccessMessage();
 	}
@@ -247,7 +271,6 @@ class PostInstallScript extends ComposerScript {
 	 * Install WordPress
 	 *
 	 * @return void
-	 * @throws Exception
 	 */
 	private static function installWordPress(): void {
 		self::getSiteInfo();
@@ -267,7 +290,6 @@ class PostInstallScript extends ComposerScript {
 	 * Gather site info.
 	 *
 	 * @return void
-	 * @throws Exception
 	 */
 	public static function getSiteInfo(): void {
 		// Site Title.
@@ -311,27 +333,6 @@ class PostInstallScript extends ComposerScript {
 		if ( ! self::confirm( 'Does everything look right?' ) ) {
 			self::getSiteInfo();
 		}
-	}
-
-	/**
-	 * Generate a random password.
-	 *
-	 * @param int $length
-	 *
-	 * @return string
-	 * @throws Exception
-	 */
-	private static function generatePassword( int $length = 16 ): string {
-		$characters = 'abcdefghijkmnpqrstuvwxyzCDEFGHJKLMNPQRTUVWXY3679!@#%^&*?,.()[]{}';
-
-		$pass = '';
-		$max = strlen( $characters ) - 1;
-
-		for ( $i = 0; $i < $length; ++$i ) {
-			$pass .= $characters[ mt_rand( 0, $max ) ];
-		}
-
-		return $pass;
 	}
 
 	/**
@@ -384,7 +385,7 @@ class PostInstallScript extends ComposerScript {
 		self::writeLine( 'Updating site description...' );
 
 		$cmd = sprintf(
-			'wp option update blogdescription "%s"',
+			'wp option update blogdescription %s',
 			escapeshellarg( self::$info['description'] )
 		);
 
@@ -415,6 +416,126 @@ class PostInstallScript extends ComposerScript {
 		self::runCommand( $cmd );
 
 		self::writeInfo( 'Theme activated.' );
+	}
+
+	/**
+	 * Perform some post-install cleanup actions.
+	 *
+	 * @return void
+	 */
+	private static function installationCleanup(): void {
+		self::writeComment( 'Performing post-install cleanup...' );
+
+		// Homepage Actions.
+		$homepage = [
+			'wp post update 2 --post_title="Home" --post_name="home"',
+			'wp option update show_on_front "page"',
+			'wp option update page_on_front 2',
+		];
+
+		self::writeLine( 'Setting up homepage...' );
+		foreach ( $homepage as $command ) {
+			self::runCommand( $command );
+		}
+
+		$general = [
+			'wp term update category 1 --name="General" --slug="general"',
+			'wp rewrite structure "/%postname%/"',
+			'wp option update rss_use_excerpt 1',
+			'wp option update blog_public 0',
+			'wp user meta update 1 show_welcome_panel 0',
+		];
+
+		self::writeLine( 'Configuring general settings...' );
+		foreach ( $general as $command ) {
+			self::runCommand( $command );
+		}
+
+		$samples = [
+			'wp comment delete 1 --force',
+			'wp post delete 1 --force',
+		];
+
+		self::writeLine( 'Removing sample content...' );
+		foreach ( $samples as $command ) {
+			self::runCommand( $command );
+		}
+
+		$discussion = [
+			'wp option update default_pingback_flag 0',
+			'wp option update default_ping_status 0',
+			'wp option update default_comment_status 0',
+			'wp option update comment_registration 1',
+			'wp option update comments_notify 0',
+			'wp option update comment_moderation 1',
+			'wp option update moderation_notify 0',
+			'wp option update comment_max_links 0',
+		];
+
+		self::writeLine( 'Configuring discussion settings...' );
+		foreach ( $discussion as $command ) {
+			self::runCommand( $command );
+		}
+
+		self::writeInfo( 'Post-install cleanup complete.' );
+	}
+
+	/**
+	 * Activate plugins.
+	 *
+	 * @return void
+	 */
+	private static function activatePlugins(): void {
+		self::writeComment( 'Activating plugins...' );
+
+		foreach ( self::$activatePlugins as $slug => $plugin ) {
+			self::activatePlugin( $slug, $plugin );
+		}
+
+		self::writeInfo( 'Plugins activated.' );
+	}
+
+	/**
+	 * Activate a plugin.
+	 *
+	 * @param string $slug
+	 * @param string|array $plugin
+	 *
+	 * @return bool
+	 */
+	private static function activatePlugin( string $slug, string|array $plugin ): bool {
+		if ( false === shell_exec( sprintf( 'wp plugin is-installed %s', escapeshellarg( $slug ) ) ) ) {
+			self::writeWarning( 'Skipping plugin activation. Plugin "' . $slug . '" not installed.' );
+			return false;
+		}
+
+		if ( is_array( $plugin ) ) {
+			foreach ( $plugin['dependencies'] as $depSlug => $depName ) {
+				if ( ! self::activatePlugin( $depSlug, $depName ) ) {
+					return false;
+				}
+			}
+
+			$cmd = sprintf(
+				'wp plugin activate %s',
+				escapeshellarg( $slug )
+			);
+			self::runCommand( $cmd );
+
+			self::writeLine( $plugin['name'] . ' activated.' );
+
+			return true;
+		}
+
+		$cmd = sprintf(
+			'wp plugin activate %s',
+			escapeshellarg( $slug )
+		);
+		self::runCommand( $cmd );
+
+		self::writeLine( $plugin . ' activated.' );
+
+		return true;
 	}
 
 	/**

@@ -502,4 +502,24 @@ VIGET;
 
 		return $result;
 	}
+
+	/**
+	 * Generate a random password.
+	 *
+	 * @param int $length
+	 *
+	 * @return string
+	 */
+	protected static function generatePassword( int $length = 16 ): string {
+		$characters = 'abcdefghijkmnpqrstuvwxyzCDEFGHJKLMNPQRTUVWXY3679!@#%^&*?,.()[]{}';
+
+		$pass = '';
+		$max = strlen( $characters ) - 1;
+
+		for ( $i = 0; $i < $length; ++$i ) {
+			$pass .= $characters[ mt_rand( 0, $max ) ];
+		}
+
+		return $pass;
+	}
 }
