@@ -194,6 +194,8 @@ class PostInstallScript extends ComposerScript {
 	}
 
 	/**
+	 * Delete a plugin.
+	 *
 	 * @param string $plugin
 	 *
 	 * @return void
