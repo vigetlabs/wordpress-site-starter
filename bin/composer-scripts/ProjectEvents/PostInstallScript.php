@@ -380,7 +380,7 @@ class PostInstallScript extends ComposerScript {
 		self::writeLine( 'Updating site description...' );
 
 		$cmd = sprintf(
-			'wp option update blogdescription "%s"',
+			'wp option update blogdescription %s',
 			escapeshellarg( self::$info['description'] )
 		);
 
