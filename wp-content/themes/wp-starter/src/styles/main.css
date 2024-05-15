@@ -3,6 +3,7 @@
 @import 'tailwindcss/utilities';
 
 /*Import custom styles*/
+@import './base/global.css';
 @import './base/has-bg.css';
 @import './base/typography.css';
 
