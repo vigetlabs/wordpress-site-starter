@@ -480,6 +480,7 @@ class PostInstallScript extends ComposerScript {
 	 */
 	private static function activatePlugins(): void {
 		self::writeComment( 'Activating plugins...' );
+
 		foreach ( self::$activatePlugins as $slug => $plugin ) {
 			self::activatePlugin( $slug, $plugin );
 		}
@@ -503,18 +504,31 @@ class PostInstallScript extends ComposerScript {
 					return;
 				}
 
-				self::activatePlugin( $depSlug, $depName );
+				$cmd = sprintf(
+					'wp plugin activate %s',
+					escapeshellarg( $depSlug )
+				);
+				self::runCommand( $cmd );
 			}
 
 			if ( false === shell_exec( sprintf( 'wp plugin is-installed %s', escapeshellarg( $slug ) ) ) ) {
 				self::writeWarning( 'Skipping plugin activation. Plugin "' . $slug . '" not installed.' );
 				return;
 			}
-			self::activatePlugin( $slug, $plugin['name'] );
+
+			$cmd = sprintf(
+				'wp plugin activate %s',
+				escapeshellarg( $slug )
+			);
+			self::runCommand( $cmd );
 
 			self::writeLine( $plugin['name'] . ' activated.' );
 		} else {
-			self::activatePlugin( $slug, $plugin );
+			$cmd = sprintf(
+				'wp plugin activate %s',
+				escapeshellarg( $slug )
+			);
+			self::runCommand( $cmd );
 
 			self::writeLine( $plugin . ' activated.' );
 		}
