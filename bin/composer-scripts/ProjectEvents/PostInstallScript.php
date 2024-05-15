@@ -462,6 +462,7 @@ class PostInstallScript extends ComposerScript {
 			'wp option update comment_registration 1',
 			'wp option update comments_notify 0',
 			'wp option update comment_moderation 1',
+			'wp option update moderation_notify 0',
 			'wp option update comment_max_links 0',
 		];
 
