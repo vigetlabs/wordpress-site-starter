@@ -18,7 +18,7 @@ This is the README for your new site. Feel free to update any of this info to ma
 Run `ddev start` to start the site. This will install WordPress files, composer packages, npm packages, and start the DDEV server. Once the server is started DDEV will automatically start Vite for local development. 
 
 If this is the first time this project has been set up: 
-1. Select English as the language.
+1. Select the desired language.
 2. Fill out the site information.
 3. Then click "Install WordPress"
 4. Once WordPress has been set up login with your user information.
@@ -45,7 +45,7 @@ Several of the Tailwind variables are pulled in and Tailwind should be used as t
 * [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/)
 * *List other Plugins used*
 
-## Blocks
+## Custom Blocks
 Builds are build using ACF and core WordPress blocks. Styles for the blocks are in `src/styles/blocks`.
 
 * Accordion
