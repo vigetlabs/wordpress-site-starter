@@ -24,20 +24,16 @@ const blocks = {
 		css: '& {list-style-type:none;} & li{margin-bottom: 0.5rem;}',
 	},
 	'core/code': {
-		border: {
-			color: 'var(--wp--preset--color--black)',
-			radius: 'var(--wp--preset--spacing--20)',
-		},
 		color: {
 			background: 'var(--wp--preset--color--white)',
-			text: 'var(--wp--preset--color--black)',
+			text: 'var(--wp--preset--color--gray-500)',
 		},
 		spacing: {
 			padding: {
-				bottom: 'calc(var(--wp--preset--spacing--30) + 0.75rem)',
-				left: 'calc(var(--wp--preset--spacing--30) + 0.75rem)',
-				right: 'calc(var(--wp--preset--spacing--30) + 0.75rem)',
-				top: 'calc(var(--wp--preset--spacing--30) + 0.75rem)',
+				bottom: 'var(--wp--preset--spacing--20)',
+				left: 'var(--wp--preset--spacing--20)',
+				right: 'var(--wp--preset--spacing--20)',
+				top: 'var(--wp--preset--spacing--20)',
 			},
 		},
 		typography: {
@@ -287,15 +283,12 @@ const blocks = {
 		},
 	},
 	'core/pullquote': {
-		border: {
-			radius: 'var(--wp--preset--spacing--20)',
-		},
 		elements: {
 			cite: {
 				typography: {
 					fontFamily: 'var(--wp--preset--font-family--body)',
 					fontSize: 'var(--wp--preset--font-size--medium)',
-					fontStyle: 'normal',
+					fontStyle: 'italic',
 				},
 			},
 		},
@@ -308,10 +301,7 @@ const blocks = {
 		typography: {
 			fontFamily: 'var(--wp--preset--font-family--heading)',
 			fontSize: 'var(--wp--preset--font-size--x-large)',
-			fontStyle: 'italic',
-			fontWeight: '400',
-			letterSpacing: '0em',
-			lineHeight: '1.5',
+			lineHeight: "1"
 		},
 	},
 	'core/query-title': {
@@ -325,12 +315,6 @@ const blocks = {
 		},
 	},
 	'core/quote': {
-		border: {
-			radius: 'var(--wp--preset--spacing--20)',
-		},
-		color: {
-			background: 'var(--wp--preset--color--white)',
-		},
 		css: '& :where(p) {margin-block-start:0;margin-block-end:calc(var(--wp--preset--spacing--10) + 0.5rem);} & :where(:last-child) {margin-block-end:0;} &.has-text-align-right.is-style-plain, .rtl .is-style-plain.wp-block-quote:not(.has-text-align-center):not(.has-text-align-left){border-width: 0 2px 0 0;padding-left:calc(var(--wp--preset--spacing--20) + 0.5rem);padding-right:calc(var(--wp--preset--spacing--20) + 0.5rem);} &.has-text-align-left.is-style-plain, body:not(.rtl) .is-style-plain.wp-block-quote:not(.has-text-align-center):not(.has-text-align-right){border-width: 0 0 0 2px;padding-left:calc(var(--wp--preset--spacing--20) + 0.5rem);padding-right:calc(var(--wp--preset--spacing--20) + 0.5rem)}',
 		elements: {
 			cite: {
@@ -343,17 +327,15 @@ const blocks = {
 		},
 		spacing: {
 			padding: {
-				bottom: 'calc(var(--wp--preset--spacing--30) + 0.75rem)',
-				left: 'calc(var(--wp--preset--spacing--30) + 0.75rem)',
-				right: 'calc(var(--wp--preset--spacing--30) + 0.75rem)',
-				top: 'calc(var(--wp--preset--spacing--30) + 0.75rem)',
+				bottom: 'calc(var(--wp--preset--spacing--20) + 0.75rem)',
+				left: 'calc(var(--wp--preset--spacing--20) + 0.75rem)',
+				right: 'calc(var(--wp--preset--spacing--20) + 0.75rem)',
+				top: 'calc(var(--wp--preset--spacing--20) + 0.75rem)',
 			},
 		},
 		typography: {
 			fontFamily: 'var(--wp--preset--font-family--heading)',
 			fontSize: 'var(--wp--preset--font-size--large)',
-			fontStyle: 'italic',
-			lineHeight: '1.3',
 		},
 		variations: {
 			plain: {
