@@ -57,30 +57,33 @@ $ ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
-### 0.1.5
+### v0.1.6
+* Testing different tagging style.
+
+### v0.1.5
 * Styling the Core WordPress blocks.
 * Updating default justification on the Custom logo grid block.
 * Styling the global unordered list style.
 
-### 0.1.4
+### v0.1.4
 * Post Create-Project WordPress Installation
 * Post WordPress Installation General Cleanup
 * Automatic Theme and Plugin Activation
 
-### 0.1.3
+### v0.1.3
 * Fix issue where Vite was crashing web server
 * Rearranged a few things/commands to work better.
 * Adjustments to comment formatting.
 * Added a "wait" to account for slow network traffic.
 
-### 0.1.2
+### v0.1.2
 * Better Composer Script Handling
 * Improvements to post-create project setup
 * Cleaner Initialization of Vite
 
-### 0.1.1
+### v0.1.1
 * Composer Script Updates
 * Vite/Tailwind/DDEV Updates
 
-### 0.1.0
+### v0.1.0
 * Initial Release
