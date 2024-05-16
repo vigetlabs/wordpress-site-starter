@@ -57,6 +57,11 @@ $ ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### 0.1.5
+* Styling the Core WordPress blocks.
+* Updating default justification on the Custom logo grid block.
+* Styling the global unordered list style.
+
 ### 0.1.4
 * Post Create-Project WordPress Installation
 * Post WordPress Installation General Cleanup
