@@ -57,6 +57,9 @@ $ ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.1
+* Remove `packages.json` file.
+
 ### v1.0.0
 * Last attempt to get packagist working.
 
