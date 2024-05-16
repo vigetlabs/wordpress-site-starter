@@ -45,7 +45,7 @@
     "layout": {
       "default": {
         "type": "flex",
-        "justifyContent": "space-between",
+        "justifyContent": "left",
         "flexWrap": "wrap"
       },
       "allowOrientation": false,
