@@ -57,6 +57,9 @@ $ ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.0
+* Last attempt to get packagist working.
+
 ### v0.1.7
 * Another test to get packagist working.
 

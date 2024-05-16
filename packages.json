@@ -1,7 +1,6 @@
 {
   "package": {
     "name": "vigetlabs/wordpress-site-starter",
-    "version": "0.1.7",
     "source": {
       "url": "/root/path/not/relative/path/to/wordpress-site-starter/.git",
       "type": "git",
