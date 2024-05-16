@@ -55,12 +55,6 @@ You can quickly remove the project by using:
 $ ddev delete project-name -O -y && cd ../ && rm -rf project-name
 ```
 
-## Theme.json
-The `theme.json` holds a lot of the core WordPress theme settings. The `theme.json` is build using several js files in `/src/theme-json`, Vite builds all of these files and exports a `theme.json` for both `dev` and `build`. Do not edit directly `theme.json` as it will be over written on build. 
-
-Several of the Tailwind variables are pulled in and Tailwind should be used as the primary way to style elements. If you need to, you can pull in more Tailwind variable for custom styling in `theme.json`.
-
-
 ## Changelog
 
 ### v1.0.3

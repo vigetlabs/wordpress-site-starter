@@ -14,52 +14,34 @@ This is the README for your new site. Feel free to update any of this info to ma
 
 
 ## Setup and Running
+To start the local server and build process. 
 
-Run `ddev start` to start the site. This will install WordPress files, composer packages, npm packages, and start the DDEV server. Once the server is started DDEV will automatically start Vite for local development. 
+```bash
+ddev start
+```
 
-If this is the first time this project has been set up: 
+This will install WordPress files, composer packages, npm packages, and start the DDEV server. Once the server is started, DDEV will automatically start Vite for local development. 
+
+### New Project
+If this is the first time setting up this project, once the install is done the site will ask you to: 
 1. Select the desired language.
 2. Fill out the site information.
 3. Then click "Install WordPress"
 4. Once WordPress has been set up login with your user information.
 
-If this is an existing project, get an database download from production, staging or another team member. Steps to download a database are different depending on the hosting server. 
-
-Once you have the database file import the database into DDEV using:
-```bash
-ddev import-db --file=FILENAME.sql.gz
-```
-Then login using the username/password for the user on that database.
+### Existing Project
+If this is an existing project you can import the local database file then you are prompted. Then provide the path to the file to be imported.
 
 You are all ready to start working on the site.
 
 ### Build for production
-The deploy script should build the files for production, but if you want to test that out on your local server you can change the DDEV config.yaml `ENVIRONMENT` to `prod` and then run `ddev npm run build`. This will build the JS and CSS files in the dist folder and out put a manifest file.
-
-### Theme.json
-The `theme.json` holds a lot of the core WordPress theme settings. The `theme.json` is build using several js files in `/src/theme-json`, Vite builds all of these files and exports a `theme.json` for both `dev` and `build`. Do not edit directly `theme.json` as it will be over written on build. 
-
-Several of the Tailwind variables are pulled in and Tailwind should be used as the primary way to style elements. If you need to, you can pull in more Tailwind variable for custom styling in `theme.json`.
+The deploy script should build the files for production, but if you want to test that out on your local server you can change the DDEV config.yaml `ENVIRONMENT` to `prod` and then `cd` into your custom theme folder and run `ddev npm run build`. This will build the JS and CSS files in the dist folder and out put a manifest file.
 
 ## Plugins
 * [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/)
 * *List other Plugins used*
 
-## Custom Blocks
-Builds are build using ACF and core WordPress blocks. Styles for the blocks are in `src/styles/blocks`.
-
-* Accordion
-* Alert Banner
-* CTA
-* Image Caption
-* Logo Grid
-* Text Icon Cards
-* Text Image
-* Video Embed
-* *List other custom Blocks*
-
 ## Commands
-
 ```bash
 ddev start
 ddev rebuild
