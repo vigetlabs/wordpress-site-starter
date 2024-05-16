@@ -3,6 +3,7 @@
 @import 'tailwindcss/utilities';
 
 /*Import custom styles*/
+@import './base/global.css';
 @import './base/has-bg.css';
 @import './base/typography.css';
 
@@ -10,6 +11,7 @@
 @import './blocks/alert-banner.css';
 @import './blocks/buttons.css';
 @import './blocks/cta.css';
+@import './blocks/list.css';
 @import './blocks/logo-grid.css';
 @import './blocks/text-image.css';
 @import './blocks/text-icon-cards.css';

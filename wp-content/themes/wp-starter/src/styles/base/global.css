@@ -1,0 +1,17 @@
+@layer base {
+	ul {
+		@apply list-disc;
+
+		li {
+			@apply list-inside;
+		}
+	}
+
+	ol {
+		@apply list-decimal;
+
+		li {
+			@apply list-inside;
+		}
+	}
+}
