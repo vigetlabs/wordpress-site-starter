@@ -14,23 +14,13 @@ This is the README for your new site. Feel free to update any of this info to ma
 
 
 ## Setup and Running
-To start the local server and build process. 
+To start the local server and build process, run: 
 
 ```bash
 ddev start
 ```
 
-This will install WordPress files, composer packages, npm packages, and start the DDEV server. Once the server is started, DDEV will automatically start Vite for local development. 
-
-### New Project
-If this is the first time setting up this project, once the install is done the site will ask you to: 
-1. Select the desired language.
-2. Fill out the site information.
-3. Then click "Install WordPress"
-4. Once WordPress has been set up login with your user information.
-
-### Existing Project
-If this is an existing project you can import the local database file then you are prompted. Then provide the path to the file to be imported.
+This will install the WordPress files, composer packages, npm packages, and start the DDEV server. Once the server is started, DDEV will automatically start Vite for local development. 
 
 You are all ready to start working on the site.
 
@@ -42,12 +32,11 @@ The deploy script should build the files for production, but if you want to test
 * *List other Plugins used*
 
 ## Commands
+The command `ddev start` will automatically start Vite so you should not need to use any of the other `npm` commands. 
+
 ```bash
 ddev start
 ddev rebuild
 ddev stop
-ddev npm run dev #builds local
-ddev npm run build  #builds production
 ```
-
-In order to run Vite you need to run it inside of DDEV by running `ddev npm run dev` inside of your theme folder.
+If you do need to run `npm` to troubleshoot something, you need to run it inside of DDEV by running `ddev npm run dev` inside of your custom theme folder.

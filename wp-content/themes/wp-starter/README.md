@@ -8,7 +8,7 @@ The `theme.json` holds a lot of the core WordPress theme settings. The `theme.js
 Several of the Tailwind variables are pulled in and Tailwind should be used as the primary way to style elements. If you need to, you can pull in more Tailwind variable for custom styling in `theme.json`.
 
 ## Custom Blocks
-Builds are build using ACF and core WordPress blocks. Styles for the blocks are in `src/styles/blocks`.
+Blocks are build using ACF and core WordPress blocks. Styles for the blocks are in `src/styles/blocks`.
 
 * Accordion
 * Alert Banner
