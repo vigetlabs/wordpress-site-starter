@@ -57,6 +57,10 @@ $ ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.2
+* Restore `packages.json` file.
+* Added `composer.lock`
+
 ### v1.0.1
 * Remove `packages.json` file.
 
