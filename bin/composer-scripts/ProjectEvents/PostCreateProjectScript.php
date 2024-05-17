@@ -498,6 +498,29 @@ class PostCreateProjectScript extends ComposerScript {
 		// Remove site-starter composer file
 		self::removeRootComposer();
 
+		// Remove site-starter vendor files
+		self::removeRootVendorDir();
+
 		self::writeInfo( 'Self-destruction complete.' );
+	}
+
+	/**
+	 * Remove the root vendor directory.
+	 *
+	 * @return void
+	 */
+	private static function removeRootVendorDir(): void {
+		self::writeLine( 'Removing root vendor directory...' );
+
+		$vendorDir = self::translatePath( 'vendor' );
+
+		if ( ! is_dir( $vendorDir ) ) {
+			self::writeWarning( 'Vendor directory not found. Skipping removal.' );
+			return;
+		}
+
+		self::deleteDirectory( $vendorDir );
+
+		self::writeInfo( 'Root vendor directory removed.' );
 	}
 }
