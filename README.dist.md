@@ -9,7 +9,7 @@ This is the README for your new site. Feel free to update any of this info to ma
 ## Requirements
 * [Composer](https://getcomposer.org/) - [Installation](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos)
 * [DDEV](https://ddev.readthedocs.io/en/stable/) - [Installation](https://ddev.readthedocs.io/en/stable/users/install/ddev-installation/)
-* [Docker](https://docs.docker.com/desktop/install/mac-install/) (or compatible container alternative like  OrbStack)
+* [Docker](https://docs.docker.com/desktop/install/mac-install/) (or compatible container alternative like OrbStack)
 * For ACF Pro, create an `auth.json` file in `wp-content/mu-plugins/viget-base/` from the [ACF Website](https://www.advancedcustomfields.com/my-account/view-licenses/). (Credentials are in 1Password)
 
 
@@ -20,7 +20,7 @@ To start the local server and build process, run:
 ddev start
 ```
 
-This will install the WordPress files, composer packages, npm packages, and start the DDEV server. Once the server is started, DDEV will automatically start Vite for local development. 
+This will install the WordPress files, composer packages, npm packages, and start the DDEV server. You will also be ask if you want to import a database or start with a new install. Once the server is started, DDEV will automatically start Vite for local development. 
 
 You are all ready to start working on the site.
 
@@ -32,7 +32,7 @@ The deploy script should build the files for production, but if you want to test
 * *List other Plugins used*
 
 ## Commands
-The command `ddev start` will automatically start Vite so you should not need to use any of the other `npm` commands. 
+The command `ddev start` will automatically start Vite so you should not need to use any `npm` commands. 
 
 ```bash
 ddev start
