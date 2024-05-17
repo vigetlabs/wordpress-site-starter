@@ -1,0 +1,35 @@
+@layer components {
+	.header-navigation {
+		@apply bg-gray-100 dark:bg-gray-800;
+
+		.wp-block-navigation {
+			.wp-block-pages-list__item,
+			.wp-block-navigation-submenu {
+				/* Menu Links */
+				.wp-block-navigation-item__content,
+				.wp-block-pages-list__item__link {
+					@apply text-gray-800 dark:text-white;
+
+					&:hover,
+					&:focus {
+						@apply text-sky-700 underline decoration-2 underline-offset-8 dark:text-sky-200;
+					}
+				}
+
+				/* Submenu */
+				.wp-block-navigation__submenu-container {
+					@apply border-2 dark:border-gray-800;
+
+					.wp-block-navigation-item__content {
+						@apply text-gray-800 dark:text-gray-800;
+
+						&:hover,
+						&:focus {
+							@apply text-sky-700 underline decoration-2 underline-offset-8 dark:text-sky-700;
+						}
+					}
+				}
+			}
+		}
+	}
+}

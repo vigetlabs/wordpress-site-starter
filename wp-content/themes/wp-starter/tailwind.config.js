@@ -23,9 +23,10 @@ module.exports = {
 	content: [
 		'./src/**/*.{css,js,jsx,tsx,php}',
 		'./patterns/**/*.{css,js,jsx,tsx,php}',
-		'./parts/**/*.{css,js,jsx,tsx,php}',
+		'./parts/**/*.{css,js,jsx,tsx,php,html}',
 		'./blocks/**/*.{css,js,jsx,tsx,php}',
 	],
+	darkMode: 'selector',
 	theme: {
 		contentSmall: minBreakpoint.toString(),
 		contentBase: maxBreakpoint.toString(),
