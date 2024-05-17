@@ -5,7 +5,7 @@ This is a WordPress starter project that includes a basic custom theme, includin
 ## Requirements
 * [Composer](https://getcomposer.org/) - [Installation](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos)
 * [DDEV](https://ddev.readthedocs.io/en/stable/) - [Installation](https://ddev.readthedocs.io/en/stable/users/install/ddev-installation/)
-* [Docker](https://docs.docker.com/desktop/install/mac-install/) (or compatible container alternative)
+* [Docker](https://docs.docker.com/desktop/install/mac-install/) (or compatible container alternative like OrbStack)
 * For ACF Pro, create an `auth.json` file in the project root directory, which can be downloaded from the [ACF Website](https://www.advancedcustomfields.com/my-account/view-licenses/).
 
 ## Using this Project
