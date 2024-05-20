@@ -2,9 +2,17 @@
 	.header-navigation {
 		@apply bg-gray-100 dark:bg-gray-800;
 
+		.wp-block-page-list {
+			@apply flex flex-col lg:flex-row;
+		}
+
 		.wp-block-navigation {
+			@apply flex w-full flex-col lg:w-auto lg:flex-row;
+
 			.wp-block-pages-list__item,
 			.wp-block-navigation-submenu {
+				@apply flex flex-col lg:flex-row;
+
 				/* Menu Links */
 				.wp-block-navigation-item__content,
 				.wp-block-pages-list__item__link {
@@ -18,7 +26,8 @@
 
 				/* Submenu */
 				.wp-block-navigation__submenu-container {
-					@apply border-2 dark:border-gray-800;
+					@apply relative flex flex-col border-2  dark:border-gray-800;
+					@apply lg:absolute;
 
 					.wp-block-navigation-item__content {
 						@apply text-gray-800 dark:text-gray-800;

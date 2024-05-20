@@ -1,4 +1,8 @@
 @layer base {
+	[x-cloak] {
+		@apply !hidden;
+	}
+
 	ul {
 		@apply list-disc;
 
