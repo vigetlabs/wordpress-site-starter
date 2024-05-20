@@ -22,9 +22,9 @@
 	<!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
-<!-- wp:columns {"verticalAlignment":null} -->
-<div class="wp-block-columns"><!-- wp:column {"width":"66.66%"} -->
-	<div class="wp-block-column" style="flex-basis:66.66%"><!-- wp:post-title {"level":1} /-->
+<!-- wp:columns {"verticalAlignment":"center"} -->
+<div class="wp-block-columns are-vertically-aligned-center"><!-- wp:column {"verticalAlignment":"center","width":"66.66%"} -->
+	<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:66.66%"><!-- wp:post-title {"level":1} /-->
 
 		<!-- wp:paragraph -->
 		<p>Page description ponam in culpa idiota aliis pravitatis. Principium ponere culpam in se justum praeceptum. Neque improperes et aliis qui non perfecte ipse docuit.</p>
