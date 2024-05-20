@@ -2,15 +2,18 @@
 	.header-navigation {
 		@apply bg-gray-100 dark:bg-gray-800;
 
+		/* For Mobile Layout */
 		.wp-block-page-list {
 			@apply flex flex-col lg:flex-row;
 		}
 
 		.wp-block-navigation {
+			/* For Mobile Layout */
 			@apply flex w-full flex-col lg:w-auto lg:flex-row;
 
 			.wp-block-pages-list__item,
 			.wp-block-navigation-submenu {
+				/* For Mobile Layout */
 				@apply flex flex-col lg:flex-row;
 
 				/* Menu Links */
@@ -24,9 +27,19 @@
 					}
 				}
 
+				/* Hide Submenu Icon */
+				.wp-block-navigation__submenu-icon {
+					@apply hidden;
+				}
+
+				.wp-block-navigation-submenu__toggle {
+					@apply relative;
+					@apply after:absolute after:inset-y-0 after:right-0 after:m-auto after:inline-block after:h-6 after:w-6 after:-rotate-45 after:border-b after:border-l after:border-solid after:border-gray-900;
+				}
+
 				/* Submenu */
 				.wp-block-navigation__submenu-container {
-					@apply relative flex flex-col border-2  dark:border-gray-800;
+					@apply relative flex flex-col border-2 p-0 dark:border-gray-800;
 					@apply lg:absolute;
 
 					.wp-block-navigation-item__content {

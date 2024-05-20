@@ -77,6 +77,7 @@ module.exports = {
 				...remPair(1),
 				...remPair(2),
 				...remPair(4),
+				...remPair(6),
 				...remPair(8),
 				...remPair(10),
 				...remPair(12),

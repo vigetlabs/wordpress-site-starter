@@ -17,7 +17,7 @@ $attrs = [];
 	<button
 		@click="menuIsOpen = !menuIsOpen"
 		x-cloak
-		class="lg:hidden absolute top-0"
+		class="lg:hidden absolute top-0 flex justify-center items-center w-32 h-32"
 		aria-rel="mobile-toggle"
 		aria-label="<?php esc_attr_e( 'Toggle menu', 'wp-starter' ); ?>"
 	>
