@@ -8,7 +8,7 @@
 				/* Menu Links */
 				.wp-block-navigation-item__content,
 				.wp-block-pages-list__item__link {
-					@apply text-gray-800 dark:text-white;
+					@apply mx-2 my-4 text-gray-800 dark:text-white;
 
 					&:hover,
 					&:focus {

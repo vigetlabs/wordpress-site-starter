@@ -3,13 +3,16 @@ import 'vite/modulepreload-polyfill';
 
 // Alpine Docs - https://alpinejs.dev/start-here
 import Alpine from 'alpinejs';
+import dropdown from './script/dropdown.js';
+import focus from '@alpinejs/focus'
 import persist from '@alpinejs/persist'
 window.Alpine = Alpine;
 
-Alpine.plugin(persist);
-Alpine.start();
+Alpine.data('dropdown', dropdown)
 
-import './script/dropdown.js';
+Alpine.plugin(persist);
+Alpine.plugin(focus)
+Alpine.start();
 
 // Import styles
 import './styles/main.css';

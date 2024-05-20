@@ -13,7 +13,7 @@ $attrs    = [];
 
 ?>
 <div <?php block_attrs( $block, 'wp-block-group', $attrs ); ?>
-	x-data="{dropdown}"
+	x-data="dropdown"
 	x-on:keydown.escape.prevent.stop="close($refs.button)"
 	x-on:focusin.window="! $refs.panel.contains($event.target) && close()"
 	x-id="['dropdown-button']"
@@ -34,11 +34,6 @@ $attrs    = [];
 	</button>
 
 	<div class="wp-block-group navigation-content"
-		x-ref="panel"
-		x-show="open"
-		x-transition.origin.top.left
-		x-on:click.outside="close($refs.button)"
-		:id="$id('dropdown-button')"
 	>
 		<?php inner_blocks(); ?>
 	</div>
