@@ -11,6 +11,10 @@
 			/* For Mobile Layout */
 			@apply flex w-full flex-col lg:w-auto lg:flex-row;
 
+			.wp-block-navigation__responsive-container {
+				@apply relative block;
+			}
+
 			.wp-block-pages-list__item,
 			.wp-block-navigation-submenu {
 				/* For Mobile Layout */
