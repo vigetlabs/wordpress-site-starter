@@ -1,0 +1,15 @@
+{
+  "name": "navigation-container",
+  "title": "Navigation Container",
+  "description": "Wrap navigation items in a container with built in toggle.",
+  "icon": "menu-alt3",
+  "keywords": [
+    "menu", "mobile", "group", "toggle"
+  ],
+  "acf": {
+    "mode": "preview"
+  },
+  "supports": {
+    "jsx": true
+  }
+}

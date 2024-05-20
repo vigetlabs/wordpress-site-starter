@@ -9,5 +9,7 @@ window.Alpine = Alpine;
 Alpine.plugin(persist);
 Alpine.start();
 
+import './script/dropdown.js';
+
 // Import styles
 import './styles/main.css';
