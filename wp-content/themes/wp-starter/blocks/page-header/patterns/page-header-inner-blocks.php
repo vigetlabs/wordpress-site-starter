@@ -8,19 +8,7 @@
  */
 
 ?>
-<!-- wp:buttons {"align":"wide","className":"is-style-breadcrumbs"} -->
-<div class="wp-block-buttons alignwide is-style-breadcrumbs"><!-- wp:button -->
-	<div class="wp-block-button"><a class="wp-block-button__link wp-element-button">Breadcrumb</a></div>
-	<!-- /wp:button -->
-
-	<!-- wp:button -->
-	<div class="wp-block-button"><a class="wp-block-button__link wp-element-button">Breadcrumb</a></div>
-	<!-- /wp:button -->
-
-	<!-- wp:button -->
-	<div class="wp-block-button"><a class="wp-block-button__link wp-element-button">Breadcrumb</a></div>
-	<!-- /wp:button --></div>
-<!-- /wp:buttons -->
+<!-- wp:acf/breadcrumbs {"name":"acf/breadcrumbs","data":{},"mode":"preview"} /-->
 
 <!-- wp:columns {"verticalAlignment":"center","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
 <div class="wp-block-columns are-vertically-aligned-center" style="margin-top:0;margin-bottom:0"><!-- wp:column {"verticalAlignment":"center","width":"66.66%"} -->
