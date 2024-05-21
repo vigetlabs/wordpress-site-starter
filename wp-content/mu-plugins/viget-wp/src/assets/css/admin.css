@@ -1,0 +1,12 @@
+#dashboard-widgets .viget-widget__header {
+  font-weight: 700;
+}
+
+#footer-thankyou {
+  font-style: normal !important;
+}
+
+/* Hide Comment Settings */
+body.options-discussion-php form table:first-of-type {
+	display: none;
+}

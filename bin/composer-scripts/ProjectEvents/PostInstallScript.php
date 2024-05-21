@@ -89,6 +89,9 @@ class PostInstallScript extends ComposerScript {
 			// Populate the database.
 			self::populateDatabase();
 		}
+
+		// Run the Viget WP Composer Install
+		self::vigetWPComposerInstall();
 	}
 
 	/**
@@ -556,5 +559,22 @@ class PostInstallScript extends ComposerScript {
 		$success = self::centeredText( $success, 2, '*', '#1296BB' );
 
 		self::writeLine( $success );
+	}
+
+	/**
+	 * Run the Viget WP Composer Installer.
+	 *
+	 * @return void
+	 */
+	private static function vigetWPComposerInstall(): void {
+		self::writeInfo( 'Running Viget WP Composer Install...' );
+
+		// Run composer install from the viget-wp directory
+		$directory = self::translatePath( './wp-content/mu-plugins/viget-wp' );
+		$cmd = 'composer install -d ' . escapeshellarg( $directory );
+
+		self::runCommand( $cmd );
+
+		self::writeInfo( 'VigetWP Composer Install complete.' );
 	}
 }

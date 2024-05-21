@@ -1,0 +1,53 @@
+# Copyright (C) 2024 Viget
+# This file is distributed under the same license as the Viget WP plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Viget WP 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/viget-wp\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-05-20T19:45:24+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: viget-wp\n"
+
+#. Plugin Name of the plugin
+#: viget-wp.php
+msgid "Viget WP"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: viget-wp.php
+msgid "https://github.com/vigetlabs/viget-wp"
+msgstr ""
+
+#. Description of the plugin
+#: viget-wp.php
+msgid "WordPress Customization from Viget"
+msgstr ""
+
+#. Author of the plugin
+#: viget-wp.php
+#: src/classes/Admin/Footer.php:33
+msgid "Viget"
+msgstr ""
+
+#. Author URI of the plugin
+#: viget-wp.php
+msgid "https://www.viget.com/"
+msgstr ""
+
+#: src/classes/Admin/Footer.php:31
+msgid "Made with"
+msgstr ""
+
+#: src/classes/Admin/Footer.php:32
+msgid "by"
+msgstr ""
+
+#: src/classes/Features/Gravatar.php:79
+msgid "Avatars"
+msgstr ""
