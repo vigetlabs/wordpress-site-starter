@@ -51,7 +51,6 @@
       "padding": true
     }
   },
-  "style": "file:./style.css",
   "acf": {
     "mode": "preview"
   }
