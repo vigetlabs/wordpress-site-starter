@@ -10,7 +10,7 @@
 $attrs = [];
 
 ?>
-<div <?php block_attrs( $block, 'wp-block-group navigation-container flex flex-col items-end gap-5 lg:w-auto w-full', $attrs ); ?>
+<div <?php block_attrs( $block, 'wp-block-group navigation-container flex flex-col items-end gap-5 md:w-auto w-full', $attrs ); ?>
 	<?php if ( ! is_admin() ) : ?>
 		x-data="{menuIsOpen : false}"
 		x-trap="menuIsOpen"
@@ -20,7 +20,7 @@ $attrs = [];
 		<?php if ( ! is_admin() ) : ?>
 			@click="menuIsOpen = !menuIsOpen"
 			x-cloak
-			class="lg:hidden absolute inset-y-0 right-0 flex justify-center items-center w-32 h-32"
+			class="md:hidden absolute inset-y-0 right-0 flex justify-center items-center w-32 h-32"
 		<?php else : ?>
 			class="hidden"
 		<?php endif; ?>
@@ -50,7 +50,7 @@ $attrs = [];
 			x-show="menuIsOpen"
 			@click.away="menuIsOpen = false"
 		<?php endif; ?>
-		class="wp-block-group pt-24 lg:pt-0 navigation-content lg:!block w-full lg:w-auto"
+		class="wp-block-group pt-24 md:pt-0 navigation-content md:!block w-full md:w-auto"
 	>
 		<div
 			<?php if ( ! is_admin() ) : ?>
