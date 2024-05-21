@@ -39,7 +39,7 @@
 
 				.wp-block-navigation-submenu__toggle {
 					@apply relative;
-					@apply after:absolute after:inset-y-0 after:right-0 after:m-auto after:inline-block after:h-6 after:w-6 after:-rotate-45 after:border-b after:border-l after:border-solid after:border-gray-900;
+					@apply after:absolute after:inset-y-0 after:right-0 after:m-auto after:inline-block after:h-6 after:w-6 after:-rotate-45 after:border-b after:border-l after:border-solid after:border-gray-900 dark:after:border-white;
 				}
 
 				/* Submenu */

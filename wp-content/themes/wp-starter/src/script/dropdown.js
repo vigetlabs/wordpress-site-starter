@@ -1,4 +1,9 @@
-function addAlpine() {
+/* Because we can not access the mark up of the dropdown button we have to add it to the DOM */
+document.addEventListener('alpine:init', () => {
+	addAlpineToHTML()
+})
+
+function addAlpineToHTML() {
 	const buttons = document.querySelectorAll(".wp-block-navigation-submenu__toggle")
 	const submenus = document.querySelectorAll(".wp-block-navigation__submenu-container.wp-block-navigation-submenu")
 
@@ -18,9 +23,6 @@ function addAlpine() {
 		element.setAttribute(':id', '$id("dropdown-button")')
 	});
 }
-
-addAlpine()
-
 
 export default () => ({
     open: false,

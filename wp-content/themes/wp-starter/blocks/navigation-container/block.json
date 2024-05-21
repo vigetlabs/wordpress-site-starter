@@ -3,8 +3,12 @@
   "title": "Navigation Container",
   "description": "Wrap navigation items in a container with built in toggle.",
   "icon": "menu-alt3",
+  "textdomain": "wp-starter",
   "keywords": [
-    "menu", "mobile", "group", "toggle"
+    "menu",
+    "mobile",
+    "group",
+    "toggle"
   ],
   "acf": {
     "mode": "preview"
