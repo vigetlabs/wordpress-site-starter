@@ -1,6 +1,6 @@
 const plugin = require("tailwindcss/plugin")
 
-module.exports = plugin(({ addComponents, addVariant }) => {
+module.exports = plugin(({ addComponents }) => {
 	// Base Styles
 	const base = {
 		// core
@@ -64,11 +64,7 @@ module.exports = plugin(({ addComponents, addVariant }) => {
 			bg-transparent bg-transparent text-sky-600
 			hover:bg-sky-100 hover:text-sky-700
 			active:bg-sky-200/80 active:text-sky-800
-			focus-visible:bg-sky-100 focus-visible:border-sky-700 focus-visible:ring-sky-600/50
-			has-background:!text-white
-			has-background:hover:bg-white/25
-			has-background:active:bg-white/30
-			has-background:focus-visible:bg-sky-100/30 has-background:focus-visible:ring-white/75`]: {},
+			focus-visible:bg-sky-100 focus-visible:border-sky-700 focus-visible:ring-sky-600/50`]: {},
 		},
 
 		'.btn-text': {
@@ -77,11 +73,7 @@ module.exports = plugin(({ addComponents, addVariant }) => {
 			bg-transparent text-sky-600
 			hover:text-sky-700 hover:underline
 			active:text-sky-800
-			focus-visible:bg-sky-100 focus-visible:ring-sky-600/50
-			has-background:border-white has-background:text-white
-			has-background:hover:text-white/90
-			has-background:active:text-white/80
-			has-background:focus-visible:bg-sky-100/30  has-background:focus-visible:ring-white/75`]:
+			focus-visible:bg-sky-100 focus-visible:ring-sky-600/50`]:
 			{},
 		},
 
@@ -112,6 +104,5 @@ module.exports = plugin(({ addComponents, addVariant }) => {
 			'@apply !p-0 !gap-0 aspect-square justify-center items-center': {},
 		},
 	}
-	addVariant("has-background", ".has-background &")
 	addComponents(buttons)
 })

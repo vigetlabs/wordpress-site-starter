@@ -3,6 +3,7 @@ module.exports = {
 	'postcss-import': {},
 	'tailwindcss/nesting': 'postcss-nesting',
     tailwindcss: {},
-    autoprefixer: {},
+	autoprefixer: {},
+	...(process.env.NODE_ENV === 'prod' ? { cssnano: {} } : {})
   },
 }
