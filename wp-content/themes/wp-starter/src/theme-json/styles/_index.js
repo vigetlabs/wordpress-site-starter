@@ -12,8 +12,8 @@ const styles = {
 	spacing: {
 		blockGap: theme.spacing[24],
 		padding: {
-			left: 'var(--wp--preset--spacing--50)',
-			right: 'var(--wp--preset--spacing--50)',
+			left: 'var(--wp--preset--spacing--20)',
+			right: 'var(--wp--preset--spacing--20)',
 		},
 	},
 	typography: {

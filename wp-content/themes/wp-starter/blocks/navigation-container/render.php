@@ -20,7 +20,7 @@ $attrs = [];
 		<?php if ( ! is_admin() ) : ?>
 			@click="menuIsOpen = !menuIsOpen"
 			x-cloak
-			class="lg:hidden flex justify-center items-center w-32 h-32"
+			class="lg:hidden absolute inset-y-0 right-0 flex justify-center items-center w-32 h-32"
 		<?php else : ?>
 			class="hidden"
 		<?php endif; ?>
@@ -50,7 +50,7 @@ $attrs = [];
 			x-show="menuIsOpen"
 			@click.away="menuIsOpen = false"
 		<?php endif; ?>
-		class="wp-block-group navigation-content lg:!block w-full lg:w-auto"
+		class="wp-block-group pt-24 lg:pt-0 navigation-content lg:!block w-full lg:w-auto"
 	>
 		<div
 			<?php if ( ! is_admin() ) : ?>

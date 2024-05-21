@@ -11,6 +11,12 @@
 			/* For Mobile Layout */
 			@apply flex w-full flex-col lg:w-auto lg:flex-row;
 
+			.wp-block-navigation__responsive-container-open,
+			.wp-block-navigation__responsive-container-close,
+			.wp-block-navigation__submenu-icon {
+				@apply hidden;
+			}
+
 			.wp-block-navigation__responsive-container {
 				@apply relative block;
 			}
@@ -29,11 +35,6 @@
 					&:focus {
 						@apply text-sky-700 underline decoration-2 underline-offset-8 dark:text-sky-200;
 					}
-				}
-
-				/* Hide Submenu Icon */
-				.wp-block-navigation__submenu-icon {
-					@apply hidden;
 				}
 
 				.wp-block-navigation-submenu__toggle {
