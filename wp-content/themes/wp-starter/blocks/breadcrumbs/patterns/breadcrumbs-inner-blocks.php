@@ -9,7 +9,8 @@
 
 ?>
 <!-- wp:buttons {"align":"wide","className":"is-style-breadcrumbs"} -->
-<div class="wp-block-buttons alignwide is-style-breadcrumbs"><!-- wp:button -->
+<div class="wp-block-buttons alignwide is-style-breadcrumbs">
+	<!-- wp:button -->
 	<div class="wp-block-button"><a class="wp-block-button__link wp-element-button">Breadcrumb</a></div>
 	<!-- /wp:button -->
 
