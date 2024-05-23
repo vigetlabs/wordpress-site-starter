@@ -1,0 +1,78 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    env:
+      SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup SSH key and known_hosts
+        run: |
+          mkdir -p -m 700 ~/.ssh
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "${{ secrets.DEPLOY_KEY }}"
+          ssh-keyscan ${{ secrets.DEPLOY_TARGET }} >> ~/.ssh/known_hosts
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Set up composer caching
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+
+      # Build theme
+      - name: Install Theme Dependencies
+        uses: "php-actions/composer@v6"
+        with:
+          php_version: "8.2"
+          dev: no
+          args: "--optimize-autoloader"
+          working_dir: wp-content/themes/wp-starter
+
+      - name: Build Theme
+        run: |
+          npm ci
+          npm run build
+        working-directory: wp-content/themes/wp-starter
+
+      # Install viget-wp composer dependencies
+      - name: Install viget-wp Dependencies
+        uses: "php-actions/composer@v6"
+        with:
+          php_version: "8.2"
+          dev: no
+          args: "--optimize-autoloader"
+          working_dir: wp-content/mu-plugins/viget-wp
+
+      # Build ACF plugin
+      - name: Build ACF plugin
+        run: |
+          npm ci
+          npm run build
+        working-directory: wp-content/plugins/acf-blocks-toolkit
+
+      # Deploy code
+      - name: Deploy
+        run: |
+
+          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_TARGET }} "\
+            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/themes/wp-starter &&\
+            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp &&\
+            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp.php &&\
+            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/acf-blocks-toolkit &&\
+            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/advanced-custom-fields-pro"
+          rsync -rlptzv --exclude="node_modules" ./wp-content/ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_TARGET }}:${{ secrets.APP_PATH }}/wp-content/
