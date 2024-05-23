@@ -55,7 +55,9 @@ class PostInstallScript extends ComposerScript {
 				'advanced-custom-fields-pro' => 'Advanced Custom Fields Pro',
 			],
 		],
+		'seo-by-rank-math' => 'Rank Math SEO',
 		'svg-support' => 'SVG Support',
+		'wordfence' => 'Wordfence',
 	];
 
 	/**
@@ -265,6 +267,9 @@ class PostInstallScript extends ComposerScript {
 
 		// Activate plugins.
 		self::activatePlugins();
+
+		// Configure plugins.
+		self::configurePlugins();
 
 		// Show the success message.
 		self::renderSuccessMessage();
@@ -496,6 +501,77 @@ class PostInstallScript extends ComposerScript {
 		}
 
 		self::writeInfo( 'Plugins activated.' );
+	}
+
+	/**
+	 * Configure plugins.
+	 *
+	 * @return void
+	 */
+	private static function configurePlugins(): void {
+		self::writeComment( 'Configuring plugins...' );
+
+		self::configureRankMath();
+		self::configureWordfence();
+
+		self::writeInfo( 'Plugins configured.' );
+	}
+
+	/**
+	 * Configure Rank Math.
+	 *
+	 * @return void
+	 */
+	private static function configureRankMath(): void {
+		self::writeLine( 'Configuring RankMath...' );
+
+		$disableWizard = sprintf(
+			'wp option update rank_math_wizard_completed %s',
+			escapeshellarg( '1' )
+		);
+
+		self::runCommand( $disableWizard );
+
+		$markConfigured = sprintf(
+			'wp option update rank_math_is_configured %s',
+			escapeshellarg( '1' )
+		);
+
+		self::runCommand( $markConfigured );
+
+		$enableBreadcrumbs = sprintf(
+			'wp option patch insert rank-math-options-general breadcrumbs %s',
+			escapeshellarg( 'on' )
+		);
+
+		self::runCommand( $enableBreadcrumbs );
+
+		$breadcrumbSeparator = sprintf(
+			'wp option patch insert rank-math-options-general breadcrumbs_separator %s',
+			escapeshellarg( '&gt;' )
+		);
+
+		self::runCommand( $breadcrumbSeparator );
+
+		self::writeLine( 'RankMath configuration complete.' );
+	}
+
+	/**
+	 * Configure Wordfence.
+	 *
+	 * @return void
+	 */
+	private static function configureWordfence(): void {
+		self::writeLine( 'Configuring Wordfence...' );
+
+		$markActivated = sprintf(
+			'wp option update wordfenceActivated %s',
+			escapeshellarg( '1' )
+		);
+
+		self::runCommand( $markActivated );
+
+		self::writeLine( 'Wordfence configuration complete.' );
 	}
 
 	/**

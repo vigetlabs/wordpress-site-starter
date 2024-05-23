@@ -1,0 +1,57 @@
+{
+  "name": "page-header",
+  "title": "Page Header",
+  "description": "Displays the Page Header Component.",
+  "icon": "schedule",
+  "category": "components",
+  "textdomain": "wp-starter",
+  "keywords": ["header", "hero", "heading", "section", "top", "logo", "branding"],
+  "attributes": {
+    "align": {
+      "type": "string",
+      "default": "full"
+    },
+    "useRootPaddingAwareAlignments": {
+      "type": "boolean",
+      "default": true
+    },
+    "style": {
+      "type": "object",
+      "default": {
+        "color": {
+          "background": "var(--wp--preset--color--gray-100)"
+        },
+        "spacing": {
+          "padding": {
+            "top": "var:preset|spacing|20",
+            "bottom": "var:preset|spacing|20",
+            "left": "var:preset|spacing|20",
+            "right": "var:preset|spacing|20"
+          }
+        }
+      }
+    }
+  },
+  "supports": {
+    "jsx": true,
+    "mode": false,
+    "alignWide": true,
+    "color": {
+      "background": true
+    },
+    "layout": {
+      "default": {
+        "justifyContent": "left"
+      },
+      "allowOrientation": false,
+      "allowInheriting": false,
+      "allowCustomContentAndWideSize": false
+    },
+    "spacing": {
+      "padding": true
+    }
+  },
+  "acf": {
+    "mode": "preview"
+  }
+}

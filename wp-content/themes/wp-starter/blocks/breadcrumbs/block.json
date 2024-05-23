@@ -1,0 +1,32 @@
+{
+  "name": "breadcrumbs",
+  "title": "Breadcrumbs",
+  "description": "Displays the Breadcrumbs Component.",
+  "icon": "networking",
+  "category": "components",
+  "textdomain": "wp-starter",
+  "keywords": [
+    "history",
+    "hierarchy",
+    "navigation",
+    "trail",
+    "rankmath",
+    "seo",
+    "sitemap"
+  ],
+  "supports": {
+    "jsx": true,
+    "mode": false,
+    "alignWide": true,
+    "layout": {
+      "default": {
+        "type": "constrained",
+        "justifyContent": "left"
+      },
+      "allowCustomContentAndWideSize": false
+    }
+  },
+  "acf": {
+    "mode": "preview"
+  }
+}

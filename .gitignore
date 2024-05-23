@@ -237,6 +237,9 @@ wp-config.php
 # Remove the theme.json file as it is built in the theme with Vite
 /wp-content/themes/wp-starter/theme.json
 
+# Plugin generated folders
+/wp-content/wflogs
+
 # Log files
 *.log
 

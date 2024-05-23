@@ -1,0 +1,15 @@
+/** Breadcrumb Block Style */
+:root .wp-block-buttons.is-style-breadcrumbs .wp-block-button__link:not(.btn-text) {
+	padding: 0;
+	color: var(--wp--preset--color--black);
+	background-color: transparent;
+}
+
+:root .wp-block-buttons.is-style-breadcrumbs .wp-block-button:last-child .wp-block-button__link:not(.btn-text) {
+	color: var(--wp--preset--color--accent);
+	text-decoration: underline;
+}
+
+:root .wp-block-buttons.is-style-breadcrumbs .wp-block-button:not(:last-child) .wp-block-button__link:after {
+	content: '>';
+}

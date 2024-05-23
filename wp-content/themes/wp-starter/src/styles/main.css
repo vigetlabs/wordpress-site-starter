@@ -16,6 +16,8 @@
 /*Import custom styles for custom blocks*/
 @import './custom-blocks/accordion.css';
 @import './custom-blocks/alert-banner.css';
+@import './custom-blocks/breadcrumbs.css';
+@import './custom-blocks/buttons.css';
 @import './custom-blocks/cta.css';
 @import './custom-blocks/logo-grid.css';
 @import './custom-blocks/text-image.css';
