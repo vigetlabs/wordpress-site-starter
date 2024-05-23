@@ -23,9 +23,10 @@ module.exports = {
 	content: [
 		'./src/**/*.{css,js,jsx,tsx,php}',
 		'./patterns/**/*.{css,js,jsx,tsx,php}',
-		'./parts/**/*.{css,js,jsx,tsx,php}',
+		'./parts/**/*.{css,js,jsx,tsx,php,html}',
 		'./blocks/**/*.{css,js,jsx,tsx,php}',
 	],
+	darkMode: 'selector',
 	theme: {
 		contentSmall: minBreakpoint.toString(),
 		contentBase: maxBreakpoint.toString(),
@@ -76,6 +77,7 @@ module.exports = {
 				...remPair(1),
 				...remPair(2),
 				...remPair(4),
+				...remPair(6),
 				...remPair(8),
 				...remPair(10),
 				...remPair(12),

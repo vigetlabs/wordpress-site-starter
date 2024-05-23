@@ -1,7 +1,6 @@
 //Move any block that you are working to a new file to make it easyer to maintain
 import theme from '../import_tailwind.js';
 import image from './blocks/image.js';
-import navigation from './blocks/navigation.js';
 
 const blocks = {
 	'core/avatar': {
@@ -194,7 +193,6 @@ const blocks = {
 	'core/loginout': {
 		css: '& input{border-radius:.33rem;padding:calc(0.667em + 2px);border:1px solid #949494;}',
 	},
-	...navigation,
 	'core/post-author': {
 		typography: {
 			fontSize: 'var(--wp--preset--font-size--small)',

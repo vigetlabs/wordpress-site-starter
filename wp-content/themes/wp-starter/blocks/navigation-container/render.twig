@@ -1,0 +1,66 @@
+{#
+	Block: Navigation Container
+#}
+
+{% set allowed = [
+	'core/paragraph',
+	'core/button',
+	'core/navigation'
+] %}
+{% set inner = {
+	template: template,
+	allowedBlocks: allowed
+} %}
+
+{% set attrs = {} %}
+
+{% if function('is_admin') == false %}
+	{% set attrs = {
+		'x-data': '{menuIsOpen : false}',
+		'x-trap': 'menuIsOpen'
+	} %}
+{% endif %}
+
+<div {{ block_attrs( attributes, 'wp-block-group navigation-container flex flex-col items-end gap-5 md:w-auto w-full', attrs ) }}>
+	<button
+		{% if function('is_admin') == false %}
+			@click="menuIsOpen = !menuIsOpen"
+			x-cloak
+			class="absolute inset-y-0 right-0 flex items-center justify-center w-32 h-32 text-gray-900 md:hidden dark:text-white"
+		{% else %}
+			class="hidden"
+		{% endif %}
+		aria-rel="mobile-toggle"
+	>
+		<svg
+			{% if function('is_admin') == false %}
+				x-show="!menuIsOpen"
+			{% endif %}
+			class="m-2" xmlns="http://www.w3.org/2000/svg" role="img" width="27" height="18" viewBox="0 0 27 18" fill="currentColor" class="menu-open">
+			<title>Open Menu</title>
+			<path d="M26.8059 1H0.805908" stroke="currentColor" stroke-width="1.5"></path>
+			<path d="M26.8059 17H0.805908" stroke="currentColor" stroke-width="1.5"></path>
+			<path d="M26.8059 9H0.805908" stroke="currentColor" stroke-width="1.5"></path>
+		</svg>
+		<svg
+			{% if function('is_admin') == false %}
+				x-show="menuIsOpen"
+			{% endif %}
+			class="m-2" xmlns="http://www.w3.org/2000/svg" role="img" width="21" height="20" fill="currentColor" class="menu-close">
+			<title>Close Menu</title>
+			<path d="M19.192 19.192.808.808M1 19.192 19.385.808" stroke="currentColor" stroke-width="2"></path>
+		</svg>
+	</button>
+
+	<div
+		{% if function('is_admin') == false %}
+			x-show="menuIsOpen"
+			@click.away="menuIsOpen = false"
+		{% endif %}
+		class="wp-block-group pt-24 md:pt-0 navigation-content md:!block w-full md:w-auto"
+	>
+		<div>
+			{{ inner_blocks( inner ) }}
+		</div>
+	</div>
+</div>
