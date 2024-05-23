@@ -70,6 +70,7 @@ jobs:
         run: |
 
           ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_TARGET }} "\
+            sudo chown -R ${{ secrets.DEPLOY_USER }}:${{ secrets.DEPLOY_DAEMON }} ${{ secrets.APP_PATH }}/wp-content &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/themes/wp-starter &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp.php &&\
