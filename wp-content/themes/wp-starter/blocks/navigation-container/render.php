@@ -12,6 +12,23 @@ $attrs = [
 	'x-trap="menuIsOpen"',
 ];
 
+$allowed = [
+	'core/group',
+	'core/paragraph',
+	'core/button',
+	'core/navigation',
+];
+
+$block_template = [
+	[
+		'core/navigation',
+	],
+];
+$inner          = [
+	'template'      => $block_template,
+	'allowedBlocks' => $allowed,
+];
+
 ?>
 <div <?php block_attrs( $block, 'wp-block-group navigation-container flex flex-col items-end gap-5 md:w-auto w-full', $attrs ); ?>>
 	<button
@@ -52,7 +69,7 @@ $attrs = [
 		class="wp-block-group pt-24 md:pt-0 navigation-content md:!block w-full md:w-auto"
 	>
 		<div>
-			<?php inner_blocks(); ?>
+			<?php inner_blocks( $inner ); ?>
 		</div>
 	</div>
 </div>
