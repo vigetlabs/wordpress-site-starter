@@ -2,7 +2,7 @@
 
 This is a custom block theme built by Viget. It is meant to be a starting place then customize and build out your theme. Please update this file to reflect your custom built theme. 
 
-## Build Stack
+## Frontend Stack
 - [Vite](https://vitejs.dev/)
 - [AlpineJS](https://alpinejs.dev/)
 - [Tailwind](https://tailwindcss.com/)
@@ -29,14 +29,36 @@ Blocks are build using ACF and core WordPress blocks. Styles for the blocks are 
 Fonts are pulled in by [typography.js](/src/theme-json/settings/typography.js). Update the `src` to pull in the font files in `/src/fonts`. For more info on setting up WordPress fonts check out [fullsiteediting](https://fullsiteediting.com/lessons/creating-theme-json/#h-typography).
 
 ### Colors
-TBA
+You have access to all of [Tailwind's colors](https://tailwindcss.com/docs/customizing-colors) but feel free to create your own custom colors in the Tailwind config. 
+Colors are pulled from Tailwind into `/src/theme-json/settings/color.js` to be used in Gutenberg and WordPress. 
+Prefix the Gutenberg color slug by adding `dark-` to flag that color as a dark enough for text, buttons to change color to dark mode.  
 
 ### Spacing
+The default spacing is fluid, meaning that it is larger on desktops and smaller on mobile screens. 
+| Class | Min | Max |
+|-------|-----|-----|
+| `.fluid-xs` | `2px` | `16px` |
+| `.fluid-sm` | `20px` | `40px` |
+| `.fluid-md` | `32px` | `64px` |
+| `.fluid-lg` | `56px` | `112px` |
+| `.fluid-xl` | `96px` | `160px` |
+| `.fluid-2x` | `144px` | `240px` |
+
 To adjust the spacing you can edit them in `tailwind.config.js` under `spacing > fluid`. The `fluid` spacing is getting pull into `/src/theme-json/settings/spacing.js` and being used as the spacing for both margin and padding in Gutenberg.
 
 ### Buttons
-WordPress buttons are normally all built in the `theme.json` but because there is a limitations on hover/focus for variants all the buttons style are build in Tailwind and CSS.
-Tailwind button plugin in `plugins-tailwind/buttons.js` has `contained`, `outline`, and both light and dark version. And will be where you will update and style all of the buttons on the site. Those button styles are getting applied to the HTML in `/src/styles/core-blocks/buttons.css`. 
+WordPress button styles are normally all built in the `theme.json` but because there is a limitations on hover/focus for button variants all the buttons style are build in Tailwind.
+The Tailwind button plugin is in `plugins-tailwind/buttons.js` and has `contained`, `outline`, and both light and dark version. In that file (`buttons.js`) is where you will update and style all of the buttons on the site. Those button styles are getting applied to the HTML in `/src/styles/core-blocks/buttons.css`. 
+If you have need to apply the buttons style to the mark up you can add one of these button classes.
+| Button Class | Button Sizes |
+|--------------|--------------
+| `.btn-contained` | `.btn-sm` |
+| `.btn-contained-light` | `.btn-lg` |
+| `.btn-outlined` |
+| `.btn-outlined-light` |
+| `.btn-subtle` |
+| `.btn-text` |
+
 
 ### Navigation
-Has been set up to be fully accessible and is built using AlpineJS and the styles are set in CSS. You can edit the JS in `/src/components/dropdown.js` and the CSS can be edited in `/src/styles/core-blocks/navigation.css`
+The navigation sas been set up to be fully accessible and is built using [Alpine](https://alpinejs.dev/) and the styles are set in CSS. You can edit the JS in `/src/components/dropdown.js` and the CSS in `/src/styles/core-blocks/navigation.css` if you need to customize the navigation. 
