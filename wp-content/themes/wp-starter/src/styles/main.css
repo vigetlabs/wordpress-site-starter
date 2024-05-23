@@ -8,6 +8,7 @@
 @import './base/typography.css';
 
 /*Import custom styles for WordPress core blocks*/
+@import './core-blocks/buttons.css';
 @import './core-blocks/list.css';
 @import './core-blocks/navigation.css';
 @import './core-blocks/quote.css';
@@ -15,7 +16,6 @@
 /*Import custom styles for custom blocks*/
 @import './custom-blocks/accordion.css';
 @import './custom-blocks/alert-banner.css';
-@import './custom-blocks/buttons.css';
 @import './custom-blocks/cta.css';
 @import './custom-blocks/logo-grid.css';
 @import './custom-blocks/text-image.css';

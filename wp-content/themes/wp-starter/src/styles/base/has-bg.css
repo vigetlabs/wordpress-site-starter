@@ -2,9 +2,7 @@
 	.wp-block,
 	.acf-block {
 		/* Add in custom bg colors here */
-		&.has-black-background-color,
-		&.has-gray-500-background-color,
-		&.has-accent-background-color {
+		&[class*='has-dark'] {
 			> *:not(.has-text-color) {
 				@apply text-white;
 			}
