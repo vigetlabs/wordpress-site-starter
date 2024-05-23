@@ -10,18 +10,6 @@
 			.wp-block-heading:not(.has-text-color) {
 				@apply text-white;
 			}
-
-			.wp-block-button {
-				.wp-block-button__link {
-					@apply btn-contained-light;
-				}
-
-				&.is-style-outline {
-					.wp-block-button__link {
-						@apply btn-outlined-light;
-					}
-				}
-			}
 		}
 	}
 }
