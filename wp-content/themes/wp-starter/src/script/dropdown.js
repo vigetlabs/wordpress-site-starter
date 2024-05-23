@@ -4,8 +4,16 @@ document.addEventListener('alpine:init', () => {
 })
 
 function addAlpineToHTML() {
+	const submenuWrapper = document.querySelectorAll(".wp-block-navigation-item.has-child")
 	const buttons = document.querySelectorAll(".wp-block-navigation-submenu__toggle")
-	const submenus = document.querySelectorAll(".wp-block-navigation__submenu-container.wp-block-navigation-submenu")
+	const submenus = document.querySelectorAll(".wp-block-navigation__submenu-container")
+
+	submenuWrapper.forEach(element => {
+		element.setAttribute('x-data', 'dropdown')
+		element.setAttribute('x-on:keydown.escape.prevent.stop', 'close($refs.button)')
+		element.setAttribute('x-on:focusin.window', '! $refs.panel.contains($event.target) && close()')
+		element.setAttribute('x-id', '["dropdown-button"]')
+	});
 
 	buttons.forEach(element => {
 		element.setAttribute('x-ref', 'button')
