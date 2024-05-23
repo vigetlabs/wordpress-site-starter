@@ -10,10 +10,18 @@
     "group",
     "toggle"
   ],
+  "supports": {
+    "jsx": true,
+    "layout": {
+      "default": {
+        "type": "flex",
+        "justifyContent": "left"
+      },
+      "allowOrientation": true,
+      "allowCustomContentAndWideSize": false
+    }
+  },
   "acf": {
     "mode": "preview"
-  },
-  "supports": {
-    "jsx": true
   }
 }
