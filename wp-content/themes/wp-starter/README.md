@@ -1,14 +1,18 @@
 # WP Site Starter
 
-Custom block theme built by Viget. This is meant to be a starting place to build out your custom theme. 
+This is a custom block theme built by Viget. It is meant to be a starting place then customize and build out your theme. Please update this file to reflect your custom built theme. 
 
+## Build Stack
+- [Vite](https://vitejs.dev/)
+- [AlpineJS](https://alpinejs.dev/)
+- [Tailwind](https://tailwindcss.com/)
 
 ## Theme.json
 The `theme.json` holds a lot of the core WordPress theme settings. The `theme.json` is build using several js files in `/src/theme-json`, Vite builds all of these files and exports a `theme.json` for both `dev` and `build`. Do not edit directly `theme.json` as it will be over written on build. 
 
 Several of the Tailwind variables are pulled in and Tailwind should be used as the primary way to style elements. If you need to, you can pull in more Tailwind variable for custom styling in `theme.json`.
 
-## Custom Blocks
+## Custom Blocks 🧱
 Blocks are build using ACF and core WordPress blocks. Styles for the blocks are in `src/styles/blocks`.
 
 * Accordion
@@ -19,9 +23,8 @@ Blocks are build using ACF and core WordPress blocks. Styles for the blocks are 
 * Text Icon Cards
 * Text Image
 * Video Embed
-* *List other custom Blocks*
 
-## Customizing Theme
+## Customizing Theme 🎨
 ### Fonts
 Fonts are pulled in by [typography.js](/src/theme-json/settings/typography.js). Update the `src` to pull in the font files in `/src/fonts`. For more info on setting up WordPress fonts check out [fullsiteediting](https://fullsiteediting.com/lessons/creating-theme-json/#h-typography).
 
