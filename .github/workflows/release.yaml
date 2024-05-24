@@ -5,6 +5,10 @@ on:
     tags:
       - 'v*' # Create release for any tag starting with 'v'
 
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
 jobs:
   release:
     name: Create GitHub Release
