@@ -7,15 +7,15 @@
 				@apply relative my-12 flex cursor-pointer justify-between py-12 pr-24 text-base font-bold;
 				@apply marker:content-none focus:outline-none;
 				@apply after:absolute after:bottom-0 after:right-0 after:top-0 after:flex after:items-center after:font-mono after:text-lg after:content-['\002B'];
-				@apply hover:text-sky-600 hover:after:text-sky-600;
-				@apply focus:text-sky-600 focus:outline-sky-600 focus:after:text-sky-600;
+				@apply hover:text-gray-600 hover:after:text-gray-600;
+				@apply focus:text-gray-600 focus:outline-gray-600 focus:after:text-gray-600;
 			}
 
 			&[open] {
 				@apply pb-24;
 
 				> summary {
-					@apply after:text-sky-600 after:content-['\2212'];
+					@apply after:text-gray-600 after:content-['\2212'];
 				}
 			}
 		}

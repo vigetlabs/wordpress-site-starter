@@ -4,7 +4,11 @@ const { remPair, rem } = require('@viget/tailwindcss-plugins/utilities/fns')
 // Breakpoints and content widths for the site
 const minBreakpoint = 640;
 const maxBreakpoint = 1440;
-const accentColor = 'custom';
+/*
+* This sets the accent color name which is used in theme-json/settings/color.js and plugins-tailwind/buttons.js
+* Any colors set in CSS will need to be manually updated.
+*/
+const accentColor = 'your-accent-color-name';
 
 const fluidSize = (
 	minSize,
