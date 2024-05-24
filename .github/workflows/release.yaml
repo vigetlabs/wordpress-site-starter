@@ -1,0 +1,25 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Create release for any tag starting with 'v'
+
+jobs:
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create GitHub Release
+        run: |
+          gh release create "$TAG" --verify-tag \
+            --title "$TAG: $(date '+%Y-%m-%d')" \
+            --generate-notes \
+            --latest
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
