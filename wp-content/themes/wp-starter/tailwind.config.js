@@ -50,6 +50,7 @@ module.exports = {
 					500: "#737373",
 					900: "#0a0a0a",
 				},
+				//This pull in the accentColor as the color name
 				[accentColor]: {
 					50: "#f0f9ff",
 					100: "#e0f2fe",
@@ -61,7 +62,7 @@ module.exports = {
 					700: "#0369a1",
 					800: "#075985",
 					900: "#0c4a6e",
-					900: "#082f49",
+					950: "#082f49",
 				},
 			},
 			flexBasis: {
