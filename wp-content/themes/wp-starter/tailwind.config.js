@@ -4,6 +4,7 @@ const { remPair, rem } = require('@viget/tailwindcss-plugins/utilities/fns')
 // Breakpoints and content widths for the site
 const minBreakpoint = 640;
 const maxBreakpoint = 1440;
+const accentColor = 'custom';
 
 const fluidSize = (
 	minSize,
@@ -30,6 +31,7 @@ module.exports = {
 	theme: {
 		contentSmall: minBreakpoint.toString(),
 		contentBase: maxBreakpoint.toString(),
+		accentColor: accentColor,
 		extend: {
 			aspectRatio: {
 				'5/3': '5/3',
@@ -43,6 +45,19 @@ module.exports = {
 					100: "#e5e5e5",
 					500: "#737373",
 					900: "#0a0a0a",
+				},
+				[accentColor]: {
+					50: "#f0f9ff",
+					100: "#e0f2fe",
+					200: "#bae6fd",
+					300: "#7dd3fc",
+					400: "#38bdf8",
+					500: "#0ea5e9",
+					600: "#0284c7",
+					700: "#0369a1",
+					800: "#075985",
+					900: "#0c4a6e",
+					900: "#082f49",
 				},
 			},
 			flexBasis: {
@@ -102,7 +117,9 @@ module.exports = {
 		},
 	},
 	plugins: [
-		require('./plugins-tailwind/buttons.js'),
+		require('./plugins-tailwind/buttons.js')({
+			accentColor: accentColor,
+		}),
 	],
 }
 

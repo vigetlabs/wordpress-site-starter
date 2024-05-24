@@ -30,7 +30,7 @@ export default {
 			slug: 'dark-black',
 		},
 		{
-			color: theme.colors.sky[800],
+			color: theme.colors[theme.accentColor][800],
 			name: 'Accent',
 			slug: 'dark-accent',
 		},
