@@ -30,11 +30,12 @@ Fonts are pulled in by [typography.js](/src/theme-json/settings/typography.js). 
 
 ### Colors
 You have access to all of [Tailwind's colors](https://tailwindcss.com/docs/customizing-colors) but feel free to create your own custom colors in the Tailwind config. 
+The theme comes with one accent color. The color name can be set in the top of the Tailwind config and the color are set in config theme. 
 Colors are pulled from Tailwind into `/src/theme-json/settings/color.js` to be used in Gutenberg and WordPress. 
 Prefix the Gutenberg color slug by adding `dark-` to flag that color as a dark enough for text, buttons to change color to dark mode.  
 
 ### Spacing
-The default spacing is fluid, meaning that it is larger on desktops and smaller on mobile screens. 
+The default spacing is fluid, meaning that it is larger on desktops and smaller on mobile screens.
 | Class | Min | Max |
 |-------|-----|-----|
 | `.fluid-xs` | `2px` | `16px` |
@@ -47,7 +48,8 @@ The default spacing is fluid, meaning that it is larger on desktops and smaller 
 To adjust the spacing you can edit them in `tailwind.config.js` under `spacing > fluid`. The `fluid` spacing is getting pull into `/src/theme-json/settings/spacing.js` and being used as the spacing for both margin and padding in Gutenberg.
 
 ### Buttons
-WordPress button styles are normally all built in the `theme.json` but because there is a limitations on hover/focus for button variants all the buttons style are build in Tailwind.
+WordPress button styles are normally built in the `theme.json` but because there is a limitations on hover/focus for button variants all the buttons style are build in Tailwind.
+
 The Tailwind button plugin is in `plugins-tailwind/buttons.js` and has `contained`, `outline`, and both light and dark version. In that file (`buttons.js`) is where you will update and style all of the buttons on the site. Those button styles are getting applied to the HTML in `/src/styles/core-blocks/buttons.css`. 
 If you have need to apply the buttons style to the mark up you can add one of these button classes.
 | Button Class | Button Sizes |
@@ -61,4 +63,4 @@ If you have need to apply the buttons style to the mark up you can add one of th
 
 
 ### Navigation
-The navigation sas been set up to be fully accessible and is built using [Alpine](https://alpinejs.dev/) and the styles are set in CSS. You can edit the JS in `/src/components/dropdown.js` and the CSS in `/src/styles/core-blocks/navigation.css` if you need to customize the navigation. 
+The navigation has been set up to be fully accessible and is built using [Alpine](https://alpinejs.dev/) and the styles are set in CSS. You can edit the JS in `/src/components/dropdown.js` and the CSS in `/src/styles/core-blocks/navigation.css` if you need to customize the navigation. 
