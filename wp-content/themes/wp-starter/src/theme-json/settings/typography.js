@@ -8,9 +8,10 @@ export default {
 	fontFamilies: [
 		// For more info about loading fonts see https://fullsiteediting.com/lessons/theme-json-typography-options/
 		{
+			//Set this to be your body font family
 			fontFamily: 'Roboto Condensed',
 			name: 'Roboto Condensed',
-			slug: 'heading',
+			slug: 'body',
 			fontFace: [
 				{
 					fontFamily: 'Roboto Condensed',
@@ -31,6 +32,22 @@ export default {
 					],
 				},
 			],
+		},
+		{
+			//Set this to be your heading font family
+			fontFamily: 'Roboto Condensed',
+			name: 'Roboto Condensed',
+			slug: 'heading',
+			/* Load custom fonts with fontFace
+			fontFace: [
+				{
+					fontFamily: 'FONT_FAMILY_HERE',
+					fontStretch: 'normal',
+					fontStyle: 'normal',
+					fontWeight: '300 900',
+					src: ['file:./src/fonts/FONT_NAME_HERE.woff2'],
+				},
+			*/
 		},
 		{
 			fontFamily:

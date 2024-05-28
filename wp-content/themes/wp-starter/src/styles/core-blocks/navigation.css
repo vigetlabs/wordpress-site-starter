@@ -1,3 +1,4 @@
+/** Navigation colors need to be updated to match your theme colors */
 @layer components {
 	.header-navigation {
 		@apply bg-gray-100 dark:bg-gray-800;
@@ -31,7 +32,7 @@
 
 					&:hover,
 					&:focus {
-						@apply text-sky-700 underline decoration-2 underline-offset-8 dark:text-sky-200;
+						@apply text-gray-700 underline decoration-2 underline-offset-8 dark:text-gray-200;
 					}
 				}
 
@@ -50,7 +51,7 @@
 
 						&:hover,
 						&:focus {
-							@apply text-sky-700 underline decoration-2 underline-offset-8 dark:text-sky-700;
+							@apply text-gray-700 underline decoration-2 underline-offset-8 dark:text-gray-700;
 						}
 					}
 				}
