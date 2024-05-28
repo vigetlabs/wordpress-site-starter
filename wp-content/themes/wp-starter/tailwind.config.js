@@ -6,6 +6,7 @@ const minBreakpoint = 640;
 const maxBreakpoint = 1440;
 /*
 * This sets the accent color name which is used in theme-json/settings/color.js and plugins-tailwind/buttons.js
+* Preferable use lowercase and one word. Use - for spaces and don't use capital letters or numbers.
 * Any colors set in CSS will need to be manually updated.
 */
 const accentColor = 'your-accent-color-name';
@@ -50,7 +51,7 @@ module.exports = {
 					500: "#737373",
 					900: "#0a0a0a",
 				},
-				//This pull in the accentColor as the color name
+				//This pulls in the accentColor as the color name
 				[accentColor]: {
 					50: "#f0f9ff",
 					100: "#e0f2fe",

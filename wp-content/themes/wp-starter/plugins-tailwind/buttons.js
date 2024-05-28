@@ -47,7 +47,7 @@ module.exports = plugin.withOptions(function (options = {}) {
 				...base,
 				[`@apply
 				border border-${accentColor}-900 bg-transparent text-${accentColor}-900
-				hover:bg-${accentColor}-100 hover:border-sky-700 hover:text-${accentColor}-700
+				hover:bg-${accentColor}-100 hover:border-${accentColor}-700 hover:text-${accentColor}-700
 				active:bg-${accentColor}-200/80 active:text-${accentColor}-800
 				focus-visible:bg-${accentColor}-100 focus-visible:border-${accentColor}-700 focus-visible:ring-${accentColor}-600/50`]: {},
 			},
