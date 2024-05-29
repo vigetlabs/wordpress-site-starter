@@ -46,7 +46,7 @@ module.exports = plugin.withOptions(function (options = {}) {
 			'.btn-outlined': {
 				...base,
 				[`@apply
-				border border-${accentColor}-900 bg-transparent text-${accentColor}-900
+				border border-current bg-transparent text-${accentColor}-900
 				hover:bg-${accentColor}-100 hover:border-${accentColor}-700 hover:text-${accentColor}-700
 				active:bg-${accentColor}-200/80 active:text-${accentColor}-800
 				focus-visible:bg-${accentColor}-100 focus-visible:border-${accentColor}-700 focus-visible:ring-${accentColor}-600/50`]: {},
@@ -55,7 +55,7 @@ module.exports = plugin.withOptions(function (options = {}) {
 			'.btn-outlined-light': {
 				...base,
 				[`@apply
-				border-white text-white
+				border-current text-white bg-transparent
 				hover:bg-white/25
 				active:bg-white/30
 				focus-visible:bg-${accentColor}-100/30 focus-visible:ring-white/50`]: {},

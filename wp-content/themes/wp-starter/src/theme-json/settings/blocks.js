@@ -8,15 +8,12 @@ export default {
 			width: false,
 		},
 		color: {
-			text: false,
-			background: false,
 			customDuotone: false,
 			customGradient: false,
 			defaultDuotone: false,
 			defaultGradients: false,
 			duotone: [],
 			gradients: [],
-			palette: [],
 		},
 		typography: {
 			fontSizes: [],
