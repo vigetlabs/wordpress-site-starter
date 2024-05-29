@@ -120,8 +120,8 @@ class PostCreateProjectScript extends ComposerScript {
 	 */
 	public static function getProjectInfo(): void {
 		// Project Name.
-		$defaultName = ucwords( str_replace( [ '-', '_' ], ' ', basename( getcwd() ) ) );
-		$name = ! empty( self::$info['name'] ) ? self::$info['name'] : $defaultName;
+		$defaultName        = ucwords( str_replace( [ '-', '_' ], ' ', basename( getcwd() ) ) );
+		$name               = ! empty( self::$info['name'] ) ? self::$info['name'] : $defaultName;
 		self::$info['name'] = self::ask( 'What is the name of your project?', $name );
 
 		// Project Slug.
@@ -220,7 +220,7 @@ class PostCreateProjectScript extends ComposerScript {
 		$readmePath    = self::translatePath( 'README.md' );
 		$projectReadme = self::translatePath( 'README.dist.md' );
 
-		if ( ! file_exists( $readmePath ) ||  ! file_exists( $projectReadme ) ) {
+		if ( ! file_exists( $readmePath ) || ! file_exists( $projectReadme ) ) {
 			self::writeWarning( 'Missing one or more README files - Skipping README swap.' );
 			return;
 		}
@@ -243,7 +243,7 @@ class PostCreateProjectScript extends ComposerScript {
 		$handlerPath    = self::translatePath( 'bin/composer-scripts/ProjectEventHandler.php' );
 		$projectHandler = self::translatePath( 'bin/composer-scripts/ProjectEventHandler.dist.php' );
 
-		if ( ! file_exists( $handlerPath ) ||  ! file_exists( $projectHandler ) ) {
+		if ( ! file_exists( $handlerPath ) || ! file_exists( $projectHandler ) ) {
 			self::writeWarning( 'Missing one or more Composer Event scripts - Skipping Composer Script swap.' );
 			return;
 		}
@@ -269,7 +269,7 @@ class PostCreateProjectScript extends ComposerScript {
 		}
 
 		$defaultThemeDir = self::translatePath( 'wp-content/themes/' . self::$defaults['theme-slug'] );
-		$themeDir         = self::translatePath( 'wp-content/themes/' . self::$info['slug'] );
+		$themeDir        = self::translatePath( 'wp-content/themes/' . self::$info['slug'] );
 
 		if ( ! is_dir( $defaultThemeDir ) ) {
 			self::writeError( 'Missing theme directory.' );
@@ -324,8 +324,8 @@ class PostCreateProjectScript extends ComposerScript {
 
 		self::writeLine( 'Performing string replacements...' );
 
-		foreach ( $files as $file ) {
-			foreach ( $search as $index => $group ) {
+		foreach ($files as $file) {
+			foreach ($search as $index => $group) {
 				self::searchReplaceFile( $group, $replace[ $index ], $file );
 			}
 		}
@@ -357,7 +357,7 @@ class PostCreateProjectScript extends ComposerScript {
 			return;
 		}
 
-		$composerData['require'][ $acfPackage ] = "*";
+		$composerData['require'][ $acfPackage ] = '*';
 
 		self::updateComposerData( $composerData, $themePath );
 
@@ -476,7 +476,7 @@ class PostCreateProjectScript extends ComposerScript {
 		];
 
 		// TODO: Search theme directory recursively.
-		$themeFiles = glob( $themeDir . '/{,*/,*/*/,*/*/*/,*/*/*/*/}*.{php,html,json}', GLOB_BRACE );
+		$themeFiles = glob( $themeDir . '/{,*/,*/*/,*/*/*/,*/*/*/*/}*.{php,twig,html,json}', GLOB_BRACE );
 
 		return array_merge( $files, $themeFiles );
 	}
