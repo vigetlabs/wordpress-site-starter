@@ -87,14 +87,14 @@ class PostInstallScript extends ComposerScript {
 
 			self::wait( 2 );
 
+			// Populate the database.
+			self::populateDatabase();
+
 			// Remove the core Twenty-X themes.
 			self::deleteCoreThemes();
 
 			// Remove Hello Dolly.
 			self::deleteCorePlugins();
-
-			// Populate the database.
-			self::populateDatabase();
 		}
 
 		// Run the Viget WP Composer Install
