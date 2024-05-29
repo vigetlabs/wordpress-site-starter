@@ -228,6 +228,8 @@ wp-config.php
 # All themes and plugins unless explicitly allowed
 /wp-content/themes/*
 /wp-content/plugins/*
+# WordFence plugin files
+/wp-content/wflogs/*
 
 # Explicitly Allowed Themes and Plugins
 !/wp-content/themes/wp-starter

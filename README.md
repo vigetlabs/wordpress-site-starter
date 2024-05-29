@@ -13,7 +13,7 @@ This is a WordPress starter project that includes a basic custom theme, includin
 To begin using this on a new project, simply call the following command from the root of your project:
 
 ```bash
-$ composer create-project viget/wordpress-site-starter
+composer create-project viget/wordpress-site-starter
 ```
 
 Follow the prompts to set up your project with the desired information. You will be asked:
@@ -47,12 +47,12 @@ Also, in `packages.json`, you can change the name of the branch from `main` to u
 **Note:** Be sure to update the paths in `packages.json` as well as the command below to point to the location of your local repository. `~/` will not work, you must use the full path.
 
 ```bash
-$ mkdir project-name && cd project-name && composer create-project --repository-url="/root/path/not/relative/path/to/wordpress-site-starter/packages.json" viget/wordpress-site-starter . --stability=dev --remove-vcs --no-install
+mkdir project-name && cd project-name && composer create-project --repository-url="/root/path/not/relative/path/to/wordpress-site-starter/packages.json" viget/wordpress-site-starter . --stability=dev --remove-vcs --no-install
 ```
 
 You can quickly remove the project by using:
 ```bash
-$ ddev delete project-name -O -y && cd ../ && rm -rf project-name
+ddev delete project-name -O -y && cd ../ && rm -rf project-name
 ```
 
 ## Changelog
