@@ -12,7 +12,6 @@ This is the README for your new site. Feel free to update any of this info to ma
 * [Docker](https://docs.docker.com/desktop/install/mac-install/) (or compatible container alternative like OrbStack)
 * For ACF Pro, create an `auth.json` file in `wp-content/mu-plugins/viget-base/` from the [ACF Website](https://www.advancedcustomfields.com/my-account/view-licenses/). (Credentials are in 1Password)
 
-
 ## Setup and Running
 To start the local server and build process, run: 
 
