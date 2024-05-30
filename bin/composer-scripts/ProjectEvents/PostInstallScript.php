@@ -194,6 +194,10 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function deleteCorePlugins(): void {
+		if ( ! self::isWordPressInstalled() ) {
+			self::writeError( 'WordPress installation failed. Can not delete stock WordPress plugins.' );
+			return;
+		}
 		self::writeInfo( 'Deleting stock WordPress plugins...' );
 
 		foreach ( self::$deletePlugins as $plugin ) {
@@ -505,6 +509,10 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function activatePlugins(): void {
+		if ( ! self::isWordPressInstalled() ) {
+			self::writeError( 'WordPress installation failed. Can not activate stock WordPress plugins.' );
+			return;
+		}
 		self::writeComment( 'Activating plugins...' );
 
 		foreach ( self::$activatePlugins as $slug => $plugin ) {
