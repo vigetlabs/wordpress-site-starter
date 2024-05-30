@@ -29,6 +29,11 @@ class PostInstallScript extends ComposerScript {
 	const IMPORT_DB_OPT = 2;
 
 	/**
+	 * Set Default Admin User
+	 */
+	const DEFAULT_ADMIN_USER = 'viget';
+
+	/**
 	 * @var array
 	 */
 	private static array $env = [];
@@ -284,9 +289,10 @@ class PostInstallScript extends ComposerScript {
 		self::getSiteInfo();
 
 		$command = sprintf(
-			'wp core install --url=%s --title=%s --admin_user=viget --admin_email=%s --admin_password=%s',
+			'wp core install --url=%s --title=%s --admin_user=%s --admin_email=%s --admin_password=%s',
 			escapeshellarg( self::$info['url'] ),
 			escapeshellarg( self::$info['title'] ),
+			escapeshellarg( self::$info['username'] ),
 			escapeshellarg( self::$info['email'] ),
 			escapeshellarg( self::$info['password'] )
 		);
@@ -315,16 +321,20 @@ class PostInstallScript extends ComposerScript {
 		$url = ! empty( self::$info['url'] ) ? self::$info['url'] : $defaultURL;
 		self::$info['url'] = self::ask( 'What is the URL?*', $url );
 
+		// Admin Username.
+		self::$info['username'] = self::$info['username'] ?? self::DEFAULT_ADMIN_USER;
+		self::$info['username'] = self::ask( 'Set the admin username:*', self::$info['username'] );
+
 		// Admin Email.
 		self::$info['email'] = self::$info['email'] ?? 'fed+wp@viget.com';
 		self::$info['email'] = self::ask( 'What is the admin email address?*', self::$info['email'] );
 
 		// Admin Password.
 		self::$info['password'] = self::$info['password'] ?? self::generatePassword();
-		self::$info['password'] = self::ask( 'Set the Admin User (viget) password:*', self::$info['password'] );
+		self::$info['password'] = self::ask( 'Set the Admin User password:*', self::$info['password'] );
 
 		// Check Required fields
-		if ( empty( self::$info['title'] ) || empty( self::$info['url'] ) || empty( self::$info['email'] ) || empty( self::$info['password'] ) ) {
+		if ( empty( self::$info['title'] ) || empty( self::$info['url'] ) || empty( self::$info['username'] ) || empty( self::$info['email'] ) || empty( self::$info['password'] ) ) {
 			self::writeError( 'Please complete all required fields.' );
 			self::getSiteInfo();
 		}
@@ -333,6 +343,7 @@ class PostInstallScript extends ComposerScript {
 		$summary  = PHP_EOL . ' - Site Title: ' . self::$info['title'];
 		$summary .= PHP_EOL . ' - Site Description: ' . ( self::$info['description'] ?: '[none]' );
 		$summary .= PHP_EOL . ' - URL: ' . self::$info['url'];
+		$summary .= PHP_EOL . ' - Admin Username: ' . self::$info['username'];
 		$summary .= PHP_EOL . ' - Admin Email: ' . self::$info['email'];
 		$summary .= PHP_EOL . ' - Admin Password: ' . self::$info['password'];
 
@@ -628,6 +639,7 @@ class PostInstallScript extends ComposerScript {
 		$success = [
 			'Congratulations!',
 			'Project has been set up successfully!',
+			'Admin Username: ' . self::$info['username'],
 			'<fg=#F26D20>Important!</> Make a note of the Admin Password:',
 			'<fg=#F26D20>' . self::$info['password'] . '</>',
 		];
