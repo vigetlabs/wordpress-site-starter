@@ -13,7 +13,7 @@ This is a WordPress starter project that includes a basic custom theme, includin
 To begin using this on a new project, simply call the following command from the root of your project:
 
 ```bash
-composer create-project viget/wordpress-site-starter
+composer create-project viget/wordpress-site-starter .
 ```
 
 Follow the prompts to set up your project with the desired information. You will be asked:
