@@ -57,6 +57,14 @@ ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.4
+* Moving to theme colors to vars to make it easy to update the global accent color
+* Add more into to the theme README so it is easy for developer to know how to update/edit items
+* Fixing placeholder bug, adding phpcs file for bin/composer-scripts
+* Fixing button outline border bug
+* Adding admin username as an option to the composer post install
+* Moving the deleting of themes and plugins to after DB install
+
 ### v1.0.3
 * Fixed README and packages.json to reference correct package.
 * Removed `vendor` directory after create-project is complete.
