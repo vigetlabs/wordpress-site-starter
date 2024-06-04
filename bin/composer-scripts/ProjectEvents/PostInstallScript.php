@@ -62,6 +62,7 @@ class PostInstallScript extends ComposerScript {
 		],
 		'seo-by-rank-math' => 'Rank Math SEO',
 		'svg-support' => 'SVG Support',
+		'viget-parts-kit' => 'Viget Parts Kit',
 		'wordfence' => 'Wordfence',
 	];
 

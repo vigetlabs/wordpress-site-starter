@@ -234,6 +234,7 @@ wp-config.php
 # Explicitly Allowed Themes and Plugins
 !/wp-content/themes/wp-starter
 !/wp-content/plugins/acf-blocks-toolkit
+!/wp-content/plugins/viget-parts-kit
 !/wp-content/plugins/advanced-custom-fields-pro
 
 # Remove the theme.json file as it is built in the theme with Vite
