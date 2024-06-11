@@ -45,7 +45,7 @@ class Block_Registration {
 
 					// Autoload block.php within block directory
 					if ( file_exists( $include_path ) ) {
-						require $include_path;
+						require_once $include_path;
 					}
 
 					register_block_type( $block['path'] . '/block.json' );

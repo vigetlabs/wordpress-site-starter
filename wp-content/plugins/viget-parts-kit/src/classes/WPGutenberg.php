@@ -27,7 +27,7 @@ class WPGutenberg {
 	 *
 	 * @return void
 	 */
-	public function load() {
+	public function load(): void {
 		$this->load_extra_blocks();
 
 		// Gutenberg scripts
@@ -109,7 +109,7 @@ class WPGutenberg {
 	 *
 	 * @return array
 	 */
-	public function get_editor_settings() {
+	public function get_editor_settings(): array {
 		// This is copied from core
 		// phpcs:disable
 		global $editor_styles, $post;
@@ -133,7 +133,7 @@ class WPGutenberg {
 		$styles = array(
 			array(
 				'css' => file_get_contents(
-					ABSPATH . WPINC . '/css/dist/editor/editor-styles.css'
+					ABSPATH . WPINC . '/css/dist/block-editor/default-editor-styles.css'
 				),
 			),
 		);

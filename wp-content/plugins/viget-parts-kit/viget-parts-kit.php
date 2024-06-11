@@ -31,13 +31,13 @@ define( 'VPK_PLUGIN_URL', plugin_dir_url( VPK_PLUGIN_FILE ) );
 // Include the PartsKit classes.
 require_once VPK_PLUGIN_PATH . 'src/classes/WPGutenberg.php';
 require_once VPK_PLUGIN_PATH . 'src/classes/PartsKit.php';
-require_once VPK_PLUGIN_PATH . 'src/classes/CoreParts.php';
+require_once VPK_PLUGIN_PATH . 'src/classes/BlockParts.php';
 
 // Init the Parts Kit.
 add_action(
 	'plugins_loaded',
 	function () {
 		new VigetPartsKit\PartsKit();
-		new VigetPartsKit\CoreParts();
+		new VigetPartsKit\BlockParts();
 	}
 );

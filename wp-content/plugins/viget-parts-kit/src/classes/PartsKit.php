@@ -19,6 +19,11 @@ class PartsKit {
 	const URL_SLUG = 'parts-kit';
 
 	/**
+	 * @var ?WPGutenberg
+	 */
+	private ?WPGutenberg $gutenberg = null;
+
+	/**
 	 * Initialize the Parts Kit
 	 */
 	public function __construct() {
@@ -141,7 +146,11 @@ class PartsKit {
 				]
 				*/
 
-				$parts = array_values( apply_filters( 'viget_parts_kit', [] ) );
+				$parts = apply_filters( 'viget_parts_kit', [] );
+
+				if ( ! empty( $parts ) ) {
+					usort( $parts, fn( $a, $b ) => $a['title'] <=> $b['title'] );
+				}
 
 				$json = [
 					'schemaVersion' => '0.0.1',
@@ -172,21 +181,11 @@ class PartsKit {
 					return;
 				}
 
-				defined( 'IS_PARTS_KIT' ) || define( 'IS_PARTS_KIT', true );
+				$parts_kit_title = __( 'Parts Kit', 'viget-parts-kit' );
+				$parts_kit_url   = home_url( self::URL_SLUG . '.json' );
 
-				printf(
-					'<html lang="en">
-						<head>
-							<title>%s</title>
-						</head>
-						<body>
-							<script type="module" src="https://unpkg.com/@viget/parts-kit@^0/lib/parts-kit.js"></script>
-							<parts-kit config-url="%s"></parts-kit>
-						</body>
-					</html>',
-					esc_html__( 'Parts Kit', 'viget-parts-kit' ),
-					esc_url( home_url( self::URL_SLUG . '.json' ) )
-				);
+				require VPK_PLUGIN_PATH . 'views/parts-kit.php';
+
 				exit;
 			}
 		);
@@ -205,8 +204,10 @@ class PartsKit {
 					return;
 				}
 
-				$gutenberg = new WPGutenberg();
-				$gutenberg->load();
+				$this->gutenberg = new WPGutenberg();
+				$this->gutenberg->load();
+
+				do_action( 'viget_parts_kit_init' );
 			}
 		);
 
@@ -219,32 +220,25 @@ class PartsKit {
 					return;
 				}
 
+				do_action( 'viget_parts_kit_render', $block_name );
+				defined( 'IS_PARTS_KIT' ) || define( 'IS_PARTS_KIT', true );
+
 				$this->disable_admin_bar();
 
 				header( 'Access-Control-Allow-Origin: *' );
-
-				defined( 'IS_PARTS_KIT' ) || define( 'IS_PARTS_KIT', true );
 
 				$block = [
 					'blockName'    => $block_name,
 					'attrs'        => [],
 					'innerContent' => [],
+					'innerBlocks'  => [],
 				];
 
-				$output = serialize_block( $block );
-				$output = apply_filters( 'viget_parts_kit_%', $output, $block_name );
-				$output = apply_filters( 'viget_parts_kit_' . $block_name, $output );
+				$output = apply_filters( 'the_content', render_block( $block ) );
+				$output = apply_filters( 'viget_parts_kit_block_%', $output, $block_name );
+				$output = apply_filters( 'viget_parts_kit_block_' . $block_name, $output );
 
-				$my_cover1 = '<!-- wp:cover {} /-->';
-				$my_cover2 = '<!-- wp:cover {"url":{"type":"string"},"useFeaturedImage":{"type":"boolean","default":false},"id":{"type":"number"},"alt":{"type":"string","default":""},"hasParallax":{"type":"boolean","default":false},"isRepeated":{"type":"boolean","default":false},"dimRatio":{"type":"number","default":100},"overlayColor":{"type":"string"},"customOverlayColor":{"type":"string"},"isUserOverlayColor":{"type":"boolean"},"backgroundType":{"type":"string","default":"image"},"focalPoint":{"type":"object"},"minHeight":{"type":"number"},"minHeightUnit":{"type":"string"},"gradient":{"type":"string"},"customGradient":{"type":"string"},"contentPosition":{"type":"string"},"isDark":{"type":"boolean","default":true},"allowedBlocks":{"type":"array"},"templateLock":{"type":["string","boolean"],"enum":["all","insert","contentOnly",false]},"tagName":{"type":"string","default":"div"},"lock":{"type":"object"},"metadata":{"type":"object"},"align":{"type":"string","enum":["left","center","right","wide","full",""]},"style":{"type":"object"},"borderColor":{"type":"string"},"textColor":{"type":"string"},"className":{"type":"string"},"layout":{"type":"object"},"fontSize":{"type":"string"},"fontFamily":{"type":"string"}} /-->';
-
-				$cover = '<!-- wp:cover {"layout":{"type":"constrained"}} -->
-<div class="wp-block-cover"><span aria-hidden="true" class="wp-block-cover__background has-background-dim-100 has-background-dim"></span><div class="wp-block-cover__inner-container"></div></div>
-<!-- /wp:cover -->';
-
-				$output = $cover;
-
-				require VPK_PLUGIN_PATH . 'views/editor.php';
+				require VPK_PLUGIN_PATH . 'views/block.php';
 
 				exit;
 			},

@@ -3,11 +3,17 @@
  * Render Parts Kit Block Editor.
  *
  * @global string $block_name
- *
  * @global string $output
  *
  * @package VigetPartsKit
  */
+
+$my_cover1 = '<!-- wp:cover /-->';
+$my_cover2 = '<!-- wp:cover {"url":{"type":"string"},"useFeaturedImage":{"type":"boolean","default":false},"id":{"type":"number"},"alt":{"type":"string","default":""},"hasParallax":{"type":"boolean","default":false},"isRepeated":{"type":"boolean","default":false},"dimRatio":{"type":"number","default":100},"overlayColor":{"type":"string"},"customOverlayColor":{"type":"string"},"isUserOverlayColor":{"type":"boolean"},"backgroundType":{"type":"string","default":"image"},"focalPoint":{"type":"object"},"minHeight":{"type":"number"},"minHeightUnit":{"type":"string"},"gradient":{"type":"string"},"customGradient":{"type":"string"},"contentPosition":{"type":"string"},"isDark":{"type":"boolean","default":true},"allowedBlocks":{"type":"array"},"templateLock":{"type":["string","boolean"],"enum":["all","insert","contentOnly",false]},"tagName":{"type":"string","default":"div"},"lock":{"type":"object"},"metadata":{"type":"object"},"align":{"type":"string","enum":["left","center","right","wide","full",""]},"style":{"type":"object"},"borderColor":{"type":"string"},"textColor":{"type":"string"},"className":{"type":"string"},"layout":{"type":"object"},"fontSize":{"type":"string"},"fontFamily":{"type":"string"}} /-->';
+
+$cover = '<!-- wp:cover {"layout":{"type":"constrained"}} -->
+<div class="wp-block-cover"><span aria-hidden="true" class="wp-block-cover__background has-background-dim-100 has-background-dim"></span><div class="wp-block-cover__inner-container"></div></div>
+<!-- /wp:cover -->';
 
 ?>
 <!DOCTYPE html>
@@ -26,28 +32,19 @@
 		html {
 			height: 100vh;
 		}
-		body/*,
-		#viget-parts-kit-block-editor,
-		body > .editor,
-		body > .editor > .block-editor,
-		body > .editor > .block-editor > div,
-		body > .editor > .block-editor > div > .edit-post-layout*/ {
+		body {
 			min-height: 100vh;
 		}
-
-		/*
-		.interface-navigable-region > *:not(:empty),
-		.edit-post-visual-editor,
-		.is-root-container {
-			height: 100%;
-		}*/
 	</style>
 </head>
 <body>
 	<textarea id="viget-parts-kit-block-editor"><?php echo esc_textarea( $output ); ?></textarea>
 
 	<script>
-		wp.attachEditor( document.getElementById( 'viget-parts-kit-block-editor' ) );
+		wp.attachEditor(
+			document.getElementById( 'viget-parts-kit-block-editor' ),
+			<?php echo wp_json_encode( $this->gutenberg->get_editor_settings() ) ?>
+		);
 	</script>
 
 	<?php wp_footer(); ?>

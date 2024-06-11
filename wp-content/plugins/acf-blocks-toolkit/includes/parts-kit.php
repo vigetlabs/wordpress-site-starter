@@ -6,33 +6,9 @@
  */
 
 use Viget\ACFBlocksToolkit\Block_Registration;
-use VigetPartsKit\PartsKit;
 
 add_filter(
-	'viget_parts_kit',
-	function( array $parts ): array {
-		$blocks = Block_Registration::get_all_blocks();
-
-		foreach ( $blocks as $block ) {
-			$block_name = str_contains( $block['name'], '/' ) ? $block['name'] : 'acf/' . $block['name'];
-
-			if ( isset( $parts[ $block_name ] ) ) {
-				continue;
-			}
-
-			$parts[ $block_name ] = [
-				'title'    => $block['title'],
-				'url'      => home_url( PartsKit::URL_SLUG . '/' . urlencode( $block_name ) ),
-				'children' => [],
-			];
-		}
-
-		return $parts;
-	}
-);
-
-add_filter(
-	'viget_parts_kit_%',
+	'viget_parts_kit_block_%',
 	function ( string $output, string $block_name ): string {
 		$block = Block_Registration::get_block( $block_name );
 
@@ -49,19 +25,47 @@ add_filter(
 			}
 		}
 
-		if ( empty( $block['data'] ) ) {
-			$block['data'] = [];
-		}
-
-		$block['data'] = array_merge( $block['data'], acfbt_get_sample_props( $block ) );
-
-		ob_start();
-		acf_render_block( $block, '', true );
-		return ob_get_clean();
+		return acfbt_parse_inner_blocks( $output );
 	},
 	10,
 	2
 );
+
+/**
+ * Parse InnerBlocks Template
+ *
+ * @param string $output
+ *
+ * @return string
+ */
+function acfbt_parse_inner_blocks( string $output ): string {
+	// Check if InnerBlocks tag has a template attribute with regular expression
+	if ( ! preg_match( '/<InnerBlocks[^>]*template="([^"]*)"[^>]*>/i', $output, $matches ) ) {
+		return $output;
+	}
+
+	// Get the template attribute value
+	$template = $matches[1];
+	$template = htmlspecialchars_decode( $template );
+	$template = json_decode( $template, true );
+
+	$content = '';
+
+	foreach ( $template as $block_array ) {
+		$block = [
+			'blockName'   => $block_array[0],
+			'attrs'       => $block_array[1] ?? [],
+			'innerBlocks' => $block_array[2] ?? [],
+		];
+		$content .= apply_filters( 'the_content', render_block( $block ) );
+		$content  = acfbt_parse_inner_blocks( $content );
+	}
+
+	$content = str_replace( '$', '\$', $content );
+
+	// Replace the InnerBlocks tag with the parsed content
+	return preg_replace( '/<InnerBlocks[^>]*\/>/i', $content, $output );
+}
 
 /**
  * Get Sample Block properties
