@@ -86,9 +86,14 @@ class CoreParts {
 					return $output;
 				}
 
-				ob_start();
-				$core_block->render();
-				return ob_get_clean();
+				$block = [
+					'blockName'    => $block_name,
+//					'attrs'        => $core_block->get_attributes(),
+					'attrs'        => [],
+					'innerContent' => [],
+				];
+
+				return serialize_block( $block );
 			},
 			10,
 			2

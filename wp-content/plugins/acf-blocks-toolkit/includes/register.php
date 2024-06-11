@@ -71,7 +71,7 @@ class Block_Registration {
 					return $metadata;
 				}
 
-				$metadata['acf']['renderCallback'] = function ( array $block, string $content = '', bool $is_preview = false ): void {
+				$metadata['acf']['renderCallback'] = function ( array $block, string $content = '', bool $is_preview = false ) use ( $metadata ): void {
 					$block_name    = str_replace( 'acf/', '', $block['name'] );
 					$block['slug'] = sanitize_title( $block_name );
 					if ( empty( $block['path'] ) ) {
@@ -80,6 +80,9 @@ class Block_Registration {
 					if ( empty( $block['url'] ) ) {
 						$block['url'] = self::path_to_url( $block['path'] );
 					}
+
+					// Pass the block template data to the block.
+					$block['template'] = $metadata['acf']['innerBlocks'] ?? [];
 
 					$twig = $block['path'] . '/render.twig';
 
@@ -281,7 +284,7 @@ class Block_Registration {
 	 * @return void
 	 */
 	public static function render_twig_block( string $template, array $block = [], string $content = '', bool $is_preview = false, int $post_id = 0 ): void {
-		$context = Timber::context();
+		$context = get_queried_object() ? Timber::context() : [];
 
 		// Store block attributes.
 		$context['attributes'] = $block;
