@@ -62,7 +62,7 @@ class WPGutenberg {
 	 *
 	 * @return void
 	 */
-	private function load_extra_blocks() {
+	private function load_extra_blocks(): void {
 		// phpcs:ignore
 		$GLOBALS['hook_suffix'] = '';
 
@@ -92,9 +92,10 @@ class WPGutenberg {
 	 * Override some features that probably don't make sense in an isolated editor
 	 *
 	 * @param array $settings Settings array.
+	 *
 	 * @return array
 	 */
-	public function block_editor_settings( array $settings ) {
+	public function block_editor_settings( array $settings ): array {
 		$settings['availableLegacyWidgets'] = (object) [];
 		$settings['hasPermissionsToManageWidgets'] = false;
 
@@ -208,9 +209,10 @@ class WPGutenberg {
 			'richEditingEnabled'     => user_can_richedit(),
 			'codeEditingEnabled'     => false,
 			'allowedBlockTypes'      => $allowed_block_types,
+
 			'__experimentalCanUserUseUnfilteredHTML' => false,
-			'__experimentalBlockPatterns' => [],
-			'__experimentalBlockPatternCategories' => [],
+			'__experimentalBlockPatterns'            => [],
+			'__experimentalBlockPatternCategories'   => [],
 		);
 
 		if ( false !== $color_palette ) {
@@ -233,7 +235,7 @@ class WPGutenberg {
 	 *
 	 * @return void
 	 */
-	public function setup_rest_api() {
+	public function setup_rest_api(): void {
 		global $post;
 
 		$post_type = 'post';
@@ -271,7 +273,7 @@ class WPGutenberg {
 	 *
 	 * @return void
 	 */
-	public function setup_media(): void{
+	public function setup_media(): void {
 		/**
 		 * @psalm-suppress MissingFile
 		 */

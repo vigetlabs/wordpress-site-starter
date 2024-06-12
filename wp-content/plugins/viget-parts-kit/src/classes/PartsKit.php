@@ -205,7 +205,7 @@ class PartsKit {
 				}
 
 				$this->gutenberg = new WPGutenberg();
-				$this->gutenberg->load();
+				$this->gutenberg?->load();
 
 				do_action( 'viget_parts_kit_init' );
 			}
@@ -225,6 +225,8 @@ class PartsKit {
 
 				$this->disable_admin_bar();
 
+				remove_filter( 'the_content', 'wpautop' );
+
 				header( 'Access-Control-Allow-Origin: *' );
 
 				$block = [
@@ -234,9 +236,11 @@ class PartsKit {
 					'innerBlocks'  => [],
 				];
 
-				$output = apply_filters( 'the_content', render_block( $block ) );
+				$output = apply_filters( 'the_content', trim( render_block( $block ) ) );
 				$output = apply_filters( 'viget_parts_kit_block_%', $output, $block_name );
 				$output = apply_filters( 'viget_parts_kit_block_' . $block_name, $output );
+
+				$output .= $this->source_code( $output );
 
 				require VPK_PLUGIN_PATH . 'views/block.php';
 
@@ -259,6 +263,39 @@ class PartsKit {
 		remove_action( 'wp_body_open', 'wp_admin_bar_render', 0 );
 		remove_action( 'wp_footer', 'wp_admin_bar_render', 1000 );
 	}
+
+	/**
+	 * Highlight the HTML
+	 *
+	 * @param string $html
+	 *
+	 * @return string
+	 */
+	private function source_code( string $html ): string {
+		if ( ! $html ) {
+			return '';
+		}
+
+		$html = preg_replace( '/<([div|p])([^>]*)?>/', '<$1$2>' . PHP_EOL . "\t", $html );
+		$html = preg_replace( '/<\/([div|p])>/', PHP_EOL . '</$1>', $html );
+
+		$markup = highlight_string( $html, true );
+
+		// Reduce spacing.
+		$markup = preg_replace( '/<br\s?\/?><br\s?\/?>/', '<br>', $markup );
+		$markup = preg_replace( '/<br\s?\/?><br\s?\/?>/', '<br>', $markup );
+
+		return sprintf(
+			'<div class="viget-markup">
+					<input type="checkbox" id="viget-toggle-markup">
+					<label for="viget-toggle-markup">%s</label>
+					<pre class="viget-source-code">%s</pre>
+				</div>',
+			esc_html__( 'Toggle Markup', 'viget-parts-kit' ),
+			$markup
+		);
+	}
+
 	/**
 	 * Get the block editor settings
 	 *

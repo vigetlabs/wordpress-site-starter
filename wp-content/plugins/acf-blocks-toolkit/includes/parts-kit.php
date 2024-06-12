@@ -57,8 +57,11 @@ function acfbt_parse_inner_blocks( string $output ): string {
 			'attrs'       => $block_array[1] ?? [],
 			'innerBlocks' => $block_array[2] ?? [],
 		];
-		$content .= apply_filters( 'the_content', render_block( $block ) );
+
+		$block    = acfbt_add_sample_data( $block );
+		$content .= apply_filters( 'the_content', trim( render_block( $block ) ) );
 		$content  = acfbt_parse_inner_blocks( $content );
+		$content  = acfbt_fill_empty_tags( $content );
 	}
 
 	$content = str_replace( '$', '\$', $content );
@@ -145,4 +148,68 @@ function acfbt_get_sample_data( array $field ): string|array {
 	}
 
 	return 'Unsupported.';
+}
+
+/**
+ * Add Sample Data to Block
+ *
+ * @param array $block
+ *
+ * @return array
+ */
+function acfbt_add_sample_data( array $block ): array {
+	$supported = [
+		'core/image'     => [
+			'url'    => acfbt_get_sample_data( [ 'type' => 'image' ] )[ 'url' ],
+			'width'  => acfbt_get_sample_data( [ 'type' => 'image' ] )[ 'width' ],
+			'height' => acfbt_get_sample_data( [ 'type' => 'image' ] )[ 'height' ],
+		],
+		'core/heading'   => [
+			'content' => acfbt_get_sample_data( [ 'type' => 'text' ] ),
+		],
+		'core/paragraph' => [
+			'content' => acfbt_get_sample_data( [ 'type' => 'text' ] ),
+		],
+		'core/button'    => [
+			'text' => acfbt_get_sample_data( [ 'type' => 'text' ] ),
+			'url'  => '#',
+		],
+		'core/details'   => [
+			'summary' => acfbt_get_sample_data( [ 'type' => 'text' ] ),
+		],
+	];
+
+	if ( ! array_key_exists( $block['blockName'], $supported ) ) {
+		return $block;
+	}
+
+	foreach ( $supported[ $block['blockName'] ] as $attr => $value ) {
+		if ( empty( $block['attrs'][ $attr ] ) ) {
+			$block['attrs'][ $attr ] = $value;
+		}
+	}
+
+	return $block;
+}
+
+/**
+ * Add sample content to empty paragraph, heading, summary, etc.
+ *
+ * @param string $content
+ *
+ * @return string
+ */
+function acfbt_fill_empty_tags( string $content ): string {
+	$sample_text = acfbt_get_sample_data( [ 'type' => 'text' ] );
+
+	$patterns = [
+		'/<(p[^>]*)><\/(p)>/i',
+		'/<(h[1-6][^>]*)><\/(h[1-6])>/i',
+	];
+
+	foreach ( $patterns as $pattern ) {
+		$content = preg_replace( $pattern, '<$1>' . $sample_text . '</$2>', $content );
+	}
+
+	return $content;
 }

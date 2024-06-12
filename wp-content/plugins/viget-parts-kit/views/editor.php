@@ -43,7 +43,7 @@ $cover = '<!-- wp:cover {"layout":{"type":"constrained"}} -->
 	<script>
 		wp.attachEditor(
 			document.getElementById( 'viget-parts-kit-block-editor' ),
-			<?php echo wp_json_encode( $this->gutenberg->get_editor_settings() ) ?>
+			<?php echo wp_json_encode( $this->gutenberg?->get_editor_settings() ) ?>
 		);
 	</script>
 

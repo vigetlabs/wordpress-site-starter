@@ -7,6 +7,8 @@
 
 namespace VigetPartsKit;
 
+use Viget\ACFBlocksToolkit\Block_Registration;
+
 /**
  * CoreParts Class
  */
@@ -59,18 +61,36 @@ class BlockParts {
 						];
 					}
 
-					$parts[ $namespace ]['children'][] = [
+					$the_block = [
 						'title'    => $block->title,
 						'url'      => home_url( PartsKit::URL_SLUG . '/' . urlencode( $block->name ) ),
 						'children' => [],
 					];
+
+					if ( 'acf' === $namespace ) {
+						$acf_block = Block_Registration::get_block( $block->name );
+
+						if ( ! empty( $acf_block['parent'] ) ) {
+							foreach ( $acf_block['parent'] as $parent ) {
+								if ( isset( $parts[ $namespace ]['children'][ $parent ] ) ) {
+									$parts[ $namespace ]['children'][ $parent ]['children'][] = $the_block;
+									continue 2;
+								}
+							}
+						}
+					}
+
+					$parts[ $namespace ]['children'][ $block->name ] = $the_block;
 				}
 
+				// Cleanup and sort data.
 				if ( ! empty( $parts ) ) {
 					foreach ( $parts as &$group ) {
 						if ( empty( $group['children'] ) ) {
 							continue;
 						}
+
+						$group['children'] = array_values( $group['children'] );
 
 						usort( $group['children'], fn( $a, $b ) => $a['title'] <=> $b['title'] );
 					}
