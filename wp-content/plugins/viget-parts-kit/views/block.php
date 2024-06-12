@@ -81,13 +81,23 @@
 		#viget-toggle-markup:checked + label + .viget-source-code {
 			display: block;
 		}
+
+		/* Disable links in output */
+		.viget-block-output a {
+			pointer-events: none;
+			text-decoration: underline wavy 0.025rem rgba(0, 0, 0, 0.5);
+			text-decoration-skip-ink: none;
+		}
 	</style>
 </head>
 <body>
 	<main id="root">
 		<?php
 		if ( $output ) {
-			echo $output;
+			printf(
+				'<div class="viget-block-output">%s</div>',
+				$output
+			);
 		} else {
 			printf(
 				'<p class="viget-empty-part"><em>%s</em></p>',
