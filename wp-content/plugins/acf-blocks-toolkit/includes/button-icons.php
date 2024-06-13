@@ -14,6 +14,22 @@ global $acfbt_disable_filters;
 $acfbt_disable_filters = false;
 
 /**
+ * Get supported blocks for icons.
+ *
+ * @return string[]
+ */
+function acfbt_get_supported_icon_blocks(): array {
+	return apply_filters(
+		'acfbt_supported_icon_blocks',
+		[
+			'core/button',
+			'core/navigation-link',
+			'core/home-link',
+		]
+	);
+}
+
+/**
  * Enqueue Editor scripts and styles.
  */
 add_action(
@@ -30,9 +46,10 @@ add_action(
 
 		wp_localize_script(
 			'acfbt-editor-scripts',
-			'acfbtIcons',
+			'acfbtVars',
 			[
-				'iconsJson' => acfbt_get_icons(),
+				'iconsJson'       => acfbt_get_icons(),
+				'supportedBlocks' => acfbt_get_supported_icon_blocks(),
 			]
 		);
 
@@ -60,19 +77,20 @@ add_action(
  * Enqueue block styles
  * (Applies to both frontend and Editor)
  */
-
 add_action(
 	'init',
 	function () {
-		wp_enqueue_block_style(
-			'core/button',
-			array(
-				'handle' => 'acfbt-block-styles',
-				'src'    => ACFBT_PLUGIN_URL . '/build/style.css',
-				'ver'    => ACFBT_VERSION,
-				'path'   => ACFBT_PLUGIN_PATH . '/build/style.css',
-			)
-		);
+		foreach ( acfbt_get_supported_icon_blocks() as $block_name ) {
+			wp_enqueue_block_style(
+				$block_name,
+				array(
+					'handle' => 'acfbt-block-styles',
+					'src'    => ACFBT_PLUGIN_URL . '/build/style.css',
+					'ver'    => ACFBT_VERSION,
+					'path'   => ACFBT_PLUGIN_PATH . '/build/style.css',
+				)
+			);
+		}
 	}
 );
 
@@ -90,7 +108,9 @@ function acfbt_button_icons_editor_css(): string {
 		$content = 'data:image/svg+xml;utf8,' . rawurlencode( $icon['icon'] );
 
 		$css .= ".wp-block-button.has-icon__{$slug} .wp-block-button__link::after,";
-		$css .= ".wp-block-button.has-icon__{$slug} .wp-block-button__link::before {";
+		$css .= ".wp-block-button.has-icon__{$slug} .wp-block-button__link::before,";
+		$css .= ".wp-block-navigation-item.has-icon__{$slug} .wp-block-navigation-item__content::after,";
+		$css .= ".wp-block-navigation-item.has-icon__{$slug} .wp-block-navigation-item__content::before {";
 		$css .= 'height: 0.7em;';
 		$css .= 'width: 1em;';
 		$css .= "mask-image: url( $content );";
@@ -109,45 +129,55 @@ function acfbt_button_icons_editor_css(): string {
 /**
  * Render icons on the frontend.
  */
-add_filter(
-	'render_block_core/button',
-	function ( string $block_content, array $block ): string {
-		if ( ! isset( $block['attrs']['icon'] ) ) {
-			return $block_content;
-		}
+foreach ( acfbt_get_supported_icon_blocks() as $block_name ) {
+	add_filter( "render_block_{$block_name}", 'acfbt_render_frontend_icons', 10, 2 );
+}
 
-		$icon = acfbt_get_icon( $block['attrs']['icon'] );
+/**
+ * Render icons on frontend.
+ *
+ * @param string $block_content
+ * @param array $block
+ *
+ * @return string
+ */
+function acfbt_render_frontend_icons( string $block_content, array $block ): string {
+	if ( ! isset( $block['attrs']['icon'] ) ) {
+		return $block_content;
+	}
 
-		// Make sure the selected icon exists, otherwise bail.
-		if ( empty( $icon ) ) {
-			return $block_content;
-		}
+	list( $namespace, $block_name ) = explode( '/', $block['blockName'] );
 
-		$position_left = $block['attrs']['iconPositionLeft'] ?? false;
+	$icon = acfbt_get_icon( $block['attrs']['icon'] );
 
-		// Append the icon class to the block.
-		$p = new WP_HTML_Tag_Processor( $block_content );
-		if ( $p->next_tag() ) {
-			$p->add_class( 'has-icon__' . $icon['value'] );
-		}
-		$block_content = $p->get_updated_html();
-		$block_content = str_replace( '$', '\$', $block_content );
+	// Make sure the selected icon exists, otherwise bail.
+	if ( empty( $icon ) ) {
+		return $block_content;
+	}
 
-		$pattern = '/(<a[^>]*>)(.*?)(<\/a>)/i';
-		$markup  = sprintf(
-			'<span class="wp-block-button__link-icon has-icon__%s" aria-hidden="true">%s</span>',
-			esc_attr( $icon['value'] ),
-			$icon['icon']
-		);
+	$position_left = $block['attrs']['iconPositionLeft'] ?? false;
 
-		// Add the SVG icon either to the left of right of the button text.
-		return $position_left
-			? preg_replace( $pattern, '$1' . $markup . '$2$3', $block_content )
-			: preg_replace( $pattern, '$1$2' . $markup . '$3', $block_content );
-	},
-	10,
-	2
-);
+	// Append the icon class to the block.
+	$p = new WP_HTML_Tag_Processor( $block_content );
+	if ( $p->next_tag() ) {
+		$p->add_class( 'has-icon__' . $icon['value'] );
+	}
+	$block_content = $p->get_updated_html();
+	$block_content = str_replace( '$', '\$', $block_content );
+
+	$pattern = '/(<a[^>]*>)(.*?)(<\/a>)/i';
+	$markup  = sprintf(
+		'<span class="wp-block-%s__link-icon has-icon__%s" aria-hidden="true">%s</span>',
+		esc_attr( $block_name ),
+		esc_attr( $icon['value'] ),
+		$icon['icon']
+	);
+
+	// Add the SVG icon either to the left of right of the button text.
+	return $position_left
+		? preg_replace( $pattern, '$1' . $markup . '$2$3', $block_content )
+		: preg_replace( $pattern, '$1$2' . $markup . '$3', $block_content );
+}
 
 /**
  * Get all available icons.

@@ -1,4 +1,4 @@
-/** global acfbtIcons */
+/** global acfbtVars */
 
 /**
  * External dependencies
@@ -19,7 +19,7 @@ import {
 	__experimentalGrid as Grid, // eslint-disable-line
 } from '@wordpress/components';
 
-const icons = acfbtIcons.iconsJson;
+const icons = acfbtVars.iconsJson;
 
 /**
  * All available icons.
@@ -34,7 +34,7 @@ export const ICONS = icons;
  * @param {Object} settings
  */
 function addAttributes(settings) {
-	if ('core/button' !== settings.name) {
+	if (!acfbtVars.supportedBlocks.includes(settings.name)) {
 		return settings;
 	}
 
@@ -72,7 +72,7 @@ addFilter(
  */
 function addInspectorControls(BlockEdit) {
 	return (props) => {
-		if (props.name !== 'core/button') {
+		if (!acfbtVars.supportedBlocks.includes(props.name)) {
 			return <BlockEdit {...props} />;
 		}
 
@@ -147,7 +147,7 @@ function addClasses(BlockListBlock) {
 	return (props) => {
 		const { name, attributes } = props;
 
-		if ('core/button' !== name || !attributes?.icon) {
+		if (!acfbtVars.supportedBlocks.includes(name) || !attributes?.icon) {
 			return <BlockListBlock {...props} />;
 		}
 

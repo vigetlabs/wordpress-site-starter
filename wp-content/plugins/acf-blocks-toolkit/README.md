@@ -45,6 +45,21 @@ add_filter(
 );
 ```
 
+### `acfbt_supported_icon_blocks` (Filter)
+
+Filter the supported icon blocks. Note: the frontend and editor CSS may need to be manually added for additional blocks.
+
+```php
+<?php
+add_filter(
+	'acfbt_supported_icon_blocks',
+	function ( array $blocks ): array {
+		$blocks[] = 'core/heading';
+		return $blocks;
+	}
+);
+```
+
 ### `acfbt_button_icons_editor_css` (Filter)
 
 Filter the editor CSS for the button icons. This is useful when some icons do not use outline fill the fill property causes issues. Or can also be used to specify icon dimensions using `max-height`.

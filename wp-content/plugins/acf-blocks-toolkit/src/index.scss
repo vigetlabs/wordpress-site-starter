@@ -1,18 +1,20 @@
-.wp-block-button[class*="has-icon__"] {
-	.wp-block-button__link {
+.wp-block-button[class*="has-icon__"],
+.wp-block-navigation-item[class*="has-icon__"] {
+	.wp-block-button__link,
+	.wp-block-navigation-item__content {
 		display: flex;
 		gap: 0.5em;
 		align-items: center;
 
-		span {
+		span[class$="__link-icon"] {
 			line-height: 0;
-		}
 
-		svg {
-			color: currentColor;
-			fill: currentColor;
-			height: 0.7em;
-			width: 1em;
+			svg {
+				color: currentColor;
+				fill: currentColor;
+				height: 0.7em;
+				width: 1em;
+			}
 		}
 	}
 }
