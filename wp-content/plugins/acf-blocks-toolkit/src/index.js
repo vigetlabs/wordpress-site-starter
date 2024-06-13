@@ -1,3 +1,5 @@
+/** global acfbtIcons */
+
 /**
  * External dependencies
  */
@@ -17,7 +19,7 @@ import {
 	__experimentalGrid as Grid, // eslint-disable-line
 } from '@wordpress/components';
 
-import icons from '../build/icons.json';
+const icons = acfbtIcons.iconsJson;
 
 /**
  * All available icons.
@@ -93,7 +95,7 @@ function addInspectorControls(BlockEdit) {
 										key={index}
 										label={icon?.label}
 										isPressed={currentIcon === icon.value}
-										className="button-icon-picker__button"
+										className={"button-icon-picker__button button-icon-picker__icon-" + icon.value }
 										onClick={() =>
 											setAttributes({
 												// Allow user to disable icons.
