@@ -299,8 +299,14 @@ function acfbt_generate_json(): void {
 	$json = [];
 
 	foreach ( $icons as $slug => $icon ) {
+		if ( ! is_array( $icon ) ) {
+			$icon = [ 'icon' => $icon ];
+		}
+
+		$default_label = is_numeric( $slug ) ? __( 'Icon', 'acf-blocks-toolkit' ) . ' ' . $slug : ucwords( str_replace( '-', ' ', $slug ) );
+
 		$json[] = [
-			'label'       => $icon['label'],
+			'label'       => $icon['label'] ?? $default_label,
 			'value'       => $slug,
 			'icon'        => $icon['icon'],
 			'defaultLeft' => $icon['defaultLeft'] ?? false,
