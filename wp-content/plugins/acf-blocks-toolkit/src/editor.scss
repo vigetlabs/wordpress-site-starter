@@ -26,6 +26,9 @@
 			&::before {
 				content: "";
 			}
+			&::after {
+				display: none;
+			}
 		}
 	}
 }
@@ -62,4 +65,8 @@
 			aspect-ratio: 1/1;
 		}
 	}
+}
+
+div[id^="portal/tooltip-"] {
+	pointer-events: none;
 }

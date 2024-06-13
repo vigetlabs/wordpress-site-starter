@@ -100,6 +100,7 @@ function addInspectorControls(BlockEdit) {
 											setAttributes({
 												// Allow user to disable icons.
 												icon: currentIcon === icon.value ? null : icon.value,
+												iconPositionLeft: iconPositionLeft || icon?.defaultLeft,
 											})
 										}
 									>
