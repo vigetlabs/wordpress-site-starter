@@ -3,7 +3,7 @@
  * Plugin Name:       ACF Blocks Toolkit
  * Plugin URI:        https://viget.com
  * Description:       ACF Block Registration and Helper functions.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 5.7
  * Requires PHP:      8.1
  * Requires Plugins:  advanced-custom-fields-pro
@@ -17,11 +17,12 @@
  * @package ACFBlocksToolkit
  */
 
-use Viget\ACFBlocksToolkit\Block_Registration;
+use Viget\ACFBlocksToolkit\BlockIcons;
+use Viget\ACFBlocksToolkit\BlockRegistration;
 use Viget\ACFBlocksToolkit\Settings;
 
 // Plugin version.
-const ACFBT_VERSION = '1.0.0';
+const ACFBT_VERSION = '1.0.1';
 
 // Plugin path.
 define( 'ACFBT_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
@@ -32,23 +33,21 @@ define( 'ACFBT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 // Helper functions.
 require_once 'includes/helpers.php';
 
-// Assets.
-require_once 'includes/assets.php';
-
-// Registration functions.
-require_once 'includes/register.php';
-
-// Settings functions.
-require_once 'includes/settings.php';
-
 // Timber functions.
 require_once 'includes/timber.php';
 
-// Timber functions.
-require_once 'includes/button-icons.php';
+// Assets.
+require_once 'includes/assets.php';
 
-// Parts Kit support.
-require_once 'includes/parts-kit.php';
+// Block Registration class.
+require_once 'src/classes/BlockRegistration.php';
 
-Block_Registration::init();
+// Block Settings class.
+require_once 'src/classes/Settings.php';
+
+// Block Icons support.
+require_once 'src/classes/BlockIcons.php';
+
+BlockRegistration::init();
 Settings::init();
+new BlockIcons();

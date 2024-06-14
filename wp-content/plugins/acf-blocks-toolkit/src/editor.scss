@@ -1,6 +1,8 @@
 // Add icons to Button blocks and style appropriately.
-.wp-block-button[class*="has-icon__"] {
-	.wp-block-button__link {
+.wp-block-button[class*="has-icon__"],
+.wp-block-navigation-item[class*="has-icon__"] {
+	.wp-block-button__link,
+	.wp-block-navigation-item__content {
 		&::after {
 			content: "";
 		}
@@ -22,9 +24,13 @@
 	}
 
 	&.has-icon-position__left {
-		.wp-block-button__link {
+		.wp-block-button__link,
+		.wp-block-navigation-item__content {
 			&::before {
 				content: "";
+			}
+			&::after {
+				display: none;
 			}
 		}
 	}
@@ -62,4 +68,8 @@
 			aspect-ratio: 1/1;
 		}
 	}
+}
+
+div[id^="portal/tooltip-"] {
+	pointer-events: none;
 }

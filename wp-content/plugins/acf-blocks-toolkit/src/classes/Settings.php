@@ -39,7 +39,7 @@ class Settings {
 					return array_merge( $paths, self::$paths );
 				}
 
-				foreach ( Block_Registration::get_all_blocks() as $block ) {
+				foreach ( BlockRegistration::get_all_blocks() as $block ) {
 					if ( empty( $block['path'] ) ) {
 						continue;
 					}
@@ -74,7 +74,7 @@ class Settings {
 					return $path;
 				}
 
-				$block_path = Block_Registration::get_block_location( $block );
+				$block_path = BlockRegistration::get_block_location( $block );
 
 				if ( $block_path ) {
 					return $block_path;

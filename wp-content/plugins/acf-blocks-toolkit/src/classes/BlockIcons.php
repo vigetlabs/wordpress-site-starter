@@ -1,6 +1,6 @@
 <?php
 /**
- * Add Button Icon Support
+ * Block Icons Support
  *
  * Inspired by Nick Diego's Enable Button Icons plugin.
  * @link https://github.com/ndiego/enable-button-icons
@@ -8,157 +8,101 @@
  * @package ACFBlocksToolkit
  */
 
-const ACFBT_ICONS_CHECKSUM = 'acfbt_icons_checksum';
+namespace Viget\ACFBlocksToolkit;
+
+use WP_HTML_Tag_Processor;
 
 /**
- * Enqueue Editor scripts and styles.
+ * Block Icons Class
  */
-add_action(
-	'enqueue_block_editor_assets',
-	function () {
-		$asset_file = include ACFBT_PLUGIN_PATH . '/build/index.asset.php';
+class BlockIcons {
 
-		wp_enqueue_script(
-			'acfbt-editor-scripts',
-			ACFBT_PLUGIN_URL . '/build/index.js',
-			$asset_file['dependencies'],
-			$asset_file['version']
-		);
+	const ICONS_CHECKSUM = 'acfbt_icons_checksum';
 
-		wp_set_script_translations(
-			'acfbt-editor-scripts',
-			'acf-blocks-toolkit',
-			ACFBT_PLUGIN_URL . '/languages'
-		);
-
-		wp_enqueue_style(
-			'acfbt-editor-styles',
-			ACFBT_PLUGIN_URL . '/build/editor.css'
-		);
-
-		wp_add_inline_style(
-			'acfbt-editor-styles',
-			acfbt_button_icons_css()
-		);
-	}
-);
-
-/**
- * Enqueue block styles
- * (Applies to both frontend and Editor)
- */
-
-add_action(
-	'init',
-	function () {
-		wp_enqueue_block_style(
-			'core/button',
-			array(
-				'handle' => 'acfbt-block-styles',
-				'src'    => ACFBT_PLUGIN_URL . '/build/style.css',
-				'ver'    => ACFBT_VERSION,
-				'path'   => ACFBT_PLUGIN_PATH . '/build/style.css',
-			)
-		);
-	}
-);
-
-/**
- * Add the icons to the block styles.
- *
- * @return string
- */
-function acfbt_button_icons_css(): string {
-	$icons = acfbt_get_icons();
-	$css   = '';
-
-	foreach ( $icons as $slug => $icon ) {
-		$content = 'data:image/svg+xml;utf8,' . rawurlencode( $icon['icon'] );
-		$css .= ".wp-block-button.has-icon__{$slug} .wp-block-button__link::after,";
-		$css .= ".wp-block-button.has-icon__{$slug} .wp-block-button__link::before {";
-		$css .= 'height: 0.7em;';
-		$css .= 'width: 1em;';
-		$css .= "mask-image: url( $content );";
-		$css .= "-webkit-mask-image: url( $content );";
-		$css .= '}';
-	}
-
-	return $css;
-}
-
-/**
- * Render icons on the frontend.
- */
-add_filter(
-	'render_block_core/button',
-	function ( string $block_content, array $block ): string {
-		if ( ! isset( $block['attrs']['icon'] ) ) {
-			return $block_content;
-		}
-
-		$icon          = $block['attrs']['icon'];
-		$position_left = $block['attrs']['iconPositionLeft'] ?? false;
-
-		// All available icon SVGs.
-		$icons = acfbt_get_icons();
-
-		// Make sure the selected icon is in the array, otherwise bail.
-		if ( ! array_key_exists( $icon, $icons ) ) {
-			return $block_content;
-		}
-
-		// Append the icon class to the block.
-		$p = new WP_HTML_Tag_Processor( $block_content );
-		if ( $p->next_tag() ) {
-			$p->add_class( 'has-icon__' . $icon );
-		}
-		$block_content = $p->get_updated_html();
-
-		$pattern = '/(<a[^>]*>)(.*?)(<\/a>)/i';
-		$markup  = sprintf(
-			'<span class="wp-block-button__link-icon has-icon__%s" aria-hidden="true">%s</span>',
-			esc_attr( $icon ),
-			$icons[ $icon ]['icon']
-		);
-
-		// Add the SVG icon either to the left of right of the button text.
-		return $position_left
-			? preg_replace( $pattern, '$1' . $markup . '$2$3', $block_content )
-			: preg_replace( $pattern, '$1$2' . $markup . '$3', $block_content );
-	},
-	10,
-	2
-);
-
-/**
- * Get all available icons.
- *
- * @return array
- */
-function acfbt_get_icons(): array {
 	/**
-	 * Filter the available button icons.
-	 *
-	 * @param array $icons The available button icons.
+	 * @var bool
 	 */
-	return apply_filters(
-		'acfbt_button_icons',
-		[
+	private bool $disable_icon_filter = false;
+
+	/**
+	 * Initialize the class.
+	 */
+	public function __construct() {
+		// Generate cached JSON file.
+		$this->generate_json();
+
+		// Enqueue editor assets.
+		$this->enqueue_editor_assets();
+
+		// Enqueue block assets.
+		$this->enqueue_block_assets();
+
+		// Add hooks to render icons on frontend.
+		$this->add_render_hooks();
+	}
+
+	/**
+	 * Get supported blocks for icons.
+	 *
+	 * @return string[]
+	 */
+	public function get_supported_blocks(): array {
+		return apply_filters(
+			'acfbt_supported_icon_blocks',
+			[
+				'core/button',
+				'core/navigation-link',
+				'core/home-link',
+			]
+		);
+	}
+
+	/**
+	 * Render icons on the frontend.
+	 */
+	private function add_render_hooks(): void {
+		foreach ( $this->get_supported_blocks() as $block_name ) {
+			add_filter(
+				"render_block_{$block_name}",
+				[ $this, 'render_frontend_icons' ],
+				10,
+				2
+			);
+		}
+	}
+
+	/**
+	 * Get all available icons.
+	 *
+	 * @param bool $from_file
+	 *
+	 * @return array
+	 */
+	private function get_icons( bool $from_file = true ): array {
+		if ( $from_file ) {
+			$path = $this->get_icons_file_path();
+			return file_exists( $path ) ? json_decode( file_get_contents( $path ), true ) : [];
+		}
+
+		$icons = [
 			'arrow-left'            => [
-				'label' => __( 'Arrow Left', 'acf-blocks-toolkit' ),
-				'icon'  => "<svg viewBox='0 0 16 11' xmlns='http://www.w3.org/2000/svg'><polygon points='16 4.7 2.88198758 4.7 6.55900621 1 5.56521739 0 0 5.5 5.56521739 11 6.55900621 10 2.88198758 6.3 16 6.3'></polygon></svg>",
+				'label'       => __( 'Arrow Left', 'acf-blocks-toolkit' ),
+				'icon'        => "<svg viewBox='0 0 16 11' xmlns='http://www.w3.org/2000/svg'><polygon points='16 4.7 2.88198758 4.7 6.55900621 1 5.56521739 0 0 5.5 5.56521739 11 6.55900621 10 2.88198758 6.3 16 6.3'></polygon></svg>",
+				'defaultLeft' => true,
 			],
 			'arrow-right'           => [
 				'label' => __( 'Arrow Right', 'acf-blocks-toolkit' ),
 				'icon'  => "<svg viewBox='0 0 16 11' xmlns='http://www.w3.org/2000/svg'><polygon points='0 4.7 13.1180124 4.7 9.44099379 1 10.4347826 0 16 5.5 10.4347826 11 9.44099379 10 13.1180124 6.3 0 6.3'></polygon></svg>",
 			],
 			'chevron-left'          => [
-				'label' => __( 'Chevron Left', 'acf-blocks-toolkit' ),
-				'icon'  => "<svg viewBox='0 0 10 18' xmlns='http://www.w3.org/2000/svg'><polygon points='8.18181818 0 10 1.5 3.03030303 9 10 16.5 8.18181818 18 0 9'></polygon></svg>",
+				'label'       => __( 'Chevron Left', 'acf-blocks-toolkit' ),
+				'icon'        => "<svg viewBox='0 0 10 18' xmlns='http://www.w3.org/2000/svg'><polygon points='8.18181818 0 10 1.5 3.03030303 9 10 16.5 8.18181818 18 0 9'></polygon></svg>",
+				'defaultLeft' => true,
 			],
 			'chevron-left-small'    => [
-				'label' => __( 'Chevron Left Small', 'acf-blocks-toolkit' ),
-				'icon'  => "<svg viewBox='0 0 7 12' xmlns='http://www.w3.org/2000/svg'><polygon points='5.25057985 0 0 5.99997743 5.25057985 12 7 10.5313252 3.03456266 5.99997743 7 1.46865977'></polygon></svg>",
+				'label'       => __( 'Chevron Left Small', 'acf-blocks-toolkit' ),
+				'icon'        => "<svg viewBox='0 0 7 12' xmlns='http://www.w3.org/2000/svg'><polygon points='5.25057985 0 0 5.99997743 5.25057985 12 7 10.5313252 3.03456266 5.99997743 7 1.46865977'></polygon></svg>",
+				'defaultLeft' => true,
 			],
 			'chevron-right'         => [
 				'label' => __( 'Chevron Right', 'acf-blocks-toolkit' ),
@@ -213,8 +157,9 @@ function acfbt_get_icons(): array {
 				'icon'  => "<svg viewBox='0 0 13 12' xmlns='http://www.w3.org/2000/svg'><path d='M1.2,0 L2.22044605e-14,1 L4.5,6 L2.22044605e-14,11 L1.1,12 L6.6,6 L1.2,0 Z M7.2,0 L6.1,1 L10.6,6 L6.1,11 L7.2,12 L12.7,6 L7.2,0 L7.2,0 Z'></path></svg>",
 			],
 			'previous'              => [
-				'label' => __( 'Previous', 'acf-blocks-toolkit' ),
-				'icon'  => "<svg viewBox='0 0 13 12' xmlns='http://www.w3.org/2000/svg'><path d='M11.5,0 L12.7,1 L8.2,6 L12.7,11 L11.6,12 L6.1,6 L11.5,0 Z M5.5,0 L6.6,1 L2.1,6 L6.6,11 L5.5,12 L2.30926389e-14,6 L5.5,0 Z'></path></svg>",
+				'label'       => __( 'Previous', 'acf-blocks-toolkit' ),
+				'icon'        => "<svg viewBox='0 0 13 12' xmlns='http://www.w3.org/2000/svg'><path d='M11.5,0 L12.7,1 L8.2,6 L12.7,11 L11.6,12 L6.1,6 L11.5,0 Z M5.5,0 L6.6,1 L2.1,6 L6.6,11 L5.5,12 L2.30926389e-14,6 L5.5,0 Z'></path></svg>",
+				'defaultLeft' => true,
 			],
 			'shuffle'               => [
 				'label' => __( 'Shuffle', 'acf-blocks-toolkit' ),
@@ -224,39 +169,265 @@ function acfbt_get_icons(): array {
 				'label' => __( 'WordPress', 'acf-blocks-toolkit' ),
 				'icon'  => "<svg viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'><path d='M20,10 C20,4.49 15.51,0 10,0 C4.48,0 0,4.49 0,10 C0,15.52 4.48,20 10,20 C15.51,20 20,15.52 20,10 Z M7.78,15.37 L4.37,6.22 C4.92,6.2 5.54,6.14 5.54,6.14 C6.04,6.08 5.98,5.01 5.48,5.03 C5.48,5.03 4.03,5.14 3.11,5.14 C2.93,5.14 2.74,5.14 2.53,5.13 C4.12,2.69 6.87,1.11 10,1.11 C12.33,1.11 14.45,1.98 16.05,3.45 C15.37,3.34 14.4,3.84 14.4,5.03 C14.4,5.77 14.85,6.39 15.3,7.13 C15.65,7.74 15.85,8.49 15.85,9.59 C15.85,11.08 14.45,14.59 14.45,14.59 L11.42,6.22 C11.96,6.2 12.24,6.05 12.24,6.05 C12.74,6 12.68,4.8 12.18,4.83 C12.18,4.83 10.74,4.95 9.8,4.95 C8.93,4.95 7.47,4.83 7.47,4.83 C6.97,4.8 6.91,6.03 7.41,6.05 L8.33,6.13 L9.59,9.54 L7.78,15.37 Z M17.41,10 C17.65,9.36 18.15,8.13 17.84,5.75 C18.54,7.04 18.89,8.46 18.89,10 C18.89,13.29 17.16,16.24 14.49,17.78 C15.46,15.19 16.43,12.58 17.41,10 Z M6.1,18.09 C3.12,16.65 1.11,13.53 1.11,10 C1.11,8.7 1.34,7.52 1.83,6.41 C3.25,10.3 4.67,14.2 6.1,18.09 Z M10.13,11.46 L12.71,18.44 C11.85,18.73 10.95,18.89 10,18.89 C9.21,18.89 8.43,18.78 7.71,18.56 C8.52,16.18 9.33,13.82 10.13,11.46 L10.13,11.46 Z'></path></svg>",
 			],
-		]
-	);
-}
-
-/**
- * Generate the Icons JSON file.
- *
- * @return void
- */
-function acfbt_generate_json(): void {
-	$icons    = acfbt_get_icons();
-	$checksum = md5( json_encode( $icons ) );
-
-	if ( $checksum === get_transient( ACFBT_ICONS_CHECKSUM ) ) {
-		return;
-	}
-
-	$path = ACFBT_PLUGIN_PATH . '/build/icons.json';
-	$json = [];
-
-	foreach ( $icons as $slug => $icon ) {
-		$json[] = [
-			'label' => $icon['label'],
-			'value' => $slug,
-			'icon'  => $icon['icon'],
 		];
+
+		if ( $this->disable_icon_filter ) {
+			return $icons;
+		}
+
+		/**
+		 * Filter the available button icons.
+		 *
+		 * @param array $icons The available button icons.
+		 */
+		return apply_filters( 'acfbt_button_icons', $icons );
 	}
 
-	file_put_contents( $path, json_encode( $json, JSON_PRETTY_PRINT ) );
+	/**
+	 * Get an icon
+	 *
+	 * @param string $slug
+	 *
+	 * @return array
+	 */
+	private function get_icon( string $slug ): array {
+		$icons = $this->get_icons();
 
-	set_transient( ACFBT_ICONS_CHECKSUM, $checksum );
+		foreach ( $icons as $icon ) {
+			if ( $slug === $icon['value'] ) {
+				return $icon;
+			}
+		}
+
+		return [];
+	}
+
+	/**
+	 * Render icons on frontend.
+	 *
+	 * @param string $block_content
+	 * @param array $block
+	 *
+	 * @return string
+	 */
+	public function render_frontend_icons( string $block_content, array $block ): string {
+		if ( ! isset( $block['attrs']['icon'] ) ) {
+			return $block_content;
+		}
+
+		list( $namespace, $block_name ) = explode( '/', $block['blockName'] );
+
+		$icon = $this->get_icon( $block['attrs']['icon'] );
+
+		// Make sure the selected icon exists, otherwise bail.
+		if ( empty( $icon ) ) {
+			return $block_content;
+		}
+
+		$position_left = $block['attrs']['iconPositionLeft'] ?? false;
+
+		// Append the icon class to the block.
+		$p = new WP_HTML_Tag_Processor( $block_content );
+		if ( $p->next_tag() ) {
+			$p->add_class( 'has-icon__' . $icon['value'] );
+		}
+		$block_content = $p->get_updated_html();
+		$block_content = str_replace( '$', '\$', $block_content );
+
+		$pattern = '/(<a[^>]*>)(.*?)(<\/a>)/i';
+		$markup  = sprintf(
+			'<span class="wp-block-%s__link-icon has-icon__%s" aria-hidden="true">%s</span>',
+			esc_attr( $block_name ),
+			esc_attr( $icon['value'] ),
+			$icon['icon']
+		);
+
+		// Add the SVG icon either to the left of right of the button text.
+		return $position_left
+			? preg_replace( $pattern, '$1' . $markup . '$2$3', $block_content )
+			: preg_replace( $pattern, '$1$2' . $markup . '$3', $block_content );
+	}
+
+	/**
+	 * Enqueue Editor scripts and styles.
+	 *
+	 * @return void
+	 */
+	private function enqueue_editor_assets(): void {
+		add_action(
+			'enqueue_block_editor_assets',
+			function () {
+				$asset_file = include ACFBT_PLUGIN_PATH . 'build/index.asset.php';
+
+				wp_register_script(
+					'acfbt-editor-scripts',
+					ACFBT_PLUGIN_URL . 'build/index.js',
+					$asset_file['dependencies'],
+					$asset_file['version']
+				);
+
+				wp_localize_script(
+					'acfbt-editor-scripts',
+					'acfbtVars',
+					[
+						'iconsJson'       => $this->get_icons(),
+						'supportedBlocks' => $this->get_supported_blocks(),
+					]
+				);
+
+				wp_enqueue_script( 'acfbt-editor-scripts' );
+
+				wp_set_script_translations(
+					'acfbt-editor-scripts',
+					'acf-blocks-toolkit',
+					ACFBT_PLUGIN_URL . 'languages'
+				);
+
+				wp_enqueue_style(
+					'acfbt-editor-styles',
+					ACFBT_PLUGIN_URL . 'build/editor.css'
+				);
+
+				wp_add_inline_style(
+					'acfbt-editor-styles',
+					$this->editor_css()
+				);
+			}
+		);
+
+	}
+
+	/**
+	 * Enqueue block styles
+	 * (Applies to both frontend and Editor)
+	 */
+	private function enqueue_block_assets(): void {
+		add_action(
+			'init',
+			function (): void {
+				foreach ( $this->get_supported_blocks() as $block_name ) {
+					wp_enqueue_block_style(
+						$block_name,
+						[
+							'handle' => 'acfbt-block-styles',
+							'src'    => ACFBT_PLUGIN_URL . 'build/style.css',
+							'ver'    => ACFBT_VERSION,
+							'path'   => ACFBT_PLUGIN_PATH . 'build/style.css',
+						]
+					);
+				}
+			}
+		);
+	}
+
+	/**
+	 * Get the CSS for the editor.
+	 *
+	 * @return string
+	 */
+	private function editor_css(): string {
+		$icons = $this->get_icons();
+		$css   = '';
+
+		foreach ( $icons as $icon ) {
+			$slug    = $icon['value'];
+			$content = 'data:image/svg+xml;utf8,' . rawurlencode( $icon['icon'] );
+
+			$css .= ".wp-block-button.has-icon__{$slug} .wp-block-button__link::after,";
+			$css .= ".wp-block-button.has-icon__{$slug} .wp-block-button__link::before,";
+			$css .= ".wp-block-navigation-item.has-icon__{$slug} .wp-block-navigation-item__content::after,";
+			$css .= ".wp-block-navigation-item.has-icon__{$slug} .wp-block-navigation-item__content::before {";
+			$css .= 'height: 0.7em;';
+			$css .= 'width: 1em;';
+			$css .= "mask-image: url( $content );";
+			$css .= "-webkit-mask-image: url( $content );";
+			$css .= '}' . PHP_EOL;
+		}
+
+		// Manually adjust a few of the icons
+		$css .= '.button-icon-picker__button.button-icon-picker__icon-chevron-left-small span svg,.button-icon-picker__button.button-icon-picker__icon-chevron-right-small span svg,
+	 .button-icon-picker__button.button-icon-picker__icon-external-arrow span svg {max-height: 60%}';
+		$css .= '.button-icon-picker__button.button-icon-picker__icon-previous span svg,.button-icon-picker__button.button-icon-picker__icon-next span svg {max-height: 80%}';
+
+		return apply_filters( 'acfbt_button_icons_editor_css', $css );
+	}
+
+	/**
+	 * Generate the Icons JSON file.
+	 *
+	 * @return void
+	 */
+	private function generate_json(): void {
+		add_action(
+			'init',
+			function () {
+				$icons    = $this->get_icons( false );
+				$checksum = md5( json_encode( $icons ) );
+				$path     = $this->get_icons_file_path( true );
+
+				if ( file_exists( $path ) && $checksum === get_transient( self::ICONS_CHECKSUM ) ) {
+					return;
+				}
+
+				$json = [];
+
+				foreach ( $icons as $slug => $icon ) {
+					if ( ! is_array( $icon ) ) {
+						$icon = [ 'icon' => $icon ];
+					}
+
+					$default_label = is_numeric( $slug ) ? __( 'Icon', 'acf-blocks-toolkit' ) . ' ' . $slug : ucwords( str_replace( '-', ' ', $slug ) );
+
+					$json[] = [
+						'label'       => $icon['label'] ?? $default_label,
+						'value'       => $slug,
+						'icon'        => $icon['icon'],
+						'defaultLeft' => $icon['defaultLeft'] ?? false,
+					];
+				}
+
+				if ( ! is_dir( dirname( $path ) ) ) {
+					wp_mkdir_p( dirname( $path ) );
+				}
+
+				if ( file_put_contents( $path, json_encode( $json, JSON_PRETTY_PRINT ) ) ) {
+					set_transient( self::ICONS_CHECKSUM, $checksum );
+				}
+			}
+		);
+	}
+
+	/**
+	 * Get path to the icons JSON file.
+	 *
+	 * @param bool $write_file
+	 *
+	 * @return string
+	 */
+	private function get_icons_file_path( bool $write_file = false ): string {
+		$uploads_dir  = wp_get_upload_dir();
+		$custom_icons = $uploads_dir['basedir'] . '/acf-blocks-toolkit/icons.json';
+		$plugin_icons = ACFBT_PLUGIN_PATH . 'assets/icons.json';
+
+		if ( $write_file ) {
+			if ( ! file_exists( $plugin_icons ) ) {
+				$this->disable_icon_filter = true;
+				return $plugin_icons;
+			}
+
+			return $custom_icons;
+		}
+
+		$theme_icons = get_stylesheet_directory() . '/acf-blocks-toolkit/icons.json';
+
+		if ( file_exists( $theme_icons ) ) {
+			return $theme_icons;
+		}
+
+		if ( file_exists( $custom_icons ) ) {
+			return $custom_icons;
+		}
+
+		return $plugin_icons;
+	}
 }
-
-add_action( 'init', 'acfbt_generate_json' );
-
-

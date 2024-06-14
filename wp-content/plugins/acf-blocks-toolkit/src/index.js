@@ -1,3 +1,5 @@
+/** global acfbtVars */
+
 /**
  * External dependencies
  */
@@ -17,7 +19,7 @@ import {
 	__experimentalGrid as Grid, // eslint-disable-line
 } from '@wordpress/components';
 
-import icons from '../build/icons.json';
+const icons = acfbtVars.iconsJson;
 
 /**
  * All available icons.
@@ -32,7 +34,7 @@ export const ICONS = icons;
  * @param {Object} settings
  */
 function addAttributes(settings) {
-	if ('core/button' !== settings.name) {
+	if (!acfbtVars.supportedBlocks.includes(settings.name)) {
 		return settings;
 	}
 
@@ -70,7 +72,7 @@ addFilter(
  */
 function addInspectorControls(BlockEdit) {
 	return (props) => {
-		if (props.name !== 'core/button') {
+		if (!acfbtVars.supportedBlocks.includes(props.name)) {
 			return <BlockEdit {...props} />;
 		}
 
@@ -93,11 +95,12 @@ function addInspectorControls(BlockEdit) {
 										key={index}
 										label={icon?.label}
 										isPressed={currentIcon === icon.value}
-										className="button-icon-picker__button"
+										className={"button-icon-picker__button button-icon-picker__icon-" + icon.value }
 										onClick={() =>
 											setAttributes({
 												// Allow user to disable icons.
 												icon: currentIcon === icon.value ? null : icon.value,
+												iconPositionLeft: iconPositionLeft || icon?.defaultLeft,
 											})
 										}
 									>
@@ -144,7 +147,7 @@ function addClasses(BlockListBlock) {
 	return (props) => {
 		const { name, attributes } = props;
 
-		if ('core/button' !== name || !attributes?.icon) {
+		if (!acfbtVars.supportedBlocks.includes(name) || !attributes?.icon) {
 			return <BlockListBlock {...props} />;
 		}
 

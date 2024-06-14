@@ -23,4 +23,15 @@ class ProjectEventHandler {
 	public static function postCreateProject( Event $event ): void {
 		PostCreateProjectScript::execute( $event );
 	}
+
+	/**
+	 * Post install event.
+	 *
+	 * @param Event $event
+	 *
+	 * @return void
+	 */
+	public static function postInstall( Event $event ): void {
+		// Do nothing.
+	}
 }

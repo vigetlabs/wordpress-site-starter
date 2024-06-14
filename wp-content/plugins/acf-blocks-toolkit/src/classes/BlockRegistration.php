@@ -12,7 +12,7 @@ use Timber\Timber;
 /**
  * Block Registration Class
  */
-class Block_Registration {
+class BlockRegistration {
 
 	/**
 	 * @var array
