@@ -40,9 +40,23 @@ if ( ! function_exists( 'block_attrs' ) ) {
 			$attrs['data-supports-jsx'] = 'true';
 		}
 
+		// Prepare Extra attributes.
+		$extra = [
+			'class' => $attrs['class'],
+			'style' => $attrs['style'],
+		];
+		unset( $attrs['class'] );
+		unset( $attrs['style'] );
+		if ( ! empty( $attrs['id'] ) ) {
+			$extra['id'] = $attrs['id'];
+			unset( $attrs['id'] );
+		}
+
 		foreach ( $attrs as $key => $value ) {
 			echo ' ' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
 		}
+
+		echo ' '; // Prep for additional block_attrs.
 
 		do_action( 'acfbt_block_attr', $block );
 
@@ -50,7 +64,7 @@ if ( ! function_exists( 'block_attrs' ) ) {
 			return;
 		}
 
-		echo wp_kses_data( get_block_wrapper_attributes() );
+		echo wp_kses_data( get_block_wrapper_attributes( $extra ) );
 	}
 }
 

@@ -47,5 +47,8 @@ require_once 'includes/timber.php';
 // Timber functions.
 require_once 'includes/button-icons.php';
 
+// Parts Kit support.
+require_once 'includes/parts-kit.php';
+
 Block_Registration::init();
 Settings::init();
