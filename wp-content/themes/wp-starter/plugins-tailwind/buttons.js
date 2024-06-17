@@ -29,7 +29,7 @@ module.exports = plugin.withOptions(function (options = {}) {
 				...base,
 				[`@apply
 				bg-${accentColor}-700 text-white
-				hover:bg-${accentColor}-700
+				hover:bg-${accentColor}-800
 				active:bg-${accentColor}-800
 				focus-visible:bg-${accentColor}-700 focus-visible:ring-${accentColor}-600/50`]: {},
 			},
