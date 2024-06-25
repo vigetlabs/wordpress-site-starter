@@ -33,7 +33,11 @@ class Gravatar {
 			'pre_get_avatar_data',
 			function ( array $args, mixed $id_or_email ): array {
 				if ( is_numeric( $id_or_email ) ) {
-					$user        = get_user_by( 'id', $id_or_email );
+					$user = get_user_by( 'id', $id_or_email );
+					if ( ! $user ) {
+						return $args;
+					}
+
 					$id_or_email = $user->user_email;
 				}
 
