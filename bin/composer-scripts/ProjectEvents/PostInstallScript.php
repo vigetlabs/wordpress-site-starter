@@ -76,6 +76,11 @@ class PostInstallScript extends ComposerScript {
 	public static function execute( Event $event ): void {
 		self::setEvent( $event );
 
+		// Only run the rest of the script if we are in development mode.
+		if ( !$event->isDevMode() ) {
+			return;
+		}
+
 		// Load DDEV Environment variables.
 		self::loadDDEVEnvironmentVars();
 
