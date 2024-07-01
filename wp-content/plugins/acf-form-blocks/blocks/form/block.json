@@ -1,0 +1,20 @@
+{
+  "name": "form",
+  "title": "Form",
+  "description": "Wrapper for forms.",
+  "icon": "feedback",
+  "category": "forms",
+  "textdomain": "acf-form-blocks",
+  "keywords": ["input", "contact", "feedback", "input"],
+  "supports": {
+    "jsx": true,
+    "mode": false,
+    "alignWide": true,
+    "anchor": true
+  },
+  "editorStyle": "file:./editor.css",
+  "style": "file:./style.css",
+  "acf": {
+    "mode": "preview"
+  }
+}
