@@ -67,6 +67,42 @@ class PostInstallScript extends ComposerScript {
 	];
 
 	/**
+	 * Initialize the script.
+	 *
+	 * @param Event $event
+	 * @param bool $fromExecute
+	 *
+	 * @return void
+	 */
+	public static function init( Event $event, bool $fromExecute = false ): void {
+		self::setEvent( $event );
+
+		if ( self::needsSetup() ) {
+			// Download WordPress
+			self::downloadWordPress();
+
+			self::wait( 2 );
+
+			if ( $fromExecute ) {
+				// Give database population options
+				self::populateDatabase();
+			} else {
+				// Automatically install WordPress
+				self::doFreshInstall();
+			}
+
+			// Remove the core Twenty-X themes.
+			self::deleteCoreThemes();
+
+			// Remove Hello Dolly.
+			self::deleteCorePlugins();
+		}
+
+		// Run the Viget WP Composer Install
+		self::vigetWPComposerInstall();
+	}
+
+	/**
 	 * Perform the actions within this file.
 	 *
 	 * @param Event $event
@@ -86,25 +122,8 @@ class PostInstallScript extends ComposerScript {
 
 		self::wait();
 
-		if ( self::needsSetup() ) {
-
-			// Download WordPress
-			self::downloadWordPress();
-
-			self::wait( 2 );
-
-			// Populate the database.
-			self::populateDatabase();
-
-			// Remove the core Twenty-X themes.
-			self::deleteCoreThemes();
-
-			// Remove Hello Dolly.
-			self::deleteCorePlugins();
-		}
-
-		// Run the Viget WP Composer Install
-		self::vigetWPComposerInstall();
+		// Initialize the script.
+		self::init( $event, true );
 	}
 
 	/**
@@ -263,6 +282,16 @@ class PostInstallScript extends ComposerScript {
 			return;
 		}
 
+		// Run a fresh WP Install
+		self::doFreshInstall();
+	}
+
+	/**
+	 * Perform a fresh WordPress install.
+	 *
+	 * @return void
+	 */
+	private static function doFreshInstall(): void {
 		// Run the WordPress Installation
 		self::installWordPress();
 
