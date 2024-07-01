@@ -8,9 +8,10 @@
  */
 
 use ACFFormBlocks\Block;
+use ACFFormBlocks\Form;
 use ACFFormBlocks\Template;
 
-$method = get_field( 'method' ) ?: 'post';
+$form = new Form( $block );
 
 // Start with a basic template.
 $template = ( new Template() )
@@ -19,13 +20,27 @@ $template = ( new Template() )
 
 $inner = [
 	'template' => $template->get(),
-]
+];
+
+$form->get_submission()->get_data();
 ?>
-<form
-	method="<?php echo esc_attr( $method ); ?>"
-	action="#<?php echo esc_attr( get_block_id( $block ) ); ?>"
-	<?php block_attrs( $block ); ?>
->
-	<input type="hidden" name="acffb_form_id" value="<?php echo esc_attr( get_block_id( $block ) ); ?>" />
-	<?php inner_blocks( $inner ); ?>
-</form>
+<?php if ( $form->get_submission()->is_success() ) : ?>
+	<div <?php block_attrs( $block, 'form-placeholder' ); ?>>
+		<?php $form->get_confirmation()->render(); ?>
+	</div>
+<?php else : ?>
+	<form
+		method="<?php echo esc_attr( $form->get_method() ); ?>"
+		action="#<?php echo esc_attr( get_block_id( $block ) ); ?>"
+		<?php block_attrs( $block ); ?>
+	>
+		<input
+			type="hidden"
+			name="<?php echo esc_attr( Form::HIDDEN_FORM_ID ); ?>"
+			value="<?php echo esc_attr( get_block_id( $block ) ); ?>"
+		/>
+
+		<?php inner_blocks( $inner ); ?>
+	</form>
+<?php endif; ?>
+
