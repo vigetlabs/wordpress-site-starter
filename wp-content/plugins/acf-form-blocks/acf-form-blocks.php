@@ -29,6 +29,11 @@ define( 'ACFFB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 // Registration functions.
 require_once 'includes/registration.php';
 
+// Form classes.
+require_once 'classes/Form.php';
+require_once 'classes/Submission.php';
+require_once 'classes/Confirmation.php';
+
 // Template Classes.
 require_once 'classes/Template.php';
 require_once 'classes/Block.php';
