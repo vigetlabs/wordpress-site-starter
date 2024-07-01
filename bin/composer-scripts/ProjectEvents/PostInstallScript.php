@@ -87,6 +87,15 @@ class PostInstallScript extends ComposerScript {
 				// Give database population options
 				self::populateDatabase();
 			} else {
+				// Pre-populate Site Info
+				self::$info = [
+					'title' => 'WordPress Site Starter',
+					'description' => 'A project developed by Viget.',
+					'url' => 'https://wpstarter.ddev.site',
+					'username' => 'viget',
+					'email' => 'fed+wp@viget.com',
+				];
+
 				// Automatically install WordPress
 				self::doFreshInstall();
 			}
