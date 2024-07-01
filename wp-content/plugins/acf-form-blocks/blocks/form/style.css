@@ -1,0 +1,39 @@
+/** Generic Form Styles **/
+.acf-block-form input[type="text"],
+.acf-block-form input[type="email"],
+.acf-block-form input[type="tel"],
+.acf-block-form input[type="url"],
+.acf-block-form input[type="password"],
+.acf-block-form select,
+.acf-block-form textarea,
+.acf-block-form .form-input > label {
+	display: block;
+	width: 100%;
+}
+
+.acf-block-form label {
+	cursor: pointer;
+}
+.acf-block-form label > * {
+	display: inline-block;
+}
+.acf-block-form .is-required {
+	color: red;
+}
+
+.acf-block-form input[type="text"],
+.acf-block-form input[type="email"],
+.acf-block-form input[type="tel"],
+.acf-block-form input[type="url"],
+.acf-block-form input[type="password"],
+.acf-block-form select,
+.acf-block-form textarea {
+	border: 1px solid #000;
+	border-radius: 3px;
+	padding: 0.5rem 0.75rem;
+}
+
+.acf-block-form .form-input + .form-input,
+.acf-block-form footer.form-submit {
+	margin-top: 1.75em;
+}

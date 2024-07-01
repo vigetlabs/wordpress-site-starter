@@ -1,0 +1,11 @@
+.acf-block-form {
+	border: 1px dotted red;
+	margin: -0.5rem;
+	padding: 0.5rem;
+}
+.wp-block-acf-input[data-type="acf/input"] + .wp-block-acf-input[data-type="acf/input"],
+.wp-block-acf-textarea[data-type="acf/textarea"] + .wp-block-acf-input[data-type="acf/input"],
+.wp-block-acf-input[data-type="acf/input"] + .wp-block-acf-textarea[data-type="acf/textarea"],
+.wp-block-acf-textarea[data-type="acf/textarea"] + .wp-block-acf-textarea[data-type="acf/textarea"] {
+	margin-top: 1.75rem;
+}
