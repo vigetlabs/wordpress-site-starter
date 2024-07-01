@@ -1,0 +1,22 @@
+{
+  "name": "textarea",
+  "title": "Textarea",
+  "description": "Form textarea field",
+  "icon": "feedback",
+  "category": "forms",
+  "textdomain": "acf-form-blocks",
+  "keywords": ["input", "contact", "feedback", "input"],
+  "ancestor": ["acf/form"],
+  "supports": {
+    "jsx": true,
+    "mode": false,
+    "alignWide": true,
+    "anchor": true,
+    "dimensions": {
+      "minHeight": true
+    }
+  },
+  "acf": {
+    "mode": "preview"
+  }
+}
