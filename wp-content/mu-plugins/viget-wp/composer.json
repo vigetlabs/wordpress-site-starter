@@ -1,5 +1,6 @@
 {
     "name": "viget/viget-wp",
+    "version": "1.0.0",
     "description": "WordPress Customization from Viget",
     "type": "library",
     "license": "GPL-3.0-or-later",
