@@ -18,6 +18,7 @@ corepack_enable: false
 override_config: true
 hooks:
   post-start:
+    - composer: install -d /var/www/html/wp-content/mu-plugins/viget-wp
     - composer: install -d /var/www/html/wp-content/themes/wp-starter
     - exec-host: ddev launch && exit
 web_environment:

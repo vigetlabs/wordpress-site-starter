@@ -67,6 +67,60 @@ class PostInstallScript extends ComposerScript {
 	];
 
 	/**
+	 * Initialize the script.
+	 *
+	 * @param Event $event
+	 * @param bool $fromExecute
+	 *
+	 * @return void
+	 */
+	public static function init( Event $event, bool $fromExecute = false ): void {
+		self::setEvent( $event );
+
+		// Load DDEV Environment variables.
+		self::loadDDEVEnvironmentVars();
+
+		self::wait();
+
+		if ( self::needsSetup() ) {
+			// Download WordPress
+			self::downloadWordPress();
+
+			self::wait( 2 );
+
+			if ( $fromExecute ) {
+				// Give database population options
+				self::populateDatabase();
+			} else {
+				// Pre-configure the Setup
+				self::$info = [
+					'title' => 'WordPress Site Starter',
+					'description' => 'A project developed by Viget.',
+					'url' => 'https://wpstarter.ddev.site',
+					'username' => 'viget',
+					'email' => 'fed+wp@viget.com',
+				];
+
+				// Do not activate Project Plugins
+				unset( self::$activatePlugins['seo-by-rank-math'] );
+				unset( self::$activatePlugins['wordfence'] );
+
+				// Automatically install WordPress
+				self::doFreshInstall();
+			}
+
+			// Remove the core Twenty-X themes.
+			self::deleteCoreThemes();
+
+			// Remove Hello Dolly.
+			self::deleteCorePlugins();
+
+			// Show the success message.
+			self::renderSuccessMessage();
+		}
+	}
+
+	/**
 	 * Perform the actions within this file.
 	 *
 	 * @param Event $event
@@ -81,30 +135,8 @@ class PostInstallScript extends ComposerScript {
 			return;
 		}
 
-		// Load DDEV Environment variables.
-		self::loadDDEVEnvironmentVars();
-
-		self::wait();
-
-		if ( self::needsSetup() ) {
-
-			// Download WordPress
-			self::downloadWordPress();
-
-			self::wait( 2 );
-
-			// Populate the database.
-			self::populateDatabase();
-
-			// Remove the core Twenty-X themes.
-			self::deleteCoreThemes();
-
-			// Remove Hello Dolly.
-			self::deleteCorePlugins();
-		}
-
-		// Run the Viget WP Composer Install
-		self::vigetWPComposerInstall();
+		// Initialize the script.
+		self::init( $event, true );
 	}
 
 	/**
@@ -263,6 +295,16 @@ class PostInstallScript extends ComposerScript {
 			return;
 		}
 
+		// Run a fresh WP Install
+		self::doFreshInstall();
+	}
+
+	/**
+	 * Perform a fresh WordPress install.
+	 *
+	 * @return void
+	 */
+	private static function doFreshInstall(): void {
 		// Run the WordPress Installation
 		self::installWordPress();
 
@@ -289,9 +331,6 @@ class PostInstallScript extends ComposerScript {
 
 		// Configure plugins.
 		self::configurePlugins();
-
-		// Show the success message.
-		self::renderSuccessMessage();
 	}
 
 	/**
@@ -536,8 +575,13 @@ class PostInstallScript extends ComposerScript {
 	private static function configurePlugins(): void {
 		self::writeComment( 'Configuring plugins...' );
 
-		self::configureRankMath();
-		self::configureWordfence();
+		if( ! empty( self::$activatePlugins['seo-by-rank-math'] ) ) {
+			self::configureRankMath();
+		}
+
+		if( ! empty( self::$activatePlugins['wordfence'] ) ) {
+			self::configureWordfence();
+		}
 
 		self::writeInfo( 'Plugins configured.' );
 	}
@@ -661,22 +705,5 @@ class PostInstallScript extends ComposerScript {
 		$success = self::centeredText( $success, 2, '*', '#1296BB' );
 
 		self::writeLine( $success );
-	}
-
-	/**
-	 * Run the Viget WP Composer Installer.
-	 *
-	 * @return void
-	 */
-	private static function vigetWPComposerInstall(): void {
-		self::writeInfo( 'Running Viget WP Composer Install...' );
-
-		// Run composer install from the viget-wp directory
-		$directory = self::translatePath( './wp-content/mu-plugins/viget-wp' );
-		$cmd = 'composer install -d ' . escapeshellarg( $directory );
-
-		self::runCommand( $cmd );
-
-		self::writeInfo( 'VigetWP Composer Install complete.' );
 	}
 }
