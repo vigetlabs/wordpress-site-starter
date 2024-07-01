@@ -57,6 +57,10 @@ ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.5
+* Fixed issue where WordPress was not installing correctly.
+* Fixed issue where Viget WP Composer installation was not working.
+
 ### v1.0.4
 * Moving to theme colors to vars to make it easy to update the global accent color
 * Add more into to the theme README so it is easy for developer to know how to update/edit items
