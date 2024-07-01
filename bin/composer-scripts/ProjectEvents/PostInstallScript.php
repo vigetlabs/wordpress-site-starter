@@ -77,6 +77,11 @@ class PostInstallScript extends ComposerScript {
 	public static function init( Event $event, bool $fromExecute = false ): void {
 		self::setEvent( $event );
 
+		// Load DDEV Environment variables.
+		self::loadDDEVEnvironmentVars();
+
+		self::wait();
+
 		if ( self::needsSetup() ) {
 			// Download WordPress
 			self::downloadWordPress();
@@ -125,11 +130,6 @@ class PostInstallScript extends ComposerScript {
 		if ( !$event->isDevMode() ) {
 			return;
 		}
-
-		// Load DDEV Environment variables.
-		self::loadDDEVEnvironmentVars();
-
-		self::wait();
 
 		// Initialize the script.
 		self::init( $event, true );
