@@ -92,7 +92,7 @@ class PostInstallScript extends ComposerScript {
 				// Give database population options
 				self::populateDatabase();
 			} else {
-				// Pre-populate Site Info
+				// Pre-configure the Setup
 				self::$info = [
 					'title' => 'WordPress Site Starter',
 					'description' => 'A project developed by Viget.',
@@ -100,6 +100,10 @@ class PostInstallScript extends ComposerScript {
 					'username' => 'viget',
 					'email' => 'fed+wp@viget.com',
 				];
+
+				// Do not activate Project Plugins
+				unset( self::$activatePlugins['seo-by-rank-math'] );
+				unset( self::$activatePlugins['wordfence'] );
 
 				// Automatically install WordPress
 				self::doFreshInstall();
@@ -110,10 +114,10 @@ class PostInstallScript extends ComposerScript {
 
 			// Remove Hello Dolly.
 			self::deleteCorePlugins();
-		}
 
-		// Run the Viget WP Composer Install
-		self::vigetWPComposerInstall();
+			// Show the success message.
+			self::renderSuccessMessage();
+		}
 	}
 
 	/**
@@ -327,9 +331,6 @@ class PostInstallScript extends ComposerScript {
 
 		// Configure plugins.
 		self::configurePlugins();
-
-		// Show the success message.
-		self::renderSuccessMessage();
 	}
 
 	/**
@@ -574,8 +575,13 @@ class PostInstallScript extends ComposerScript {
 	private static function configurePlugins(): void {
 		self::writeComment( 'Configuring plugins...' );
 
-		self::configureRankMath();
-		self::configureWordfence();
+		if( ! empty( self::$activatePlugins['seo-by-rank-math'] ) ) {
+			self::configureRankMath();
+		}
+
+		if( ! empty( self::$activatePlugins['wordfence'] ) ) {
+			self::configureWordfence();
+		}
 
 		self::writeInfo( 'Plugins configured.' );
 	}
@@ -699,22 +705,5 @@ class PostInstallScript extends ComposerScript {
 		$success = self::centeredText( $success, 2, '*', '#1296BB' );
 
 		self::writeLine( $success );
-	}
-
-	/**
-	 * Run the Viget WP Composer Installer.
-	 *
-	 * @return void
-	 */
-	private static function vigetWPComposerInstall(): void {
-		self::writeInfo( 'Running Viget WP Composer Install...' );
-
-		// Run composer install from the viget-wp directory
-		$directory = self::translatePath( './wp-content/mu-plugins/viget-wp' );
-		$cmd = 'composer install -d ' . escapeshellarg( $directory );
-
-		self::runCommand( $cmd );
-
-		self::writeInfo( 'VigetWP Composer Install complete.' );
 	}
 }
