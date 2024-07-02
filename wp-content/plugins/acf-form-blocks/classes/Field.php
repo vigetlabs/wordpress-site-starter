@@ -29,6 +29,15 @@ class Field {
 	}
 
 	/**
+	 * Get the block array.
+	 *
+	 * @return array
+	 */
+	public function get_block(): array {
+		return $this->block;
+	}
+
+	/**
 	 * Get the field ID.
 	 *
 	 * @return string

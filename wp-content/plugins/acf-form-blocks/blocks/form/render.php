@@ -11,7 +11,7 @@ use ACFFormBlocks\Block;
 use ACFFormBlocks\Form;
 use ACFFormBlocks\Template;
 
-$form = new Form( $block );
+$form = acffb_get_form( $block );
 
 // Start with a basic template.
 $template = ( new Template() )
@@ -22,22 +22,13 @@ $inner = [
 	'template' => $template->get(),
 ];
 ?>
-<?php if ( $form->get_submission()->is_success() ) : ?>
+<?php if ( $form->get_submission()->is_processed() ) : ?>
 	<div <?php block_attrs( $block, 'form-placeholder' ); ?>>
 		<?php $form->get_confirmation()->render(); ?>
 	</div>
 <?php else : ?>
-	<form
-		method="<?php echo esc_attr( $form->get_method() ); ?>"
-		action="#<?php echo esc_attr( get_block_id( $block ) ); ?>"
-		<?php block_attrs( $block ); ?>
-	>
+	<form <?php block_attrs( $block ); ?>>
 		<?php $form->get_validation()->render(); ?>
-		<input
-			type="hidden"
-			name="<?php echo esc_attr( Form::HIDDEN_FORM_ID ); ?>"
-			value="<?php echo esc_attr( get_block_id( $block ) ); ?>"
-		/>
 
 		<?php inner_blocks( $inner ); ?>
 	</form>

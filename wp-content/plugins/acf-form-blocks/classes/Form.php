@@ -26,10 +26,19 @@ class Form {
 	 */
 	protected array $block;
 
+	/**
+	 * @var ?Validation
+	 */
 	private ?Validation $validation = null;
 
+	/**
+	 * @var ?Submission
+	 */
 	private ?Submission $submission = null;
 
+	/**
+	 * @var ?Confirmation
+	 */
 	private ?Confirmation $confirmation = null;
 
 	/**
@@ -37,8 +46,61 @@ class Form {
 	 *
 	 * @param array $block Block data.
 	 */
-	public function __construct( array $block ) {
+	public function __construct( array $block, bool $preload_meta = false ) {
 		$this->block = $block;
+
+		if ( $preload_meta ) {
+			$this->preload_meta();
+		}
+	}
+
+	/**
+	 * Preload the meta data.
+	 *
+	 * @return void
+	 */
+	private function preload_meta(): void {
+		add_filter(
+			'acf/pre_load_metadata',
+			function ( $null, $post_id, $name, $hidden ) {
+				$meta = $this->get_field_meta();
+				$name = ( $hidden ? '_' : '' ) . $name;
+
+				if ( isset( $meta[ $post_id ] ) ) {
+					if ( isset( $meta[ $post_id ][ $name ] ) ) {
+						return $meta[ $post_id ][ $name ];
+					}
+					return '__return_null';
+				}
+
+				return $null;
+			},
+			5,
+			4
+		);
+	}
+
+	/**
+	 * Get the field meta.
+	 *
+	 * @return array
+	 */
+	private function get_field_meta(): array {
+		$meta = [];
+
+		$fields = $this->get_fields();
+		foreach ( $fields as $field ) {
+			$field_block = $field->get_block();
+			if ( empty( $field_block['data'] ) ) {
+				continue;
+			}
+
+			foreach ( $field_block['data'] as $key => $value ) {
+				$meta[ $field->get_name() ][ $key ] = $value;
+			}
+		}
+
+		return $meta;
 	}
 
 	/**
@@ -48,6 +110,15 @@ class Form {
 	 */
 	public function get_form(): array {
 		return $this->block;
+	}
+
+	/**
+	 * Update the cache.
+	 *
+	 * @return void
+	 */
+	public function update_cache(): void {
+		Cache::set( get_block_id( $this->block ), $this );
 	}
 
 	/**
@@ -67,6 +138,7 @@ class Form {
 	public function get_confirmation(): Confirmation {
 		if ( null === $this->confirmation ) {
 			$this->confirmation = new Confirmation( $this );
+			$this->update_cache();
 		}
 
 		return $this->confirmation;
@@ -80,6 +152,7 @@ class Form {
 	public function get_submission(): Submission {
 		if ( null === $this->submission ) {
 			$this->submission = new Submission( $this );
+			$this->update_cache();
 		}
 
 		return $this->submission;
@@ -93,6 +166,7 @@ class Form {
 	public function get_validation(): Validation {
 		if ( null === $this->validation ) {
 			$this->validation = new Validation( $this );
+			$this->update_cache();
 		}
 
 		return $this->validation;
