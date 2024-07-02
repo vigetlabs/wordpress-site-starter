@@ -1,10 +1,10 @@
 === Advanced Custom Fields PRO ===
 Contributors: elliotcondon
 Tags: acf, fields, custom fields, meta, repeater
-Requires at least: 5.8
+Requires at least: 6.0
 Tested up to: 6.5
-Requires PHP: 7.0
-Stable tag: 6.2.10
+Requires PHP: 7.4
+Stable tag: 6.3.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,6 +15,8 @@ Advanced Custom Fields (ACF) helps you easily customize WordPress with powerful,
 Advanced Custom Fields (ACF) turns WordPress sites into a fully-fledged content management system by giving you all the tools to do more with your data.
 
 Use the ACF plugin to take full control of your WordPress edit screens, custom field data, and more.
+
+https://www.youtube.com/watch?v=9C6_roqghZQ&rel=0
 
 **Add fields on demand.**
 The ACF field builder allows you to quickly and easily add fields to WP edit screens with only the click of a few buttons! Whether it's something simple like adding an “author” field to a book review post, or something more complex like the structured data needs of an ecommerce site or marketplace, ACF makes adding fields to your content model easy.
@@ -91,6 +93,95 @@ From your WordPress dashboard
 
 
 == Changelog ==
+
+= 6.3.3 =
+*Release Date 27th June 2024*
+
+* Enhancement - All dashicons are now available to the icon picker field type
+* Fix - The True/False field now correctly shows it’s description message beside the switch when using the Stylized UI setting
+* Fix - Conditional logic values now correctly load options when loaded over AJAX
+* Fix - ACF PRO will no longer trigger license validation calls when loading a front-end page
+* i18n - Fixed an untranslatable string on Option Page previews
+
+= 6.3.2.1 =
+*Release Date 24th June 2024*
+*PRO Only Release*
+
+* Fix - ACF Blocks no longer trigger a JavaScript error when fetched via AJAX
+
+= 6.3.2 =
+*Release Date 24th June 2024*
+
+* Security Fix - ACF now generates different nonces for each AJAX-enabled field, preventing subscribers or front-end form users from querying other field results
+* Security Fix - ACF now correctly verifies permissions for certain editor only actions, preventing subscribers performing those actions
+* Security Fix - Deprecated a legacy private internal field type (output) to prevent it being able to output unsafe HTML
+* Security Fix - Improved handling of some SQL filters and other internal functions to ensure output is always correctly escaped
+* Security Fix - ACF now includes blank index.php files in all folders to prevent directory listing of ACF plugin folders for incorrectly configured web servers
+
+= 6.3.1.2 =
+*Release Date 6th June 2024*
+*PRO Only Release*
+
+* Fix - ACF Blocks in widget areas no longer cause a fatal error when no context is available
+* Fix - ACF Blocks with no fields assigned no longer show a gap in the sidebar where the form would render
+
+= 6.3.1.1 =
+*Release Date 6th June 2024*
+*PRO Only Release*
+
+* Fix - Repeater and Flexible Content fields no longer error when duplicating or removing rows containing Icon Picker subfields
+* Fix - ACF Blocks containing Flexible Content fields now correctly load their edit form
+* Fix - ACF Blocks no longer have a race condition where the data store is not initialized when read
+* Fix - ACF Blocks no longer trigger a JS error for blocks without fields and with an empty no-fields message
+* Fix - ACF Block preloading now works correctly for fields consuming custom block context
+* Fix - ACF Block JavaScript debug messages now correctly appear when SCRIPT_DEBUG is true
+
+= 6.3.1 =
+*Release Date 4th June 2024*
+
+* Enhancement - Options Pages registered in the UI can now be duplicated
+* Fix - ACF Block validation now correctly validates Repeater, Group, and Flexible Content fields
+* Fix - ACF Block validation now correctly validates when a field is using a non-default return type
+* Fix - Fields moved between field groups now correctly updates both JSON files
+* Fix - Icon Picker fields now render correctly when using left-aligned labels
+* Fix - Icon Picker fields no longer renders tabs if only one tab is selected for display
+* Fix - Icon Picker fields no longer crash the post editor if no icon picker tabs are selected for displayed
+* Fix - True/False field now better handles longer On/Off labels
+* Fix - Select2 results loaded by AJAX for multi-select Taxonomy fields no longer double encode HTML entities
+
+= 6.3.0.1 =
+*Release Date 22nd May 2024*
+
+* Fix - A possible fatal error no longer occurs in the new site health functionality for ACF PRO users
+* Fix - A possible undefined index error no longer occurs in ACF Blocks for ACF PRO users
+
+= 6.3.0 =
+*Release Date 22nd May 2024*
+
+* New - ACF now requires WordPress version 6.0 or newer, and PHP 7.4 or newer.
+* New - ACF Blocks now support validation rules for fields. View the [release notes](https://www.advancedcustomfields.com/blog/acf-6-3-0-released) for more information
+* New - ACF Blocks now supports storing field data in the postmeta table rather than in the post content
+* New - Conditional logic rules for fields now support selecting specific values for post objects, page links, taxonomies, relationships and users rather than having to enter the ID
+* New - New Icon Picker field type for ACF and ACF PRO
+* New - Icon selection for a custom post type menu icon
+* New - Icon selection for an options page menu icon
+* New - ACF now surfaces debug and status information in the WordPress Site Health area
+* New - The escaped html notice can now be permanently dismissed
+* Enhancement - Tab field now supports a `selected` attribute to specify which should be selected by default, and support class attributes
+* Fix - Block Preloading now works reliably in WordPress 6.5 or newer
+* Fix - Select2 results loaded by AJAX for post object fields no longer double encode HTML entities
+* Fix - Custom post types registered with ACF will now have custom field support enabled by default to better support revisions
+* Fix - The first preview after publishing a post in the classic editor now displays ACF fields correctly
+* Fix - ACF fields and Flexible Content layouts are now correctly positioned while dragging
+* Fix - Copying the title of a field inside a Flexible Content layout no longer adds whitespace to the copied value
+* Fix - Flexible Content layout names are no longer converted to lowercase when edited
+* Fix - ACF Blocks with attributes without a default now correctly register
+* Fix - User fields no longer trigger a 404 when loading results if the nonce generated only contains numbers
+* Fix - Description fields for ACF items now support being solely numeric characters
+* Fix - The field group header no longer appears above the WordPress admin menu on small screens
+* Fix - The `acf/json/save_file_name` filter now correctly applies when deleting JSON files
+* i18n - All errors raised during ACF PRO license or update checks are now translatable
+* Other - The ACF Shortcode is now disabled by default for new installations of ACF as discussed in the [ACF 6.2.7 release notes](https://www.advancedcustomfields.com/blog/acf-6-2-7-security-release/#security-and-the-acf-shortcode)
 
 = 6.2.10 =
 *Release Date 15th May 2024*
@@ -575,5 +666,3 @@ From your WordPress dashboard
 [View the full changelog](https://www.advancedcustomfields.com/changelog/)
 
 == Upgrade Notice ==
-= 6.2.5 =
-From ACF 6.2.5, the shortcode will now escape unsafe HTML automatically. This may be a breaking change. Please view [our release blog](https://www.advancedcustomfields.com/blog/acf-6-2-5-security-release/) for more information.

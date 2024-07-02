@@ -15,7 +15,6 @@ if ( ! class_exists( 'acf_field_select' ) ) :
 		 * @param   n/a
 		 * @return  n/a
 		 */
-
 		function initialize() {
 
 			// vars
@@ -52,7 +51,6 @@ if ( ! class_exists( 'acf_field_select' ) ) :
 		 * @param   $post_id (int)
 		 * @return  $post_id (int)
 		 */
-
 		function input_admin_enqueue_scripts() {
 
 			// bail early if no enqueue
@@ -114,32 +112,29 @@ if ( ! class_exists( 'acf_field_select' ) ) :
 			);
 		}
 
-
 		/**
-		 * description
+		 * AJAX handler for getting Select field choices.
 		 *
-		 * @type    function
-		 * @date    24/10/13
-		 * @since   5.0.0
+		 * @since 5.0.0
 		 *
-		 * @param   $post_id (int)
-		 * @return  $post_id (int)
+		 * @return void
 		 */
+		public function ajax_query() {
+			$nonce = acf_request_arg( 'nonce', '' );
+			$key   = acf_request_arg( 'field_key', '' );
 
-		function ajax_query() {
+			// Back-compat for field settings.
+			if ( ! acf_is_field_key( $key ) ) {
+				$nonce = '';
+				$key   = '';
+			}
 
-			// validate
-			if ( ! acf_verify_ajax() ) {
+			if ( ! acf_verify_ajax( $nonce, $key ) ) {
 				die();
 			}
 
-			// get choices
-			$response = $this->get_ajax_query( $_POST );
-
-			// return
-			acf_send_ajax_results( $response );
+			acf_send_ajax_results( $this->get_ajax_query( $_POST ) );
 		}
-
 
 		/**
 		 * This function will return an array of data formatted for use in a select2 AJAX response
@@ -223,7 +218,6 @@ if ( ! class_exists( 'acf_field_select' ) ) :
 		 * @since   3.6
 		 * @date    23/01/13
 		 */
-
 		function render_field( $field ) {
 
 			// convert
@@ -296,7 +290,12 @@ if ( ! class_exists( 'acf_field_select' ) ) :
 			if ( ! empty( $field['ajax_action'] ) ) {
 				$select['data-ajax_action'] = $field['ajax_action'];
 			}
-
+			if ( ! empty( $field['nonce'] ) ) {
+				$select['data-nonce'] = $field['nonce'];
+			}
+			if ( $field['ajax'] && empty( $field['nonce'] ) && acf_is_field_key( $field['key'] ) ) {
+				$select['data-nonce'] = wp_create_nonce( $field['key'] );
+			}
 			if ( ! empty( $field['hide_search'] ) ) {
 				$select['data-minimum-results-for-search'] = '-1';
 			}
@@ -309,10 +308,6 @@ if ( ! class_exists( 'acf_field_select' ) ) :
 						'name' => $field['name'],
 					)
 				);
-			}
-
-			if ( ! empty( $field['query_nonce'] ) ) {
-				$select['data-query-nonce'] = $field['query_nonce'];
 			}
 
 			// append
@@ -334,7 +329,6 @@ if ( ! class_exists( 'acf_field_select' ) ) :
 		 *
 		 * @param   $field  - an array holding all the field's data
 		 */
-
 		function render_field_settings( $field ) {
 
 			// encode choices (convert from array)
@@ -490,7 +484,6 @@ if ( ! class_exists( 'acf_field_select' ) ) :
 		 *
 		 * @return  $field - the modified field
 		 */
-
 		function update_field( $field ) {
 
 			// decode choices (convert to array)
@@ -520,7 +513,6 @@ if ( ! class_exists( 'acf_field_select' ) ) :
 		 *
 		 * @return  $value - the modified value
 		 */
-
 		function update_value( $value, $post_id, $field ) {
 
 			// Bail early if no value.
@@ -549,7 +541,6 @@ if ( ! class_exists( 'acf_field_select' ) ) :
 		 * @param   $field (array)
 		 * @return  $field
 		 */
-
 		function translate_field( $field ) {
 
 			// translate
