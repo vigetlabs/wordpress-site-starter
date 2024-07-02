@@ -66,6 +66,8 @@ if ( ! function_exists( 'block_attrs' ) ) {
 			unset( $attrs['id'] );
 		}
 
+		$attrs = apply_filters( 'acfbt_block_attrs', $attrs, $block );
+
 		foreach ( $attrs as $key => $value ) {
 			if ( is_null( $value ) ) {
 				continue;

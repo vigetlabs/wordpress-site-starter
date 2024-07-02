@@ -2,7 +2,7 @@
   "name": "textarea",
   "title": "Textarea",
   "description": "Form textarea field",
-  "icon": "feedback",
+  "icon": "edit",
   "category": "forms",
   "textdomain": "acf-form-blocks",
   "keywords": ["input", "contact", "feedback", "input"],

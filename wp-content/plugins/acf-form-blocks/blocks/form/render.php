@@ -16,7 +16,7 @@ $form = new Form( $block );
 // Start with a basic template.
 $template = ( new Template() )
 	->add( ( new Block( 'acf/input' ) ) )
-	->add( ( new Block( 'acf/submit' ) ) );
+	->add( ( new Block( 'acf/submit', [ 'lock' => [ 'move' => false, 'remove' => true ] ] ) ) );
 
 $inner = [
 	'template' => $template->get(),

@@ -29,6 +29,15 @@ class Field {
 	}
 
 	/**
+	 * Get the field ID.
+	 *
+	 * @return string
+	 */
+	public function get_id(): string {
+		return get_block_id( $this->block );
+	}
+
+	/**
 	 * Get the field name.
 	 *
 	 * @return string
@@ -98,6 +107,17 @@ class Field {
 	}
 
 	/**
+	 * Get the field data.
+	 *
+	 * @param string $selector Field selector.
+	 *
+	 * @return mixed
+	 */
+	protected function get_field_data( string $selector ): mixed {
+		return get_field( $selector, $this->block['id'] );
+	}
+
+	/**
 	 * Check if the field is required.
 	 *
 	 * @return bool
@@ -107,13 +127,11 @@ class Field {
 	}
 
 	/**
-	 * Get the field data.
+	 * Get the field placeholder.
 	 *
-	 * @param string $selector Field selector.
-	 *
-	 * @return mixed
+	 * @return string
 	 */
-	protected function get_field_data( string $selector ): mixed {
-		return get_field( $selector, $this->block['id'] );
+	public function get_placeholder(): string {
+		return $this->get_field_data( 'placeholder' ) ?? '';
 	}
 }
