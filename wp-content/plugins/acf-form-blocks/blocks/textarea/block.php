@@ -22,6 +22,10 @@ add_filter(
 			$attrs['placeholder'] = $field->get_placeholder();
 		}
 
+		if ( $field->is_required() ) {
+			$attrs['required'] = true;
+		}
+
 		return $attrs;
 	},
 	10,
