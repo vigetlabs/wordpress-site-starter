@@ -20,6 +20,20 @@ class Submission {
 	protected Form $form;
 
 	/**
+	 * Is the submission processed.
+	 *
+	 * @var bool
+	 */
+	private bool $is_processed = false;
+
+	/**
+	 * Is the nonce verified?
+	 *
+	 * @var bool
+	 */
+	private bool $nonce_verified = false;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param Form $form The Form.
@@ -34,6 +48,17 @@ class Submission {
 	 * @return bool
 	 */
 	public function has_submit(): bool {
+		if ( ! $this->nonce_verified ) {
+			$nonce_field = Form::HIDDEN_FORM_ID . '_' . get_block_id( $this->form->get_form() ) . '_nonce';
+
+			if ( empty( $_REQUEST[ $nonce_field ] ) || ! wp_verify_nonce( $_REQUEST[ $nonce_field ], 'form_submission' ) ) {
+				return false;
+			}
+
+			$this->nonce_verified = true;
+			$this->form->update_cache();
+		}
+
 		return ! empty( $_REQUEST[ Form::HIDDEN_FORM_ID ] ) && get_block_id( $this->form->get_form() ) === $_REQUEST[ Form::HIDDEN_FORM_ID ];
 	}
 
@@ -42,18 +67,32 @@ class Submission {
 	 *
 	 * @return bool
 	 */
-	public function is_success(): bool {
+	public function is_processed(): bool {
+		return $this->is_processed;
+	}
+
+	/**
+	 * Process the form submission.
+	 *
+	 * @return void
+	 */
+	public function process(): void {
+		if ( $this->is_processed() ) {
+			return;
+		}
+
 		if ( ! $this->has_submit() ) {
-			return false;
+			return;
 		}
 
 		if ( $this->form->get_validation()->has_errors() ) {
-			return false;
+			return;
 		}
 
 		$this->save();
+		$this->is_processed = true;
 
-		return true;
+		$this->form->update_cache();
 	}
 
 	/**

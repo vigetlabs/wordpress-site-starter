@@ -39,6 +39,10 @@ class Validation {
 	 * @return bool
 	 */
 	public function has_errors(): bool {
+		if ( count( $this->errors ) ) {
+			return true;
+		}
+
 		$fields = $this->form->get_fields();
 		$data   = $this->form->get_submission()->get_data();
 
@@ -54,6 +58,8 @@ class Validation {
 			$this->errors[] = $field->get_label() . ' ' . __( 'is required.', 'acf-form-blocks' );
 		}
 
+		$this->form->update_cache();
+
 		return count( $this->errors ) > 0;
 	}
 
@@ -63,6 +69,22 @@ class Validation {
 	 * @return void
 	 */
 	public function render(): void {
+		if ( ! $this->form->get_submission()->is_processed() ) {
+			$block_id = get_block_id( $this->form->get_form() );
+
+			printf(
+				'<input
+				type="hidden"
+				name="%s"
+				value="%s"
+			/>',
+				esc_attr( Form::HIDDEN_FORM_ID ),
+				esc_attr( $block_id )
+			);
+
+			wp_nonce_field( 'form_submission', Form::HIDDEN_FORM_ID . '_' . $block_id . '_nonce' );
+		}
+
 		if ( empty( $this->errors ) ) {
 			return;
 		}
