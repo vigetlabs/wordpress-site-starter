@@ -51,6 +51,8 @@ class Submission {
 			return false;
 		}
 
+		$this->save();
+
 		return true;
 	}
 
@@ -68,5 +70,19 @@ class Submission {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Save the form data.
+	 *
+	 * @return void
+	 */
+	protected function save(): void {
+		wp_insert_post( [
+			'post_type'    => ACFFB_SUBMISSION_POST_TYPE,
+			'post_title'   => __( 'Submission from', 'acf-form-blocks' ) . ' ' . get_the_title(),
+			'post_status'  => 'publish',
+			'post_content' => json_encode( $this->get_data() ),
+		] );
 	}
 }
