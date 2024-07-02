@@ -37,3 +37,10 @@
 .acf-block-form footer.form-submit {
 	margin-top: 1.75em;
 }
+
+.acf-form-blocks-validation {
+	border: 1px solid red;
+	background-color: rgba( 255, 0, 0, 0.1 );
+	padding: 1em;
+	margin: 1.75em 0;
+}

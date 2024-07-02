@@ -18,14 +18,14 @@ $inner = [
 ?>
 <div class="form-input type-textarea">
 	<label<?php
-		if ( ! is_admin( $inner ) ) :
+		if ( ! is_admin() ) :
 			printf( ' for="%s"', esc_attr( get_block_id( $block ) ) );
 		endif;
 	?>>
-		<?php inner_blocks(); ?>
+		<?php inner_blocks( $inner ); ?>
 		<?php if ( $required ) : ?>
 			<span class="is-required">*</span>
 		<?php endif; ?>
 	</label>
-	<textarea name="textarea" name="<?php echo esc_attr( $block['id'] ); ?>" <?php block_attrs( $block ); ?>></textarea>
+	<textarea name="<?php echo esc_attr( $block['id'] ); ?>" <?php block_attrs( $block ); ?>></textarea>
 </div>
