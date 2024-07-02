@@ -104,7 +104,7 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
       const iconName = fieldType.name.replaceAll('_', '-');
       return `
 			<a href="#" class="acf-field-type" data-field-type="${fieldType.name}">
-				${fieldType.pro && !acf.get('is_pro') ? '<span class="field-type-requires-pro"><i class="acf-icon acf-icon-lock"></i>PRO</span>' : fieldType.pro ? '<span class="field-type-requires-pro">PRO</span>' : ''}
+				${fieldType.pro && !acf.get('is_pro') ? '<span class="field-type-requires-pro not-pro"></span>' : fieldType.pro ? '<span class="field-type-requires-pro"></span>' : ''}
 				<i class="field-type-icon field-type-icon-${iconName}"></i>
 				<span class="field-type-label">${fieldType.label}</span>
 			</a>
@@ -566,6 +566,9 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
     $tabLabel: function () {
       return this.fieldObject.$el.find('.conditional-logic-badge');
     },
+    $conditionalValueSelect: function () {
+      return this.$('.condition-rule-value');
+    },
     open: function () {
       var $div = this.$control();
       $div.show();
@@ -705,51 +708,57 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
       if (!this.ruleData('field') || !this.ruleData('operator')) {
         return;
       }
-
-      // vars
       var $select = this.$input('value');
       var $td = this.$td('value');
-      var val = $select.val();
+      var currentVal = $select.val();
+      var savedValue = this.$rule[0].getAttribute('data-value');
 
       // get selected field
       var $field = acf.findFieldObject(this.ruleData('field'));
       var field = acf.getFieldObject($field);
-
       // get selected field conditions
       var conditionTypes = acf.getConditionTypes({
         fieldType: field.getType(),
         operator: this.ruleData('operator')
       });
-
-      // html
       var conditionType = conditionTypes[0].prototype;
       var choices = conditionType.choices(field);
-
-      // create html: array
-      if (choices instanceof Array) {
-        var $newSelect = $('<select></select>');
+      let $newSelect;
+      if (choices instanceof jQuery && !!choices.data('acfSelect2Props')) {
+        $newSelect = $select.clone();
+        // If converting from a disabled input, we need to convert it to an active select.
+        if ($newSelect.is('input')) {
+          var classes = $select.attr('class');
+          const $rebuiltSelect = $('<select></select>').addClass(classes).val(savedValue);
+          $newSelect = $rebuiltSelect;
+        }
+        acf.addAction('acf_conditional_value_rendered', function () {
+          acf.newSelect2($newSelect, choices.data('acfSelect2Props'));
+        });
+      } else if (choices instanceof Array) {
+        this.$conditionalValueSelect().removeClass('select2-hidden-accessible');
+        $newSelect = $('<select></select>');
         acf.renderSelect($newSelect, choices);
-
-        // create html: string (<input />)
       } else {
-        var $newSelect = $(choices);
+        this.$conditionalValueSelect().removeClass('select2-hidden-accessible');
+        $newSelect = $(choices);
       }
 
       // append
       $select.detach();
       $td.html($newSelect);
 
-      // copy attrs
       // timeout needed to avoid browser bug where "disabled" attribute is not applied
       setTimeout(function () {
         ['class', 'name', 'id'].map(function (attr) {
           $newSelect.attr(attr, $select.attr(attr));
         });
+        $select.val(savedValue);
+        acf.doAction('acf_conditional_value_rendered');
       }, 0);
-
       // select existing value (if not a disabled input)
       if (!$newSelect.prop('disabled')) {
-        acf.val($newSelect, val, true);
+        acf.val($newSelect, currentVal, true);
       }
 
       // set
@@ -773,6 +782,10 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
 
       // remove all tr's except the first one
       $group2.find('tr').not(':first').remove();
+
+      // Find the remaining tr and render
+      var $tr = $group2.find('tr');
+      this.renderRule($tr);
 
       // save field
       this.fieldObject.save();
@@ -1236,7 +1249,7 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
       if ($(e.target).hasClass('acf-input-wrap')) {
         copyValue = $(e.target).find('input').first().val();
       } else {
-        copyValue = $(e.target).text();
+        copyValue = $(e.target).text().trim();
       }
       navigator.clipboard.writeText(copyValue).then(() => {
         $(e.target).closest('.copyable').addClass('copied');
@@ -2762,6 +2775,14 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
       var _field$data;
       if ((field === null || field === void 0 || (_field$data = field.data) === null || _field$data === void 0 ? void 0 : _field$data.call(field, 'key')) !== 'bidirectional_target') return args;
       args.dropdownCssClass = 'field-type-select-results';
+
+      // Check for a full modern version of select2 like the one provided by ACF.
+      try {
+        $.fn.select2.amd.require('select2/compat/dropdownCss');
+      } catch (err) {
+        console.warn('ACF was not able to load the full version of select2 due to a conflicting version provided by another plugin or theme taking precedence. Skipping styling of bidirectional settings.');
+        delete args.dropdownCssClass;
+      }
       args.templateResult = function (selection) {
         if ('undefined' !== typeof selection.element) {
           return selection;
@@ -3038,20 +3059,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _toPropertyKey_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./toPropertyKey.js */ "./node_modules/@babel/runtime/helpers/esm/toPropertyKey.js");
 
-function _defineProperty(obj, key, value) {
-  key = (0,_toPropertyKey_js__WEBPACK_IMPORTED_MODULE_0__["default"])(key);
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
+function _defineProperty(e, r, t) {
+  return (r = (0,_toPropertyKey_js__WEBPACK_IMPORTED_MODULE_0__["default"])(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
 }
+
 
 /***/ }),
 
@@ -3079,6 +3095,7 @@ function toPrimitive(t, r) {
   return ("string" === r ? String : Number)(t);
 }
 
+
 /***/ }),
 
 /***/ "./node_modules/@babel/runtime/helpers/esm/toPropertyKey.js":
@@ -3100,6 +3117,7 @@ function toPropertyKey(t) {
   var i = (0,_toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__["default"])(t, "string");
   return "symbol" == (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(i) ? i : i + "";
 }
+
 
 /***/ }),
 
@@ -3123,6 +3141,7 @@ function _typeof(o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
   }, _typeof(o);
 }
+
 
 /***/ })
 
