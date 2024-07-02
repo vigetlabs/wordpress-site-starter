@@ -8,10 +8,10 @@
  */
 
 use ACFFormBlocks\Block;
+use ACFFormBlocks\Field;
 use ACFFormBlocks\Template;
 
-$required = get_field( 'required' );
-$type = get_field( 'input_type' ) ?: 'text';
+$field = new Field( $block );
 
 $inner = [
 	'template' => ( new Template( new Block( 'core/paragraph', [ 'placeholder' => __( 'Field Label...', 'acf-form-blocks' ) ] ) ) )->get(),
@@ -24,9 +24,14 @@ $inner = [
 		endif;
 	?>>
 		<?php inner_blocks( $inner ); ?>
-		<?php if ( $required ) : ?>
+		<?php if ( $field->is_required() ) : ?>
 			<span class="is-required">*</span>
 		<?php endif; ?>
 	</label>
-	<input type="<?php echo esc_attr( $type ); ?>" name="<?php echo esc_attr( $block['id'] ); ?>" <?php block_attrs( $block ); ?> />
+	<input
+		type="<?php echo esc_attr( $field->get_input_type() ); ?>"
+		name="<?php echo esc_attr( $field->get_name() ); ?>"
+		value="<?php echo esc_attr( $field->get_value() ); ?>"
+		<?php block_attrs( $block ); ?>
+	/>
 </div>
