@@ -26,6 +26,12 @@ class Form {
 	 */
 	protected array $block;
 
+	private ?Validation $validation = null;
+
+	private ?Submission $submission = null;
+
+	private ?Confirmation $confirmation = null;
+
 	/**
 	 * Constructor.
 	 *
@@ -33,6 +39,15 @@ class Form {
 	 */
 	public function __construct( array $block ) {
 		$this->block = $block;
+	}
+
+	/**
+	 * Get the form.
+	 *
+	 * @return array
+	 */
+	public function get_form(): array {
+		return $this->block;
 	}
 
 	/**
@@ -50,7 +65,11 @@ class Form {
 	 * @return Confirmation
 	 */
 	public function get_confirmation(): Confirmation {
-		return new Confirmation( $this->block );
+		if ( null === $this->confirmation ) {
+			$this->confirmation = new Confirmation( $this );
+		}
+
+		return $this->confirmation;
 	}
 
 	/**
@@ -59,6 +78,86 @@ class Form {
 	 * @return Submission
 	 */
 	public function get_submission(): Submission {
-		return new Submission( $this->block );
+		if ( null === $this->submission ) {
+			$this->submission = new Submission( $this );
+		}
+
+		return $this->submission;
+	}
+
+	/**
+	 * Get the form validation.
+	 *
+	 * @return Validation
+	 */
+	public function get_validation(): Validation {
+		if ( null === $this->validation ) {
+			$this->validation = new Validation( $this );
+		}
+
+		return $this->validation;
+	}
+
+	/**
+	 * Get the fields from the form.
+	 *
+	 * @return array
+	 */
+	public function get_fields(): array {
+		$content = get_the_content();
+		$context = [ 'postId' => get_the_ID(), 'postType' => get_post_type() ];
+		$blocks  = parse_blocks( $content );
+
+		$field_blocks = $this->extract_field_blocks( $blocks, $context );
+
+		return $this->parse_fields( $field_blocks );
+	}
+
+	/**
+	 * Extract fields from the blocks array.
+	 *
+	 * @param array $blocks
+	 * @param array $context
+	 *
+	 * @return array
+	 */
+	private function extract_field_blocks( array $blocks, array $context ): array {
+		$fields = [];
+		$types  = [ 'acf/input', 'acf/textarea' ];
+
+		foreach( $blocks as $block ) {
+			if ( in_array( $block['blockName'], $types ) ) {
+				$attrs       = $block['attrs'] ?? [];
+				$attrs['id'] = acf_get_block_id( $attrs, $context );
+				$attrs['id'] = acf_ensure_block_id_prefix( $attrs['id'] );
+
+				$attrs['wp_block'] = $block;
+
+				$fields[] = $attrs;
+			}
+
+			if ( ! empty( $block['innerBlocks'] ) ) {
+				$fields = array_merge( $fields, $this->extract_field_blocks( $block['innerBlocks'], $context ) );
+			}
+		}
+
+		return $fields;
+	}
+
+	/**
+	 * Parse the field blocks into Field objects.
+	 *
+	 * @param array $field_blocks
+	 *
+	 * @return Field[]
+	 */
+	private function parse_fields( array $field_blocks ): array {
+		$fields = [];
+
+		foreach ( $field_blocks as $field_block ) {
+			$fields[] = new Field( $field_block );
+		}
+
+		return $fields;
 	}
 }

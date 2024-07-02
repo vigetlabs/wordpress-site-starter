@@ -13,19 +13,19 @@ namespace ACFFormBlocks;
 class Submission {
 
 	/**
-	 * Block data.
+	 * The Form.
 	 *
-	 * @var array
+	 * @var Form
 	 */
-	protected array $block;
+	protected Form $form;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param array $block Block data.
+	 * @param Form $form The Form.
 	 */
-	public function __construct( array $block ) {
-		$this->block = $block;
+	public function __construct( Form $form ) {
+		$this->form = $form;
 	}
 
 	/**
@@ -34,7 +34,7 @@ class Submission {
 	 * @return bool
 	 */
 	public function has_submit(): bool {
-		return ! empty( $_REQUEST[ Form::HIDDEN_FORM_ID ] ) && get_block_id( $this->block ) === $_REQUEST[ Form::HIDDEN_FORM_ID ];
+		return ! empty( $_REQUEST[ Form::HIDDEN_FORM_ID ] ) && get_block_id( $this->form->get_form() ) === $_REQUEST[ Form::HIDDEN_FORM_ID ];
 	}
 
 	/**
@@ -47,21 +47,11 @@ class Submission {
 			return false;
 		}
 
-		if ( $this->has_errors() ) {
+		if ( $this->form->get_validation()->has_errors() ) {
 			return false;
 		}
 
 		return true;
-	}
-
-	/**
-	 * Check if the form has errors.
-	 *
-	 * @return bool
-	 */
-	public function has_errors(): bool {
-		$data = $this->get_data();
-		return false;
 	}
 
 	/**
@@ -70,44 +60,13 @@ class Submission {
 	 * @return array
 	 */
 	public function get_data(): array {
-		$fields = $this->get_fields();
+		$fields = $this->form->get_fields();
 		$data   = [];
-		return $data;
-	}
 
-	/**
-	 * Get the fields from the form.
-	 *
-	 * @return array
-	 */
-	protected function get_fields(): array {
-		$content = get_the_content();
-		$blocks  = parse_blocks( $content );
-
-		return $this->extract_fields( $blocks );
-	}
-
-	/**
-	 * Extract fields from the blocks array.
-	 *
-	 * @param array $blocks
-	 *
-	 * @return array
-	 */
-	protected function extract_fields( array $blocks ): array {
-		$fields = [];
-		$types  = [ 'acf/input', 'acf/textarea' ];
-
-		foreach( $blocks as $block ) {
-			if ( in_array( $block['blockName'], $types ) ) {
-				$fields[] = $block;
-			}
-
-			if ( ! empty( $block['innerBlocks'] ) ) {
-				$fields = array_merge( $fields, $this->extract_fields( $block['innerBlocks'] ) );
-			}
+		foreach ( $fields as $field ) {
+			$data[ $field->get_name() ] = $_REQUEST[ $field->get_name() ] ?? null;
 		}
 
-		return $fields;
+		return $data;
 	}
 }

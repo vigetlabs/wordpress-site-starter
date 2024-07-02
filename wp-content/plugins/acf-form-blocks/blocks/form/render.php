@@ -21,8 +21,6 @@ $template = ( new Template() )
 $inner = [
 	'template' => $template->get(),
 ];
-
-$form->get_submission()->get_data();
 ?>
 <?php if ( $form->get_submission()->is_success() ) : ?>
 	<div <?php block_attrs( $block, 'form-placeholder' ); ?>>
@@ -34,6 +32,7 @@ $form->get_submission()->get_data();
 		action="#<?php echo esc_attr( get_block_id( $block ) ); ?>"
 		<?php block_attrs( $block ); ?>
 	>
+		<?php $form->get_validation()->render(); ?>
 		<input
 			type="hidden"
 			name="<?php echo esc_attr( Form::HIDDEN_FORM_ID ); ?>"

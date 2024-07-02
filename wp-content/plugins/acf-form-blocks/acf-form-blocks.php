@@ -31,6 +31,8 @@ require_once 'includes/registration.php';
 
 // Form classes.
 require_once 'classes/Form.php';
+require_once 'classes/Field.php';
+require_once 'classes/Validation.php';
 require_once 'classes/Submission.php';
 require_once 'classes/Confirmation.php';
 

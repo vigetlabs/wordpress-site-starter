@@ -8,16 +8,16 @@
 namespace ACFFormBlocks;
 
 /**
- * Submission Confirmation
+ * Form Confirmation
  */
 class Confirmation {
 
 	/**
-	 * Block data.
+	 * The Form.
 	 *
-	 * @var array
+	 * @var Form
 	 */
-	protected array $block;
+	protected Form $form;
 
 	/**
 	 * Confirmation type.
@@ -29,10 +29,10 @@ class Confirmation {
 	/**
 	 * Constructor.
 	 *
-	 * @param array $block Block data.
+	 * @param Form $form The Form.
 	 */
-	public function __construct( array $block ) {
-		$this->block = $block;
+	public function __construct( Form $form ) {
+		$this->form = $form;
 		$this->type = get_field( 'confirmation' );
 	}
 
