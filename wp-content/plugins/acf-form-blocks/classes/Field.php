@@ -70,7 +70,7 @@ class Field {
 	 * @return string
 	 */
 	public function get_input_type(): string {
-		return $this->get_field_data( 'input_type' ) ?: 'text';
+		return $this->get_field_data( 'input_type', 'text' );
 	}
 
 	/**
@@ -122,8 +122,14 @@ class Field {
 	 *
 	 * @return mixed
 	 */
-	protected function get_field_data( string $selector ): mixed {
-		return get_field( $selector, $this->block['id'] );
+	protected function get_field_data( string $selector, mixed $default = null ): mixed {
+		$data = get_field( $selector, $this->block['id'] );
+
+		if ( is_null( $data ) && ! is_null( $default ) ) {
+			return $default;
+		}
+
+		return $data;
 	}
 
 	/**
@@ -132,7 +138,7 @@ class Field {
 	 * @return bool
 	 */
 	public function is_required(): bool {
-		return boolval( $this->get_field_data( 'required' ) );
+		return boolval( $this->get_field_data( 'required', false ) );
 	}
 
 	/**
@@ -141,6 +147,6 @@ class Field {
 	 * @return string
 	 */
 	public function get_placeholder(): string {
-		return $this->get_field_data( 'placeholder' ) ?? '';
+		return $this->get_field_data( 'placeholder', '' );
 	}
 }

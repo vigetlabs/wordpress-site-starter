@@ -37,6 +37,7 @@ require_once 'includes/block-fields.php';
 require_once 'classes/Cache.php';
 require_once 'classes/Form.php';
 require_once 'classes/Field.php';
+require_once 'classes/Select.php';
 require_once 'classes/Validation.php';
 require_once 'classes/Submission.php';
 require_once 'classes/Confirmation.php';

@@ -9,6 +9,7 @@
 .acf-block-form .form-input > label {
 	display: block;
 	width: 100%;
+	max-width: 100%;
 }
 
 .acf-block-form label {
