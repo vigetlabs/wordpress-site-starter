@@ -86,7 +86,9 @@ class Form {
 	 * @return array
 	 */
 	private function get_field_meta(): array {
-		$meta = [];
+		$meta = [
+			get_block_id( $this->block ) => $this->block['data'] ?? [],
+		];
 
 		$fields = $this->get_fields();
 		foreach ( $fields as $field ) {
@@ -233,5 +235,22 @@ class Form {
 		}
 
 		return $fields;
+	}
+
+	/**
+	 * Get the form data.
+	 *
+	 * @param string $selector Field selector.
+	 *
+	 * @return mixed
+	 */
+	public function get_form_data( string $selector ): mixed {
+		$value = get_field( $selector );
+
+		if ( ! is_null( $value ) ) {
+			return $value;
+		}
+
+		return get_field( $selector, get_block_id( $this->block ) );
 	}
 }
