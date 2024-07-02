@@ -5,11 +5,19 @@
 .acf-block-form input[type="url"],
 .acf-block-form input[type="password"],
 .acf-block-form select,
-.acf-block-form textarea,
-.acf-block-form .form-input > label {
+.acf-block-form textarea {
 	display: block;
 	width: 100%;
 	max-width: 100%;
+	border: 1px solid #000;
+	border-radius: 3px;
+	padding: 0.5rem 0.75rem;
+}
+
+.acf-block-form .form-input > label {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25rem;
 }
 
 .acf-block-form label {
@@ -20,18 +28,6 @@
 }
 .acf-block-form .is-required {
 	color: red;
-}
-
-.acf-block-form input[type="text"],
-.acf-block-form input[type="email"],
-.acf-block-form input[type="tel"],
-.acf-block-form input[type="url"],
-.acf-block-form input[type="password"],
-.acf-block-form select,
-.acf-block-form textarea {
-	border: 1px solid #000;
-	border-radius: 3px;
-	padding: 0.5rem 0.75rem;
 }
 
 .acf-block-form .form-input + .form-input,
