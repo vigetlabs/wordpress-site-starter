@@ -3,9 +3,19 @@
 	margin: -0.5rem;
 	padding: 0.5rem;
 }
+
 .wp-block-acf-input[data-type="acf/input"] + .wp-block-acf-input[data-type="acf/input"],
 .wp-block-acf-textarea[data-type="acf/textarea"] + .wp-block-acf-input[data-type="acf/input"],
 .wp-block-acf-input[data-type="acf/input"] + .wp-block-acf-textarea[data-type="acf/textarea"],
-.wp-block-acf-textarea[data-type="acf/textarea"] + .wp-block-acf-textarea[data-type="acf/textarea"] {
+.wp-block-acf-textarea[data-type="acf/textarea"] + .wp-block-acf-textarea[data-type="acf/textarea"],
+.wp-block-acf-input[data-type="acf/input"] + .wp-block-acf-select[data-type="acf/select"],
+.wp-block-acf-textarea[data-type="acf/textarea"] + .wp-block-acf-select[data-type="acf/select"],
+.wp-block-acf-select[data-type="acf/select"] + .wp-block-acf-input[data-type="acf/input"],
+.wp-block-acf-select[data-type="acf/select"] + .wp-block-acf-textarea[data-type="acf/textarea"],
+.wp-block-acf-select[data-type="acf/select"] + .wp-block-acf-select[data-type="acf/select"] {
 	margin-top: 1.75rem;
+}
+
+.acf-block-form select {
+	pointer-events: none;
 }

@@ -199,7 +199,7 @@ class Form {
 	 */
 	private function extract_field_blocks( array $blocks, array $context ): array {
 		$fields = [];
-		$types  = [ 'acf/input', 'acf/textarea' ];
+		$types  = [ 'acf/input', 'acf/textarea', 'acf/select' ];
 
 		foreach( $blocks as $block ) {
 			if ( in_array( $block['blockName'], $types ) ) {

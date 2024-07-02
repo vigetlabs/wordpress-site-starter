@@ -52,6 +52,13 @@ add_action(
 						'value' => 'acf/textarea',
 					),
 				),
+				array(
+					array(
+						'param' => 'block',
+						'operator' => '==',
+						'value' => 'acf/select',
+					),
+				),
 			),
 			'menu_order' => 0,
 			'position' => 'normal',
@@ -102,6 +109,13 @@ add_action(
 						'param' => 'block',
 						'operator' => '==',
 						'value' => 'acf/textarea',
+					),
+				),
+				array(
+					array(
+						'param' => 'block',
+						'operator' => '==',
+						'value' => 'acf/select',
 					),
 				),
 			),
