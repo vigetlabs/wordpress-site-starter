@@ -91,8 +91,14 @@ class Submission {
 
 		$this->save();
 		$this->is_processed = true;
-
 		$this->form->update_cache();
+
+		if ( 'redirect' !== $this->form->get_confirmation()->get_type() ) {
+			return;
+		}
+
+		wp_safe_redirect( $this->form->get_confirmation()->get_redirect() );
+		exit;
 	}
 
 	/**

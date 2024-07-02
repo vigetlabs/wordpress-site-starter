@@ -20,20 +20,12 @@ class Confirmation {
 	protected Form $form;
 
 	/**
-	 * Confirmation type.
-	 *
-	 * @var string
-	 */
-	protected string $type;
-
-	/**
 	 * Constructor.
 	 *
 	 * @param Form $form The Form.
 	 */
 	public function __construct( Form $form ) {
 		$this->form = $form;
-		$this->type = get_field( 'confirmation' );
 	}
 
 	/**
@@ -42,7 +34,13 @@ class Confirmation {
 	 * @return string
 	 */
 	public function get_type(): string {
-		return $this->type;
+		$confirmation = $this->form->get_form_data( 'confirmation' );
+
+		if ( ! $confirmation ) {
+			return 'message';
+		}
+
+		return $confirmation;
 	}
 
 	/**
@@ -51,7 +49,28 @@ class Confirmation {
 	 * @return string
 	 */
 	public function get_message(): string {
-		return get_field( 'message' );
+		$message = $this->form->get_form_data( 'message' );
+
+		if ( ! $message ) {
+			return __( 'Thank you for your submission.', 'acf-form-blocks' );
+		}
+
+		return $message;
+	}
+
+	/**
+	 * Get the redirect URL.
+	 *
+	 * @return string
+	 */
+	public function get_redirect(): string {
+		$redirect = $this->form->get_form_data( 'redirect' );
+
+		if ( ! $redirect ) {
+			return '';
+		}
+
+		return $redirect;
 	}
 
 	/**

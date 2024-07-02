@@ -115,8 +115,8 @@
         },
         {
             "key": "field_66832fbc1e20a",
-            "label": "URL",
-            "name": "redirect_url",
+            "label": "Redirect URL",
+            "name": "redirect",
             "aria-label": "",
             "type": "url",
             "instructions": "",
@@ -157,5 +157,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1719927191
+    "modified": 1719937196
 }
