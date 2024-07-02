@@ -27,7 +27,9 @@ define( 'ACFFB_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'ACFFB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 // Registration functions.
+require_once 'includes/assets.php';
 require_once 'includes/registration.php';
+require_once 'includes/post-types.php';
 require_once 'includes/block-fields.php';
 
 // Form classes.
