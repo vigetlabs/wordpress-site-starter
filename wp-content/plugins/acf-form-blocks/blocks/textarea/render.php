@@ -20,7 +20,7 @@ $inner = [
 <div class="form-input type-textarea">
 	<label<?php
 		if ( ! is_admin() ) :
-			printf( ' for="%s"', esc_attr( get_block_id( $block ) ) );
+			printf( ' for="%s"', esc_attr( $field->get_id() ) );
 		endif;
 	?>>
 		<?php inner_blocks( $inner ); ?>
@@ -28,8 +28,6 @@ $inner = [
 			<span class="is-required">*</span>
 		<?php endif; ?>
 	</label>
-	<textarea
-		name="<?php echo esc_attr( $field->get_name() ); ?>"
-		<?php block_attrs( $block ); ?>
-	><?php echo esc_textarea( $field->get_value() ); ?></textarea>
+
+	<textarea <?php block_attrs( $block ); ?>><?php echo esc_textarea( $field->get_value() ); ?></textarea>
 </div>

@@ -2,7 +2,7 @@
   "name": "input",
   "title": "Input",
   "description": "Form input field",
-  "icon": "feedback",
+  "icon": "edit",
   "category": "forms",
   "textdomain": "acf-form-blocks",
   "keywords": ["input", "contact", "feedback", "input"],

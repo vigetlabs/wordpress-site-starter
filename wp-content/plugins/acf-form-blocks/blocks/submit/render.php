@@ -10,9 +10,12 @@
 use ACFFormBlocks\Block;
 use ACFFormBlocks\Template;
 
-$buttons = ( new Block( 'core/buttons' ) )
-	->add( ( new Block( 'core/button', [ 'text' => __( 'Submit', 'acf-form-blocks' ) ] ) ) );
-$inner = [
+$buttons = ( new Block( 'core/buttons', [ 'lock' => [ 'move' => false, 'remove' => true ] ] ) )
+	->add( ( new Block( 'core/button', [
+		'text' => __( 'Submit', 'acf-form-blocks' ),
+		'lock' => [ 'move' => false, 'remove' => true ],
+	] ) ) );
+$inner   = [
 	'template' => ( new Template( $buttons ) )->get(),
 ];
 ?>
