@@ -47,6 +47,26 @@ class Field {
 	}
 
 	/**
+	 * Get the field input type.
+	 *
+	 * @return string
+	 */
+	public function get_input_type(): string {
+		return $this->get_field_data( 'input_type' ) ?: 'text';
+	}
+
+	/**
+	 * Get the field value.
+	 *
+	 * @return string
+	 */
+	public function get_value(): string {
+		$value = $_REQUEST[ $this->get_name() ] ?? '';
+		$value = sanitize_text_field( $value );
+		return trim( $value );
+	}
+
+	/**
 	 * Get the field label.
 	 *
 	 * @return string
