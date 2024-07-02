@@ -3,6 +3,24 @@
     "title": "Block: Form",
     "fields": [
         {
+            "key": "field_6684014a8bd1f",
+            "label": "Form Settings",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_668327fcca5b6",
             "label": "Form Method",
             "name": "method",
@@ -27,8 +45,26 @@
             "layout": "horizontal"
         },
         {
+            "key": "field_6684017c8bd20",
+            "label": "Submission",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 0,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
             "key": "field_66832f771e208",
-            "label": "Submission Confirmation",
+            "label": "Confirmation",
             "name": "confirmation",
             "aria-label": "",
             "type": "button_group",
@@ -121,5 +157,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1719873979
+    "modified": 1719927191
 }
