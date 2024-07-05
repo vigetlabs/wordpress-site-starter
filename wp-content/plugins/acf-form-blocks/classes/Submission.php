@@ -49,7 +49,7 @@ class Submission {
 	 */
 	public function has_submit(): bool {
 		if ( ! $this->nonce_verified ) {
-			$nonce_field = Form::HIDDEN_FORM_ID . '_' . get_block_id( $this->form->get_form() ) . '_nonce';
+			$nonce_field = Form::HIDDEN_FORM_ID . '_' . get_block_id( $this->form->get_form_element() ) . '_nonce';
 
 			if ( empty( $_REQUEST[ $nonce_field ] ) || ! wp_verify_nonce( $_REQUEST[ $nonce_field ], 'form_submission' ) ) {
 				return false;
@@ -59,7 +59,7 @@ class Submission {
 			$this->form->update_cache();
 		}
 
-		return ! empty( $_REQUEST[ Form::HIDDEN_FORM_ID ] ) && get_block_id( $this->form->get_form() ) === $_REQUEST[ Form::HIDDEN_FORM_ID ];
+		return ! empty( $_REQUEST[ Form::HIDDEN_FORM_ID ] ) && get_block_id( $this->form->get_form_element() ) === $_REQUEST[ Form::HIDDEN_FORM_ID ];
 	}
 
 	/**
@@ -91,6 +91,7 @@ class Submission {
 
 		$this->save();
 		$this->is_processed = true;
+
 		$this->form->update_cache();
 
 		if ( 'redirect' !== $this->form->get_confirmation()->get_type() ) {
@@ -107,7 +108,7 @@ class Submission {
 	 * @return array
 	 */
 	public function get_data(): array {
-		$fields = $this->form->get_fields();
+		$fields = $this->form->get_form_object()->get_fields();
 		$data   = [];
 
 		foreach ( $fields as $field ) {

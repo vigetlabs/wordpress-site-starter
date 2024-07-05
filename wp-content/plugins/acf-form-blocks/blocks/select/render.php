@@ -7,11 +7,13 @@
  * @package ACFFormBlocks
  */
 
-use ACFFormBlocks\Block;
-use ACFFormBlocks\Select;
-use ACFFormBlocks\Template;
+use ACFFormBlocks\Elements\Field;
+use ACFFormBlocks\Elements\Select;
+use ACFFormBlocks\Utilities\Block;
+use ACFFormBlocks\Utilities\Template;
 
-$field   = new Select( $block );
+/** @var Select $field */
+$field   = Field::factory( $block );
 $options = $field->get_options();
 $inner   = [
 	'template' => ( new Template( new Block( 'core/paragraph', [ 'placeholder' => __( 'Field Label...', 'acf-form-blocks' ) ] ) ) )->get(),

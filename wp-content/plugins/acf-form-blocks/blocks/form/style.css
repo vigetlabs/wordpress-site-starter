@@ -3,6 +3,7 @@
 .acf-block-form input[type="email"],
 .acf-block-form input[type="tel"],
 .acf-block-form input[type="url"],
+.acf-block-form input[type="number"],
 .acf-block-form input[type="password"],
 .acf-block-form select,
 .acf-block-form textarea {
@@ -30,9 +31,15 @@
 	color: red;
 }
 
-.acf-block-form .form-input + .form-input,
+.acf-block-form > .form-input + .form-input,
+.acf-block-form > .form-input + .wp-block-group,
+.acf-block-form > .wp-block-group + .form-input,
 .acf-block-form footer.form-submit {
 	margin-top: 1.75em;
+}
+
+.acf-block-form > .wp-block-group > * {
+	margin-block-start: 0.75rem;
 }
 
 .acf-form-blocks-validation {

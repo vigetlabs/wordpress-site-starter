@@ -4,6 +4,12 @@
 	padding: 0.5rem;
 }
 
+.acf-block-form .form-input > label > .acf-innerblocks-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25rem;
+}
+
 .wp-block-acf-input[data-type="acf/input"] + .wp-block-acf-input[data-type="acf/input"],
 .wp-block-acf-textarea[data-type="acf/textarea"] + .wp-block-acf-input[data-type="acf/input"],
 .wp-block-acf-input[data-type="acf/input"] + .wp-block-acf-textarea[data-type="acf/textarea"],

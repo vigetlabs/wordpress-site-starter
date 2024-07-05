@@ -5,7 +5,7 @@
  * @package ACFFormBlocks
  */
 
-use ACFFormBlocks\Field;
+use ACFFormBlocks\Elements\Field;
 
 add_filter(
 	'acfbt_block_attrs',
@@ -14,7 +14,7 @@ add_filter(
 			return $attrs;
 		}
 
-		$field = new Field( $block );
+		$field = Field::factory( $block );
 
 		$attrs['name'] = $field->get_name();
 

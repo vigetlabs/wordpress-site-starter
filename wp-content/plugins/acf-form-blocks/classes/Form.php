@@ -7,6 +7,8 @@
 
 namespace ACFFormBlocks;
 
+use ACFFormBlocks\Utilities\Cache;
+
 /**
  * Class for Forms
  */
@@ -20,11 +22,11 @@ class Form {
 	const HIDDEN_FORM_ID = 'acffb_form_id';
 
 	/**
-	 * Block data.
+	 * The Form.
 	 *
-	 * @var array
+	 * @var Elements\Form
 	 */
-	protected array $block;
+	private Elements\Form $form;
 
 	/**
 	 * @var ?Validation
@@ -44,14 +46,32 @@ class Form {
 	/**
 	 * Constructor.
 	 *
-	 * @param array $block Block data.
+	 * @param bool $preload_meta Preload meta.
 	 */
-	public function __construct( array $block, bool $preload_meta = false ) {
-		$this->block = $block;
+	public function __construct( Elements\Form $form, bool $preload_meta = false ) {
+		$this->form = $form;
 
 		if ( $preload_meta ) {
 			$this->preload_meta();
 		}
+	}
+
+	/**
+	 * Get the form object.
+	 *
+	 * @return Elements\Form
+	 */
+	public function get_form_object(): Elements\Form {
+		return $this->form;
+	}
+
+	/**
+	 * Get the form element form.
+	 *
+	 * @return array
+	 */
+	public function get_form_element(): array {
+		return $this->form->get_form();
 	}
 
 	/**
@@ -87,10 +107,10 @@ class Form {
 	 */
 	private function get_field_meta(): array {
 		$meta = [
-			get_block_id( $this->block ) => $this->block['data'] ?? [],
+			get_block_id( $this->form->get_form() ) => $this->block['data'] ?? [],
 		];
 
-		$fields = $this->get_fields();
+		$fields = $this->form->get_fields();
 		foreach ( $fields as $field ) {
 			$field_block = $field->get_block();
 			if ( empty( $field_block['data'] ) ) {
@@ -106,30 +126,12 @@ class Form {
 	}
 
 	/**
-	 * Get the form.
-	 *
-	 * @return array
-	 */
-	public function get_form(): array {
-		return $this->block;
-	}
-
-	/**
 	 * Update the cache.
 	 *
 	 * @return void
 	 */
 	public function update_cache(): void {
-		Cache::set( get_block_id( $this->block ), $this );
-	}
-
-	/**
-	 * Get the form action.
-	 *
-	 * @return string
-	 */
-	public function get_method(): string {
-		return get_field( 'method' ) ?: 'post';
+		Cache::set( get_block_id( $this->form->get_form() ), $this );
 	}
 
 	/**
@@ -172,85 +174,5 @@ class Form {
 		}
 
 		return $this->validation;
-	}
-
-	/**
-	 * Get the fields from the form.
-	 *
-	 * @return array
-	 */
-	public function get_fields(): array {
-		$content = get_the_content();
-		$context = [ 'postId' => get_the_ID(), 'postType' => get_post_type() ];
-		$blocks  = parse_blocks( $content );
-
-		$field_blocks = $this->extract_field_blocks( $blocks, $context );
-
-		return $this->parse_fields( $field_blocks );
-	}
-
-	/**
-	 * Extract fields from the blocks array.
-	 *
-	 * @param array $blocks
-	 * @param array $context
-	 *
-	 * @return array
-	 */
-	private function extract_field_blocks( array $blocks, array $context ): array {
-		$fields = [];
-		$types  = [ 'acf/input', 'acf/textarea', 'acf/select' ];
-
-		foreach( $blocks as $block ) {
-			if ( in_array( $block['blockName'], $types ) ) {
-				$attrs       = $block['attrs'] ?? [];
-				$attrs['id'] = acf_get_block_id( $attrs, $context );
-				$attrs['id'] = acf_ensure_block_id_prefix( $attrs['id'] );
-
-				$attrs['wp_block'] = $block;
-
-				$fields[] = $attrs;
-			}
-
-			if ( ! empty( $block['innerBlocks'] ) ) {
-				$fields = array_merge( $fields, $this->extract_field_blocks( $block['innerBlocks'], $context ) );
-			}
-		}
-
-		return $fields;
-	}
-
-	/**
-	 * Parse the field blocks into Field objects.
-	 *
-	 * @param array $field_blocks
-	 *
-	 * @return Field[]
-	 */
-	private function parse_fields( array $field_blocks ): array {
-		$fields = [];
-
-		foreach ( $field_blocks as $field_block ) {
-			$fields[] = new Field( $field_block );
-		}
-
-		return $fields;
-	}
-
-	/**
-	 * Get the form data.
-	 *
-	 * @param string $selector Field selector.
-	 *
-	 * @return mixed
-	 */
-	public function get_form_data( string $selector ): mixed {
-		$value = get_field( $selector );
-
-		if ( ! is_null( $value ) ) {
-			return $value;
-		}
-
-		return get_field( $selector, get_block_id( $this->block ) );
 	}
 }

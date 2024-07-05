@@ -26,22 +26,16 @@ define( 'ACFFB_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 // Plugin URL.
 define( 'ACFFB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
-// Registration functions.
-require_once 'includes/helpers.php';
-require_once 'includes/assets.php';
-require_once 'includes/registration.php';
-require_once 'includes/post-types.php';
-require_once 'includes/block-fields.php';
+// Maybe Load Composer dependencies.
+if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+	require_once __DIR__ . '/vendor/autoload.php';
+}
 
-// Form classes.
-require_once 'classes/Cache.php';
-require_once 'classes/Form.php';
-require_once 'classes/Field.php';
-require_once 'classes/Select.php';
-require_once 'classes/Validation.php';
-require_once 'classes/Submission.php';
-require_once 'classes/Confirmation.php';
+// Load include files.
+$plugin_files = glob( ACFFB_PLUGIN_PATH . 'includes/*.php' );
 
-// Template Classes.
-require_once 'classes/Template.php';
-require_once 'classes/Block.php';
+foreach ( $plugin_files as $path ) {
+	if ( file_exists( $path ) ) {
+		require_once $path;
+	}
+}
