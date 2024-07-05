@@ -71,6 +71,29 @@ class Form {
 	}
 
 	/**
+	 * Check if the form has a field of a specific type.
+	 *
+	 * @param string $field_type
+	 *
+	 * @return bool
+	 */
+	public function has_field_type( string $field_type ): bool {
+		$fields = $this->get_fields();
+
+		if ( ! str_starts_with( $field_type, 'acf/' ) ) {
+			$field_type = 'acf/' . $field_type;
+		}
+
+		foreach ( $fields as $field ) {
+			if ( $field->get_block()['name'] === $field_type ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Extract fields from the blocks array.
 	 *
 	 * @param array $blocks

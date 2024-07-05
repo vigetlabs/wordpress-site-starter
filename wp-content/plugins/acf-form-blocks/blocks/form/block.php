@@ -17,6 +17,10 @@ add_filter(
 		$attrs['method'] = $form->get_form_object()->get_method();
 		$attrs['action'] = '#' . get_block_id( $form->get_form_element() );
 
+		if ( $form->get_form_object()->has_field_type( 'file' ) ) {
+			$attrs['enctype'] = 'multipart/form-data';
+		}
+
 		return $attrs;
 	},
 	10,
