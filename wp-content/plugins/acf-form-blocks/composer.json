@@ -1,0 +1,25 @@
+{
+  "name": "viget/acf-form-blocks",
+  "version": "1.0.0",
+  "description": "Create forms in Gutenberg with ACF Blocks by Viget.",
+  "keywords": [
+    "wordpress",
+    "components",
+    "cms",
+    "ddev",
+    "tailwind",
+    "vite"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Viget",
+      "homepage": "https://viget.com/"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "ACFFormBlocks\\": "classes/"
+    }
+  }
+}

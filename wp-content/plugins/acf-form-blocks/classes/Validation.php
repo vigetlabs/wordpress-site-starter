@@ -43,7 +43,7 @@ class Validation {
 			return true;
 		}
 
-		$fields = $this->form->get_fields();
+		$fields = $this->form->get_form_object()->get_fields();
 		$data   = $this->form->get_submission()->get_data();
 
 		foreach ( $fields as $field ) {
@@ -70,7 +70,7 @@ class Validation {
 	 */
 	public function render(): void {
 		if ( ! $this->form->get_submission()->is_processed() ) {
-			$block_id = get_block_id( $this->form->get_form() );
+			$block_id = get_block_id( $this->form->get_form_element() );
 
 			printf(
 				'<input

@@ -5,7 +5,7 @@
  * @package ACFFormBlocks
  */
 
-namespace ACFFormBlocks;
+namespace ACFFormBlocks\Elements;
 
 /**
  * Class for Fields
@@ -26,6 +26,34 @@ class Field {
 	 */
 	public function __construct( array $block ) {
 		$this->block = $block;
+	}
+
+	/**
+	 * Factory method to create a new field object.
+	 *
+	 * @param array $block Block data.
+	 *
+	 * @return Field
+	 */
+	public static function factory( array $block ): Field {
+		$element = str_replace( 'acf/', '', $block['name'] );
+		$class   = __NAMESPACE__ . '\\' . ucfirst( $element );
+
+		if ( class_exists( $class ) ) {
+			// Input handler.
+			if ( 'input' === $element ) {
+				$input = new $class( $block );
+				$type  = __NAMESPACE__ . '\\' . ucfirst( $input->get_input_type() );
+
+				if ( class_exists( $type ) ) {
+					return new $type( $block );
+				}
+			}
+
+			return new $class( $block );
+		}
+
+		return new Field( $block );
 	}
 
 	/**
@@ -62,15 +90,6 @@ class Field {
 	 */
 	public function get_type(): string {
 		return $this->block['blockName'];
-	}
-
-	/**
-	 * Get the field input type.
-	 *
-	 * @return string
-	 */
-	public function get_input_type(): string {
-		return $this->get_field_data( 'input_type', 'text' );
 	}
 
 	/**
@@ -119,6 +138,7 @@ class Field {
 	 * Get the field data.
 	 *
 	 * @param string $selector Field selector.
+	 * @param mixed $default Default value.
 	 *
 	 * @return mixed
 	 */

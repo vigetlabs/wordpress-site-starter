@@ -5,7 +5,7 @@
  * @package ACFFormBlocks
  */
 
-namespace ACFFormBlocks;
+namespace ACFFormBlocks\Utilities;
 
 /**
  * Template Block

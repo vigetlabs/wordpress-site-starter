@@ -7,8 +7,8 @@
  * @package ACFFormBlocks
  */
 
-use ACFFormBlocks\Block;
-use ACFFormBlocks\Template;
+use ACFFormBlocks\Utilities\Block;
+use ACFFormBlocks\Utilities\Template;
 
 $buttons = ( new Block( 'core/buttons', [ 'lock' => [ 'move' => false, 'remove' => true ] ] ) )
 	->add( ( new Block( 'core/button', [

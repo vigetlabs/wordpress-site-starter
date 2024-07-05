@@ -14,8 +14,8 @@ add_filter(
 
 		$form = acffb_get_form( $block );
 
-		$attrs['method'] = $form->get_method();
-		$attrs['action'] = '#' . get_block_id( $form->get_form() );
+		$attrs['method'] = $form->get_form_object()->get_method();
+		$attrs['action'] = '#' . get_block_id( $form->get_form_element() );
 
 		return $attrs;
 	},

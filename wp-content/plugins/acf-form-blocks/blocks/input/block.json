@@ -13,6 +13,7 @@
     "alignWide": true,
     "anchor": true
   },
+  "style": "file:./style.css",
   "acf": {
     "mode": "preview"
   }

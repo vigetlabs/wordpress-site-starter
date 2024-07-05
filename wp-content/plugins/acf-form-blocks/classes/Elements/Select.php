@@ -5,7 +5,7 @@
  * @package ACFFormBlocks
  */
 
-namespace ACFFormBlocks;
+namespace ACFFormBlocks\Elements;
 
 /**
  * Class for Select Fields
@@ -20,9 +20,9 @@ class Select extends Field {
 	private string $default_value = '';
 
 	/**
-	 * Get the field type.
+	 * Get the select options.
 	 *
-	 * @return string
+	 * @return array
 	 */
 	public function get_options(): array {
 		$opts    = $this->get_field_data( 'options' );
@@ -59,6 +59,7 @@ class Select extends Field {
 	 */
 	public function get_value(): string {
 		$value = parent::get_value();
+
 		if ( ! $value ) {
 			return $this->default_value;
 		}
