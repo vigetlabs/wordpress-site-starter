@@ -9,8 +9,8 @@
 
 use ACFFormBlocks\Elements\Field;
 use ACFFormBlocks\Elements\Input;
-use ACFFormBlocks\Utilities\Block;
-use ACFFormBlocks\Utilities\Template;
+use ACFFormBlocks\Utilities\BlockTemplate\Block;
+use ACFFormBlocks\Utilities\BlockTemplate\Template;
 
 /** @var Input $field */
 $field = Field::factory( $block );

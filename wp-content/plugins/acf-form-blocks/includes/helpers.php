@@ -9,6 +9,7 @@
 
 use ACFFormBlocks\Elements\Form as FormElement;
 use ACFFormBlocks\Form;
+use ACFFormBlocks\Utilities\Blocks;
 use ACFFormBlocks\Utilities\Cache;
 
 /**
@@ -55,7 +56,7 @@ function acffb_get_form( array $block = [], string $content = '', array $context
  * @return ?Form
  */
 function acffb_get_form_block( array $blocks, array $context = [] ): ?Form {
-	$forms = acffb_get_blocks_by_type( $blocks, 'acf/form' );
+	$forms = Blocks::get_blocks_by_type( $blocks, 'acf/form' );
 
 	if ( ! $forms ) {
 		return null;
@@ -71,57 +72,4 @@ function acffb_get_form_block( array $blocks, array $context = [] ): ?Form {
 	$form_el = new FormElement( acf_prepare_block( $attrs ) );
 
 	return new Form( $form_el, true );
-}
-
-/**
- * Get Blocks by Type.
- *
- * @param array        $blocks Blocks.
- * @param string|array $type Block Type(s).
- *
- * @return array
- */
-function acffb_get_blocks_by_type( array $blocks, string|array $type ): array {
-	$found = [];
-
-	if ( ! is_array( $type ) ) {
-		$type = [ $type ];
-	}
-
-	foreach ( $blocks as $block ) {
-		if ( in_array( $block['blockName'], $type, true ) ) {
-			$found[] = $block;
-		}
-
-		// Pattern Support.
-		if ( 'core/block' === $block['blockName'] && ! empty( $block['attrs']['ref'] ) ) {
-			$pattern_blocks = acffb_get_pattern( $block['attrs']['ref'] );
-
-			$found = array_merge( $found, acffb_get_blocks_by_type( $pattern_blocks, $type ) );
-		}
-
-		// Check Inner Blocks.
-		if ( ! empty( $block['innerBlocks'] ) ) {
-			$found = array_merge( $found, acffb_get_blocks_by_type( $block['innerBlocks'], $type ) );
-		}
-	}
-
-	return $found;
-}
-
-/**
- * Get the block pattern by ID.
- *
- * @param int $block_ref_id Block ID.
- *
- * @return array
- */
-function acffb_get_pattern( int $block_ref_id ): array {
-	$block = get_post( $block_ref_id );
-
-	if ( ! $block ) {
-		return [];
-	}
-
-	return parse_blocks( $block->post_content );
 }
