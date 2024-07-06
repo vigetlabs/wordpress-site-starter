@@ -29,6 +29,15 @@ class Field {
 	}
 
 	/**
+	 * Get the field type.
+	 *
+	 * @return ?string
+	 */
+	public function get_type(): ?string {
+		return $this->get_field_data( 'type' );
+	}
+
+	/**
 	 * Factory method to create a new field object.
 	 *
 	 * @param array $block Block data.
@@ -84,12 +93,20 @@ class Field {
 	}
 
 	/**
-	 * Get the field type.
+	 * Get the block name
+	 *
+	 * @param bool $real If actual block name is needed.
 	 *
 	 * @return string
 	 */
-	public function get_type(): string {
-		return $this->block['blockName'];
+	public function get_block_name( bool $real = false ): string {
+		$name = $this->block['blockName'] ?? $this->block['name'] ?? '';
+
+		if ( $real ) {
+			return $name;
+		}
+
+		return str_replace( 'acf/', '', $name );
 	}
 
 	/**
@@ -142,7 +159,7 @@ class Field {
 	 *
 	 * @return mixed
 	 */
-	protected function get_field_data( string $selector, mixed $default = null ): mixed {
+	public function get_field_data( string $selector, mixed $default = null ): mixed {
 		$data = get_field( $selector, $this->block['id'] );
 
 		if ( is_null( $data ) && ! is_null( $default ) ) {

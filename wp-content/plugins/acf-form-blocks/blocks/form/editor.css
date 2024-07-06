@@ -9,19 +9,15 @@
 	flex-wrap: wrap;
 	gap: 0.25rem;
 }
-
-.wp-block-acf-input[data-type="acf/input"] + .wp-block-acf-input[data-type="acf/input"],
-.wp-block-acf-textarea[data-type="acf/textarea"] + .wp-block-acf-input[data-type="acf/input"],
-.wp-block-acf-input[data-type="acf/input"] + .wp-block-acf-textarea[data-type="acf/textarea"],
-.wp-block-acf-textarea[data-type="acf/textarea"] + .wp-block-acf-textarea[data-type="acf/textarea"],
-.wp-block-acf-input[data-type="acf/input"] + .wp-block-acf-select[data-type="acf/select"],
-.wp-block-acf-textarea[data-type="acf/textarea"] + .wp-block-acf-select[data-type="acf/select"],
-.wp-block-acf-select[data-type="acf/select"] + .wp-block-acf-input[data-type="acf/input"],
-.wp-block-acf-select[data-type="acf/select"] + .wp-block-acf-textarea[data-type="acf/textarea"],
-.wp-block-acf-select[data-type="acf/select"] + .wp-block-acf-select[data-type="acf/select"] {
-	margin-top: 1.75rem;
+.acf-block-form .form-input > label > .acf-innerblocks-container:has(.block-list-appender) {
+	padding-right: 1.75rem;
 }
 
-.acf-block-form select {
+.acf-block-form > .acf-innerblocks-container > *:not(:last-child) {
+	margin-bottom: 1.75rem;
+}
+
+.acf-block-form select,
+.acf-block-form input[type=file] {
 	pointer-events: none;
 }
