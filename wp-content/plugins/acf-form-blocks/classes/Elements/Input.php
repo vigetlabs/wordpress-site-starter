@@ -18,7 +18,7 @@ class Input extends Field {
 	 * @return string
 	 */
 	public function get_input_type(): string {
-		return $this->get_field_data( 'input_type', 'text' );
+		return $this->get_field_data( 'type', 'text' );
 	}
 
 	/**

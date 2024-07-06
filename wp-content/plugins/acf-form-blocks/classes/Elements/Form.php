@@ -38,6 +38,24 @@ class Form {
 	}
 
 	/**
+	 * Get the form ID.
+	 *
+	 * @return string
+	 */
+	public function get_id(): string {
+		return get_block_id( $this->block );
+	}
+
+	/**
+	 * Get the form name.
+	 *
+	 * @return string
+	 */
+	public function get_name(): string {
+		return $this->get_form_meta( 'name' ) ?: get_the_title();
+	}
+
+	/**
 	 * Get the form action.
 	 *
 	 * @return string
@@ -50,11 +68,11 @@ class Form {
 	 * Get the fields from the page content.
 	 *
 	 * @param string $content
-	 * @param ?array $context
+	 * @param array  $context
 	 *
 	 * @return array
 	 */
-	public function get_fields( string $content = '', ?array $context = null ): array {
+	public function get_fields( string $content = '', array $context = [] ): array {
 		if ( ! $content ) {
 			$content = get_the_content();
 		}
@@ -74,10 +92,11 @@ class Form {
 	 * Check if the form has a field of a specific type.
 	 *
 	 * @param string $field_type
+	 * @param string $sub_type
 	 *
 	 * @return bool
 	 */
-	public function has_field_type( string $field_type ): bool {
+	public function has_field_type( string $field_type, string $sub_type = '' ): bool {
 		$fields = $this->get_fields();
 
 		if ( ! str_starts_with( $field_type, 'acf/' ) ) {
@@ -85,8 +104,10 @@ class Form {
 		}
 
 		foreach ( $fields as $field ) {
-			if ( $field->get_block()['name'] === $field_type ) {
-				return true;
+			if ( $field->get_block_name( true ) === $field_type ) {
+				if ( ! $sub_type || $sub_type === $field->get_type() ) {
+					return true;
+				}
 			}
 		}
 
@@ -102,23 +123,17 @@ class Form {
 	 * @return array
 	 */
 	private function extract_field_blocks( array $blocks, array $context ): array {
-		$fields = [];
-		$types  = [ 'acf/input', 'acf/textarea', 'acf/select' ];
+		$fields   = [];
+		$filtered = acffb_get_blocks_by_type( $blocks, [ 'acf/input', 'acf/textarea', 'acf/select' ] );
 
-		foreach( $blocks as $block ) {
-			if ( in_array( $block['blockName'], $types ) ) {
-				$attrs       = $block['attrs'] ?? [];
-				$attrs['id'] = acf_get_block_id( $attrs, $context );
-				$attrs['id'] = acf_ensure_block_id_prefix( $attrs['id'] );
+		foreach ( $filtered as $block ) {
+			$attrs       = $block['attrs'] ?? [];
+			$attrs['id'] = acf_get_block_id( $attrs, $context );
+			$attrs['id'] = acf_ensure_block_id_prefix( $attrs['id'] );
 
-				$attrs['wp_block'] = $block;
+			$attrs['wp_block'] = $block;
 
-				$fields[] = $attrs;
-			}
-
-			if ( ! empty( $block['innerBlocks'] ) ) {
-				$fields = array_merge( $fields, $this->extract_field_blocks( $block['innerBlocks'], $context ) );
-			}
+			$fields[] = $attrs;
 		}
 
 		return $fields;
@@ -156,6 +171,21 @@ class Form {
 			return $value;
 		}
 
-		return get_field( $selector, get_block_id( $this->block ) );
+		return get_field( $selector, $this->get_id() );
+	}
+
+	/**
+	 * Get the form metadata.
+	 *
+	 * @param string $key Meta key.
+	 *
+	 * @return mixed
+	 */
+	public function get_form_meta( string $key ): mixed {
+		if ( empty( $this->block['metadata'][ $key ] ) ) {
+			return null;
+		}
+
+		return $this->block['metadata'][ $key ];
 	}
 }

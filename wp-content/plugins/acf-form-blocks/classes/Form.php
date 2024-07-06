@@ -54,6 +54,17 @@ class Form {
 		if ( $preload_meta ) {
 			$this->preload_meta();
 		}
+
+		$this->update_cache();
+	}
+
+	/**
+	 * Get the form ID.
+	 *
+	 * @return string
+	 */
+	public function get_form_id(): string {
+		return get_block_id( $this->form->get_form() );
 	}
 
 	/**
@@ -107,7 +118,7 @@ class Form {
 	 */
 	private function get_field_meta(): array {
 		$meta = [
-			get_block_id( $this->form->get_form() ) => $this->block['data'] ?? [],
+			$this->get_form_id() => $this->block['data'] ?? [],
 		];
 
 		$fields = $this->form->get_fields();
@@ -131,7 +142,7 @@ class Form {
 	 * @return void
 	 */
 	public function update_cache(): void {
-		Cache::set( get_block_id( $this->form->get_form() ), $this );
+		Cache::set( $this->get_form_id(), $this );
 	}
 
 	/**

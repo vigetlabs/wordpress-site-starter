@@ -5,7 +5,7 @@
         {
             "key": "field_66832bf3c10aa",
             "label": "Input Type",
-            "name": "input_type",
+            "name": "type",
             "aria-label": "",
             "type": "select",
             "instructions": "",
@@ -22,7 +22,8 @@
                 "url": "URL",
                 "tel": "Phone",
                 "number": "Number",
-                "password": "Password"
+                "password": "Password",
+                "file": "File\/Upload"
             },
             "default_value": "text",
             "return_format": "value",
@@ -198,5 +199,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1720216602
+    "modified": 1720264980
 }

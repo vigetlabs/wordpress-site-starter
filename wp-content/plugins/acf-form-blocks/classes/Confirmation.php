@@ -34,7 +34,7 @@ class Confirmation {
 	 * @return string
 	 */
 	public function get_type(): string {
-		$confirmation = $this->form->get_form_data( 'confirmation' );
+		$confirmation = $this->form->get_form_object()->get_form_data( 'confirmation' );
 
 		if ( ! $confirmation ) {
 			return 'message';
@@ -49,7 +49,7 @@ class Confirmation {
 	 * @return string
 	 */
 	public function get_message(): string {
-		$message = $this->form->get_form_data( 'message' );
+		$message = $this->form->get_form_object()->get_form_data( 'message' );
 
 		if ( ! $message ) {
 			return __( 'Thank you for your submission.', 'acf-form-blocks' );
@@ -64,7 +64,7 @@ class Confirmation {
 	 * @return string
 	 */
 	public function get_redirect(): string {
-		$redirect = $this->form->get_form_data( 'redirect' );
+		$redirect = $this->form->get_form_object()->get_form_data( 'redirect' );
 
 		if ( ! $redirect ) {
 			return '';

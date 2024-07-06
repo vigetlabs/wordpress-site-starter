@@ -7,6 +7,8 @@
 
 namespace ACFFormBlocks;
 
+use ACFFormBlocks\Elements\Field;
+
 /**
  * Submission Confirmation
  */
@@ -18,6 +20,13 @@ class Submission {
 	 * @var Form
 	 */
 	protected Form $form;
+
+	/**
+	 * The form data.
+	 *
+	 * @var array
+	 */
+	private array $data = [];
 
 	/**
 	 * Is the submission processed.
@@ -108,14 +117,70 @@ class Submission {
 	 * @return array
 	 */
 	public function get_data(): array {
-		$fields = $this->form->get_form_object()->get_fields();
-		$data   = [];
-
-		foreach ( $fields as $field ) {
-			$data[ $field->get_name() ] = $_REQUEST[ $field->get_name() ] ?? null;
+		if ( ! empty( $this->data ) ) {
+			return $this->data;
 		}
 
-		return $data;
+		$fields = $this->form->get_form_object()->get_fields();
+
+		foreach ( $fields as $field ) {
+			$value = [
+				'label' => $field->get_label(),
+			];
+
+			if ( 'input' === $field->get_block_name() && 'file' === $field->get_type() ) {
+				$value['value'] = $this->handle_upload( $field );
+			} else {
+				$value['value'] = $_REQUEST[ $field->get_name() ] ?? null;
+			}
+
+			$this->data[ $field->get_name() ] = $value;
+		}
+
+		$this->form->update_cache();
+
+		return $this->data;
+	}
+
+	/**
+	 * Handle the file upload.
+	 *
+	 * @param Field $field The Field.
+	 *
+	 * @return ?string
+	 */
+	private function handle_upload( Field $field ): ?string {
+		$upload = $_FILES[ $field->get_name() ] ?? null;
+
+		if ( ! $upload ) {
+			return null;
+		}
+
+		$upload_dir    = wp_upload_dir();
+		$upload_folder = $upload_dir['basedir'] . '/form-submissions';
+
+		// Make sure root directory is protected.
+		if ( ! is_dir( $upload_folder ) ) {
+			wp_mkdir_p( $upload_folder );
+			file_put_contents( $upload_folder . '/index.php', "<?php // Silence is golden.\n" );
+		}
+
+		$upload_folder .= '/' . $this->form->get_form_id();
+
+		// Make sure upload directory is protected.
+		if ( ! is_dir( $upload_folder ) ) {
+			wp_mkdir_p( $upload_folder );
+			file_put_contents( $upload_folder . '/index.php', "<?php // Silence is golden.\n" );
+		}
+
+		$upload_name = wp_unique_filename( $upload_folder, $upload['name'] );
+		$upload_path = $upload_folder . '/' . $upload_name;
+
+		if ( ! move_uploaded_file( $upload['tmp_name'], $upload_path ) ) {
+			return null;
+		}
+
+		return $upload_path;
 	}
 
 	/**
@@ -124,9 +189,11 @@ class Submission {
 	 * @return void
 	 */
 	protected function save(): void {
+		$form_name = $this->form->get_form_object()->get_name();
+
 		wp_insert_post( [
 			'post_type'    => ACFFB_SUBMISSION_POST_TYPE,
-			'post_title'   => __( 'Submission from', 'acf-form-blocks' ) . ' ' . get_the_title(),
+			'post_title'   => __( 'Submission from', 'acf-form-blocks' ) . ' ' . $form_name,
 			'post_status'  => 'publish',
 			'post_content' => json_encode( $this->get_data() ),
 		] );
