@@ -7,8 +7,8 @@
  * @package ACFFormBlocks
  */
 
-use ACFFormBlocks\Utilities\Block;
-use ACFFormBlocks\Utilities\Template;
+use ACFFormBlocks\Utilities\BlockTemplate\Block;
+use ACFFormBlocks\Utilities\BlockTemplate\Template;
 
 $form = acffb_get_form( $block );
 

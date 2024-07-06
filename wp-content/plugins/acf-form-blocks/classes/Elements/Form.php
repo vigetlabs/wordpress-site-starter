@@ -7,6 +7,8 @@
 
 namespace ACFFormBlocks\Elements;
 
+use ACFFormBlocks\Utilities\Blocks;
+
 /**
  * Class for Form Elements
  */
@@ -124,7 +126,7 @@ class Form {
 	 */
 	private function extract_field_blocks( array $blocks, array $context ): array {
 		$fields   = [];
-		$filtered = acffb_get_blocks_by_type( $blocks, [ 'acf/input', 'acf/textarea', 'acf/select' ] );
+		$filtered = Blocks::get_blocks_by_type( $blocks, [ 'acf/input', 'acf/textarea', 'acf/select' ] );
 
 		foreach ( $filtered as $block ) {
 			$attrs       = $block['attrs'] ?? [];
