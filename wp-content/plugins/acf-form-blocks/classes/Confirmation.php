@@ -64,7 +64,14 @@ class Confirmation {
 	 * @return string
 	 */
 	public function get_redirect(): string {
-		$redirect = $this->form->get_form_object()->get_form_data( 'redirect' );
+		$custom = $this->form->get_form_object()->get_form_data( 'custom_url' );
+
+		if ( $custom ) {
+			$redirect = $this->form->get_form_object()->get_form_data( 'redirect' );
+		} else {
+			$page     = $this->form->get_form_object()->get_form_data( 'page' );
+			$redirect = get_permalink( $page->ID );
+		}
 
 		if ( ! $redirect ) {
 			return '';
@@ -81,9 +88,16 @@ class Confirmation {
 	public function render(): void {
 		?>
 		<div class="acffb-confirmation">
-			<?php if ( 'message' === $this->get_type() ) : ?>
-				<p><?php echo esc_html( $this->get_message() ); ?></p>
-			<?php endif; ?>
+			<?php if ( 'content' === $this->get_type() ) :
+				$page = $this->form->get_form_object()->get_form_data( 'page' );
+				echo apply_filters( 'the_content', $page->post_content );
+			else :
+				printf(
+					'<p>%s</p>',
+					wp_kses_post( $this->get_message() )
+				);
+			endif;
+			?>
 		</div>
 		<?php
 	}
