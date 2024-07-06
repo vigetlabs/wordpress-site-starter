@@ -78,7 +78,8 @@
             },
             "choices": {
                 "message": "Message",
-                "redirect": "Redirect"
+                "redirect": "Redirect",
+                "content": "Page Content"
             },
             "default_value": "message",
             "return_format": "value",
@@ -114,6 +115,80 @@
             "new_lines": ""
         },
         {
+            "key": "field_668952d3e1d7f",
+            "label": "Page",
+            "name": "page",
+            "aria-label": "",
+            "type": "post_object",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_66832f771e208",
+                        "operator": "==",
+                        "value": "redirect"
+                    },
+                    {
+                        "field": "field_66895376e1d81",
+                        "operator": "!=",
+                        "value": "1"
+                    }
+                ],
+                [
+                    {
+                        "field": "field_66832f771e208",
+                        "operator": "==",
+                        "value": "content"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "page"
+            ],
+            "post_status": "",
+            "taxonomy": "",
+            "return_format": "object",
+            "multiple": 0,
+            "allow_null": 0,
+            "bidirectional": 0,
+            "ui": 1,
+            "bidirectional_target": []
+        },
+        {
+            "key": "field_66895376e1d81",
+            "label": "Custom URL",
+            "name": "custom_url",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_66832f771e208",
+                        "operator": "==",
+                        "value": "redirect"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
             "key": "field_66832fbc1e20a",
             "label": "Redirect URL",
             "name": "redirect",
@@ -127,6 +202,11 @@
                         "field": "field_66832f771e208",
                         "operator": "==",
                         "value": "redirect"
+                    },
+                    {
+                        "field": "field_66895376e1d81",
+                        "operator": "==",
+                        "value": "1"
                     }
                 ]
             ],
@@ -157,5 +237,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1719937196
+    "modified": 1720276251
 }
