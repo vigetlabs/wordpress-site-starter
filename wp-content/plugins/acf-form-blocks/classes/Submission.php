@@ -42,6 +42,8 @@ class Submission {
 	 */
 	private bool $nonce_verified = false;
 
+	private ?int $submission_id = null;
+
 	/**
 	 * Constructor.
 	 *
@@ -98,10 +100,10 @@ class Submission {
 			return;
 		}
 
-		$this->save();
 		$this->is_processed = true;
+		$this->save();
 
-		$this->form->update_cache();
+		$this->form->get_notification()->send();
 
 		if ( 'redirect' !== $this->form->get_confirmation()->get_type() ) {
 			return;
@@ -191,11 +193,29 @@ class Submission {
 	protected function save(): void {
 		$form_name = $this->form->get_form_object()->get_name();
 
-		wp_insert_post( [
+		$submission_id = wp_insert_post( [
 			'post_type'    => ACFFB_SUBMISSION_POST_TYPE,
 			'post_title'   => __( 'Submission from', 'acf-form-blocks' ) . ' ' . $form_name,
 			'post_status'  => 'publish',
 			'post_content' => json_encode( $this->get_data() ),
 		] );
+
+		if ( $submission_id ) {
+			$this->submission_id = $submission_id;
+			$this->form->update_cache();
+		}
+	}
+
+	/**
+	 * Get the submission admin URL.
+	 *
+	 * @return ?string
+	 */
+	public function get_submission_url(): ?string {
+		if ( ! $this->submission_id ) {
+			return null;
+		}
+
+		return get_edit_post_link( $this->submission_id );
 	}
 }

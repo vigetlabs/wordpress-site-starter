@@ -217,6 +217,111 @@
             },
             "default_value": "",
             "placeholder": "https:\/\/"
+        },
+        {
+            "key": "field_66895ea1c1062",
+            "label": "Notification",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 1,
+            "multi_expand": 1,
+            "endpoint": 0
+        },
+        {
+            "key": "field_66895ec6c1063",
+            "label": "Site Admin Email",
+            "name": "admin_email",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "ui_on_text": "Enabled",
+            "ui_off_text": "Disabled",
+            "ui": 1
+        },
+        {
+            "key": "field_66895efdc1064",
+            "label": "Confirmation Email",
+            "name": "confirmation_email",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Form must have an Email field.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "ui_on_text": "Enabled",
+            "ui_off_text": "Disabled",
+            "ui": 1
+        },
+        {
+            "key": "field_66895f4bc1065",
+            "label": "Custom Email",
+            "name": "custom_email",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui_on_text": "Enabled",
+            "ui_off_text": "Disabled",
+            "ui": 1
+        },
+        {
+            "key": "field_66895f71c1066",
+            "label": "Email Recipient",
+            "name": "email_recipient",
+            "aria-label": "",
+            "type": "email",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_66895f4bc1065",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "name@domain.com",
+            "prepend": "",
+            "append": ""
         }
     ],
     "location": [
@@ -237,5 +342,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1720276251
+    "modified": 1720278960
 }
