@@ -44,6 +44,11 @@ class Form {
 	private ?Confirmation $confirmation = null;
 
 	/**
+	 * @var ?Notification
+	 */
+	private ?Notification $notification = null;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param bool $preload_meta Preload meta.
@@ -185,5 +190,19 @@ class Form {
 		}
 
 		return $this->validation;
+	}
+
+	/**
+	 * Get the form notification.
+	 *
+	 * @return Notification
+	 */
+	public function get_notification(): Notification {
+		if ( null === $this->notification ) {
+			$this->notification = new Notification( $this );
+			$this->update_cache();
+		}
+
+		return $this->notification;
 	}
 }

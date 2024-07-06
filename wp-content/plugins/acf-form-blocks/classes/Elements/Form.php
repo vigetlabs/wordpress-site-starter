@@ -173,7 +173,18 @@ class Form {
 			return $value;
 		}
 
-		return get_field( $selector, $this->get_id() );
+		$value = get_field( $selector, $this->get_id() );
+
+		if ( ! is_null( $value ) ) {
+			return $value;
+		}
+
+		// Not sure why this is all of sudden necessary.
+		if ( isset( $this->block['data'][ $selector ] ) ) {
+			return $this->block['data'][ $selector ];
+		}
+
+		return null;
 	}
 
 	/**
