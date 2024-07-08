@@ -1,6 +1,6 @@
 <?php
 /**
- * Block: Input
+ * Block: Select
  *
  * @global array $block
  *

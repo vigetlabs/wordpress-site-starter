@@ -1,6 +1,6 @@
 <?php
 /**
- * Block: Submit
+ * Submit button
  *
  * @package ACFFormBlocks
  */

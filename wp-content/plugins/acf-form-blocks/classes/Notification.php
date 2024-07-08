@@ -29,11 +29,11 @@ class Notification {
 	}
 
 	/**
-	 * Send the emails
+	 * Process the notification emails
 	 *
 	 * @return void
 	 */
-	public function send(): void {
+	public function process(): void {
 		if ( $this->is_admin_email_enabled() ) {
 			$this->send_admin_email();
 		}

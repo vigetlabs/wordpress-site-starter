@@ -89,7 +89,7 @@ class Field {
 	 * @return string
 	 */
 	public function get_name(): string {
-		return $this->block['id'];
+		return get_block_id( $this->block );
 	}
 
 	/**

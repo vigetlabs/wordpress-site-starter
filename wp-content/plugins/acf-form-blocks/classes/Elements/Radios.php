@@ -1,6 +1,6 @@
 <?php
 /**
- * Select Class
+ * Radios Class
  *
  * @package ACFFormBlocks
  */
@@ -10,8 +10,8 @@ namespace ACFFormBlocks\Elements;
 use ACFFormBlocks\Traits\Options;
 
 /**
- * Class for Select Fields
+ * Class for Radios Fields
  */
-class Select extends Field {
+class Radios extends Field {
 	use Options;
 }
