@@ -123,7 +123,16 @@ class Submission {
 			return $this->data;
 		}
 
-		$fields = $this->form->get_form_object()->get_fields();
+		$fields     = $this->form->get_form_object()->get_fields();
+		$this->data = [
+			'content' => [],
+			'meta'    => [
+				'url'    => esc_url( $_SERVER['REQUEST_URI'] ),
+				'ip'     => sanitize_text_field( $_SERVER['REMOTE_ADDR'] ),
+				'agent'  => sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ),
+				'method' => sanitize_text_field( $_SERVER['REQUEST_METHOD'] ),
+			],
+		];
 
 		foreach ( $fields as $field ) {
 			$value = [
@@ -133,15 +142,36 @@ class Submission {
 			if ( 'input' === $field->get_block_name() && 'file' === $field->get_type() ) {
 				$value['value'] = $this->handle_upload( $field );
 			} else {
-				$value['value'] = $_REQUEST[ $field->get_name() ] ?? null;
+				$value['value'] = $this->sanitize_input( $field );
 			}
 
-			$this->data[ $field->get_name() ] = $value;
+			$this->data['content'][ $field->get_name() ] = $value;
 		}
+
+		$this->data = apply_filters( 'acffb_submission_data', $this->data );
 
 		$this->form->update_cache();
 
 		return $this->data;
+	}
+
+	/**
+	 * Sanitize the input.
+	 *
+	 * @param Field $field The Field.
+	 *
+	 * @return ?string
+	 */
+	private function sanitize_input( Field $field ): ?string {
+		if ( empty( $_REQUEST[ $field->get_name() ] ) && 0 !== $_REQUEST[ $field->get_name() ] && '0' !== $_REQUEST[ $field->get_name() ] ) {
+			return null;
+		}
+
+		if ( 'textarea' === $field->get_block_name() ) {
+			return sanitize_textarea_field( $_REQUEST[ $field->get_name() ] );
+		}
+
+		return sanitize_text_field( $_REQUEST[ $field->get_name() ] );
 	}
 
 	/**
@@ -192,18 +222,30 @@ class Submission {
 	 */
 	protected function save(): void {
 		$form_name = $this->form->get_form_object()->get_name();
+		$form_data = $this->get_data();
+		$form_post = apply_filters(
+			'acffb_submission_post',
+			[
+				'post_type'    => ACFFB_SUBMISSION_POST_TYPE,
+				'post_title'   => $form_name  . ' ' . __( 'Submission', 'acf-form-blocks' ),
+				'post_status'  => 'publish',
+				'post_content' => json_encode( $form_data['content'] ),
+			]
+		);
 
-		$submission_id = wp_insert_post( [
-			'post_type'    => ACFFB_SUBMISSION_POST_TYPE,
-			'post_title'   => __( 'Submission from', 'acf-form-blocks' ) . ' ' . $form_name,
-			'post_status'  => 'publish',
-			'post_content' => json_encode( $this->get_data() ),
-		] );
+		$submission_id = wp_insert_post( $form_post );
 
-		if ( $submission_id ) {
-			$this->submission_id = $submission_id;
-			$this->form->update_cache();
+		if ( ! $submission_id ) {
+			return;
 		}
+
+		$this->submission_id = $submission_id;
+
+		foreach ( $form_data['meta'] as $meta_key => $meta_value ) {
+			update_post_meta( $submission_id, $meta_key, $meta_value );
+		}
+
+		$this->form->update_cache();
 	}
 
 	/**
