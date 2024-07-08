@@ -1,6 +1,6 @@
 <?php
 /**
- * Input block
+ * Select block
  *
  * @package ACFFormBlocks
  */

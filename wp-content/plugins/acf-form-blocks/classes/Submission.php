@@ -103,7 +103,7 @@ class Submission {
 		$this->is_processed = true;
 		$this->save();
 
-		$this->form->get_notification()->send();
+		$this->form->get_notification()->process();
 
 		if ( 'redirect' !== $this->form->get_confirmation()->get_type() ) {
 			return;

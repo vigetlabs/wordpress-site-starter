@@ -1,0 +1,18 @@
+.acf-block-radios ul.radios-options,
+.acf-block-radios ul.radios-options li {
+	list-style: none;
+}
+
+.acf-block-radios ul.radios-options li {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.acf-block-radios ul.radios-options input[type=radio] {
+	cursor: pointer;
+}
+
+.acf-block-radios.is-style-inline ul.radios-options {
+	display: flex;
+	gap: 1rem;
+}
