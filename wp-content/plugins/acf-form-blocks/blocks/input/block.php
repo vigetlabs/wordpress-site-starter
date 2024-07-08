@@ -57,6 +57,11 @@ add_filter(
 			}
 		}
 
+		$logic = $input->get_conditional_logic();
+		if ( $logic ) {
+			$attrs['data-conditional-rules'] = wp_json_encode( $logic );
+		}
+
 		return $attrs;
 	},
 	10,

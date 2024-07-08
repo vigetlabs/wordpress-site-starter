@@ -12,6 +12,8 @@ use ACFFormBlocks\Utilities\BlockTemplate\Template;
 
 $form = acffb_get_form( $block );
 
+wp_enqueue_script( 'acfformblocks-conditional-logic' );
+
 // Start with a basic template.
 $template = ( new Template() )
 	->add( ( new Block( 'acf/input' ) ) )

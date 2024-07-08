@@ -52,7 +52,7 @@ if ( ! function_exists( 'dd' ) ) {
 			} elseif ( in_array( $method, [ 'export', 'var_export' ], true ) ) {
 				var_export( $data ); // phpcs:ignore
 			} elseif ( in_array( $method, [ 'json', 'json_encode' ], true ) ) {
-				echo wp_json_encode( $data ); // phpcs:ignore
+				echo wp_json_encode( $data, JSON_PRETTY_PRINT ); // phpcs:ignore
 			}
 
 			if ( $return ) {

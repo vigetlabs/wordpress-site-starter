@@ -75,7 +75,7 @@ class Field {
 	}
 
 	/**
-	 * Get the field ID.
+	 * Get the field ID attribute.
 	 *
 	 * @return string
 	 */
@@ -84,12 +84,12 @@ class Field {
 	}
 
 	/**
-	 * Get the field name.
+	 * Get the field name (the actual ID).
 	 *
 	 * @return string
 	 */
 	public function get_name(): string {
-		return get_block_id( $this->block );
+		return get_block_id( $this->block, true );
 	}
 
 	/**
@@ -160,13 +160,24 @@ class Field {
 	 * @return mixed
 	 */
 	public function get_field_data( string $selector, mixed $default = null ): mixed {
-		$data = get_field( $selector, $this->block['id'] );
+		$value = get_field( $selector );
 
-		if ( is_null( $data ) && ! is_null( $default ) ) {
-			return $default;
+		if ( ! is_null( $value ) ) {
+			return $value;
 		}
 
-		return $data;
+		$value = get_field( $selector, $this->block['id'] );
+
+		if ( ! is_null( $value ) ) {
+			return $value;
+		}
+
+		// Not sure why this is all of sudden necessary.
+		if ( isset( $this->block['data'][ $selector ] ) ) {
+			return $this->block['data'][ $selector ];
+		}
+
+		return $default;
 	}
 
 	/**
@@ -185,5 +196,45 @@ class Field {
 	 */
 	public function get_placeholder(): string {
 		return $this->get_field_data( 'placeholder', '' );
+	}
+
+	/**
+	 * Get Conditional logic rules for field.
+	 *
+	 * @return ?array
+	 */
+	public function get_conditional_logic(): ?array {
+		if ( ! in_array( $this->get_block_name( true ), [ 'acf/input', 'acf/select', 'acf/radios', 'acf/textarea', 'acf/submit' ], true ) ) {
+			return null;
+		}
+
+		if ( ! $this->get_field_data( 'enable_conditional_logic' ) ) {
+			return null;
+		}
+
+		$logic = $this->get_field_data( 'conditional_logic' );
+
+		if ( empty( $logic ) || ! is_array( $logic ) ) {
+			return null;
+		}
+
+		$action = $logic[0]['action'];
+		$rules  = [
+			'field'     => $this->get_name(),
+			'container' => sprintf( 'div.form-input:has(#%s)', $this->get_name() ),
+			'action'    => $action,
+			'logic'     => 'and',
+			'rules'     => [],
+		];
+
+		foreach ( $logic as $item ) {
+			$rules['rules'][] = [
+				'name'     => $item['field'],
+				'operator' => $item['condition'],
+				'value'    => $item['value'] ?? '',
+			];
+		}
+
+		return $rules;
 	}
 }
