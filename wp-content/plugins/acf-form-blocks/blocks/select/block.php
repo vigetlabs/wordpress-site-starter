@@ -15,17 +15,22 @@ add_filter(
 			return $attrs;
 		}
 
-		/** @var Select $field */
-		$field = Field::factory( $block );
+		/** @var Select $select */
+		$select = Field::factory( $block );
 
-		$attrs['name'] = $field->get_name();
+		$attrs['name'] = $select->get_name();
 
-		if ( $field->get_placeholder() ) {
-			$attrs['placeholder'] = $field->get_placeholder();
+		if ( $select->get_placeholder() ) {
+			$attrs['placeholder'] = $select->get_placeholder();
 		}
 
-		if ( $field->is_required() ) {
+		if ( $select->is_required() ) {
 			$attrs['required'] = true;
+		}
+
+		$logic = $select->get_conditional_logic();
+		if ( $logic ) {
+			$attrs['data-conditional-rules'] = wp_json_encode( $logic );
 		}
 
 		return $attrs;

@@ -6,6 +6,7 @@
 .acf-block-radios ul.radios-options li {
 	display: flex;
 	gap: 0.5rem;
+	align-items: center;
 }
 
 .acf-block-radios ul.radios-options input[type=radio] {

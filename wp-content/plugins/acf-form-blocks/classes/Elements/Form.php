@@ -126,7 +126,7 @@ class Form {
 	 */
 	private function extract_field_blocks( array $blocks, array $context ): array {
 		$fields   = [];
-		$filtered = Blocks::get_blocks_by_type( $blocks, [ 'acf/input', 'acf/textarea', 'acf/select' ] );
+		$filtered = Blocks::get_blocks_by_type( $blocks, [ 'acf/input', 'acf/textarea', 'acf/select', 'acf/radios' ] );
 
 		foreach ( $filtered as $block ) {
 			$attrs       = $block['attrs'] ?? [];

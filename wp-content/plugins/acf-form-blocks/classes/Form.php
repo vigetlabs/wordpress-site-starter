@@ -26,27 +26,27 @@ class Form {
 	 *
 	 * @var Elements\Form
 	 */
-	private Elements\Form $form;
+	protected Elements\Form $form;
 
 	/**
 	 * @var ?Validation
 	 */
-	private ?Validation $validation = null;
+	protected ?Validation $validation = null;
 
 	/**
 	 * @var ?Submission
 	 */
-	private ?Submission $submission = null;
+	protected ?Submission $submission = null;
 
 	/**
 	 * @var ?Confirmation
 	 */
-	private ?Confirmation $confirmation = null;
+	protected ?Confirmation $confirmation = null;
 
 	/**
 	 * @var ?Notification
 	 */
-	private ?Notification $notification = null;
+	protected ?Notification $notification = null;
 
 	/**
 	 * Constructor.
@@ -57,6 +57,7 @@ class Form {
 		$this->form = $form;
 
 		if ( $preload_meta ) {
+			// $block = acf_add_block_meta_values( $block, $post_id );
 			$this->preload_meta();
 		}
 
