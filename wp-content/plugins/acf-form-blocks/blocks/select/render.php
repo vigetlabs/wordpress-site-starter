@@ -9,14 +9,12 @@
 
 use ACFFormBlocks\Elements\Field;
 use ACFFormBlocks\Elements\Select;
-use ACFFormBlocks\Utilities\BlockTemplate\Block;
-use ACFFormBlocks\Utilities\BlockTemplate\Template;
 
 /** @var Select $field */
 $field   = Field::factory( $block );
 $options = $field->get_options();
 $inner   = [
-	'template' => ( new Template( new Block( 'core/paragraph', [ 'placeholder' => __( 'Field Label...', 'acf-form-blocks' ) ] ) ) )->get(),
+	'template' => $field->get_template(),
 ];
 
 $has_selected = false;

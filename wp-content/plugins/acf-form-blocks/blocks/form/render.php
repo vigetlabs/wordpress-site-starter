@@ -7,20 +7,12 @@
  * @package ACFFormBlocks
  */
 
-use ACFFormBlocks\Utilities\BlockTemplate\Block;
-use ACFFormBlocks\Utilities\BlockTemplate\Template;
-
 $form = acffb_get_form( $block );
 
 wp_enqueue_script( 'acfformblocks-conditional-logic' );
 
-// Start with a basic template.
-$template = ( new Template() )
-	->add( ( new Block( 'acf/input' ) ) )
-	->add( ( new Block( 'acf/submit', [ 'lock' => [ 'move' => false, 'remove' => true ] ] ) ) );
-
 $inner = [
-	'template' => $template->get(),
+	'template' => $form->get_form_object()->get_template(),
 ];
 ?>
 <?php if ( $form->get_submission()->is_processed() ) : ?>

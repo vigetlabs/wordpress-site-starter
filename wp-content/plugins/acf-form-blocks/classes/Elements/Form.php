@@ -9,6 +9,9 @@ namespace ACFFormBlocks\Elements;
 
 use ACFFormBlocks\Form as FormObject;
 use ACFFormBlocks\Utilities\Blocks;
+use ACFFormBlocks\Utilities\BlockTemplate\Block;
+use ACFFormBlocks\Utilities\BlockTemplate\Template;
+use Exception;
 
 /**
  * Class for Form Elements
@@ -233,5 +236,18 @@ class Form {
 		}
 
 		return $this->block['metadata'][ $key ];
+	}
+
+	/**
+	 * Get the form template.
+	 *
+	 * @return array
+	 * @throws Exception
+	 */
+	public function get_template(): array {
+		return ( new Template() )
+			->add( ( new Block( 'acf/input' ) ) )
+			->add( ( new Block( 'acf/submit', [ 'lock' => [ 'move' => false, 'remove' => true ] ] ) )
+		)->get();
 	}
 }
