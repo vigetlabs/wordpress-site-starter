@@ -8,11 +8,13 @@
 add_action(
 	'wp_enqueue_scripts',
 	function () {
+		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
 		wp_register_script(
 			'mf-conditional-fields',
-			ACFFB_PLUGIN_URL . 'assets/js/third-party/mf-conditional-fields.min.js',
+			ACFFB_PLUGIN_URL . 'assets/js/third-party/mf-conditional-fields' . $min . '.js',
 			[],
-			ACFFB_VERSION,
+			'1.0.6',
 			[
 				'in_footer' => true,
 			]
