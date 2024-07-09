@@ -266,4 +266,13 @@ class Field {
 
 		return $rules;
 	}
+
+	/**
+	 * Get the block template.
+	 *
+	 * @return array
+	 */
+	public function get_template(): array {
+		return [];
+	}
 }
