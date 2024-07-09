@@ -42,4 +42,4 @@ class FormBlock extends Block {
 }
 
 // Init block actions and filters.
-new FormBlock( 'acf/form' );
+( new FormBlock( 'acf/form' ) );

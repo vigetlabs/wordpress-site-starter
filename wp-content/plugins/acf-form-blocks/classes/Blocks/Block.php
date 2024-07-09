@@ -9,14 +9,17 @@ namespace ACFFormBlocks\Blocks;
 
 use ACFFormBlocks\Form;
 
+/**
+ * Class for Block Actions
+ */
 class Block {
 
 	/**
-	 * The block name.
+	 * The block name(s).
 	 *
-	 * @var string
+	 * @var array
 	 */
-	protected string $block_name;
+	protected array $block_names;
 
 	/**
 	 * The block array.
@@ -24,6 +27,13 @@ class Block {
 	 * @var array
 	 */
 	protected array $block = [];
+
+	/**
+	 * The WordPress block array.
+	 *
+	 * @var array
+	 */
+	protected array $wp_block = [];
 
 	/**
 	 * The form object.
@@ -35,13 +45,22 @@ class Block {
 	/**
 	 * Block constructor.
 	 *
-	 * @param string $block_name The block name.
+	 * @param string|array $block_names The block name.
 	 */
-	public function __construct( string $block_name ) {
-		$this->block_name = $block_name;
+	public function __construct( string|array $block_names ) {
+		if ( ! is_array( $block_names ) ) {
+			$block_names = [ $block_names ];
+		}
+		$this->block_names = $block_names;
 
+		// Filter the block attributes.
 		$this->filter_attrs();
+
+		// Template redirect actions.
 		$this->template_redirect();
+
+		// Filter the block during render
+		$this->render_block();
 	}
 
 	/**
@@ -53,7 +72,7 @@ class Block {
 		add_filter(
 			'acfbt_block_attrs',
 			function ( array $attrs, array $block ): array {
-				if ( $this->block_name !== $block['name'] ) {
+				if ( ! in_array( $block['name'], $this->block_names, true ) ) {
 					return $attrs;
 				}
 
@@ -93,6 +112,29 @@ class Block {
 	}
 
 	/**
+	 * Filter the block during render.
+	 *
+	 * @return void
+	 */
+	private function render_block(): void {
+		add_filter(
+			'render_block',
+			function ( string $block_content, array $block ): string {
+				if ( ! in_array( $block['blockName'], $this->block_names, true ) ) {
+					return $block_content;
+				}
+
+				$this->wp_block = $block;
+
+				return $this->render( $block_content );
+			},
+			10,
+			2
+		);
+
+	}
+
+	/**
 	 * Set the block attributes.
 	 *
 	 * @param array $attrs The block attributes.
@@ -110,5 +152,16 @@ class Block {
 	 */
 	public function do_template_redirect(): void {
 		// Do nothing.
+	}
+
+	/**
+	 * Apply the render filter.
+	 *
+	 * @param string $block_content The block content.
+	 *
+	 * @return string
+	 */
+	public function render( string $block_content ): string {
+		return $block_content;
 	}
 }
