@@ -5,38 +5,41 @@
  * @package ACFFormBlocks
  */
 
-add_filter(
-	'acfbt_block_attrs',
-	function ( array $attrs, array $block ): array {
-		if ( 'acf/form' !== $block['name'] ) {
-			return $attrs;
-		}
+namespace ACFFormBlocks\Blocks;
 
-		$form = acffb_get_form( $block );
+/**
+ * Form Block
+ */
+class FormBlock extends Block {
 
-		$attrs['method'] = $form->get_form_object()->get_method();
-		$attrs['action'] = '#' . $form->get_form_object()->get_id_attr();
-		$attrs['id']     = $form->get_form_object()->get_id_attr();
+	/**
+	 * Set the block attributes.
+	 *
+	 * @param array $attrs The block attributes.
+	 *
+	 * @return array
+	 */
+	public function set_attrs( array $attrs ): array {
+		$attrs['method'] = $this->form->get_form_object()->get_method();
+		$attrs['action'] = '#' . $this->form->get_form_object()->get_id_attr();
+		$attrs['id']     = $this->form->get_form_object()->get_id_attr();
 
-		if ( $form->get_form_object()->has_field_type( 'input', 'file' ) ) {
+		if ( $this->form->get_form_object()->has_field_type( 'input', 'file' ) ) {
 			$attrs['enctype'] = 'multipart/form-data';
 		}
-
 		return $attrs;
-	},
-	10,
-	2
-);
-
-add_action(
-	'template_redirect',
-	function() {
-		$form = acffb_get_form();
-		if ( ! $form ) {
-			return;
-		}
-
-		// Handle form submission and redirects.
-		$form->get_submission()->process();
 	}
-);
+
+	/**
+	 * Perform Template Redirect Actions
+	 *
+	 * @return void
+	 */
+	public function do_template_redirect(): void {
+		// Handle form submission and redirects.
+		$this->form->get_submission()->process();
+	}
+}
+
+// Init block actions and filters.
+new FormBlock( 'acf/form' );
