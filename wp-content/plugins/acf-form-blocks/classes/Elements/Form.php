@@ -111,6 +111,27 @@ class Form {
 	 * @return array
 	 */
 	public function get_fields( string $content = '', array $context = [] ): array {
+		$all_fields   = $this->get_all_fields( $content, $context );
+		$input_fields = [];
+
+		foreach ( $all_fields as $field ) {
+			if ( in_array( $field->get_block_name( true ), FormObject::ALL_INPUT_TYPES  ) ) {
+				$input_fields[] = $field;
+			}
+		}
+
+		return $input_fields;
+	}
+
+	/**
+	 * Get all the fields from the page content.
+	 *
+	 * @param string $content
+	 * @param array  $context
+	 *
+	 * @return array
+	 */
+	public function get_all_fields( string $content = '', array $context = [] ): array {
 		if ( ! $content ) {
 			$content = get_the_content();
 		}
@@ -162,7 +183,7 @@ class Form {
 	 */
 	private function extract_field_blocks( array $blocks, array $context ): array {
 		$fields   = [];
-		$filtered = Blocks::get_blocks_by_type( $blocks, FormObject::ALL_INPUT_TYPES );
+		$filtered = Blocks::get_blocks_by_type( $blocks, FormObject::ALL_FIELD_TYPES );
 
 		foreach ( $filtered as $block ) {
 			$attrs       = $block['attrs'] ?? [];
@@ -249,5 +270,27 @@ class Form {
 			->add( ( new Block( 'acf/input' ) ) )
 			->add( ( new Block( 'acf/submit', [ 'lock' => [ 'move' => false, 'remove' => true ] ] ) )
 		)->get();
+	}
+
+	/**
+	 * Get a field by its ID.
+	 *
+	 * @param string $field_id
+	 *
+	 * @return ?Field
+	 */
+	public function get_field_by_id( string $field_id ): ?Field {
+		$fields = $this->get_all_fields();
+
+		foreach ( $fields as $field ) {
+			$block_name = str_replace( '/', '_', $field->get_block_name( true ) );
+			$block_id   = $block_name . '_' . $field_id;
+
+			if ( $field->get_id() === $block_id ) {
+				return $field;
+			}
+		}
+
+		return null;
 	}
 }

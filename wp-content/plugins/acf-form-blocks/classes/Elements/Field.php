@@ -22,12 +22,21 @@ class Field {
 	protected array $block;
 
 	/**
+	 * Block context.
+	 *
+	 * @var array
+	 */
+	protected array $context;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param array $block Block data.
+	 * @param array $context Block context.
 	 */
-	public function __construct( array $block ) {
-		$this->block = $block;
+	public function __construct( array $block, array $context = [] ) {
+		$this->block   = $block;
+		$this->context = $context;
 	}
 
 	/**
@@ -43,25 +52,26 @@ class Field {
 	 * Factory method to create a new field object.
 	 *
 	 * @param array $block Block data.
+	 * @param array $context Context data.
 	 *
 	 * @return Field
 	 */
-	public static function factory( array $block ): Field {
+	public static function factory( array $block, array $context = [] ): Field {
 		$element = str_replace( 'acf/', '', $block['name'] );
 		$class   = __NAMESPACE__ . '\\' . ucfirst( $element );
 
 		if ( class_exists( $class ) ) {
 			// Input handler.
 			if ( 'input' === $element ) {
-				$input = new $class( $block );
+				$input = new $class( $block, $context );
 				$type  = __NAMESPACE__ . '\\' . ucfirst( $input->get_input_type() );
 
 				if ( class_exists( $type ) ) {
-					return new $type( $block );
+					return new $type( $block, $context );
 				}
 			}
 
-			return new $class( $block );
+			return new $class( $block, $context );
 		}
 
 		return new Field( $block );

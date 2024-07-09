@@ -115,7 +115,21 @@ add_action(
 					array(
 						'param' => 'block',
 						'operator' => '==',
+						'value' => 'acf/radios',
+					),
+				),
+				array(
+					array(
+						'param' => 'block',
+						'operator' => '==',
 						'value' => 'acf/select',
+					),
+				),
+				array(
+					array(
+						'param' => 'block',
+						'operator' => '==',
+						'value' => 'acf/fieldset',
 					),
 				),
 			),
