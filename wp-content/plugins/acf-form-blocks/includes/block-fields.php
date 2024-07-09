@@ -510,6 +510,13 @@ add_action(
 					array(
 						'param' => 'block',
 						'operator' => '==',
+						'value' => 'acf/fieldset',
+					),
+				),
+				array(
+					array(
+						'param' => 'block',
+						'operator' => '==',
 						'value' => 'acf/submit',
 					),
 				),
