@@ -7,6 +7,7 @@
 
 namespace ACFFormBlocks\Elements;
 
+use ACFFormBlocks\Form as FormObject;
 use ACFFormBlocks\Utilities\Blocks;
 
 /**
@@ -40,11 +41,43 @@ class Form {
 	}
 
 	/**
-	 * Get the form ID.
+	 * Get the ID attribute.
+	 *
+	 * @return string
+	 */
+	public function get_id_attr(): string {
+		if ( ! empty( $this->block['anchor'] ) ) {
+			return $this->block['anchor'];
+		}
+
+		if ( empty( $this->block['form_id'] ) ) {
+			return get_block_id( $this->block, true );
+		}
+
+		$block_name = str_replace( '/', '_', $this->block['name'] );
+		return $block_name . '_' . $this->block['form_id'];
+	}
+
+	/**
+	 * Get the actual form ID (unique/constant).
 	 *
 	 * @return string
 	 */
 	public function get_id(): string {
+		if ( empty( $this->block['form_id'] ) ) {
+			return get_block_id( $this->block, true );
+		}
+
+		$block_name = str_replace( '/', '_', $this->block['name'] );
+		return $block_name . '_' . $this->block['form_id'];
+	}
+
+	/**
+	 * Get the block ACF ID
+	 *
+	 * @return string
+	 */
+	public function get_acf_id(): string {
 		return get_block_id( $this->block );
 	}
 
@@ -126,7 +159,7 @@ class Form {
 	 */
 	private function extract_field_blocks( array $blocks, array $context ): array {
 		$fields   = [];
-		$filtered = Blocks::get_blocks_by_type( $blocks, [ 'acf/input', 'acf/textarea', 'acf/select', 'acf/radios' ] );
+		$filtered = Blocks::get_blocks_by_type( $blocks, FormObject::ALL_INPUT_TYPES );
 
 		foreach ( $filtered as $block ) {
 			$attrs       = $block['attrs'] ?? [];
@@ -173,7 +206,7 @@ class Form {
 			return $value;
 		}
 
-		$value = get_field( $selector, $this->get_id() );
+		$value = get_field( $selector, $this->get_acf_id() );
 
 		if ( ! is_null( $value ) ) {
 			return $value;

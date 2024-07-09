@@ -17,6 +17,12 @@
     "alignWide": true,
     "anchor": true
   },
+  "attributes": {
+    "field_id": {
+      "type": "string",
+      "default": ""
+    }
+  },
   "acf": {
     "mode": "preview"
   }

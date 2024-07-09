@@ -14,16 +14,22 @@ add_filter(
 			return $attrs;
 		}
 
-		$field = Field::factory( $block );
+		$textarea = Field::factory( $block );
 
-		$attrs['name'] = $field->get_name();
+		$attrs['name'] = $textarea->get_name();
+		$attrs['id']   = $textarea->get_id_attr();
 
-		if ( $field->get_placeholder() ) {
-			$attrs['placeholder'] = $field->get_placeholder();
+		if ( $textarea->get_placeholder() ) {
+			$attrs['placeholder'] = $textarea->get_placeholder();
 		}
 
-		if ( $field->is_required() ) {
+		if ( $textarea->is_required() ) {
 			$attrs['required'] = true;
+		}
+
+		$logic = $textarea->get_conditional_logic();
+		if ( $logic ) {
+			$attrs['data-conditional-rules'] = wp_json_encode( $logic );
 		}
 
 		return $attrs;

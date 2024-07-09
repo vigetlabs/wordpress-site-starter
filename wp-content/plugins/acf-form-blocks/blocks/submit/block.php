@@ -10,7 +10,7 @@ use ACFFormBlocks\Elements\Field;
 add_filter(
 	'acfbt_block_attrs',
 	function ( array $attrs, array $block ): array {
-		if ( 'acf/radios' !== $block['name'] ) {
+		if ( 'acf/submit' !== $block['name'] ) {
 			return $attrs;
 		}
 

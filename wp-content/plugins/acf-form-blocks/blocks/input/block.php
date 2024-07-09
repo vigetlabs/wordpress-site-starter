@@ -20,6 +20,7 @@ add_filter(
 		$input = Field::factory( $block );
 
 		$attrs['name']  = $input->get_name();
+		$attrs['id']    = $input->get_id_attr();
 		$attrs['type']  = $input->get_input_type();
 		$attrs['value'] = $input->get_value();
 

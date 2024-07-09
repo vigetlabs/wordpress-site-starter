@@ -197,7 +197,7 @@ class Submission {
 			file_put_contents( $upload_folder . '/index.php', "<?php // Silence is golden.\n" );
 		}
 
-		$upload_folder .= '/' . $this->form->get_form_id();
+		$upload_folder .= '/' . $this->form->get_form_object()->get_id();
 
 		// Make sure upload directory is protected.
 		if ( ! is_dir( $upload_folder ) ) {

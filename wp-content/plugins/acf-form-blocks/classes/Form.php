@@ -21,6 +21,30 @@ class Form {
 	 */
 	const HIDDEN_FORM_ID = 'acffb_form_id';
 
+	const ALL_INPUT_TYPES = [
+		'acf/input',
+		'acf/select',
+		'acf/radios',
+		'acf/textarea',
+	];
+
+	const ALL_FIELD_TYPES = [
+		'acf/input',
+		'acf/select',
+		'acf/radios',
+		'acf/textarea',
+		'acf/submit',
+	];
+
+	const ALL_BLOCK_TYPES = [
+		'acf/form',
+		'acf/input',
+		'acf/select',
+		'acf/radios',
+		'acf/textarea',
+		'acf/submit',
+	];
+
 	/**
 	 * The Form.
 	 *
@@ -62,15 +86,6 @@ class Form {
 		}
 
 		$this->update_cache();
-	}
-
-	/**
-	 * Get the form ID.
-	 *
-	 * @return string
-	 */
-	public function get_form_id(): string {
-		return get_block_id( $this->form->get_form() );
 	}
 
 	/**
@@ -124,7 +139,7 @@ class Form {
 	 */
 	private function get_field_meta(): array {
 		$meta = [
-			$this->get_form_id() => $this->block['data'] ?? [],
+			$this->get_form_object()->get_acf_id() => $this->block['data'] ?? [],
 		];
 
 		$fields = $this->form->get_fields();
@@ -148,7 +163,7 @@ class Form {
 	 * @return void
 	 */
 	public function update_cache(): void {
-		Cache::set( $this->get_form_id(), $this );
+		Cache::set( $this->get_form_object()->get_acf_id(), $this );
 	}
 
 	/**
