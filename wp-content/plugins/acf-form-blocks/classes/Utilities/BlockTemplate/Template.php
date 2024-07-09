@@ -9,6 +9,8 @@
 
 namespace ACFFormBlocks\Utilities\BlockTemplate;
 
+use Exception;
+
 /**
  * Block Template
  */
@@ -27,6 +29,7 @@ class Template {
 	 * @param Block|array|null $block Template block.
 	 *
 	 * @return Template
+	 * @throws Exception
 	 */
 	public function __construct( Block|array|null $block = null ) {
 		if ( ! $block ) {
@@ -50,6 +53,7 @@ class Template {
 	 * @param Block|string $block Template block.
 	 *
 	 * @return Template
+	 * @throws Exception
 	 */
 	public function add( Block|string $block ): Template {
 		if ( is_string( $block ) ) {

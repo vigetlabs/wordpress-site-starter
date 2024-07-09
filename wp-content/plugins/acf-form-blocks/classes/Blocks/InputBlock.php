@@ -38,15 +38,14 @@ class InputBlock extends FieldBlock {
 		if ( $this->field->get_maxlength() ) {
 			$attrs['maxlength'] = $this->field->get_maxlength();
 
-			if ( 'number' === $this->field->get_input_type() ) {
+			if ( $this->field instanceof Number ) {
 				$js_maxlength     = 'if(this.value.length>this.maxLength)this.value=this.value.slice(0,this.maxLength)';
 				$attrs['oninput'] = $js_maxlength;
 				$attrs['onfocus'] = $js_maxlength;
 			}
 		}
 
-		if ( 'number' === $this->field->get_input_type() ) {
-			/** @var Number $this__field (TODO) */
+		if ( $this->field instanceof Number ) {
 			if ( ! $this->field->controls_enabled() ) {
 				$attrs['data-appearance'] = 'none';
 			} else {
