@@ -20,6 +20,9 @@
       "default": ""
     }
   },
+  "providesContext": {
+    "acffb/form_id": "form_id"
+  },
   "acf": {
     "mode": "preview"
   }

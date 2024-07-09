@@ -7,6 +7,8 @@
 
 namespace ACFFormBlocks\Utilities;
 
+use ACFFormBlocks\Form;
+
 /**
  * Class for Caching
  */
@@ -15,7 +17,7 @@ class Cache {
 	/**
 	 * The storage.
 	 *
-	 * @var array
+	 * @var Form[]
 	 */
 	private static array $storage = [];
 
@@ -24,9 +26,9 @@ class Cache {
 	 *
 	 * @param string $key The key.
 	 *
-	 * @return mixed
+	 * @return ?Form
 	 */
-	public static function get( string $key ): mixed {
+	public static function get( string $key ): ?Form {
 		return self::$storage[ $key ] ?? null;
 	}
 
@@ -34,11 +36,31 @@ class Cache {
 	 * Set a cached value.
 	 *
 	 * @param string $key The key.
-	 * @param mixed  $value The value.
+	 * @param Form   $form The form.
 	 *
 	 * @return void
 	 */
-	public static function set( string $key, mixed $value ): void {
-		self::$storage[ $key ] = $value;
+	public static function set( string $key, Form $form ): void {
+		self::$storage[ $key ] = $form;
+	}
+
+	/**
+	 * Find a cached Form.
+	 *
+	 * @param string $form_id The form ID.
+	 *
+	 * @return ?Form
+	 */
+	public static function find( string $form_id ): ?Form {
+		foreach ( self::$storage as $cache ) {
+			$block_name = str_replace( '/', '_', $cache->get_form_element()['name'] );
+			$form_id    = $block_name . '_' . $form_id;
+
+			if ( $cache->get_form_object()->get_id() === $form_id ) {
+				return $cache;
+			}
+		}
+
+		return null;
 	}
 }

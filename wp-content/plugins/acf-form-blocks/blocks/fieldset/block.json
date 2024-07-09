@@ -19,6 +19,9 @@
       "default": ""
     }
   },
+  "providesContext": {
+    "acffb/fieldset_id": "field_id"
+  },
   "acf": {
     "mode": "preview"
   }

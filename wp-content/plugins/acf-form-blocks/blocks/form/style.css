@@ -15,7 +15,8 @@
 	padding: 0.5rem 0.75rem;
 }
 
-.acf-block-form .form-input > label {
+.acf-block-form .form-input > label,
+.acf-block-form .form-fieldset > legend {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.25rem;
@@ -24,7 +25,8 @@
 .acf-block-form label {
 	cursor: pointer;
 }
-.acf-block-form label > * {
+.acf-block-form label > *,
+.acf-block-form legend > * {
 	display: inline-block;
 }
 .acf-block-form .is-required {
@@ -38,12 +40,16 @@
 .acf-block-form > .acf-block-fieldset + .form-input,
 .acf-block-form > .wp-block-group + .form-input,
 .acf-block-form footer.form-submit {
-	margin-top: 1.75em;
+	margin-block-start: 1.75em;
 }
 
 .acf-block-form > .wp-block-group > *,
 .acf-block-form > .acf-block-fieldset > * {
 	margin-block-start: 0.75rem;
+}
+
+:where(body .is-layout-flow) > *[hidden]:first-child + * {
+	margin-block-start: 0;
 }
 
 .acf-block-form .wp-block-columns:last-child {
