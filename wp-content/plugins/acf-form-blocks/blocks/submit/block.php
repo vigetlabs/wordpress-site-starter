@@ -8,4 +8,4 @@
 use ACFFormBlocks\Blocks\SubmitBlock;
 
 // Init block actions and filters.
-( new SubmitBlock( 'acf/submit' ) );
+( new SubmitBlock() );

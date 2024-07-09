@@ -20,7 +20,16 @@ class InputBlock extends FieldBlock {
 	 * Type hint for the field object.
 	 * @var ?Input
 	 */
-	protected ?Field $field;
+	protected ?Field $field = null;
+
+	/**
+	 * RadiosBlock constructor.
+	 *
+	 * @param string|array $block_names The block name.
+	 */
+	public function __construct( string|array $block_names = 'acf/input' ) {
+		parent::__construct( $block_names );
+	}
 
 	/**
 	 * Set the block attributes.
