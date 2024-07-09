@@ -63,41 +63,15 @@ function acffb_get_posted_acf_block(): array {
 /**
  * Get the block ID from ACF Field block data.
  *
- * // TODO: Not a great solution, but works :|
- *
  * @param array $block
  *
  * @return ?string
  */
 function acffb_get_block_id_from_acf_block_data( array $block ): ?string {
-	if ( empty( $block['data'] ) ) {
+	if ( empty( $block['name'] ) || empty( $block['field_id'] ) ) {
 		return null;
 	}
 
-	$form    = acffb_get_form();
-	$matches = [];
-
-	foreach ( $form->get_form_object()->get_fields() as $form_field ) {
-		if ( $block['name'] !== $form_field->get_block_name( true ) ) {
-			continue;
-		}
-
-		$field_name = $form_field->get_name();
-
-		foreach ( $block['data'] as $key => $value ) {
-			if ( $form_field->get_field_data( $key ) === $value ) {
-				if ( ! in_array( $field_name, $matches, true ) ) {
-					$matches[] = $field_name;
-				}
-			} elseif ( in_array( $field_name, $matches, true ) ) {
-				$matches = array_diff( $matches, [ $field_name ] );
-			}
-		}
-	}
-
-	if ( 1 === count( $matches ) ) {
-		return $matches[0];
-	}
-
-	return null;
+	$block_name = str_replace( '/', '_', $block['name'] );
+	return $block_name . '_' . $block['field_id'];
 }

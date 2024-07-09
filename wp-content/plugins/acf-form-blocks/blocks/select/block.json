@@ -13,6 +13,12 @@
     "anchor": true
   },
   "editorStyle": "file:./editor.css",
+  "attributes": {
+    "field_id": {
+      "type": "string",
+      "default": ""
+    }
+  },
   "acf": {
     "mode": "preview"
   }

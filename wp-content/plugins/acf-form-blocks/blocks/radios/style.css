@@ -3,6 +3,10 @@
 	list-style: none;
 }
 
+.acf-block-radios ul.radios-options {
+	padding-top: 0.75rem;
+}
+
 .acf-block-radios ul.radios-options li {
 	display: flex;
 	gap: 0.5rem;

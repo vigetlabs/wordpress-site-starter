@@ -19,6 +19,7 @@ add_filter(
 		$select = Field::factory( $block );
 
 		$attrs['name'] = $select->get_name();
+		$attrs['id']   = $select->get_id_attr();
 
 		if ( $select->get_placeholder() ) {
 			$attrs['placeholder'] = $select->get_placeholder();

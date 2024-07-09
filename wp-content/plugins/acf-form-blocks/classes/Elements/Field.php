@@ -7,6 +7,8 @@
 
 namespace ACFFormBlocks\Elements;
 
+use ACFFormBlocks\Form;
+
 /**
  * Class for Fields
  */
@@ -75,12 +77,34 @@ class Field {
 	}
 
 	/**
+	 * Get the block ACF ID
+	 *
+	 * @return string
+	 */
+	public function get_acf_id(): string {
+		return get_block_id( $this->block, true );
+	}
+
+	/**
 	 * Get the field ID attribute.
 	 *
 	 * @return string
 	 */
+	public function get_id_attr(): string {
+		if ( ! empty( $this->block['anchor'] ) ) {
+			return $this->block['anchor'];
+		}
+
+		return $this->get_name();
+	}
+
+	/**
+	 * Get the field unique ID.
+	 *
+	 * @return string
+	 */
 	public function get_id(): string {
-		return get_block_id( $this->block );
+		return $this->get_name();
 	}
 
 	/**
@@ -89,7 +113,13 @@ class Field {
 	 * @return string
 	 */
 	public function get_name(): string {
-		return get_block_id( $this->block, true );
+		if ( empty( $this->block['field_id'] ) ) {
+			return $this->get_acf_id();
+		}
+
+		$block_name = $this->get_block_name( true );
+		$block_name = str_replace( '/', '_', $block_name );
+		return $block_name . '_' . $this->block['field_id'];
 	}
 
 	/**
@@ -204,7 +234,7 @@ class Field {
 	 * @return ?array
 	 */
 	public function get_conditional_logic(): ?array {
-		if ( ! in_array( $this->get_block_name( true ), [ 'acf/input', 'acf/select', 'acf/radios', 'acf/textarea', 'acf/submit' ], true ) ) {
+		if ( ! in_array( $this->get_block_name( true ), Form::ALL_FIELD_TYPES, true ) ) {
 			return null;
 		}
 
@@ -220,8 +250,7 @@ class Field {
 
 		$action = $logic[0]['action'];
 		$rules  = [
-			'field'     => $this->get_name(),
-			'container' => sprintf( 'div.form-input:has(#%s)', $this->get_name() ),
+			'container' => sprintf( 'div.form-input:has(#%s)', $this->get_id_attr() ),
 			'action'    => $action,
 			'logic'     => 'and',
 			'rules'     => [],

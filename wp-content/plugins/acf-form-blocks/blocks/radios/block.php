@@ -1,6 +1,6 @@
 <?php
 /**
- * Radio field
+ * Radio buttons
  *
  * @package ACFFormBlocks
  */
@@ -16,6 +16,10 @@ add_filter(
 
 		$radios = Field::factory( $block );
 
+		$logic = $radios->get_conditional_logic();
+		if ( $logic ) {
+			$attrs['data-conditional-rules'] = wp_json_encode( $logic );
+		}
 
 		return $attrs;
 	},
