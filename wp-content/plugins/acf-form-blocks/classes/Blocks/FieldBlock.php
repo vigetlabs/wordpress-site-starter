@@ -43,7 +43,7 @@ class FieldBlock extends Block {
 		}
 
 		$logic = $this->field->get_conditional_logic();
-		if ( $logic ) {
+		if ( ! is_admin() && $logic ) {
 			$attrs['data-conditional-rules'] = wp_json_encode( $logic );
 		}
 
