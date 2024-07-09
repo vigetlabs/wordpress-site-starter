@@ -51,6 +51,7 @@ class Block {
 		if ( ! is_array( $block_names ) ) {
 			$block_names = [ $block_names ];
 		}
+
 		$this->block_names = $block_names;
 
 		// Filter the block attributes.
