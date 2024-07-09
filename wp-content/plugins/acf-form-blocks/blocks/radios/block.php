@@ -5,24 +5,22 @@
  * @package ACFFormBlocks
  */
 
+namespace ACFFormBlocks\Blocks;
+
 use ACFFormBlocks\Elements\Field;
+use ACFFormBlocks\Elements\Radios;
 
-add_filter(
-	'acfbt_block_attrs',
-	function ( array $attrs, array $block ): array {
-		if ( 'acf/radios' !== $block['name'] ) {
-			return $attrs;
-		}
+/**
+ * Radios Block Class
+ */
+class RadiosBlock extends FieldBlock {
 
-		$radios = Field::factory( $block );
+	/**
+	 * Type hint for the field object.
+	 * @var ?Radios
+	 */
+	protected ?Field $field;
+}
 
-		$logic = $radios->get_conditional_logic();
-		if ( $logic ) {
-			$attrs['data-conditional-rules'] = wp_json_encode( $logic );
-		}
-
-		return $attrs;
-	},
-	10,
-	2
-);
+// Init block actions and filters.
+( new RadiosBlock( 'acf/radios' ) );

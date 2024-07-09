@@ -5,66 +5,65 @@
  * @package ACFFormBlocks
  */
 
+namespace ACFFormBlocks\Blocks;
+
 use ACFFormBlocks\Elements\Field;
 use ACFFormBlocks\Elements\Input;
 use ACFFormBlocks\Elements\Number;
 
-add_filter(
-	'acfbt_block_attrs',
-	function ( array $attrs, array $block ): array {
-		if ( 'acf/input' !== $block['name'] ) {
-			return $attrs;
-		}
+/**
+ * Input Block Class
+ */
+class InputBlock extends FieldBlock {
 
-		/** @var Input $input */
-		$input = Field::factory( $block );
+	/**
+	 * Type hint for the field object.
+	 * @var ?Input
+	 */
+	protected ?Field $field;
 
-		$attrs['name']  = $input->get_name();
-		$attrs['id']    = $input->get_id_attr();
-		$attrs['type']  = $input->get_input_type();
-		$attrs['value'] = $input->get_value();
+	/**
+	 * Set the block attributes.
+	 *
+	 * @param array $attrs The block attributes.
+	 *
+	 * @return array
+	 */
+	public function set_attrs( array $attrs ): array {
+		$attrs = parent::set_attrs( $attrs );
 
-		if ( $input->get_maxlength() ) {
-			$attrs['maxlength'] = $input->get_maxlength();
+		$attrs['type']  = $this->field->get_input_type();
+		$attrs['value'] = $this->field->get_value();
 
-			if ( 'number' === $input->get_input_type() ) {
+		if ( $this->field->get_maxlength() ) {
+			$attrs['maxlength'] = $this->field->get_maxlength();
+
+			if ( 'number' === $this->field->get_input_type() ) {
 				$js_maxlength     = 'if(this.value.length>this.maxLength)this.value=this.value.slice(0,this.maxLength)';
 				$attrs['oninput'] = $js_maxlength;
 				$attrs['onfocus'] = $js_maxlength;
 			}
 		}
 
-		if ( $input->get_placeholder() ) {
-			$attrs['placeholder'] = $input->get_placeholder();
-		}
-
-		if ( $input->is_required() ) {
-			$attrs['required'] = true;
-		}
-
-		if ( 'number' === $input->get_input_type() ) {
-			/** @var Number $input */
-			if ( ! $input->controls_enabled() ) {
+		if ( 'number' === $this->field->get_input_type() ) {
+			/** @var Number $this__field (TODO) */
+			if ( ! $this->field->controls_enabled() ) {
 				$attrs['data-appearance'] = 'none';
 			} else {
-				$attrs['step'] = $input->get_step();
+				$attrs['step'] = $this->field->get_step();
 
-				if ( $input->get_min() ) {
-					$attrs['min'] = $input->get_min();
+				if ( $this->field->get_min() ) {
+					$attrs['min'] = $this->field->get_min();
 				}
-				if ( $input->get_max() ) {
-					$attrs['max'] = $input->get_max();
+				if ( $this->field->get_max() ) {
+					$attrs['max'] = $this->field->get_max();
 				}
 			}
 		}
 
-		$logic = $input->get_conditional_logic();
-		if ( $logic ) {
-			$attrs['data-conditional-rules'] = wp_json_encode( $logic );
-		}
-
 		return $attrs;
-	},
-	10,
-	2
-);
+	}
+}
+
+// Init block actions and filters.
+( new InputBlock( 'acf/input' ) );

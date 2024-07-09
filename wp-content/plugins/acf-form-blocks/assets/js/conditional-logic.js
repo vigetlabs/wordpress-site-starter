@@ -15,8 +15,7 @@ document.addEventListener(
 			{
 				rules: 'inline',
 				disableHidden: true,
-				debug: true,
-				depth: 8,
+				depth: 16,
 			}
 		);
 	}
