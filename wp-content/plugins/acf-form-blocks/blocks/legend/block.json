@@ -1,0 +1,20 @@
+{
+  "name": "legend",
+  "title": "Legend",
+  "description": "Form fieldset legend",
+  "icon": "edit",
+  "category": "forms",
+  "textdomain": "acf-form-blocks",
+  "keywords": ["input", "contact", "feedback", "group", "set"],
+  "ancestor": ["acf/form"],
+  "parent": ["acf/fieldset"],
+  "supports": {
+    "jsx": true,
+    "mode": false,
+    "alignWide": false,
+    "anchor": true
+  },
+  "acf": {
+    "mode": "preview"
+  }
+}

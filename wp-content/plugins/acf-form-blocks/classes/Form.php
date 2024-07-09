@@ -29,6 +29,7 @@ class Form {
 	];
 
 	const ALL_FIELD_TYPES = [
+		'acf/fieldset',
 		'acf/input',
 		'acf/select',
 		'acf/radios',
@@ -38,6 +39,8 @@ class Form {
 
 	const ALL_BLOCK_TYPES = [
 		'acf/form',
+		'acf/fieldset',
+		'acf/legend',
 		'acf/input',
 		'acf/select',
 		'acf/radios',

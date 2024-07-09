@@ -13,7 +13,7 @@ namespace ACFFormBlocks\Blocks;
 class SubmitBlock extends FieldBlock {
 
 	/**
-	 * RadiosBlock constructor.
+	 * SubmitBlock constructor.
 	 *
 	 * @param string|array $block_names The block name.
 	 */

@@ -34,13 +34,20 @@
 .acf-block-form > .form-input + .form-input,
 .acf-block-form > .form-input + .wp-block-group,
 .acf-block-form > .form-input + .wp-block-columns,
+.acf-block-form > .form-input + .acf-block-fieldset,
+.acf-block-form > .acf-block-fieldset + .form-input,
 .acf-block-form > .wp-block-group + .form-input,
 .acf-block-form footer.form-submit {
 	margin-top: 1.75em;
 }
 
-.acf-block-form > .wp-block-group > * {
+.acf-block-form > .wp-block-group > *,
+.acf-block-form > .acf-block-fieldset > * {
 	margin-block-start: 0.75rem;
+}
+
+.acf-block-form .wp-block-columns:last-child {
+	margin-bottom: 0;
 }
 
 .acf-form-blocks-validation {

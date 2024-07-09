@@ -1,0 +1,25 @@
+{
+  "name": "fieldset",
+  "title": "Fieldset",
+  "description": "Form fieldset group",
+  "icon": "welcome-widgets-menus",
+  "category": "forms",
+  "textdomain": "acf-form-blocks",
+  "keywords": ["input", "contact", "feedback", "group", "set"],
+  "ancestor": ["acf/form"],
+  "supports": {
+    "jsx": true,
+    "mode": false,
+    "alignWide": false,
+    "anchor": true
+  },
+  "attributes": {
+    "field_id": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "acf": {
+    "mode": "preview"
+  }
+}

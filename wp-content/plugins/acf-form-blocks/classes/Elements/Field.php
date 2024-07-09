@@ -248,9 +248,15 @@ class Field {
 			return null;
 		}
 
+		if ( 'fieldset' === $this->get_block_name() ) {
+			$container = sprintf( '#%s', $this->get_id_attr() );
+		} else {
+			$container = sprintf( 'div.form-input:has(#%s)', $this->get_id_attr() );
+		}
+
 		$action = $logic[0]['action'];
 		$rules  = [
-			'container' => sprintf( 'div.form-input:has(#%s)', $this->get_id_attr() ),
+			'container' => $container,
 			'action'    => $action,
 			'logic'     => 'and',
 			'rules'     => [],
