@@ -7,6 +7,8 @@
 
 namespace ACFFormBlocks\Utilities\BlockTemplate;
 
+use Exception;
+
 /**
  * Template Block
  */
@@ -31,7 +33,7 @@ class Block extends Template {
 	 *
 	 * @var array
 	 */
-	protected $attributes = [];
+	protected array $attributes = [];
 
 	/**
 	 * Constructor
@@ -40,13 +42,13 @@ class Block extends Template {
 	 * @param array   $attributes Attributes.
 	 * @param Block[] $inner_blocks Inner blocks.
 	 *
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function __construct( string $block, array $attributes = [], array $inner_blocks = [] ) {
 		$registered = \WP_Block_Type_Registry::get_instance()->get_registered( $block );
 
 		if ( ! $registered ) {
-			throw new \Exception( 'Block not registered' );
+			throw new Exception( 'Block not registered' );
 		}
 
 		$this->block = $block;
@@ -79,13 +81,13 @@ class Block extends Template {
 	 * @param mixed $value Value.
 	 *
 	 * @return Block
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function attr( string $key, mixed $value ): Block {
 		$supported = $this->get_supported_attributes();
 
 		if ( ! in_array( $key, $supported ) ) {
-			throw new \Exception( 'Unsupported block attribute: ' . $key . '. Must be one of: ' . implode( ', ', $supported ) );
+			throw new Exception( 'Unsupported block attribute: ' . $key . '. Must be one of: ' . implode( ', ', $supported ) );
 		}
 
 		$this->attributes[ $key ] = $value;
@@ -100,7 +102,7 @@ class Block extends Template {
 	 * @param mixed $value
 	 *
 	 * @return Block
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function attribute( string $key, mixed $value ): Block {
 		return $this->attr( $key, $value );
@@ -137,14 +139,14 @@ class Block extends Template {
 	 * @param Block|string $block Template block.
 	 *
 	 * @return Block
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function add( Block|string $block ): Block {
 		$allowed    = $this->get_allowed_blocks();
 		$block_name = is_string( $block ) ? $block : $block->get_name();
 
 		if ( ! empty( $allowed ) && ! in_array( $block_name, $allowed ) ) {
-			throw new \Exception( 'Block not allowed' );
+			throw new Exception( 'Block not allowed' );
 		}
 
 		parent::add( $block );
