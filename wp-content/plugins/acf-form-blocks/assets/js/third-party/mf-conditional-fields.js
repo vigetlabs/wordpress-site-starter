@@ -18,7 +18,7 @@ const mfConditionalFields = (forms, options = {}) => {
 			forms = document.querySelectorAll(forms);
 			break;
 		case 'object':
-			// Check if this is an object of objects 
+			// Check if this is an object of objects
 			// ( special logic to handle the form elements provided by jQuery )
 
 			if (Array.isArray(forms) === false && Object.prototype.hasOwnProperty.call(forms, "0")) {
@@ -57,47 +57,52 @@ const mfConditionalFields = (forms, options = {}) => {
 
 			let condition = field.getAttribute('data-conditional-rules');
 
-			if (condition.length > 0) {
-				condition = JSON.parse(condition);
-				let container = 'container' in condition ? condition['container'] : '',
-					action = 'action' in condition ? condition['action'] : 'show',
-					logic = 'logic' in condition ? condition['logic'] : 'or',
-					rules = 'rules' in condition ? condition['rules'] : [];
+			if (condition.length <= 0) {
+				return;
+			}
 
-				// if a single rule is provided, insert it into an array
-				if (typeof rules == "object" && typeof rules.length == "undefined") {
-					rules = [rules];
-				}
+			condition = JSON.parse(condition);
 
-				// If rules are available, start a loop to implement each rule
-				if (rules.length > 0) {
-					for (let i = 0; rules.length > i; i++) {
-						if ("group" in rules[i]) {
-							// Store grouped rules triggers
-							for (let r = 0; rules[i].group.length > r; r++) {
-								if ("name" in rules[i].group[r] && !triggers[formIndex].includes(rules[i].group[r].name)) {
-									triggers[formIndex].push(rules[i].group[r].name);
-								}
-							}
-						} else {
-							// Store normal rules triggers
-							if ("name" in rules[i] && !triggers[formIndex].includes(rules[i].name)) {
-								triggers[formIndex].push(rules[i].name);
-							}
+			let container = 'container' in condition ? condition['container'] : '',
+				action = 'action' in condition ? condition['action'] : 'show',
+				logic = 'logic' in condition ? condition['logic'] : 'or',
+				rules = 'rules' in condition ? condition['rules'] : [];
+
+			// if a single rule is provided, insert it into an array
+			if (typeof rules == "object" && typeof rules.length == "undefined") {
+				rules = [rules];
+			}
+
+			// If rules are available, start a loop to implement each rule
+			if (rules.length <= 0) {
+				return;
+			}
+
+			for (let i = 0; rules.length > i; i++) {
+				if ("group" in rules[i]) {
+					// Store grouped rules triggers
+					for (let r = 0; rules[i].group.length > r; r++) {
+						if ("name" in rules[i].group[r] && !triggers[formIndex].includes(rules[i].group[r].name)) {
+							triggers[formIndex].push(rules[i].group[r].name);
 						}
 					}
-
-					field.removeAttribute('data-conditional-rules');
-
-					field.mfConditionalContainerSelector = container;
-					field.mfConditionalAction = action;
-					field.mfConditionalLogic = logic;
-					field.mfConditionalRules = rules;
-					field.mfConditionalFormIndex = formIndex;
-
-					self.updateField(field);
+				} else {
+					// Store normal rules triggers
+					if ("name" in rules[i] && !triggers[formIndex].includes(rules[i].name)) {
+						triggers[formIndex].push(rules[i].name);
+					}
 				}
 			}
+
+			field.removeAttribute('data-conditional-rules');
+
+			field.mfConditionalContainerSelector = container;
+			field.mfConditionalAction = action;
+			field.mfConditionalLogic = logic;
+			field.mfConditionalRules = rules;
+			field.mfConditionalFormIndex = formIndex;
+
+			self.updateField(field);
 
 		},
 		/**
@@ -115,7 +120,6 @@ const mfConditionalFields = (forms, options = {}) => {
 				logic = field.mfConditionalLogic,
 				rules = field.mfConditionalRules,
 				isConditionMet = false;
-
 
 			if (rules.length > 0) {
 
@@ -157,6 +161,7 @@ const mfConditionalFields = (forms, options = {}) => {
 				}
 
 			}
+
 			// Toggle the fields based on the value of `isConditionMet`
 			if (isConditionMet) {
 				self.toggleField(field, action, depthLevel);
@@ -309,41 +314,41 @@ const mfConditionalFields = (forms, options = {}) => {
 				operator = rule.operator,
 				value = rule.value;
 
-			if (triggers[formIndex].includes(name)) {
-
-				let trigger = forms[formIndex].querySelectorAll('[name="' + name + '"]'),
-					triggerType, triggerValue, isRuleMet;
-
-				if (trigger.length > 0) {
-					triggerType = trigger[0].type;
-					// Get the first element and assign it a trigger if it's not a radio or checkbox ( there is a possibility to have same name attribute on these )
-					if (triggerType !== 'radio' && triggerType !== 'checkbox') {
-						trigger = trigger[0];
-					}
-					// Get the trigger value(s)
-					if (triggerType == 'radio' || triggerType == 'checkbox') {
-						// Special logic for handling radios and checkboxs since they can have the same name attribute.
-						triggerValue = [];
-						for (let i = 0; i < trigger.length; i++) {
-							if (trigger[i].checked) {
-								triggerValue.push(trigger[i].value);
-							}
-
-							// Convert array to a string in the last loop iteration
-							if (i === trigger.length - 1) {
-								triggerValue = triggerValue.join('|');
-							}
-						}
-					} else {
-						triggerValue = trigger.value;
-					}
-
-					isRuleMet = self.compareValues(operator, triggerValue, value);
-				}
-				return isRuleMet;
+			if (!triggers[formIndex].includes(name)) {
+				return false;
 			}
 
-			return false;
+			let trigger = forms[formIndex].querySelectorAll('[name="' + name + '"]'),
+				triggerType, triggerValue;
+
+			if (trigger.length <= 0) {
+				return false;
+			}
+
+			triggerType = trigger[0].type;
+			// Get the first element and assign it a trigger if it's not a radio or checkbox ( there is a possibility to have same name attribute on these )
+			if (triggerType !== 'radio' && triggerType !== 'checkbox') {
+				trigger = trigger[0];
+			}
+			// Get the trigger value(s)
+			if (triggerType == 'radio' || triggerType == 'checkbox') {
+				// Special logic for handling radios and checkboxs since they can have the same name attribute.
+				triggerValue = [];
+				for (let i = 0; i < trigger.length; i++) {
+					if (trigger[i].checked) {
+						triggerValue.push(trigger[i].value);
+					}
+
+					// Convert array to a string in the last loop iteration
+					if (i === trigger.length - 1) {
+						triggerValue = triggerValue.join('|');
+					}
+				}
+			} else {
+				triggerValue = trigger.value;
+			}
+
+			return self.compareValues(operator, triggerValue, value);
 		},
 		/**
 		 * Compare provided strings and return true if there is a match, return false otherwise.

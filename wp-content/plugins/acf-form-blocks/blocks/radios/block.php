@@ -5,7 +5,7 @@
  * @package ACFFormBlocks
  */
 
-use ACFFormBlocks\Blocks\FieldBlock;
+use ACFFormBlocks\Blocks\RadiosBlock;
 
 // Init block actions and filters.
-( new FieldBlock( 'acf/radios' ) );
+( new RadiosBlock() );

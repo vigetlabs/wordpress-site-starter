@@ -13,6 +13,15 @@ namespace ACFFormBlocks\Blocks;
 class FormBlock extends Block {
 
 	/**
+	 * RadiosBlock constructor.
+	 *
+	 * @param string|array $block_names The block name.
+	 */
+	public function __construct( string|array $block_names = 'acf/form' ) {
+		parent::__construct( $block_names );
+	}
+
+	/**
 	 * Set the block attributes.
 	 *
 	 * @param array $attrs The block attributes.
