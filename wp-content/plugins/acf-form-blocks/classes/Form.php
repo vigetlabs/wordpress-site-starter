@@ -21,14 +21,25 @@ class Form {
 	 */
 	const HIDDEN_FORM_ID = 'acffb_form_id';
 
+	/**
+	 * All Input Types.
+	 *
+	 * @var string[]
+	 */
 	const ALL_INPUT_TYPES = [
 		'acf/input',
 		'acf/select',
 		'acf/radios',
 		'acf/textarea',
 		'acf/checkbox',
+		'acf/fieldset',
 	];
 
+	/**
+	 * All Field Types.
+	 *
+	 * @var string[]
+	 */
 	const ALL_FIELD_TYPES = [
 		'acf/fieldset',
 		'acf/input',
@@ -39,6 +50,11 @@ class Form {
 		'acf/submit',
 	];
 
+	/**
+	 * All Block Types.
+	 *
+	 * @var string[]
+	 */
 	const ALL_BLOCK_TYPES = [
 		'acf/form',
 		'acf/fieldset',

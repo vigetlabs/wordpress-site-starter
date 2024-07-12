@@ -14,7 +14,7 @@ add_action( 'init', function() {
 			'singular_name' => 'Form Submission',
 			'menu_name' => 'Form Submissions',
 			'all_items' => 'Form Submissions',
-			'edit_item' => 'Edit Form Submission',
+			'edit_item' => 'View Form Submission',
 			'view_item' => 'View Form Submission',
 			'view_items' => 'View Form Submissions',
 			'add_new_item' => '',
