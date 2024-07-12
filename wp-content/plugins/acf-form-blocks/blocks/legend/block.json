@@ -14,6 +14,12 @@
     "alignWide": false,
     "anchor": true
   },
+  "attributes": {
+    "block_id": {
+      "type": "string",
+      "default": ""
+    }
+  },
   "usesContext": ["acffb/form_id", "acffb/fieldset_id"],
   "acf": {
     "mode": "preview"

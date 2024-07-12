@@ -14,7 +14,7 @@
   },
   "editorStyle": "file:./editor.css",
   "attributes": {
-    "field_id": {
+    "block_id": {
       "type": "string",
       "default": ""
     }

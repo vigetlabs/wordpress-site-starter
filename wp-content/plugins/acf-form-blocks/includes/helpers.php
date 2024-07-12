@@ -22,9 +22,10 @@ use ACFFormBlocks\Utilities\Cache;
  * @return ?Form
  */
 function acffb_get_form( array $block = [], string $content = '', array $context = [] ): ?Form {
-	if ( $block ) {
-		if ( Cache::get( get_block_id( $block, true ) ) ) {
-			return Cache::get( get_block_id( $block, true ) );
+	if ( ! empty( $block['block_id'] ) ) {
+		$cache = Cache::get( $block['block_id'] );
+		if ( $cache ) {
+			return $cache;
 		}
 
 		return new Form( new FormElement( $block ) );

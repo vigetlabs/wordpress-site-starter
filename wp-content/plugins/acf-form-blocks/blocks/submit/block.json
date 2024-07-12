@@ -14,7 +14,7 @@
     "anchor": true
   },
   "attributes": {
-    "field_id": {
+    "block_id": {
       "type": "string",
       "default": ""
     }

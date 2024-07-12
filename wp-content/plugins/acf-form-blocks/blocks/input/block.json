@@ -15,7 +15,7 @@
   },
   "style": "file:./style.css",
   "attributes": {
-    "field_id": {
+    "block_id": {
       "type": "string",
       "default": ""
     }

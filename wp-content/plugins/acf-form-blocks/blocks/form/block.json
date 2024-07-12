@@ -15,13 +15,13 @@
   "editorStyle": "file:./editor.css",
   "style": "file:./style.css",
   "attributes": {
-    "form_id": {
+    "block_id": {
       "type": "string",
       "default": ""
     }
   },
   "providesContext": {
-    "acffb/form_id": "form_id"
+    "acffb/form_id": "block_id"
   },
   "acf": {
     "mode": "preview"
