@@ -8,6 +8,7 @@
 namespace ACFFormBlocks\Blocks;
 
 use ACFFormBlocks\Form;
+use ACFFormBlocks\Utilities\Cache;
 
 /**
  * Class for Block Actions
@@ -78,8 +79,14 @@ class Block {
 				}
 
 				$this->block = $block;
-				$this->form = acffb_get_form( $this->block );
 
+				if ( ! empty( $this->block['acffb/form_id'] ) ) {
+					$this->form = Cache::get( $this->block['acffb/form_id'] );
+				} else {
+					$this->form = acffb_get_form();
+				}
+
+				// Skip if we don't have a form.
 				if ( ! $this->form ) {
 					return $attrs;
 				}
@@ -102,6 +109,8 @@ class Block {
 			function() {
 				if ( ! $this->form ) {
 					$this->form = acffb_get_form();
+
+					// Skip if we don't have a form.
 					if ( ! $this->form ) {
 						return;
 					}
@@ -132,7 +141,6 @@ class Block {
 			10,
 			2
 		);
-
 	}
 
 	/**

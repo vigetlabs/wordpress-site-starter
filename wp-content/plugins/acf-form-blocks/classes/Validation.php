@@ -43,6 +43,10 @@ class Validation {
 			return true;
 		}
 
+		if ( ! $this->form->get_submission()->has_submit() ) {
+			return false;
+		}
+
 		$fields = $this->form->get_form_object()->get_fields();
 		$data   = $this->form->get_submission()->get_data();
 
@@ -51,7 +55,7 @@ class Validation {
 				continue;
 			}
 
-			if ( ! empty( $data[ $field->get_name() ] ) ) {
+			if ( ! empty( $data['content'][ $field->get_name() ] ) ) {
 				continue;
 			}
 

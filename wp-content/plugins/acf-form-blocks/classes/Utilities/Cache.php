@@ -32,6 +32,7 @@ class Cache {
 		if ( ! str_starts_with( $key, 'acf_form_' ) ) {
 			$key = 'acf_form_' . $key;
 		}
+
 		return self::$storage[ $key ] ?? null;
 	}
 
@@ -40,10 +41,20 @@ class Cache {
 	 *
 	 * @param string $key The key.
 	 * @param Form   $form The form.
+	 * @param bool   $new  Is this a new form?
 	 *
 	 * @return void
 	 */
-	public static function set( string $key, Form $form ): void {
+	public static function set( string $key, Form $form, bool $new = false ): void {
+		if ( ! str_starts_with( $key, 'acf_form_' ) ) {
+			$key = 'acf_form_' . $key;
+		}
+
+		if ( $new && ! empty( self::$storage[ $key ] ) ) {
+			// Not sure why this would ever happen, but it does.
+			return;
+		}
+
 		self::$storage[ $key ] = $form;
 	}
 

@@ -123,13 +123,13 @@ class Field {
 	 * @return string
 	 */
 	public function get_name(): string {
-		if ( empty( $this->block['field_id'] ) ) {
+		if ( empty( $this->block['block_id'] ) ) {
 			return $this->get_acf_id();
 		}
 
 		$block_name = $this->get_block_name( true );
 		$block_name = str_replace( '/', '_', $block_name );
-		return $block_name . '_' . $this->block['field_id'];
+		return $block_name . '_' . $this->block['block_id'];
 	}
 
 	/**

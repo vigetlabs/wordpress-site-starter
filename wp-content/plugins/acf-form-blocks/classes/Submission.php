@@ -26,23 +26,28 @@ class Submission {
 	 *
 	 * @var array
 	 */
-	private array $data = [];
+	protected array $data = [];
 
 	/**
 	 * Is the submission processed.
 	 *
 	 * @var bool
 	 */
-	private bool $is_processed = false;
+	protected bool $is_processed = false;
 
 	/**
 	 * Is the nonce verified?
 	 *
 	 * @var bool
 	 */
-	private bool $nonce_verified = false;
+	protected bool $nonce_verified = false;
 
-	private ?int $submission_id = null;
+	/**
+	 * The submission ID.
+	 *
+	 * @var ?int
+	 */
+	protected ?int $submission_id = null;
 
 	/**
 	 * Constructor.
@@ -101,6 +106,8 @@ class Submission {
 		}
 
 		$this->is_processed = true;
+		$this->form->update_cache();
+
 		$this->save();
 
 		$this->form->get_notification()->process();
@@ -160,18 +167,28 @@ class Submission {
 	 *
 	 * @param Field $field The Field.
 	 *
-	 * @return ?string
+	 * @return string|array|null
 	 */
-	private function sanitize_input( Field $field ): ?string {
-		if ( empty( $_REQUEST[ $field->get_name() ] ) && 0 !== $_REQUEST[ $field->get_name() ] && '0' !== $_REQUEST[ $field->get_name() ] ) {
+	private function sanitize_input( Field $field ): string|array|null {
+		if ( ! isset( $_REQUEST[ $field->get_name() ] ) ) {
 			return null;
 		}
 
-		if ( 'textarea' === $field->get_block_name() ) {
-			return sanitize_textarea_field( $_REQUEST[ $field->get_name() ] );
+		$user_input = ! is_array( $_REQUEST[ $field->get_name() ] ) ? trim( $_REQUEST[ $field->get_name() ] ) : $_REQUEST[ $field->get_name() ];
+
+		if ( empty( $user_input ) && '0' !== $user_input ) {
+			return null;
 		}
 
-		return sanitize_text_field( $_REQUEST[ $field->get_name() ] );
+		if ( is_array( $user_input ) ) {
+			return array_map( 'sanitize_text_field', $user_input );
+		}
+
+		if ( 'textarea' === $field->get_block_name() ) {
+			return sanitize_textarea_field( $user_input );
+		}
+
+		return sanitize_text_field( $user_input );
 	}
 
 	/**
