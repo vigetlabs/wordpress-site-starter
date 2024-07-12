@@ -52,9 +52,9 @@ trait Options {
 	/**
 	 * Get the field value.
 	 *
-	 * @return string
+	 * @return string|array
 	 */
-	public function get_value(): string {
+	public function get_value(): string|array {
 		$value = parent::get_value();
 
 		if ( ! $value ) {

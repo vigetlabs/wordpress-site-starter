@@ -8,6 +8,7 @@
 namespace ACFFormBlocks\Elements;
 
 use ACFFormBlocks\Form;
+use WP_Block;
 
 /**
  * Class for Fields
@@ -29,14 +30,23 @@ class Field {
 	protected array $context;
 
 	/**
+	 * WP Block instance.
+	 *
+	 * @var ?WP_Block
+	 */
+	protected ?WP_Block $wp_block = null;
+
+	/**
 	 * Constructor.
 	 *
-	 * @param array $block Block data.
-	 * @param array $context Block context.
+	 * @param array    $block Block data.
+	 * @param array     $context Block context.
+	 * @param ?WP_Block $wp_block WP Block object.
 	 */
-	public function __construct( array $block, array $context = [] ) {
-		$this->block   = $block;
-		$this->context = $context;
+	public function __construct( array $block, array $context = [], ?WP_Block $wp_block = null ) {
+		$this->block    = $block;
+		$this->context  = $context;
+		$this->wp_block = $wp_block;
 	}
 
 	/**
@@ -51,30 +61,31 @@ class Field {
 	/**
 	 * Factory method to create a new field object.
 	 *
-	 * @param array $block Block data.
-	 * @param array $context Context data.
+	 * @param array     $block Block data.
+	 * @param array     $context Context data.
+	 * @param ?WP_Block $wp_block WP Block object.
 	 *
 	 * @return Field
 	 */
-	public static function factory( array $block, array $context = [] ): Field {
+	public static function factory( array $block, array $context = [], ?WP_Block $wp_block = null ): Field {
 		$element = str_replace( 'acf/', '', $block['name'] );
 		$class   = __NAMESPACE__ . '\\' . ucfirst( $element );
 
 		if ( class_exists( $class ) ) {
 			// Input handler.
 			if ( 'input' === $element ) {
-				$input = new $class( $block, $context );
+				$input = new $class( $block, $context, $wp_block );
 				$type  = __NAMESPACE__ . '\\' . ucfirst( $input->get_input_type() );
 
 				if ( class_exists( $type ) ) {
-					return new $type( $block, $context );
+					return new $type( $block, $context, $wp_block );
 				}
 			}
 
-			return new $class( $block, $context );
+			return new $class( $block, $context, $wp_block );
 		}
 
-		return new Field( $block );
+		return new Field( $block, $context, $wp_block );
 	}
 
 	/**
@@ -152,10 +163,15 @@ class Field {
 	/**
 	 * Get the field value.
 	 *
-	 * @return string
+	 * @return string|array
 	 */
-	public function get_value(): string {
+	public function get_value(): string|array {
 		$value = $_REQUEST[ $this->get_name() ] ?? '';
+
+		if ( is_array( $value ) ) {
+			return array_map( 'sanitize_text_field', $value );
+		}
+
 		$value = sanitize_text_field( $value );
 		return trim( $value );
 	}
@@ -165,17 +181,50 @@ class Field {
 	 *
 	 * @return string
 	 */
-	public function get_label(): string {
+	public function get_field_label(): string {
 		if ( ! empty( $this->block['metadata']['name'] ) ) {
 			return trim( $this->block['metadata']['name'] );
 		}
 
-		if ( empty( $this->block['wp_block']['innerBlocks'] ) ) {
-			return '';
+		return $this->get_label();
+	}
+
+	/**
+	 * Get the field label.
+	 *
+	 * @return string
+	 */
+	public function get_label(): string {
+		$inner_blocks = [];
+
+		if ( ! empty( $this->wp_block->parsed_block['innerBlocks'] ) ) {
+			$inner_blocks = $this->wp_block->parsed_block['innerBlocks'];
+		} elseif ( ! empty( $this->block['wp_block']['innerBlocks'] ) ) {
+			$inner_blocks = $this->block['wp_block']['innerBlocks'];
 		}
 
+		if ( ! empty( $inner_blocks ) ) {
+			$label = $this->find_label( $inner_blocks );
+
+			if ( $label ) {
+				return $label;
+			}
+		}
+
+		return $this->get_id();
+	}
+
+	/**
+	 * Find the label in the inner blocks.
+	 *
+	 * @param array $inner_blocks
+	 *
+	 * @return string
+	 */
+	private function find_label( array $inner_blocks ): string {
 		$label = '';
-		foreach ( $this->block['wp_block']['innerBlocks'] as $inner_block ) {
+
+		foreach ( $inner_blocks as $inner_block ) {
 			if ( 'core/paragraph' === $inner_block['blockName'] ) {
 				$label = wp_strip_all_tags( $inner_block['innerHTML'] );
 				break;
@@ -185,6 +234,14 @@ class Field {
 
 			if ( $label ) {
 				break;
+			}
+
+			if ( 'acf/legend' === $inner_block['blockName'] && ! empty( $inner_block['innerBlocks'] ) ) {
+				$label = $this->find_label( $inner_block['innerBlocks'] );
+
+				if ( $label ) {
+					break;
+				}
 			}
 		}
 

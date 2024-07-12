@@ -134,16 +134,18 @@ class Submission {
 		$this->data = [
 			'content' => [],
 			'meta'    => [
-				'url'    => esc_url( $_SERVER['REQUEST_URI'] ),
-				'ip'     => sanitize_text_field( $_SERVER['REMOTE_ADDR'] ),
-				'agent'  => sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ),
-				'method' => sanitize_text_field( $_SERVER['REQUEST_METHOD'] ),
+				'url'     => esc_url( $_SERVER['REQUEST_URI'] ),
+				'ip'      => sanitize_text_field( $_SERVER['REMOTE_ADDR'] ),
+				'agent'   => sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ),
+				'method'  => sanitize_text_field( $_SERVER['REQUEST_METHOD'] ),
+				'form_id' => $this->form->get_form_object()->get_id(),
 			],
 		];
 
 		foreach ( $fields as $field ) {
+			$field = Field::factory( $field->get_block() );
 			$value = [
-				'label' => $field->get_label(),
+				'label' => $field->get_field_label(),
 			];
 
 			if ( 'input' === $field->get_block_name() && 'file' === $field->get_type() ) {
