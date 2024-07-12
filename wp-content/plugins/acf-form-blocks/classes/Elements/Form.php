@@ -26,6 +26,13 @@ class Form {
 	protected array $block;
 
 	/**
+	 * Form fields.
+	 *
+	 * @var array
+	 */
+	protected array $fields = [];
+
+	/**
 	 * Constructor.
 	 *
 	 * @param array $block Block data.
@@ -132,6 +139,10 @@ class Form {
 	 * @return array
 	 */
 	public function get_all_fields( string $content = '', array $context = [] ): array {
+		if ( ! empty( $this->fields ) ) {
+			return $this->fields;
+		}
+
 		if ( ! $content ) {
 			$content = get_the_content();
 		}
@@ -143,8 +154,9 @@ class Form {
 		$blocks = parse_blocks( $content );
 
 		$field_blocks = $this->extract_field_blocks( $blocks, $context );
+		$this->fields = $this->parse_fields( $field_blocks );
 
-		return $this->parse_fields( $field_blocks );
+		return $this->fields;
 	}
 
 	/**
@@ -283,8 +295,12 @@ class Form {
 		$fields = $this->get_all_fields();
 
 		foreach ( $fields as $field ) {
-			$block_name = str_replace( '/', '_', $field->get_block_name( true ) );
-			$block_id   = $block_name . '_' . $field_id;
+			if ( str_starts_with( $field_id, 'acf_' ) ) {
+				$block_id = $field_id;
+			} else {
+				$block_name = str_replace( '/', '_', $field->get_block_name( true ) );
+				$block_id   = $block_name . '_' . $field_id;
+			}
 
 			if ( $field->get_id() === $block_id ) {
 				return $field;

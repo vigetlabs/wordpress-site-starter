@@ -14,14 +14,38 @@
     "anchor": true
   },
   "attributes": {
-    "field_id": {
+    "block_id": {
       "type": "string",
       "default": ""
+    },
+    "is_checkbox_group": {
+      "type": "boolean",
+      "default": false
     }
   },
   "providesContext": {
-    "acffb/fieldset_id": "field_id"
+    "acffb/fieldset_id": "block_id"
   },
+  "styles": [
+    { "name": "default", "label": "Default", "isDefault": true },
+    { "name": "inline", "label": "Inline" },
+    { "name": "columns", "label": "Columns" }
+  ],
+  "variations": [
+    {
+      "name": "checkbox-group",
+      "icon": "forms",
+      "title": "Checkbox Group",
+      "scope": ["inserter"],
+      "innerBlocks": [ ["acf/legend"], ["acf/checkbox"], ["acf/checkbox"], ["acf/checkbox"] ],
+      "attributes": {
+        "is_checkbox_group": true
+      },
+      "isActive": ["is_checkbox_group"]
+    }
+  ],
+  "style": "file:./style.css",
+  "usesContext": ["acffb/form_id"],
   "acf": {
     "mode": "preview"
   }

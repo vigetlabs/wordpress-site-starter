@@ -16,10 +16,12 @@
 }
 
 .acf-block-form .form-input > label,
-.acf-block-form .form-fieldset > legend {
+.acf-block-form .form-fieldset > legend,
+.acf-block-form .acf-block-radios .radios-label {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.25rem;
+	width: 100%;
 }
 
 .acf-block-form label {
@@ -46,6 +48,9 @@
 .acf-block-form > .wp-block-group > *,
 .acf-block-form > .acf-block-fieldset > * {
 	margin-block-start: 0.75rem;
+}
+.acf-block-form > .acf-block-fieldset > legend {
+	margin-block-end: 0.75rem;
 }
 
 :where(body .is-layout-flow) > *[hidden]:first-child + * {

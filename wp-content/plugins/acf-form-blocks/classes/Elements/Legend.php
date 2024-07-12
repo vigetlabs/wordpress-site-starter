@@ -25,7 +25,7 @@ class Legend extends Field {
 			return null;
 		}
 
-		$form = Cache::find( $this->context['acffb/form_id'] );
+		$form = Cache::get( $this->context['acffb/form_id'] );
 
 		if ( ! $form ) {
 			$form = acffb_get_form();

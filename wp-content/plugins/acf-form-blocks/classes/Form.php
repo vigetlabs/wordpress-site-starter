@@ -26,6 +26,7 @@ class Form {
 		'acf/select',
 		'acf/radios',
 		'acf/textarea',
+		'acf/checkbox',
 	];
 
 	const ALL_FIELD_TYPES = [
@@ -34,6 +35,7 @@ class Form {
 		'acf/select',
 		'acf/radios',
 		'acf/textarea',
+		'acf/checkbox',
 		'acf/submit',
 	];
 
@@ -45,6 +47,7 @@ class Form {
 		'acf/select',
 		'acf/radios',
 		'acf/textarea',
+		'acf/checkbox',
 		'acf/submit',
 	];
 
@@ -82,6 +85,9 @@ class Form {
 	 */
 	public function __construct( Elements\Form $form, bool $preload_meta = false ) {
 		$this->form = $form;
+
+		// Store the fields in cache.
+		$this->form->get_all_fields();
 
 		if ( $preload_meta ) {
 			// $block = acf_add_block_meta_values( $block, $post_id );

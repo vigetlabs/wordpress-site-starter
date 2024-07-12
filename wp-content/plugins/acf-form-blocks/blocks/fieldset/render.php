@@ -17,7 +17,13 @@ $template = ( new Template() )
 $inner = [
 	'template' => $template->get(),
 ];
+
+$classes = 'form-fieldset';
+
+if ( $block['is_checkbox_group'] ) {
+	$classes .= ' type-checkbox-group';
+}
 ?>
-<fieldset <?php block_attrs( $block ); ?>>
+<fieldset <?php block_attrs( $block, $classes ); ?>>
 	<?php inner_blocks( $inner ); ?>
 </fieldset>
