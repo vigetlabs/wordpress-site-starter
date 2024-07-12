@@ -17,6 +17,7 @@ use ACFFormBlocks\Utilities\BlockTemplate\Template;
 $field = Field::factory( $block, $context );
 
 $fieldset = $field->get_fieldset();
+$required = $fieldset?->is_required() ?? false;
 
 $inner = [
 	'template'      => ( new Template( ( new Block( 'core/paragraph', [ 'placeholder' => __( 'Legend...', 'acf-field-blocks' ), 'lock' => 'all' ] ) ) ) )->get(),
@@ -25,7 +26,7 @@ $inner = [
 ?>
 <legend <?php block_attrs( $block ); ?>>
 	<?php inner_blocks( $inner ); ?>
-	<?php if ( $fieldset->is_required() ) : ?>
+	<?php if ( $required ) : ?>
 		<span class="is-required">*</span>
 	<?php endif; ?>
 </legend>
