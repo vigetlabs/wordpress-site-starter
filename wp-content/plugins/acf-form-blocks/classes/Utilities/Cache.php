@@ -29,6 +29,9 @@ class Cache {
 	 * @return ?Form
 	 */
 	public static function get( string $key ): ?Form {
+		if ( ! str_starts_with( $key, 'acf_form_' ) ) {
+			$key = 'acf_form_' . $key;
+		}
 		return self::$storage[ $key ] ?? null;
 	}
 

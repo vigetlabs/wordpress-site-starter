@@ -53,12 +53,12 @@ class Form {
 			return $this->block['anchor'];
 		}
 
-		if ( empty( $this->block['form_id'] ) ) {
+		if ( empty( $this->block['block_id'] ) ) {
 			return get_block_id( $this->block, true );
 		}
 
 		$block_name = str_replace( '/', '_', $this->block['name'] );
-		return $block_name . '_' . $this->block['form_id'];
+		return $block_name . '_' . $this->block['block_id'];
 	}
 
 	/**
@@ -67,12 +67,12 @@ class Form {
 	 * @return string
 	 */
 	public function get_id(): string {
-		if ( empty( $this->block['form_id'] ) ) {
+		if ( empty( $this->block['block_id'] ) ) {
 			return get_block_id( $this->block, true );
 		}
 
 		$block_name = str_replace( '/', '_', $this->block['name'] );
-		return $block_name . '_' . $this->block['form_id'];
+		return $block_name . '_' . $this->block['block_id'];
 	}
 
 	/**

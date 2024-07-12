@@ -166,7 +166,7 @@ class Form {
 	 * @return void
 	 */
 	public function update_cache(): void {
-		Cache::set( $this->get_form_object()->get_acf_id(), $this );
+		Cache::set( $this->get_form_object()->get_id(), $this );
 	}
 
 	/**
