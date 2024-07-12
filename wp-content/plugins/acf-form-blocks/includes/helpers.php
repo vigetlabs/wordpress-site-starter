@@ -28,7 +28,9 @@ function acffb_get_form( array $block = [], string $content = '', array $context
 			return $cache;
 		}
 
-		return new Form( new FormElement( $block ) );
+		$form = new Form( new FormElement( $block ) );
+		Cache::set( $form->get_form_object()->get_id(), $form, true );
+		return $form;
 	}
 
 	if ( ! $content ) {
@@ -45,7 +47,13 @@ function acffb_get_form( array $block = [], string $content = '', array $context
 		$context = [ 'postId' => get_the_ID(), 'postType' => get_post_type() ];
 	}
 
-	return acffb_get_form_block( $blocks, $context );
+	$form = acffb_get_form_block( $blocks, $context );
+
+	if ( ! $form ) {
+		return null;
+	}
+
+	return acffb_get_form( $form );
 }
 
 /**
@@ -54,9 +62,9 @@ function acffb_get_form( array $block = [], string $content = '', array $context
  * @param array $blocks Blocks.
  * @param array $context Context.
  *
- * @return ?Form
+ * @return ?array
  */
-function acffb_get_form_block( array $blocks, array $context = [] ): ?Form {
+function acffb_get_form_block( array $blocks, array $context = [] ): ?array {
 	$forms = Blocks::get_blocks_by_type( $blocks, 'acf/form' );
 
 	if ( ! $forms ) {
@@ -70,7 +78,5 @@ function acffb_get_form_block( array $blocks, array $context = [] ): ?Form {
 	$attrs['id'] = acf_get_block_id( $attrs, $context );
 	$attrs['id'] = acf_ensure_block_id_prefix( $attrs['id'] );
 
-	$form_el = new FormElement( acf_prepare_block( $attrs ) );
-
-	return new Form( $form_el, true );
+	return acf_prepare_block( $attrs );
 }
