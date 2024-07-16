@@ -18,16 +18,16 @@ trait ChildFields {
 	/**
 	 * Get the child fields.
 	 *
-	 * @param Form|null $form The form object.
+	 * @param ?Form $form The form object.
 	 *
 	 * @return Field[]
 	 */
 	public function get_child_fields( ?Form $form = null ): array {
-		if ( ! $this->get_form() && $form ) {
-			$this->form = $form;
+		if ( ! $form ) {
+			$form = $this->get_form();
 		}
 
-		$fields   = $this->form->get_form_object()->get_all_fields();
+		$fields   = $form->get_form_object()->get_all_fields();
 		$children = [];
 
 		foreach ( $fields as $field ) {
