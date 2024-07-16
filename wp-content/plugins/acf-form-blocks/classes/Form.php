@@ -131,9 +131,11 @@ class Form {
 				return $cache;
 			}
 
-			$form = new self( new FormElement( $form, $content, $context ) );
-			Cache::set( $form->get_form_object()->get_id(), $form, true );
-			return $form;
+			if ( is_array( $form ) ) {
+				$form = new self( new FormElement( $form, $content, $context ) );
+				Cache::set( $form->get_form_object()->get_id(), $form, true );
+				return $form;
+			}
 		}
 
 		if ( ! $content ) {
