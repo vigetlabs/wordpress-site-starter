@@ -77,6 +77,18 @@ class Submission {
 					'high'
 				);
 
+				add_meta_box(
+					'acffb_submission_meta',
+					__( 'Submission Meta', 'acf-form-blocks' ),
+					function( \WP_Post $post ): void {
+						$meta = get_post_meta( $post->ID );
+
+						$this->render_submission_meta( $meta );
+					},
+					ACFFB_SUBMISSION_POST_TYPE,
+					'side'
+				);
+
 				remove_meta_box( 'pageparentdiv', ACFFB_SUBMISSION_POST_TYPE, 'side' );
 			}
 		);
@@ -98,12 +110,37 @@ class Submission {
 					$field = $form->get_form_object()->get_field_by_id( $key );
 					?>
 					<tr id="<?php echo esc_attr( $key ); ?>">
-						<th scope="row"><?php echo esc_html( $content['label'] ); ?></th>
+						<th scope="row" title="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $content['label'] ); ?></th>
 						<td><?php $field->render_value( $content['value'], $form ); ?></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>
 		</table>
 		<?php
+	}
+
+	/**
+	 * Render the submission meta.
+	 *
+	 * @param array $meta Submission meta.
+	 *
+	 * @return void
+	 */
+	private function render_submission_meta( array $meta ): void {
+		foreach ( $meta as $key => $value ) {
+			if ( in_array( $key, [ '_form_markup', '_form_context', '_edit_lock' ], true ) ) {
+				continue;
+			}
+
+			$label = ltrim( $key, '_' );
+			$label = ucwords( str_replace( '_', ' ', $label ) );
+			$label = str_replace( [ 'Id', 'Url', 'Ip' ], [ 'ID', 'URL', 'IP' ], $label );
+
+			printf(
+				'<p><strong>%s:</strong> %s</p>',
+				esc_html( $label ),
+				esc_html( $value[0] )
+			);
+		}
 	}
 }

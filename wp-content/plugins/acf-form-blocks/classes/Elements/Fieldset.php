@@ -45,7 +45,7 @@ class Fieldset extends Field {
 			return;
 		}
 
-		if ( ! empty( $this->context['is_checkbox_group'] ) ) {
+		if ( ! empty( $this->is_checkbox_group() ) ) {
 			$value = empty( $value ) ? [] : $value;
 
 			echo '<div class="text-input"><ul class="acffb-checkbox-list">';
@@ -65,7 +65,8 @@ class Fieldset extends Field {
 		foreach ( $children as $child ) {
 			echo '<div class="acffb-sub-field">';
 			printf(
-				'<p class="sub-field-label">%s</p>',
+				'<p class="sub-field-label" title="%s">%s</p>',
+				esc_attr( $child->get_id() ),
 				esc_html( $child->get_label() )
 			);
 
