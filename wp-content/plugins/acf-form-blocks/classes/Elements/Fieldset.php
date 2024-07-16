@@ -33,7 +33,7 @@ class Fieldset extends Field {
 	 * Render the input value.
 	 *
 	 * @param mixed $value Value to render.
-	 * @param Form $form Form object.
+	 * @param Form  $form  Form object.
 	 *
 	 * @return void
 	 */
@@ -47,6 +47,7 @@ class Fieldset extends Field {
 
 		if ( ! empty( $this->context['is_checkbox_group'] ) ) {
 			$value = empty( $value ) ? [] : $value;
+
 			echo '<div class="text-input"><ul class="acffb-checkbox-list">';
 			foreach ( $children as $child ) {
 				$checked = in_array( $child->get_value(), $value, true );
@@ -68,15 +69,19 @@ class Fieldset extends Field {
 				esc_html( $child->get_label() )
 			);
 
-			foreach ( $value as $child_id => $val ) {
-				if ( $child_id !== $child->get_id() ) {
-					continue;
+			if ( empty( $value ) ) {
+				parent::render_value( $value, $form );
+			} else {
+				foreach ( $value as $child_id => $val ) {
+					if ( $child_id !== $child->get_id() ) {
+						continue;
+					}
+
+					$child->set_default_value( $val );
+
+					$child->render_value( $val, $form );
+					break;
 				}
-
-				$child->set_default_value( $val );
-
-				$child->render_value( $val, $form );
-				break;
 			}
 			echo '</div>';
 		}
