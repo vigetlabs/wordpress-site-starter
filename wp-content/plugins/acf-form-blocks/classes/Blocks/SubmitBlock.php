@@ -10,7 +10,7 @@ namespace ACFFormBlocks\Blocks;
 /**
  * Submit Block Class
  */
-class SubmitBlock extends FieldBlock {
+class SubmitBlock extends Block {
 
 	/**
 	 * SubmitBlock constructor.

@@ -60,6 +60,25 @@ class Form {
 	}
 
 	/**
+	 * Get the block attributes.
+	 *
+	 * @return array
+	 */
+	public function get_attrs(): array {
+		$attrs = [
+			'method' => $this->get_method(),
+			'action' => '#' . $this->get_id_attr(),
+			'id'     => $this->get_id_attr()
+		];
+
+		if ( $this->has_field_type( 'input', 'file' ) ) {
+			$attrs['enctype'] = 'multipart/form-data';
+		}
+
+		return $attrs;
+	}
+
+	/**
 	 * Get the form.
 	 *
 	 * @return array

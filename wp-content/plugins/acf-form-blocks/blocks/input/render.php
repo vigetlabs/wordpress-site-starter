@@ -30,5 +30,5 @@ $inner = [
 		<?php endif; ?>
 	</label>
 
-	<input <?php acffb_block_attrs( $field ); ?> />
+	<input <?php block_attrs( $block, '', $field->get_attrs() ); ?> />
 </div>

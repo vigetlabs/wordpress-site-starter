@@ -39,7 +39,7 @@ if ( ! function_exists( 'block_attrs' ) ) {
 				$attrs['data-id'] = $id;
 			}
 		} else {
-			$attrs['id'] = apply_filters( 'acfbt_block_id_attr', get_block_id( $block ), $block );
+			$attrs['id'] = $id;
 		}
 
 		$block_class = get_block_class( $block, $custom_class );
@@ -78,8 +78,6 @@ if ( ! function_exists( 'block_attrs' ) ) {
 			$extra['id'] = $attrs['id'];
 			unset( $attrs['id'] );
 		}
-
-		$attrs = apply_filters( 'acfbt_block_attrs', $attrs, $block );
 
 		foreach ( $attrs as $key => $value ) {
 			if ( is_null( $value ) ) {

@@ -14,7 +14,7 @@ use ACFFormBlocks\Utilities\BlockTemplate\Template;
 use Exception;
 
 /**
- * Class for Radios Fields
+ * Class for Fieldsets
  */
 class Fieldset extends Field {
 	use ChildFields;

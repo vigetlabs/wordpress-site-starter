@@ -8,7 +8,6 @@
 namespace ACFFormBlocks;
 
 use ACFFormBlocks\Elements\Field;
-use ACFFormBlocks\Elements\Fieldset;
 
 /**
  * Submission Confirmation
@@ -66,7 +65,7 @@ class Submission {
 	 */
 	public function has_submit(): bool {
 		if ( ! $this->nonce_verified ) {
-			$nonce_field = Form::HIDDEN_FORM_ID . '_' . get_block_id( $this->form->get_form_element() ) . '_nonce';
+			$nonce_field = Form::HIDDEN_FORM_ID . '_' .$this->form->get_form_object()->get_id() . '_nonce';
 
 			if ( empty( $_REQUEST[ $nonce_field ] ) || ! wp_verify_nonce( $_REQUEST[ $nonce_field ], 'form_submission' ) ) {
 				return false;
@@ -76,7 +75,7 @@ class Submission {
 			$this->form->update_cache();
 		}
 
-		return ! empty( $_REQUEST[ Form::HIDDEN_FORM_ID ] ) && get_block_id( $this->form->get_form_element() ) === $_REQUEST[ Form::HIDDEN_FORM_ID ];
+		return ! empty( $_REQUEST[ Form::HIDDEN_FORM_ID ] ) && $this->form->get_form_object()->get_id() === $_REQUEST[ Form::HIDDEN_FORM_ID ];
 	}
 
 	/**

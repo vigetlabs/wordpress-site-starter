@@ -33,7 +33,7 @@ $has_selected = false;
 		<?php endif; ?>
 	</label>
 
-	<select <?php acffb_block_attrs( $field ); ?>>
+	<select <?php block_attrs( $block, '', $field->get_attrs() ); ?>>
 		<?php if ( empty( $options ) ) : ?>
 			<option value="" selected><?php esc_html_e( 'No options available.', 'acf-form-blocks' ); ?></option>
 		<?php else : ?>
