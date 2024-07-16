@@ -4,17 +4,16 @@
  *
  * @global array $block
  * @global array $context
+ * @global WP_Block $wp_block
  *
  * @package ACFFormBlocks
  */
 
 use ACFFormBlocks\Elements\Field;
-use ACFFormBlocks\Elements\Legend;
 use ACFFormBlocks\Utilities\BlockTemplate\Block;
 use ACFFormBlocks\Utilities\BlockTemplate\Template;
 
-/** @var Legend $field */
-$field = Field::factory( $block, $context );
+$field = Field::factory( $block, $context, $wp_block );
 
 $fieldset = $field->get_fieldset();
 $required = $fieldset?->is_required() ?? false;
@@ -24,7 +23,7 @@ $inner = [
 	'allowedBlocks' => [ 'core/paragraph' ],
 ];
 ?>
-<legend <?php block_attrs( $block ); ?>>
+<legend <?php acffb_block_attrs( $field ); ?>>
 	<?php inner_blocks( $inner ); ?>
 	<?php if ( $required ) : ?>
 		<span class="is-required">*</span>

@@ -7,7 +7,6 @@
 
 namespace ACFFormBlocks\Elements;
 
-use ACFFormBlocks\Traits\Fieldset;
 use ACFFormBlocks\Utilities\BlockTemplate\Block;
 use ACFFormBlocks\Utilities\BlockTemplate\Template;
 use Exception;
@@ -16,7 +15,6 @@ use Exception;
  * Class for Checkbox Fields
  */
 class Checkbox extends Field {
-	use Fieldset;
 
 	/**
 	 * Get the block template.
@@ -36,19 +34,6 @@ class Checkbox extends Field {
 	}
 
 	/**
-	 * Get the name attribute.
-	 *
-	 * @return string
-	 */
-	public function get_name_attr(): string {
-		if ( $this->get_fieldset() ) {
-			return $this->get_fieldset()->get_name() . '[]';
-		}
-
-		return parent::get_name();
-	}
-
-	/**
 	 * Get the value attribute of the checkbox.
 	 *
 	 * @return string
@@ -58,11 +43,7 @@ class Checkbox extends Field {
 		$value        = $this->get_field_data( 'value', 1 );
 
 		if ( ! $custom_value ) {
-			$checkbox = $this->get_form()?->get_form_object()->get_field_by_id( $this->get_id() );
-			if ( $checkbox ) {
-				$checkbox = Field::factory( $checkbox->get_block(), $this->context );
-				$value    = $checkbox->get_label();
-			}
+			$value = $this->get_label();
 		}
 
 		return $value;

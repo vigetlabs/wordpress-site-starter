@@ -20,6 +20,7 @@
       "default": ""
     }
   },
+  "usesContext": ["acffb/form_id", "acffb/fieldset_id"],
   "acf": {
     "mode": "preview"
   }

@@ -7,6 +7,7 @@
  * @package ACFFormBlocks
  */
 
+use ACFFormBlocks\Elements\Field;
 use ACFFormBlocks\Elements\Form as FormElement;
 use ACFFormBlocks\Form;
 use ACFFormBlocks\Utilities\Blocks;
@@ -28,13 +29,17 @@ function acffb_get_form( array $block = [], string $content = '', array $context
 			return $cache;
 		}
 
-		$form = new Form( new FormElement( $block ) );
+		$form = new Form( new FormElement( $block, $content, $context ) );
 		Cache::set( $form->get_form_object()->get_id(), $form, true );
 		return $form;
 	}
 
 	if ( ! $content ) {
 		$content = get_the_content();
+	}
+
+	if ( ! $content ) {
+		return null;
 	}
 
 	$blocks = parse_blocks( $content );
@@ -53,7 +58,7 @@ function acffb_get_form( array $block = [], string $content = '', array $context
 		return null;
 	}
 
-	return acffb_get_form( $form );
+	return acffb_get_form( $form, $content, $context );
 }
 
 /**
@@ -79,4 +84,23 @@ function acffb_get_form_block( array $blocks, array $context = [] ): ?array {
 	$attrs['id'] = acf_ensure_block_id_prefix( $attrs['id'] );
 
 	return acf_prepare_block( $attrs );
+}
+
+/**
+ * Output the block attributes.
+ *
+ * @param Field  $field
+ * @param string $custom_class
+ * @param array  $attrs
+ *
+ * @return void
+ */
+function acffb_block_attrs( Field $field, string $custom_class = '', array $attrs = [] ): void {
+	$filter = function ( array $attrs ) use ( $field ) {
+		return apply_filters( 'acffb_block_attrs', $attrs, $field );
+	};
+
+	add_filter( 'acfbt_block_attrs', $filter );
+	block_attrs( $field->get_block(), $custom_class, $attrs );
+	remove_filter( 'acfbt_block_attrs', $filter );
 }

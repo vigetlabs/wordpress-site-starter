@@ -7,14 +7,10 @@
 
 namespace ACFFormBlocks\Traits;
 
+/**
+ * Trait for Options
+ */
 trait Options {
-
-	/**
-	 * Default value
-	 *
-	 * @var string
-	 */
-	private string $default_value = '';
 
 	/**
 	 * Get the select options.
@@ -47,20 +43,5 @@ trait Options {
 		}
 
 		return $options;
-	}
-
-	/**
-	 * Get the field value.
-	 *
-	 * @return string|array
-	 */
-	public function get_value(): string|array {
-		$value = parent::get_value();
-
-		if ( ! $value ) {
-			return $this->default_value;
-		}
-
-		return $value;
 	}
 }

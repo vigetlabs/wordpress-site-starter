@@ -8,6 +8,7 @@
 namespace ACFFormBlocks\Elements;
 
 use ACFFormBlocks\Form;
+use ACFFormBlocks\Utilities\Cache;
 use WP_Block;
 
 /**
@@ -30,11 +31,32 @@ class Field {
 	protected array $context;
 
 	/**
+	 * Parent field ID.
+	 *
+	 * @var ?string
+	 */
+	protected ?string $parent_id = null;
+
+	/**
 	 * WP Block instance.
 	 *
 	 * @var ?WP_Block
 	 */
 	protected ?WP_Block $wp_block = null;
+
+	/**
+	 * Default value.
+	 *
+	 * @var mixed
+	 */
+	protected mixed $default_value = null;
+
+	/**
+	 * Form instance.
+	 *
+	 * @var ?Form
+	 */
+	protected ?Form $form = null;
 
 	/**
 	 * Constructor.
@@ -43,10 +65,15 @@ class Field {
 	 * @param array     $context Block context.
 	 * @param ?WP_Block $wp_block WP Block object.
 	 */
-	public function __construct( array $block, array $context = [], ?WP_Block $wp_block = null ) {
+	public function __construct( array $block, array $context = [], ?WP_Block $wp_block = null, ?Form $form = null ) {
 		$this->block    = $block;
 		$this->context  = $context;
 		$this->wp_block = $wp_block;
+		$this->form     = $form;
+
+		if ( ! empty( $block['parent_id'] ) ) {
+			$this->parent_id = $block['parent_id'];
+		}
 	}
 
 	/**
@@ -64,28 +91,29 @@ class Field {
 	 * @param array     $block Block data.
 	 * @param array     $context Context data.
 	 * @param ?WP_Block $wp_block WP Block object.
+	 * @param ?Form     $form The Form Element object.
 	 *
 	 * @return Field
 	 */
-	public static function factory( array $block, array $context = [], ?WP_Block $wp_block = null ): Field {
+	public static function factory( array $block, array $context = [], ?WP_Block $wp_block = null, ?Form $form = null ): Field {
 		$element = str_replace( 'acf/', '', $block['name'] );
 		$class   = __NAMESPACE__ . '\\' . ucfirst( $element );
 
 		if ( class_exists( $class ) ) {
 			// Input handler.
 			if ( 'input' === $element ) {
-				$input = new $class( $block, $context, $wp_block );
+				$input = new $class( $block, $context, $wp_block, $form );
 				$type  = __NAMESPACE__ . '\\' . ucfirst( $input->get_input_type() );
 
 				if ( class_exists( $type ) ) {
-					return new $type( $block, $context, $wp_block );
+					return new $type( $block, $context, $wp_block, $form );
 				}
 			}
 
-			return new $class( $block, $context, $wp_block );
+			return new $class( $block, $context, $wp_block, $form );
 		}
 
-		return new Field( $block, $context, $wp_block );
+		return new Field( $block, $context, $wp_block, $form );
 	}
 
 	/**
@@ -95,6 +123,60 @@ class Field {
 	 */
 	public function get_block(): array {
 		return $this->block;
+	}
+
+	/**
+	 * Get the block context.
+	 *
+	 * @param string $key
+	 *
+	 * @return mixed
+	 */
+	public function get_context( string $key = '' ): mixed {
+		$context = $this->context ?? $this->wp_block?->context ?? [];
+
+		if ( ! $key ) {
+			return $context;
+		}
+
+		if ( ! isset( $context[ $key ] ) ) {
+			return null;
+		}
+
+		return $context[ $key ];
+	}
+
+	/**
+	 * Get the form object.
+	 *
+	 * @return ?Form
+	 */
+	public function get_form(): ?Form {
+		if ( ! $this->form ) {
+			if ( $this->get_context( 'acffb/form_id' ) ) {
+				$this->form = Cache::get( $this->get_context( 'acffb/form_id' ) );
+			}
+
+			if ( ! $this->form ) {
+				$this->form = acffb_get_form();
+			}
+		}
+
+		return $this->form;
+	}
+
+	/**
+	 * Get the fieldset.
+	 *
+	 * @return ?Field
+	 */
+	public function get_fieldset(): ?Field {
+		if ( ! $this->get_context( 'acffb/fieldset_id' ) ) {
+			return null;
+		}
+
+		$fieldset_id = 'acf_fieldset_' . $this->get_context( 'acffb/fieldset_id' );
+		return $this->get_form()?->get_form_object()->get_field_by_id( $fieldset_id );
 	}
 
 	/**
@@ -144,6 +226,23 @@ class Field {
 	}
 
 	/**
+	 * Get the name attribute.
+	 *
+	 * @return string
+	 */
+	public function get_name_attr(): string {
+		if ( $this->get_fieldset() ) {
+			return sprintf(
+				'%s[%s]',
+				$this->get_fieldset()->get_name(),
+				$this->get_name()
+			);
+		}
+
+		return $this->get_name();
+	}
+
+	/**
 	 * Get the block name
 	 *
 	 * @param bool $real If actual block name is needed.
@@ -161,12 +260,32 @@ class Field {
 	}
 
 	/**
+	 * Get the default value.
+	 *
+	 * @return mixed
+	 */
+	public function get_default_value(): mixed {
+		return $this->default_value;
+	}
+
+	/**
+	 * Set the default value.
+	 *
+	 * @param mixed $value
+	 *
+	 * @return void
+	 */
+	public function set_default_value( mixed $value ): void {
+		$this->default_value = $value;
+	}
+
+	/**
 	 * Get the field value.
 	 *
 	 * @return string|array
 	 */
 	public function get_value(): string|array {
-		$value = $_REQUEST[ $this->get_name() ] ?? '';
+		$value = $_REQUEST[ $this->get_name() ] ?? $this->get_default_value();
 
 		if ( is_array( $value ) ) {
 			return array_map( 'sanitize_text_field', $value );
@@ -347,5 +466,66 @@ class Field {
 	 */
 	public function get_template(): array {
 		return [];
+	}
+
+	/**
+	 * Sanitize input from the field
+	 *
+	 * @param mixed $input
+	 *
+	 * @return string|array|null
+	 */
+	public function sanitize_input( mixed $input ): string|array|null {
+		if ( is_array( $input ) ) {
+			return array_map( 'sanitize_text_field', $input );
+		}
+
+		if ( 'textarea' === $this->get_block_name() ) {
+			$input = sanitize_textarea_field( $input );
+			return str_replace( [ "\n", "\r", "'" ], [ "\\n", "\\r", "\'" ], $input );
+		}
+
+		return sanitize_text_field( $input );
+	}
+
+	/**
+	 * Render the field value
+	 *
+	 * @param mixed $value
+	 * @param Form  $form
+	 *
+	 * @return void
+	 */
+	public function render_value( mixed $value, Form $form ): void {
+		if ( empty( $value ) ) {
+			echo '<div class="text-input">&nbsp;</div>';
+			return;
+		}
+
+		if ( is_array( $value ) ) {
+			printf(
+				'<pre class="text-input">%s</pre>',
+				print_r( $value, true )
+			);
+		} elseif ( 'textarea' === $this->get_block_name() ) {
+			printf(
+				'<div class="text-input">%s</div>',
+				nl2br( esc_textarea( stripslashes( $value ) ) )
+			);
+		} else {
+			printf(
+				'<div class="text-input">%s</div>',
+				esc_html( $value )
+			);
+		}
+	}
+
+	/**
+	 * Get the parent field ID.
+	 *
+	 * @return ?string
+	 */
+	public function get_parent_id(): ?string {
+		return $this->parent_id;
 	}
 }

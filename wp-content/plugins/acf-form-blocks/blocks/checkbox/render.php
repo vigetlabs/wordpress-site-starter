@@ -4,6 +4,7 @@
  *
  * @global array $block
  * @global array $context
+ * @global WP_Block $wp_block
  *
  * @package ACFFormBlocks
  */
@@ -12,7 +13,7 @@ use ACFFormBlocks\Elements\Checkbox;
 use ACFFormBlocks\Elements\Field;
 
 /** @var Checkbox $field */
-$field = Field::factory( $block, $context );
+$field = Field::factory( $block, $context, $wp_block );
 $inner = [
 	'template' => $field->get_template(),
 ];

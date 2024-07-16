@@ -5,8 +5,6 @@
  * @package ACFFormBlocks
  */
 
-use ACFFormBlocks\Elements\Field;
-
 add_filter(
 	'acf/prepare_field/key=field_668c1b138ccd0',
 	function ( array $field ): array {

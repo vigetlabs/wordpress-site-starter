@@ -7,6 +7,7 @@
 
 namespace ACFFormBlocks\Blocks;
 
+use ACFFormBlocks\Elements\Field;
 use ACFFormBlocks\Form;
 use ACFFormBlocks\Utilities\Cache;
 
@@ -21,6 +22,13 @@ class Block {
 	 * @var array
 	 */
 	protected array $block_names;
+
+	/**
+	 * The field object.
+	 *
+	 * @var ?Field
+	 */
+	protected ?Field $field = null;
 
 	/**
 	 * The block array.
@@ -70,18 +78,19 @@ class Block {
 	 *
 	 * @return void
 	 */
-	private function filter_attrs(): void {
+	protected function filter_attrs(): void {
 		add_filter(
-			'acfbt_block_attrs',
-			function ( array $attrs, array $block ): array {
-				if ( ! in_array( $block['name'], $this->block_names, true ) ) {
+			'acffb_block_attrs',
+			function ( array $attrs, Field $field ): array {
+				if ( ! in_array( $field->get_block_name( true ), $this->block_names, true ) ) {
 					return $attrs;
 				}
 
-				$this->block = $block;
+				$this->field = $field;
+				$this->block = $this->field->get_block();
 
-				if ( ! empty( $this->block['acffb/form_id'] ) ) {
-					$this->form = Cache::get( $this->block['acffb/form_id'] );
+				if ( $this->field->get_context( 'acffb/form_id' ) ) {
+					$this->form = Cache::get( $this->field->get_context( 'acffb/form_id' ) );
 				} else {
 					$this->form = acffb_get_form();
 				}

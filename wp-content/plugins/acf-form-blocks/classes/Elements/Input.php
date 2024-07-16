@@ -7,6 +7,7 @@
 
 namespace ACFFormBlocks\Elements;
 
+use ACFFormBlocks\Form;
 use ACFFormBlocks\Utilities\BlockTemplate\Block;
 use ACFFormBlocks\Utilities\BlockTemplate\Template;
 use Exception;
@@ -49,5 +50,26 @@ class Input extends Field {
 				)
 			)
 		)->get();
+	}
+
+	/**
+	 * Render the input value.
+	 *
+	 * @param mixed $value Value to render.
+	 * @param Form $form Form object.
+	 *
+	 * @return void
+	 */
+	public function render_value( mixed $value, Form $form ): void {
+		if ( 'file' !== $this->get_input_type() || empty( $value ) ) {
+			parent::render_value( $value, $form );
+			return;
+		}
+
+		printf(
+			'<div class="text-input"><a href="%s" target="_blank" rel="noopener">%s</a></div>',
+			esc_attr( $value['url'] ),
+			esc_html__( 'View File', 'acf-form-blocks' )
+		);
 	}
 }
