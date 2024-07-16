@@ -26,6 +26,20 @@ class Form {
 	protected array $block;
 
 	/**
+	 * The Form markup from Gutenberg.
+	 *
+	 * @var string
+	 */
+	protected string $markup = '';
+
+	/**
+	 * The Form context.
+	 *
+	 * @var array
+	 */
+	protected array $context = [];
+
+	/**
 	 * Form fields.
 	 *
 	 * @var array
@@ -36,9 +50,13 @@ class Form {
 	 * Constructor.
 	 *
 	 * @param array $block Block data.
+	 * @param string $markup Form markup.
+	 * @param array $context Form context.
 	 */
-	public function __construct( array $block ) {
-		$this->block = $block;
+	public function __construct( array $block, string $markup = '', array $context = [] ) {
+		$this->block   = $block;
+		$this->markup  = $markup;
+		$this->context = $context;
 	}
 
 	/**
@@ -48,6 +66,24 @@ class Form {
 	 */
 	public function get_form(): array {
 		return $this->block;
+	}
+
+	/**
+	 * Get the form markup.
+	 *
+	 * @return string
+	 */
+	public function get_form_markup(): string {
+		return $this->markup;
+	}
+
+	/**
+	 * Get the form context.
+	 *
+	 * @return array
+	 */
+	public function get_form_context(): array {
+		return $this->context;
 	}
 
 	/**
@@ -123,7 +159,7 @@ class Form {
 
 		foreach ( $all_fields as $field ) {
 			if ( in_array( $field->get_block_name( true ), FormObject::ALL_INPUT_TYPES  ) ) {
-				$input_fields[] = $field;
+				$input_fields[ $field->get_id() ] = $field;
 			}
 		}
 
@@ -136,7 +172,7 @@ class Form {
 	 * @param string $content
 	 * @param array  $context
 	 *
-	 * @return array
+	 * @return Field[]
 	 */
 	public function get_all_fields( string $content = '', array $context = [] ): array {
 		if ( ! empty( $this->fields ) ) {
@@ -144,17 +180,24 @@ class Form {
 		}
 
 		if ( ! $content ) {
-			$content = get_the_content();
+			$content = $this->get_form_markup() ?: get_the_content();
 		}
 
-		if ( ! $context ) {
-			$context = [ 'postId' => get_the_ID(), 'postType' => get_post_type() ];
+		if ( ! $content ) {
+			return [];
 		}
 
 		$blocks = parse_blocks( $content );
 
-		$field_blocks = $this->extract_field_blocks( $blocks, $context );
-		$this->fields = $this->parse_fields( $field_blocks );
+		if ( empty( $blocks ) ) {
+			return [];
+		}
+
+		if ( ! $context ) {
+			$context = $this->get_form_context() ?: [ 'postId' => get_the_ID(), 'postType' => get_post_type() ];
+		}
+
+		$this->fields = $this->extract_field_blocks( $blocks, $context );
 
 		return $this->fields;
 	}
@@ -198,31 +241,20 @@ class Form {
 		$filtered = Blocks::get_blocks_by_type( $blocks, FormObject::ALL_FIELD_TYPES );
 
 		foreach ( $filtered as $block ) {
-			$attrs       = $block['attrs'] ?? [];
+			if ( empty( $block['attrs'] ) ) {
+				continue;
+			}
+
+			$attrs       = $block['attrs'];
 			$attrs['id'] = acf_get_block_id( $attrs, $context );
 			$attrs['id'] = acf_ensure_block_id_prefix( $attrs['id'] );
 
 			$attrs['wp_block'] = $block;
 
-			$fields[] = $attrs;
-		}
+			$block_name = str_replace( '/', '_', $attrs['name'] );
+			$block_id   = $block_name . '_' . $attrs['block_id'];
 
-		return $fields;
-	}
-
-	/**
-	 * Parse the field blocks into Field objects.
-	 *
-	 * @param array $field_blocks
-	 *
-	 * @return Field[]
-	 */
-	private function parse_fields( array $field_blocks ): array {
-		$fields = [];
-
-		foreach ( $field_blocks as $field_block ) {
-			// Warning: Using Field::factory here causes infinite loop.
-			$fields[] = new Field( $field_block );
+			$fields[ $block_id ] = Field::factory( $attrs, $attrs );
 		}
 
 		return $fields;
@@ -294,17 +326,8 @@ class Form {
 	public function get_field_by_id( string $field_id ): ?Field {
 		$fields = $this->get_all_fields();
 
-		foreach ( $fields as $field ) {
-			if ( str_starts_with( $field_id, 'acf_' ) ) {
-				$block_id = $field_id;
-			} else {
-				$block_name = str_replace( '/', '_', $field->get_block_name( true ) );
-				$block_id   = $block_name . '_' . $field_id;
-			}
-
-			if ( $field->get_id() === $block_id ) {
-				return $field;
-			}
+		if ( array_key_exists( $field_id, $fields ) ) {
+			return $fields[ $field_id ];
 		}
 
 		return null;

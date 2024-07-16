@@ -57,24 +57,4 @@ class Cache {
 
 		self::$storage[ $key ] = $form;
 	}
-
-	/**
-	 * Find a cached Form.
-	 *
-	 * @param string $form_id The form ID.
-	 *
-	 * @return ?Form
-	 */
-	public static function find( string $form_id ): ?Form {
-		foreach ( self::$storage as $cache ) {
-			$block_name = str_replace( '/', '_', $cache->get_form_element()['name'] );
-			$form_id    = $block_name . '_' . $form_id;
-
-			if ( $cache->get_form_object()->get_id() === $form_id ) {
-				return $cache;
-			}
-		}
-
-		return null;
-	}
 }

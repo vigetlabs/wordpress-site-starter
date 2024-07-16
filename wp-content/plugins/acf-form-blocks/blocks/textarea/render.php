@@ -3,6 +3,8 @@
  * Block: Textarea
  *
  * @global array $block
+ * @global array $context
+ * @global WP_Block $wp_block
  *
  * @package ACFFormBlocks
  */
@@ -11,7 +13,7 @@ use ACFFormBlocks\Elements\Field;
 use ACFFormBlocks\Utilities\BlockTemplate\Block;
 use ACFFormBlocks\Utilities\BlockTemplate\Template;
 
-$field = Field::factory( $block );
+$field = Field::factory( $block, $context, $wp_block );
 
 $inner = [
 	'template' => ( new Template( new Block( 'core/paragraph', [ 'placeholder' => __( 'Field Label...', 'acf-form-blocks' ) ] ) ) )->get(),
@@ -20,7 +22,7 @@ $inner = [
 <div class="form-input type-textarea">
 	<label<?php
 		if ( ! is_admin() ) :
-			printf( ' for="%s"', esc_attr( $field->get_id() ) );
+			printf( ' for="%s"', esc_attr( $field->get_id_attr() ) );
 		endif;
 	?>>
 		<?php inner_blocks( $inner ); ?>
@@ -29,5 +31,5 @@ $inner = [
 		<?php endif; ?>
 	</label>
 
-	<textarea <?php block_attrs( $block ); ?>><?php echo esc_textarea( $field->get_value() ); ?></textarea>
+	<textarea <?php acffb_block_attrs( $field ); ?>><?php echo esc_textarea( $field->get_value() ); ?></textarea>
 </div>

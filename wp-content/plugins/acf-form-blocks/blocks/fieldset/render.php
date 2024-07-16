@@ -11,25 +11,19 @@
 
 use ACFFormBlocks\Elements\Field;
 use ACFFormBlocks\Elements\Fieldset;
-use ACFFormBlocks\Utilities\BlockTemplate\Block;
-use ACFFormBlocks\Utilities\BlockTemplate\Template;
 
 /** @var Fieldset $field */
-$field    = Field::factory( $block, $context, $wp_block );
-$template = ( new Template() )
-	->add( ( new Block( 'acf/legend' ) ) )
-	->add( ( new Block( 'core/paragraph', [ 'placeholder' => __( 'Type / to add fields...', 'acf-field-blocks' ) ] ) ) );
-
+$field = Field::factory( $block, $context, $wp_block );
 $inner = [
-	'template' => $template->get(),
+	'template' => $field->get_template(),
 ];
 
 $classes = 'form-fieldset';
 
-if ( ! empty( $block['is_checkbox_group'] ) ) {
+if ( $field->is_checkbox_group() ) {
 	$classes .= ' type-checkbox-group';
 }
 ?>
-<fieldset <?php block_attrs( $block, $classes ); ?>>
+<fieldset <?php acffb_block_attrs( $field, $classes ); ?>>
 	<?php inner_blocks( $inner ); ?>
 </fieldset>

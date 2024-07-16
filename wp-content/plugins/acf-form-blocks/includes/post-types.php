@@ -5,6 +5,8 @@
  * @package ACFFormBlocks
  */
 
+use ACFFormBlocks\Admin\Submission;
+
 const ACFFB_SUBMISSION_POST_TYPE = 'acffb-submission';
 
 add_action( 'init', function() {
@@ -57,19 +59,4 @@ add_action( 'init', function() {
 	) );
 } );
 
-// Add meta box for submission data.
-add_action( 'add_meta_boxes', function() {
-	add_meta_box(
-		'acffb_submission_data',
-		__( 'Submission Data', 'acf-form-blocks' ),
-		function( $post ) {
-			$data = $post->post_content ? json_decode( $post->post_content, true ) : [];
-			echo '<pre>' . print_r( $data, true ) . '</pre>';
-		},
-		ACFFB_SUBMISSION_POST_TYPE,
-		'normal',
-		'high'
-	);
-
-	remove_meta_box( 'pageparentdiv', ACFFB_SUBMISSION_POST_TYPE, 'side' );
-} );
+$admin_submission = new Submission();

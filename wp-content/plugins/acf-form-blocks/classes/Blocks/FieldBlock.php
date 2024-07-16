@@ -7,19 +7,10 @@
 
 namespace ACFFormBlocks\Blocks;
 
-use ACFFormBlocks\Elements\Field;
-
 /**
  * Class for Field Block Actions
  */
 class FieldBlock extends Block {
-
-	/**
-	 * The field object.
-	 *
-	 * @var ?Field
-	 */
-	protected ?Field $field = null;
 
 	/**
 	 * Set the block attributes.
@@ -29,9 +20,9 @@ class FieldBlock extends Block {
 	 * @return array
 	 */
 	public function set_attrs( array $attrs ): array {
-		$this->field = Field::factory( $this->block );
+		unset( $attrs['data-supports-jsx'] ); // Unnecessary for input fields.
 
-		$attrs['name'] = $this->field->get_name();
+		$attrs['name'] = $this->field->get_name_attr();
 		$attrs['id']   = $this->field->get_id_attr();
 
 		if ( $this->field->get_placeholder() ) {

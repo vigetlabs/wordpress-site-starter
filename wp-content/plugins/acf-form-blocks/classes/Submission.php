@@ -8,6 +8,7 @@
 namespace ACFFormBlocks;
 
 use ACFFormBlocks\Elements\Field;
+use ACFFormBlocks\Elements\Fieldset;
 
 /**
  * Submission Confirmation
@@ -108,6 +109,7 @@ class Submission {
 		$this->is_processed = true;
 		$this->form->update_cache();
 
+		do_action( 'acffb_process_submission', $this );
 		$this->save();
 
 		$this->form->get_notification()->process();
@@ -134,27 +136,43 @@ class Submission {
 		$this->data = [
 			'content' => [],
 			'meta'    => [
-				'url'     => esc_url( $_SERVER['REQUEST_URI'] ),
-				'ip'      => sanitize_text_field( $_SERVER['REMOTE_ADDR'] ),
-				'agent'   => sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ),
-				'method'  => sanitize_text_field( $_SERVER['REQUEST_METHOD'] ),
-				'form_id' => $this->form->get_form_object()->get_id(),
+				'_url'          => esc_url( $_SERVER['REQUEST_URI'] ),
+				'_ip'           => sanitize_text_field( $_SERVER['REMOTE_ADDR'] ),
+				'_agent'        => sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ),
+				'_method'       => sanitize_text_field( $_SERVER['REQUEST_METHOD'] ),
+				'_form_id'      => $this->form->get_form_object()->get_id(),
+				'_form_markup'  => $this->form->get_form_object()->get_form_markup(),
+				'_form_context' => $this->form->get_form_object()->get_form_context(),
+				'_post_id'      => get_queried_object_id(),
 			],
 		];
 
 		foreach ( $fields as $field ) {
-			$field = Field::factory( $field->get_block() );
-			$value = [
+			if ( ! method_exists( $field, 'get_child_fields' ) ) {
+				continue;
+			}
+
+			$children = $field->get_child_fields( $this->form );
+
+			foreach ( $children as $child ) {
+				if ( array_key_exists( $child->get_id(), $fields ) ) {
+					unset( $fields[ $child->get_id() ] );
+				}
+			}
+		}
+
+		foreach ( $fields as $field ) {
+			$data = [
 				'label' => $field->get_field_label(),
 			];
 
 			if ( 'input' === $field->get_block_name() && 'file' === $field->get_type() ) {
-				$value['value'] = $this->handle_upload( $field );
+				$data['value'] = $this->handle_upload( $field );
 			} else {
-				$value['value'] = $this->sanitize_input( $field );
+				$data['value'] = $this->sanitize_input( $field );
 			}
 
-			$this->data['content'][ $field->get_name() ] = $value;
+			$this->data['content'][ $field->get_name() ] = $data;
 		}
 
 		$this->data = apply_filters( 'acffb_submission_data', $this->data );
@@ -182,15 +200,7 @@ class Submission {
 			return null;
 		}
 
-		if ( is_array( $user_input ) ) {
-			return array_map( 'sanitize_text_field', $user_input );
-		}
-
-		if ( 'textarea' === $field->get_block_name() ) {
-			return sanitize_textarea_field( $user_input );
-		}
-
-		return sanitize_text_field( $user_input );
+		return $field->sanitize_input( $user_input );
 	}
 
 	/**
@@ -198,40 +208,47 @@ class Submission {
 	 *
 	 * @param Field $field The Field.
 	 *
-	 * @return ?string
+	 * @return ?array
 	 */
-	private function handle_upload( Field $field ): ?string {
+	private function handle_upload( Field $field ): ?array {
 		$upload = $_FILES[ $field->get_name() ] ?? null;
 
 		if ( ! $upload ) {
 			return null;
 		}
 
-		$upload_dir    = wp_upload_dir();
-		$upload_folder = $upload_dir['basedir'] . '/form-submissions';
+		$upload_dir  = wp_upload_dir();
+		$folder_path = '/form-submissions';
+		$upload_path = $upload_dir['basedir'] . $folder_path;
 
 		// Make sure root directory is protected.
-		if ( ! is_dir( $upload_folder ) ) {
-			wp_mkdir_p( $upload_folder );
-			file_put_contents( $upload_folder . '/index.php', "<?php // Silence is golden.\n" );
+		if ( ! is_dir( $upload_path ) ) {
+			wp_mkdir_p( $upload_path );
+			file_put_contents( $upload_path . '/index.php', "<?php // Silence is golden.\n" );
 		}
 
-		$upload_folder .= '/' . $this->form->get_form_object()->get_id();
+		$form_dir     = '/' . $this->form->get_form_object()->get_id();
+		$folder_path .= $form_dir;
+		$upload_path .= $form_dir;
 
 		// Make sure upload directory is protected.
-		if ( ! is_dir( $upload_folder ) ) {
-			wp_mkdir_p( $upload_folder );
-			file_put_contents( $upload_folder . '/index.php', "<?php // Silence is golden.\n" );
+		if ( ! is_dir( $upload_path ) ) {
+			wp_mkdir_p( $upload_path );
+			file_put_contents( $upload_path . '/index.php', "<?php // Silence is golden.\n" );
 		}
 
-		$upload_name = wp_unique_filename( $upload_folder, $upload['name'] );
-		$upload_path = $upload_folder . '/' . $upload_name;
+		$upload_name  = wp_unique_filename( $upload_path, $upload['name'] );
+		$folder_path .= '/' . $upload_name;
+		$upload_path .= '/' . $upload_name;
 
 		if ( ! move_uploaded_file( $upload['tmp_name'], $upload_path ) ) {
 			return null;
 		}
 
-		return $upload_path;
+		return [
+			'path' => $upload_path,
+			'url'  => $upload_dir['baseurl'] . $folder_path,
+		];
 	}
 
 	/**
@@ -240,15 +257,17 @@ class Submission {
 	 * @return void
 	 */
 	protected function save(): void {
-		$form_name = $this->form->get_form_object()->get_name();
-		$form_data = $this->get_data();
-		$form_post = apply_filters(
+		$form_name      = $this->form->get_form_object()->get_name();
+		$form_data      = $this->get_data();
+		$submission_key = md5( serialize( $form_data['content'] ) );
+		$form_post      = apply_filters(
 			'acffb_submission_post',
 			[
 				'post_type'    => ACFFB_SUBMISSION_POST_TYPE,
 				'post_title'   => $form_name  . ' ' . __( 'Submission', 'acf-form-blocks' ),
 				'post_status'  => 'publish',
-				'post_content' => json_encode( $form_data['content'] ),
+				'post_name'    => sanitize_title( $form_name . ' ' . $submission_key ),
+				'post_content' => wp_json_encode(  $form_data['content'] ),
 			]
 		);
 

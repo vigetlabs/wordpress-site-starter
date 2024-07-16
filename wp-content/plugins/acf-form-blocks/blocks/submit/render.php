@@ -15,7 +15,8 @@ $buttons = ( new Block( 'core/buttons', [ 'lock' => [ 'move' => false, 'remove' 
 		'text' => __( 'Submit', 'acf-form-blocks' ),
 		'lock' => [ 'move' => false, 'remove' => true ],
 	] ) ) );
-$inner   = [
+
+$inner = [
 	'template' => ( new Template( $buttons ) )->get(),
 ];
 ?>

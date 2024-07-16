@@ -3,6 +3,8 @@
  * Block: Radios
  *
  * @global array $block
+ * @global array $context
+ * @global WP_Block $wp_block
  *
  * @package ACFFormBlocks
  */
@@ -11,7 +13,7 @@ use ACFFormBlocks\Elements\Field;
 use ACFFormBlocks\Elements\Radios;
 
 /** @var Radios $field */
-$field   = Field::factory( $block );
+$field   = Field::factory( $block, $context, $wp_block );
 $options = $field->get_options();
 $inner   = [
 	'template' => $field->get_template(),
@@ -19,7 +21,7 @@ $inner   = [
 
 $has_checked = false;
 ?>
-<div <?php block_attrs( $block, 'form-input type-radios' ); ?>>
+<div <?php acffb_block_attrs( $field, 'form-input type-radios' ); ?>>
 	<div class="radios-label">
 		<?php inner_blocks( $inner ); ?>
 		<?php if ( $field->is_required() ) : ?>
@@ -33,7 +35,7 @@ $has_checked = false;
 		<ul class="radios-options">
 			<?php
 			foreach ( $options as $index => $option ) :
-				$option_id = $field->get_id() . '-' . $index;
+				$option_id = $field->get_id_attr() . '-' . $index;
 				$checked   = ! $has_checked ? checked( $option['value'], $field->get_value(), false ) : '';
 				if ( $checked ) :
 					$has_checked = true;
@@ -44,7 +46,7 @@ $has_checked = false;
 						type="radio"
 						value="<?php echo esc_attr( $option['value'] ); ?>"
 						id="<?php echo esc_attr( $option_id ); ?>"
-						name="<?php echo esc_attr( $field->get_name() ); ?>"
+						name="<?php echo esc_attr( $field->get_name_attr() ); ?>"
 						<?php echo $checked; ?>
 					>
 					<label for="<?php echo esc_attr( $option_id ); ?>">

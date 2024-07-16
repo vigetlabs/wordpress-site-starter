@@ -3,6 +3,8 @@
  * Block: Select
  *
  * @global array $block
+ * @global array $context
+ * @global WP_Block $wp_block
  *
  * @package ACFFormBlocks
  */
@@ -11,7 +13,7 @@ use ACFFormBlocks\Elements\Field;
 use ACFFormBlocks\Elements\Select;
 
 /** @var Select $field */
-$field   = Field::factory( $block );
+$field   = Field::factory( $block, $context, $wp_block );
 $options = $field->get_options();
 $inner   = [
 	'template' => $field->get_template(),
@@ -22,7 +24,7 @@ $has_selected = false;
 <div class="form-input type-select">
 	<label<?php
 		if ( ! is_admin() ) :
-			printf( ' for="%s"', esc_attr( $field->get_id() ) );
+			printf( ' for="%s"', esc_attr( $field->get_id_attr() ) );
 		endif;
 	?>>
 		<?php inner_blocks( $inner ); ?>
@@ -31,7 +33,7 @@ $has_selected = false;
 		<?php endif; ?>
 	</label>
 
-	<select <?php block_attrs( $block ); ?>>
+	<select <?php acffb_block_attrs( $field ); ?>>
 		<?php if ( empty( $options ) ) : ?>
 			<option value="" selected><?php esc_html_e( 'No options available.', 'acf-form-blocks' ); ?></option>
 		<?php else : ?>
