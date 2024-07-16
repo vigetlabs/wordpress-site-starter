@@ -385,24 +385,58 @@ class Field {
 	 * @return mixed
 	 */
 	public function get_field_data( string $selector, mixed $default = null ): mixed {
+		$this->preload_meta();
+
 		$value = get_field( $selector );
 
 		if ( ! is_null( $value ) ) {
 			return $value;
 		}
 
-		$value = get_field( $selector, $this->block['id'] );
+		$value = get_field( $selector, $this->get_acf_id() );
 
 		if ( ! is_null( $value ) ) {
 			return $value;
 		}
 
-		// Not sure why this is all of sudden necessary.
-		if ( isset( $this->block['data'][ $selector ] ) ) {
-			return $this->block['data'][ $selector ];
-		}
-
 		return $default;
+	}
+
+	/**
+	 * Preload the meta data.
+	 *
+	 * @return void
+	 */
+	private function preload_meta(): void {
+		add_filter(
+			'acf/pre_load_metadata',
+			function ( $null, $post_id, $name, $hidden ) {
+				$meta = $this->get_field_meta();
+				$name = ( $hidden ? '_' : '' ) . $name;
+
+				if ( isset( $meta[ $post_id ] ) ) {
+					if ( isset( $meta[ $post_id ][ $name ] ) ) {
+						return $meta[ $post_id ][ $name ];
+					}
+					return '__return_null';
+				}
+
+				return $null;
+			},
+			5,
+			4
+		);
+	}
+
+	/**
+	 * Get the field meta.
+	 *
+	 * @return array
+	 */
+	private function get_field_meta(): array {
+		return [
+			$this->get_acf_id() => $this->block['data'] ?? [],
+		];
 	}
 
 	/**

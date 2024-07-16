@@ -132,7 +132,7 @@ class Form {
 			}
 
 			if ( is_array( $form ) ) {
-				$form = new self( new FormElement( $form, $content, $context ) );
+				$form = new self( new FormElement( $form, $content, $context ), true );
 				Cache::set( $form->get_form_object()->get_id(), $form, true );
 				return $form;
 			}
