@@ -34,4 +34,18 @@ class Radios extends Field {
 			)
 		)->get();
 	}
+
+	/**
+	 * Get the radio field wrapper attributes.
+	 *
+	 * @return array
+	 */
+	public function get_attrs(): array {
+		$attrs = parent::get_attrs();
+
+		// Discard name since this is on a div element.
+		unset( $attrs['name'] );
+
+		return $attrs;
+	}
 }

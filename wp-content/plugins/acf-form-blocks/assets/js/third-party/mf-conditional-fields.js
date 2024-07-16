@@ -6,7 +6,7 @@
  * Author: Ali Khallad
  * Author link: http://alikhallad.com
  * Source : https://github.com/bomsn/mf-conditional-fields
- * Version 1.0.6
+ * Version 1.0.7
  *
  */
 "use strict";
@@ -57,52 +57,47 @@ const mfConditionalFields = (forms, options = {}) => {
 
 			let condition = field.getAttribute('data-conditional-rules');
 
-			if (condition.length <= 0) {
-				return;
-			}
+			if (condition.length > 0) {
+				condition = JSON.parse(condition);
+				let container = 'container' in condition ? condition['container'] : '',
+					action = 'action' in condition ? condition['action'] : 'show',
+					logic = 'logic' in condition ? condition['logic'] : 'or',
+					rules = 'rules' in condition ? condition['rules'] : [];
 
-			condition = JSON.parse(condition);
+				// if a single rule is provided, insert it into an array
+				if (typeof rules == "object" && typeof rules.length == "undefined") {
+					rules = [rules];
+				}
 
-			let container = 'container' in condition ? condition['container'] : '',
-				action = 'action' in condition ? condition['action'] : 'show',
-				logic = 'logic' in condition ? condition['logic'] : 'or',
-				rules = 'rules' in condition ? condition['rules'] : [];
-
-			// if a single rule is provided, insert it into an array
-			if (typeof rules == "object" && typeof rules.length == "undefined") {
-				rules = [rules];
-			}
-
-			// If rules are available, start a loop to implement each rule
-			if (rules.length <= 0) {
-				return;
-			}
-
-			for (let i = 0; rules.length > i; i++) {
-				if ("group" in rules[i]) {
-					// Store grouped rules triggers
-					for (let r = 0; rules[i].group.length > r; r++) {
-						if ("name" in rules[i].group[r] && !triggers[formIndex].includes(rules[i].group[r].name)) {
-							triggers[formIndex].push(rules[i].group[r].name);
+				// If rules are available, start a loop to implement each rule
+				if (rules.length > 0) {
+					for (let i = 0; rules.length > i; i++) {
+						if ("group" in rules[i]) {
+							// Store grouped rules triggers
+							for (let r = 0; rules[i].group.length > r; r++) {
+								if ("name" in rules[i].group[r] && !triggers[formIndex].includes(rules[i].group[r].name)) {
+									triggers[formIndex].push(rules[i].group[r].name);
+								}
+							}
+						} else {
+							// Store normal rules triggers
+							if ("name" in rules[i] && !triggers[formIndex].includes(rules[i].name)) {
+								triggers[formIndex].push(rules[i].name);
+							}
 						}
 					}
-				} else {
-					// Store normal rules triggers
-					if ("name" in rules[i] && !triggers[formIndex].includes(rules[i].name)) {
-						triggers[formIndex].push(rules[i].name);
-					}
+
+					field.removeAttribute('data-conditional-rules');
+
+					field.mfConditionalContainerSelector = container;
+					field.mfConditionalAction = action;
+					field.mfConditionalLogic = logic;
+					field.mfConditionalRules = rules;
+					field.mfConditionalFormIndex = formIndex;
+
+					self.updateField(field);
 				}
 			}
-
-			field.removeAttribute('data-conditional-rules');
-
-			field.mfConditionalContainerSelector = container;
-			field.mfConditionalAction = action;
-			field.mfConditionalLogic = logic;
-			field.mfConditionalRules = rules;
-			field.mfConditionalFormIndex = formIndex;
-
-			self.updateField(field);
 
 		},
 		/**
@@ -120,6 +115,7 @@ const mfConditionalFields = (forms, options = {}) => {
 				logic = field.mfConditionalLogic,
 				rules = field.mfConditionalRules,
 				isConditionMet = false;
+
 
 			if (rules.length > 0) {
 
@@ -161,7 +157,6 @@ const mfConditionalFields = (forms, options = {}) => {
 				}
 
 			}
-
 			// Toggle the fields based on the value of `isConditionMet`
 			if (isConditionMet) {
 				self.toggleField(field, action, depthLevel);
@@ -344,9 +339,17 @@ const mfConditionalFields = (forms, options = {}) => {
 						triggerValue = triggerValue.join('|');
 					}
 				}
+			} else if (triggerType == 'select-multiple') {
+				triggerValue = [];
+				for (let i = 0; i < trigger.options.length; i++) {
+					if (trigger.options[i].selected) {
+						triggerValue.push(trigger.options[i].value);
+					}
+				}
+				triggerValue = triggerValue.join('|');
 			} else {
 				triggerValue = trigger.value;
-			}
+			};
 
 			return self.compareValues(operator, triggerValue, value);
 		},
