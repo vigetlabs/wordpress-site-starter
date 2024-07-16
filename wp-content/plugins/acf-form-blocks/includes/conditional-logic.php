@@ -8,7 +8,8 @@
 add_filter(
 	'acf/prepare_field/key=field_668c1b138ccd0',
 	function ( array $field ): array {
-		$form = acffb_get_form();
+		$form = ACFFormBlocks\Form::get_instance();
+
 		if ( ! $form ) {
 			return $field;
 		}

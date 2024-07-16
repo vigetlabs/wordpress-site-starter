@@ -30,14 +30,15 @@ class Submission {
 	}
 
 	/**
-	 * Set up the form instance.
+	 * Get the form instance.
 	 *
-	 * @return void
+	 * @return ?Form
 	 */
-	private function get_form(): void {
-		$markup     = get_post_meta( get_the_ID(), '_form_markup', true );
-		$context    = get_post_meta( get_the_ID(), '_form_context', true );
-		$this->form = acffb_get_form( [], $markup, $context );
+	private function get_form(): ?Form {
+		$markup  = get_post_meta( get_the_ID(), '_form_markup', true );
+		$context = get_post_meta( get_the_ID(), '_form_context', true );
+
+		return Form::get_instance( null, $markup, $context );
 	}
 
 	/**
@@ -89,18 +90,16 @@ class Submission {
 	 * @return void
 	 */
 	private function render_submission_data( array $data ): void {
-		if ( ! $this->form ) {
-			$this->get_form();
-		}
+		$form = $this->get_form();
 		?>
 		<table class="form-table acffb-submission">
 			<tbody>
 				<?php foreach ( $data as $key => $content ) :
-					$field = $this->form->get_form_object()->get_field_by_id( $key );
+					$field = $form->get_form_object()->get_field_by_id( $key );
 					?>
 					<tr id="<?php echo esc_attr( $key ); ?>">
 						<th scope="row"><?php echo esc_html( $content['label'] ); ?></th>
-						<td><?php $field->render_value( $content['value'], $this->form ); ?></td>
+						<td><?php $field->render_value( $content['value'], $form ); ?></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>

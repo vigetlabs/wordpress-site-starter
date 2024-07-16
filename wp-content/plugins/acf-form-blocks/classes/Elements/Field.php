@@ -52,28 +52,47 @@ class Field {
 	protected mixed $default_value = null;
 
 	/**
-	 * Form instance.
-	 *
-	 * @var ?Form
-	 */
-	protected ?Form $form = null;
-
-	/**
 	 * Constructor.
 	 *
 	 * @param array    $block Block data.
 	 * @param array     $context Block context.
 	 * @param ?WP_Block $wp_block WP Block object.
 	 */
-	public function __construct( array $block, array $context = [], ?WP_Block $wp_block = null, ?Form $form = null ) {
+	public function __construct( array $block, array $context = [], ?WP_Block $wp_block = null ) {
 		$this->block    = $block;
 		$this->context  = $context;
 		$this->wp_block = $wp_block;
-		$this->form     = $form;
 
 		if ( ! empty( $block['parent_id'] ) ) {
 			$this->parent_id = $block['parent_id'];
 		}
+	}
+
+	/**
+	 * Get attributes for this field.
+	 *
+	 * @return array
+	 */
+	public function get_attrs(): array {
+		$attrs = [
+			'id'   => $this->get_id_attr(),
+			'name' => $this->get_name_attr(),
+		];
+
+		if ( $this->get_placeholder() ) {
+			$attrs['placeholder'] = $this->get_placeholder();
+		}
+
+		if ( $this->is_required() ) {
+			$attrs['required'] = true;
+		}
+
+		$logic = $this->get_conditional_logic();
+		if ( ! is_admin() && $logic ) {
+			$attrs['data-conditional-rules'] = wp_json_encode( $logic );
+		}
+
+		return $attrs;
 	}
 
 	/**
@@ -152,17 +171,7 @@ class Field {
 	 * @return ?Form
 	 */
 	public function get_form(): ?Form {
-		if ( ! $this->form ) {
-			if ( $this->get_context( 'acffb/form_id' ) ) {
-				$this->form = Cache::get( $this->get_context( 'acffb/form_id' ) );
-			}
-
-			if ( ! $this->form ) {
-				$this->form = acffb_get_form();
-			}
-		}
-
-		return $this->form;
+		return Form::get_instance( $this->get_context( 'acffb/form_id' ) );
 	}
 
 	/**
@@ -440,6 +449,10 @@ class Field {
 			$container = sprintf( 'div.form-input:has(#%s)', $this->get_id_attr() );
 		}
 
+		if ( empty( $logic[0]['action'] ) ) {
+			return null;
+		}
+
 		$action = $logic[0]['action'];
 		$rules  = [
 			'container' => $container,
@@ -455,6 +468,8 @@ class Field {
 				'value'    => $item['value'] ?? '',
 			];
 		}
+
+//		error_log( print_r( $rules, true ) );
 
 		return $rules;
 	}

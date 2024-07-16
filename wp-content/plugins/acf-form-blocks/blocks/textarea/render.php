@@ -31,5 +31,5 @@ $inner = [
 		<?php endif; ?>
 	</label>
 
-	<textarea <?php acffb_block_attrs( $field ); ?>><?php echo esc_textarea( $field->get_value() ); ?></textarea>
+	<textarea <?php block_attrs( $block, '', $field->get_attrs() ); ?>><?php echo esc_textarea( $field->get_value() ); ?></textarea>
 </div>

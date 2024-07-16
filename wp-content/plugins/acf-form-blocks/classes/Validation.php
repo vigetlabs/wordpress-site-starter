@@ -74,7 +74,7 @@ class Validation {
 	 */
 	public function render(): void {
 		if ( ! $this->form->get_submission()->is_processed() ) {
-			$block_id = $this->form->get_form_object()->get_acf_id();
+			$block_id = $this->form->get_form_object()->get_id();
 
 			printf(
 				'<input

@@ -21,7 +21,7 @@ $inner   = [
 
 $has_checked = false;
 ?>
-<div <?php acffb_block_attrs( $field, 'form-input type-radios' ); ?>>
+<div <?php block_attrs( $block, 'form-input type-radios', $field->get_attrs() ); ?>>
 	<div class="radios-label">
 		<?php inner_blocks( $inner ); ?>
 		<?php if ( $field->is_required() ) : ?>

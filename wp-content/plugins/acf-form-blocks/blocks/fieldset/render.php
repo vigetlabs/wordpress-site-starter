@@ -24,6 +24,6 @@ if ( $field->is_checkbox_group() ) {
 	$classes .= ' type-checkbox-group';
 }
 ?>
-<fieldset <?php acffb_block_attrs( $field, $classes ); ?>>
+<fieldset <?php block_attrs( $block, $classes, $field->get_attrs() ); ?>>
 	<?php inner_blocks( $inner ); ?>
 </fieldset>

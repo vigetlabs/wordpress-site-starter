@@ -9,7 +9,6 @@ namespace ACFFormBlocks\Blocks;
 
 use ACFFormBlocks\Elements\Field;
 use ACFFormBlocks\Form;
-use ACFFormBlocks\Utilities\Cache;
 
 /**
  * Class for Block Actions
@@ -22,6 +21,13 @@ class Block {
 	 * @var array
 	 */
 	protected array $block_names;
+
+	/**
+	 * The form object.
+	 *
+	 * @var ?Form
+	 */
+	protected ?Form $form = null;
 
 	/**
 	 * The field object.
@@ -45,13 +51,6 @@ class Block {
 	protected array $wp_block = [];
 
 	/**
-	 * The form object.
-	 *
-	 * @var ?Form
-	 */
-	protected ?Form $form = null;
-
-	/**
 	 * Block constructor.
 	 *
 	 * @param string|array $block_names The block name.
@@ -63,48 +62,11 @@ class Block {
 
 		$this->block_names = $block_names;
 
-		// Filter the block attributes.
-		$this->filter_attrs();
-
 		// Template redirect actions.
 		$this->template_redirect();
 
 		// Filter the block during render
 		$this->render_block();
-	}
-
-	/**
-	 * Filter the block attributes.
-	 *
-	 * @return void
-	 */
-	protected function filter_attrs(): void {
-		add_filter(
-			'acffb_block_attrs',
-			function ( array $attrs, Field $field ): array {
-				if ( ! in_array( $field->get_block_name( true ), $this->block_names, true ) ) {
-					return $attrs;
-				}
-
-				$this->field = $field;
-				$this->block = $this->field->get_block();
-
-				if ( $this->field->get_context( 'acffb/form_id' ) ) {
-					$this->form = Cache::get( $this->field->get_context( 'acffb/form_id' ) );
-				} else {
-					$this->form = acffb_get_form();
-				}
-
-				// Skip if we don't have a form.
-				if ( ! $this->form ) {
-					return $attrs;
-				}
-
-				return $this->set_attrs( $attrs );
-			},
-			10,
-			2
-		);
 	}
 
 	/**
@@ -117,7 +79,7 @@ class Block {
 			'template_redirect',
 			function() {
 				if ( ! $this->form ) {
-					$this->form = acffb_get_form();
+					$this->form = Form::get_instance();
 
 					// Skip if we don't have a form.
 					if ( ! $this->form ) {
@@ -150,17 +112,6 @@ class Block {
 			10,
 			2
 		);
-	}
-
-	/**
-	 * Set the block attributes.
-	 *
-	 * @param array $attrs The block attributes.
-	 *
-	 * @return array
-	 */
-	public function set_attrs( array $attrs ): array {
-		return $attrs;
 	}
 
 	/**

@@ -7,6 +7,8 @@
 
 namespace ACFFormBlocks;
 
+use ACFFormBlocks\Elements\Form as FormElement;
+use ACFFormBlocks\Utilities\Blocks;
 use ACFFormBlocks\Utilities\Cache;
 
 /**
@@ -70,9 +72,9 @@ class Form {
 	/**
 	 * The Form.
 	 *
-	 * @var Elements\Form
+	 * @var FormElement
 	 */
-	protected Elements\Form $form;
+	protected FormElement $form;
 
 	/**
 	 * @var ?Validation
@@ -99,18 +101,91 @@ class Form {
 	 *
 	 * @param bool $preload_meta Preload meta.
 	 */
-	public function __construct( Elements\Form $form, bool $preload_meta = false ) {
+	public function __construct( FormElement $form, bool $preload_meta = false ) {
 		$this->form = $form;
 
 		// Store the fields in cache.
 		$this->form->get_all_fields();
 
 		if ( $preload_meta ) {
-			// $block = acf_add_block_meta_values( $block, $post_id );
 			$this->preload_meta();
 		}
+	}
 
-		$this->update_cache();
+	/**
+	 * Get the Form Instance.
+	 *
+	 * @param mixed  $form
+	 * @param string $content
+	 * @param array  $context
+	 *
+	 * @return ?self
+	 */
+	public static function get_instance( mixed $form = null, string $content = '', array $context = [] ): ?self {
+		$form_id = is_string( $form ) ? $form : ( ! empty( $form['block_id'] ) ? $form['block_id'] : null );
+
+		if ( $form_id ) {
+			$cache = Cache::get( $form_id );
+
+			if ( $cache ) {
+				return $cache;
+			}
+
+			$form = new self( new FormElement( $form, $content, $context ) );
+			Cache::set( $form->get_form_object()->get_id(), $form, true );
+			return $form;
+		}
+
+		if ( ! $content ) {
+			$content = get_the_content();
+		}
+
+		if ( ! $content ) {
+			return null;
+		}
+
+		$blocks = parse_blocks( $content );
+
+		if ( empty( $blocks ) ) {
+			return null;
+		}
+
+		if ( ! $context ) {
+			$context = [ 'postId' => get_the_ID(), 'postType' => get_post_type() ];
+		}
+
+		$form = self::get_form_block( $blocks, $context );
+
+		if ( ! $form ) {
+			return null;
+		}
+
+		return self::get_instance( $form, $content, $context );
+	}
+
+	/**
+	 * Get the Form Block Recursively.
+	 *
+	 * @param array $blocks Blocks.
+	 * @param array $context Context.
+	 *
+	 * @return ?array
+	 */
+	private static function get_form_block( array $blocks, array $context = [] ): ?array {
+		$forms = Blocks::get_blocks_by_type( $blocks, 'acf/form' );
+
+		if ( ! $forms ) {
+			return null;
+		}
+
+		// Return first form block.
+		$block = $forms[0];
+
+		$attrs       = $block['attrs'] ?? [];
+		$attrs['id'] = acf_get_block_id( $attrs, $context );
+		$attrs['id'] = acf_ensure_block_id_prefix( $attrs['id'] );
+
+		return acf_prepare_block( $attrs );
 	}
 
 	/**
@@ -199,7 +274,6 @@ class Form {
 	public function get_confirmation(): Confirmation {
 		if ( null === $this->confirmation ) {
 			$this->confirmation = new Confirmation( $this );
-			$this->update_cache();
 		}
 
 		return $this->confirmation;
@@ -213,7 +287,6 @@ class Form {
 	public function get_submission(): Submission {
 		if ( null === $this->submission ) {
 			$this->submission = new Submission( $this );
-			$this->update_cache();
 		}
 
 		return $this->submission;
@@ -227,7 +300,6 @@ class Form {
 	public function get_validation(): Validation {
 		if ( null === $this->validation ) {
 			$this->validation = new Validation( $this );
-			$this->update_cache();
 		}
 
 		return $this->validation;
@@ -241,7 +313,6 @@ class Form {
 	public function get_notification(): Notification {
 		if ( null === $this->notification ) {
 			$this->notification = new Notification( $this );
-			$this->update_cache();
 		}
 
 		return $this->notification;

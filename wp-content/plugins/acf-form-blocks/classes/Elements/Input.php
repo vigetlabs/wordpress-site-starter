@@ -53,6 +53,47 @@ class Input extends Field {
 	}
 
 	/**
+	 * Get attributes for this field.
+	 *
+	 * @return array
+	 */
+	public function get_attrs(): array {
+		$attrs = parent::get_attrs();
+
+		$attrs['data-supports-jsx'] = null;
+
+		$attrs['type']  = $this->get_input_type();
+		$attrs['value'] = $this->get_value();
+
+		if ( $this->get_maxlength() ) {
+			$attrs['maxlength'] = $this->get_maxlength();
+
+			if ( $this instanceof Number ) {
+				$js_maxlength     = 'if(this.value.length>this.maxLength)this.value=this.value.slice(0,this.maxLength)';
+				$attrs['oninput'] = $js_maxlength;
+				$attrs['onfocus'] = $js_maxlength;
+			}
+		}
+
+		if ( $this instanceof Number ) {
+			if ( ! $this->controls_enabled() ) {
+				$attrs['data-appearance'] = 'none';
+			} else {
+				$attrs['step'] = $this->get_step();
+
+				if ( $this->get_min() ) {
+					$attrs['min'] = $this->get_min();
+				}
+				if ( $this->field->get_max() ) {
+					$attrs['max'] = $this->get_max();
+				}
+			}
+		}
+
+		return $attrs;
+	}
+
+	/**
 	 * Render the input value.
 	 *
 	 * @param mixed $value Value to render.

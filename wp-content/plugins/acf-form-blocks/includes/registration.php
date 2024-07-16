@@ -5,8 +5,6 @@
  * @package ACFFormBlocks
  */
 
-use ACFFormBlocks\Form;
-
 add_filter(
 	'acfbt_block_locations',
 	function ( array $locations ): array {
