@@ -24,28 +24,57 @@ a.page-title-action:empty {
 .acffb-checkbox-list {
 	columns: 2;
 	overflow-wrap: break-word;
+	margin-block-end: 0.15rem;
+	margin-block-start: 0.25rem;
 }
-.acffb-checkbox-list li {
+.acffb-checkbox-list li,
+.acffb-radio-list li {
 	display: flex;
 	gap: 0.2rem;
 }
-
-.acffb-checkbox-list li .checkbox {
+.acffb-checkbox-list li .checkbox,
+.acffb-radio-list li .radio {
 	align-items: center;
+	aspect-ratio: 1/1;
 	border: 1px dotted #333;
+	break-inside: avoid;
 	display: inline-flex;
 	height: 16px;
 	justify-content: center;
 	margin: 1px;
 	width: 16px;
-	break-inside: avoid;
 }
-.acffb-checkbox-list li.checked {
+.acffb-checkbox-list li.checked,
+.acffb-radio-list li.checked {
 	font-weight: bold;
 }
-.acffb-checkbox-list li.checked .checkbox {
+.acffb-checkbox-list li.checked .checkbox,
+.acffb-radio-list li.checked .radio {
 	border: 2px solid #000;
 	margin: 0;
+}
+
+.acffb-radio-list {
+	display: flex;
+	gap: 1rem;
+	margin-block-end: 0;
+	margin-block-start: 0.5rem;
+}
+.acffb-radio-list li .radio {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 100%;
+}
+.acffb-radio-list li .radio:before {
+	content: '';
+	line-height: 0;
+	position: relative;
+	top: -0.15rem;
+}
+.acffb-radio-list li.checked .radio:before {
+	content: '\2022';
+	font-size: 32px;
 }
 
 .acffb-sub-field {
