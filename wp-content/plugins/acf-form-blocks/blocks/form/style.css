@@ -49,9 +49,6 @@
 .acf-block-form > .acf-block-fieldset > * {
 	margin-block-start: 0.75rem;
 }
-.acf-block-form > .acf-block-fieldset > legend {
-	margin-block-end: 0.75rem;
-}
 
 :where(body .is-layout-flow) > *[hidden]:first-child + * {
 	margin-block-start: 0;
