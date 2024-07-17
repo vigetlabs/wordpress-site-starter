@@ -13,11 +13,11 @@ namespace ACFFormBlocks;
 class Notification {
 
 	/**
-	 * The Form.
+	 * The Form ID.
 	 *
-	 * @var Form
+	 * @var string
 	 */
-	protected Form $form;
+	protected string $form_id;
 
 	/**
 	 * Constructor.
@@ -25,7 +25,24 @@ class Notification {
 	 * @param Form $form The Form.
 	 */
 	public function __construct( Form $form ) {
-		$this->form = $form;
+		$this->form_id = $form->get_form_object()->get_id();
+
+		// Add the hooks.
+		$this->add_hooks();
+	}
+
+	private function add_hooks(): void {
+		// Process notifications on form submission.
+		add_action( 'acffb_process_submission', [ $this, 'process' ], 10 );
+	}
+
+	/**
+	 * Get the form instance.
+	 *
+	 * @return ?Form
+	 */
+	public function get_form(): ?Form {
+		return Form::get_instance( $this->form_id );
 	}
 
 	/**
@@ -53,12 +70,13 @@ class Notification {
 	 * @return void
 	 */
 	private function send_admin_email(): void {
-		$submission_url = $this->form->get_submission()->get_submission_url();
+		$form           = $this->get_form();
+		$submission_url = $form->get_submission()->get_submission_url();
 
-		$form_name = $this->form->get_form_object()->get_name();
+		$form_name = $form->get_form_object()->get_name();
 		$subject   = __( 'New Form Submission', 'acf-form-blocks' ) . ': ' . $form_name;
 		$body      = __( 'A new form submission has been received for the form', 'acf-blocks-toolkit' ) . ': ' . $form_name . '<br><br>';
-		$body     .= wp_json_encode( $this->form->get_submission()->get_data(), JSON_PRETTY_PRINT );
+		$body     .= wp_json_encode( $form->get_submission()->get_data(), JSON_PRETTY_PRINT );
 
 		if ( $submission_url ) {
 			$body .= '<br><br>';
@@ -80,10 +98,11 @@ class Notification {
 	 * @return void
 	 */
 	private function send_confirmation_email(): void {
-		$form_name = $this->form->get_form_object()->get_name();
+		$form      = $this->get_form();
+		$form_name = $form->get_form_object()->get_name();
 		$subject   = __( 'Form Submission Confirmation', 'acf-form-blocks' );
 		$body      = __( 'This is a confirmation that your submission has been received for the form', 'acf-blocks-toolkit' ) . ': ' . $form_name . '<br><br>';
-		$body     .= wp_json_encode( $this->form->get_submission()->get_data(), JSON_PRETTY_PRINT );
+		$body     .= wp_json_encode( $form->get_submission()->get_data(), JSON_PRETTY_PRINT );
 
 		$recipient = $this->get_confirmation_recipient();
 
@@ -96,7 +115,7 @@ class Notification {
 	 * @return string
 	 */
 	private function get_confirmation_recipient(): string {
-		foreach ( $this->form->get_form_object()->get_fields() as $field ) {
+		foreach ( $this->get_form()->get_form_object()->get_fields() as $field ) {
 			if ( 'input' === $field->get_block_name() && 'email' === $field->get_type() ) {
 				return $field->get_value();
 			}
@@ -111,10 +130,11 @@ class Notification {
 	 * @return void
 	 */
 	private function send_custom_email(): void {
-		$form_name = $this->form->get_form_object()->get_name();
+		$form      = $this->get_form();
+		$form_name = $form->get_form_object()->get_name();
 		$subject   = __( 'New Form Submission', 'acf-form-blocks' ) . ': ' . $form_name;
 		$body      = __( 'A new form submission has been received for the form', 'acf-blocks-toolkit' ) . ': ' . $form_name . '<br><br>';
-		$body     .= wp_json_encode( $this->form->get_submission()->get_data(), JSON_PRETTY_PRINT );
+		$body     .= wp_json_encode( $form->get_submission()->get_data(), JSON_PRETTY_PRINT );
 
 		$recipient = $this->get_custom_email();
 
@@ -127,7 +147,7 @@ class Notification {
 	 * @return bool
 	 */
 	public function is_admin_email_enabled(): bool {
-		return boolval( $this->form->get_form_object()->get_form_data( 'admin_email' ) );
+		return boolval( $this->get_form()->get_form_object()->get_form_data( 'admin_email' ) );
 	}
 
 	/**
@@ -136,7 +156,7 @@ class Notification {
 	 * @return bool
 	 */
 	public function is_confirmation_email_enabled(): bool {
-		return boolval( $this->form->get_form_object()->get_form_data( 'confirmation_email' ) );
+		return boolval( $this->get_form()->get_form_object()->get_form_data( 'confirmation_email' ) );
 	}
 
 	/**
@@ -145,7 +165,7 @@ class Notification {
 	 * @return bool
 	 */
 	public function is_custom_email_enabled(): bool {
-		return boolval( $this->form->get_form_object()->get_form_data( 'custom_email' ) );
+		return boolval( $this->get_form()->get_form_object()->get_form_data( 'custom_email' ) );
 	}
 
 	/**
@@ -154,7 +174,7 @@ class Notification {
 	 * @return string
 	 */
 	public function get_custom_email(): string {
-		return (string) $this->form->get_form_object()->get_form_data( 'email_recipient' );
+		return (string) $this->get_form()->get_form_object()->get_form_data( 'email_recipient' );
 	}
 
 	/**

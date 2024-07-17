@@ -38,7 +38,7 @@ class Checkbox extends Field {
 	 *
 	 * @return string
 	 */
-	public function get_value(): string {
+	public function get_value_attr(): string {
 		$custom_value = $this->get_field_data( 'checkbox_value', false );
 		$value        = $this->get_field_data( 'value', 1 );
 
@@ -56,10 +56,12 @@ class Checkbox extends Field {
 	 */
 	public function is_checked(): bool {
 		if ( ! $this->get_fieldset() ) {
-			return $this->get_value() === parent::get_value();
+			return $this->get_value_attr() === parent::get_value();
 		}
 
-		if ( in_array( $this->get_value(), $this->get_fieldset()->get_value(), true ) ) {
+		$values = $this->get_fieldset()->get_value() ?? [];
+
+		if ( in_array( $this->get_value(), $values, true ) ) {
 			return true;
 		}
 

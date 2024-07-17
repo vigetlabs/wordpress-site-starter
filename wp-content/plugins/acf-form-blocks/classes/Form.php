@@ -200,7 +200,7 @@ class Form {
 	}
 
 	/**
-	 * Get the form element form.
+	 * Get the form block element.
 	 *
 	 * @return array
 	 */
@@ -213,7 +213,7 @@ class Form {
 	 *
 	 * @return void
 	 */
-	private function preload_meta(): void {
+	public function preload_meta(): void {
 		add_filter(
 			'acf/pre_load_metadata',
 			function ( $null, $post_id, $name, $hidden ) {

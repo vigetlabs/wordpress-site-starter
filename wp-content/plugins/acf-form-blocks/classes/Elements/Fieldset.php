@@ -20,16 +20,6 @@ class Fieldset extends Field {
 	use ChildFields;
 
 	/**
-	 * Get the block template.
-	 *
-	 * @return array
-	 * @throws Exception
-	 */
-	public function get_value(): array {
-		return ! empty( $_REQUEST[ $this->get_name() ] ) ? $_REQUEST[ $this->get_name() ] : [];
-	}
-
-	/**
 	 * Render the input value.
 	 *
 	 * @param mixed $value Value to render.
@@ -45,19 +35,29 @@ class Fieldset extends Field {
 			return;
 		}
 
-		if ( ! empty( $this->is_checkbox_group() ) ) {
+		if ( $this->is_checkbox_group() ) {
 			$value = empty( $value ) ? [] : $value;
 
 			echo '<div class="text-input"><ul class="acffb-checkbox-list">';
+
+			/** @var Checkbox[] $children */
 			foreach ( $children as $child ) {
-				$checked = in_array( $child->get_value(), $value, true );
+				$checked   = in_array( $child->get_value_attr(), $value, true );
+				$label     = $child->get_value_attr();
+				$cbx_label = '';
+
+				if ( $label !== $child->get_label() ) {
+					$cbx_label = sprintf( ' <span class="cbx-label">(%s)</span>', esc_html( $child->get_label() ) );
+				}
+
 				printf(
 					'<li%s><span class="checkbox">%s</span>%s</li>',
 					$checked ? ' class="checked"' : '',
 					$checked ? '<span class="dashicons dashicons-saved"></span>' : '',
-					esc_html( $child->get_value() )
+					esc_html( $label ) . $cbx_label
 				);
 			}
+
 			echo '</ul></div>';
 			return;
 		}

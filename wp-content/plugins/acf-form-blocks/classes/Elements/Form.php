@@ -222,6 +222,22 @@ class Form {
 	}
 
 	/**
+	 * Update the field context manually.
+	 *
+	 * @return void
+	 */
+	public function update_field_context(): void {
+		$fields  = $this->get_all_fields();
+		$context = [
+			'acffb/form_id' => $this->get_id(),
+		];
+
+		foreach ( $fields as $field ) {
+			$field->set_context( $context );
+		}
+	}
+
+	/**
 	 * Check if the form has a field of a specific type.
 	 *
 	 * @param string $field_type
@@ -287,12 +303,6 @@ class Form {
 	 * @return mixed
 	 */
 	public function get_form_data( string $selector ): mixed {
-		$value = get_field( $selector );
-
-		if ( ! is_null( $value ) ) {
-			return $value;
-		}
-
 		$value = get_field( $selector, $this->get_acf_id() );
 
 		if ( ! is_null( $value ) ) {

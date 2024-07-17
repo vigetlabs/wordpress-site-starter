@@ -13,11 +13,11 @@ namespace ACFFormBlocks;
 class Validation {
 
 	/**
-	 * The Form.
+	 * The Form ID.
 	 *
-	 * @var Form
+	 * @var string
 	 */
-	protected Form $form;
+	protected string $form_id;
 
 	/**
 	 * Errors.
@@ -30,7 +30,16 @@ class Validation {
 	 * Constructor.
 	 */
 	public function __construct( Form $form ) {
-		$this->form = $form;
+		$this->form_id = $form->get_form_object()->get_id();
+	}
+
+	/**
+	 * Get the form instance.
+	 *
+	 * @return ?Form
+	 */
+	public function get_form(): ?Form {
+		return Form::get_instance( $this->form_id );
 	}
 
 	/**
@@ -43,26 +52,28 @@ class Validation {
 			return true;
 		}
 
-		if ( ! $this->form->get_submission()->has_submit() ) {
+		$form = $this->get_form();
+
+		if ( ! $form->get_submission()->has_submit() ) {
 			return false;
 		}
 
-		$fields = $this->form->get_form_object()->get_fields();
-		$data   = $this->form->get_submission()->get_data();
+		$fields = $form->get_form_object()->get_fields();
+		$data   = $form->get_submission()->get_data();
 
 		foreach ( $fields as $field ) {
 			if ( ! $field->is_required() ) {
 				continue;
 			}
 
-			if ( ! empty( $data['content'][ $field->get_name() ] ) ) {
+			if ( ! empty( $data['content'][ $field->get_name() ]['value'] ) ) {
 				continue;
 			}
 
 			$this->errors[] = $field->get_label() . ' ' . __( 'is required.', 'acf-form-blocks' );
 		}
 
-		$this->form->update_cache();
+		$form->update_cache();
 
 		return count( $this->errors ) > 0;
 	}
@@ -73,8 +84,9 @@ class Validation {
 	 * @return void
 	 */
 	public function render(): void {
-		if ( ! $this->form->get_submission()->is_processed() ) {
-			$block_id = $this->form->get_form_object()->get_id();
+		$form = $this->get_form();
+		if ( ! $form->get_submission()->is_processed() ) {
+			$block_id = $form->get_form_object()->get_id();
 
 			printf(
 				'<input
