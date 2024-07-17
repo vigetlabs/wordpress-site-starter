@@ -24,7 +24,7 @@
                 "number": "Number",
                 "password": "Password",
                 "file": "File\/Upload",
-                "datetime-local": "Date/Time",
+                "datetime-local": "Date\/Time",
                 "date": "Date",
                 "time": "Time",
                 "color": "Color Picker",
@@ -37,6 +37,26 @@
             "ui": 0,
             "ajax": 0,
             "placeholder": ""
+        },
+        {
+            "key": "field_669718dcc6615",
+            "label": "Default Value",
+            "name": "default_value",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         },
         {
             "key": "field_66886c0865624",
@@ -204,5 +224,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1720264980
+    "modified": 1721178350
 }

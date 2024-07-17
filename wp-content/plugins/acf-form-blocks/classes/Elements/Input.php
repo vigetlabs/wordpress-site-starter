@@ -18,6 +18,21 @@ use Exception;
 class Input extends Field {
 
 	/**
+	 * Get the default value.
+	 *
+	 * @return mixed
+	 */
+	public function get_default_value(): mixed {
+		$default = $this->get_field_data( 'default_value' );
+
+		if ( ! $default ) {
+			return parent::get_default_value();
+		}
+
+		return $default;
+	}
+
+	/**
 	 * Get the field input type.
 	 *
 	 * @return string

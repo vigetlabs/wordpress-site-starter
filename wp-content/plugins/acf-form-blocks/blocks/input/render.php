@@ -31,4 +31,10 @@ $inner = [
 	</label>
 
 	<input <?php block_attrs( $block, '', $field->get_attrs() ); ?> />
+
+	<?php
+	if ( is_admin() && 'hidden' === $field->get_input_type() ) {
+		printf( '<p><em>%s</em></p>', __( 'This field is hidden.', 'acf-form-blocks' ) );
+	}
+	?>
 </div>
