@@ -18,6 +18,7 @@
 	padding: 0.5rem 0.75rem;
 }
 
+.acf-block-form > .form-input.input-type-hidden,
 .acf-block-form *:not([data-block]) > .form-input.input-type-hidden {
 	display: none;
 }
