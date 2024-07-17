@@ -135,14 +135,25 @@ class Submission {
 		$this->data = [
 			'content' => [],
 			'meta'    => [
-				'_url'          => esc_url( $_SERVER['REQUEST_URI'] ),
-				'_ip'           => sanitize_text_field( $_SERVER['REMOTE_ADDR'] ),
-				'_agent'        => sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ),
-				'_method'       => sanitize_text_field( $_SERVER['REQUEST_METHOD'] ),
-				'_form_id'      => $this->form->get_form_object()->get_id(),
-				'_form_markup'  => $this->form->get_form_object()->get_form_markup(),
-				'_form_context' => $this->form->get_form_object()->get_form_context(),
-				'_post_id'      => get_queried_object_id(),
+				'_url'           => esc_url( $_SERVER['REQUEST_URI'] ),
+				'_ip'            => sanitize_text_field( $_SERVER['REMOTE_ADDR'] ),
+				'_agent'         => sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ),
+				'_method'        => sanitize_text_field( $_SERVER['REQUEST_METHOD'] ),
+				'_form_id'       => $this->form->get_form_object()->get_id(),
+				'_form_markup'   => $this->form->get_form_object()->get_form_markup(),
+				'_form_context'  => $this->form->get_form_object()->get_form_context(),
+				'_post_id'       => get_queried_object_id(),
+				'_confirmation'  => [
+					'type' => $this->form->get_confirmation()->get_type(),
+					'page' => $this->form->get_form_object()->get_form_data( 'page' ),
+					'url'  => $this->form->get_form_object()->get_form_data( 'custom_url' ),
+				],
+				'_notifications' => [
+					'admin'        => $this->form->get_notification()->is_admin_email_enabled(),
+					'confirmation' => $this->form->get_notification()->is_confirmation_email_enabled(),
+					'custom'       => $this->form->get_notification()->is_custom_email_enabled(),
+					'recipient'    => $this->form->get_notification()->get_custom_email(),
+				],
 			],
 		];
 

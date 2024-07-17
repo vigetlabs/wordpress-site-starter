@@ -89,6 +89,52 @@ class Submission {
 					'side'
 				);
 
+				add_meta_box(
+					'acffb_submission_confirmation',
+					__( 'Confirmation Details', 'acf-form-blocks' ),
+					function( \WP_Post $post ): void {
+						$meta = get_post_meta( $post->ID );
+
+						if ( empty( $meta['_confirmation'] ) ) {
+							printf(
+								'<p>%s</p>',
+								esc_html__( 'No data available.', 'acf-form-blocks' )
+							);
+							return;
+						}
+
+						$confirmation = $meta['_confirmation'][0];
+						$confirmation = unserialize( $confirmation );
+
+						$this->render_confirmation( $confirmation );
+					},
+					ACFFB_SUBMISSION_POST_TYPE,
+					'side'
+				);
+
+				add_meta_box(
+					'acffb_submission_notifications',
+					__( 'Notifications', 'acf-form-blocks' ),
+					function( \WP_Post $post ): void {
+						$meta = get_post_meta( $post->ID );
+
+						if ( empty( $meta['_notifications'] ) ) {
+							printf(
+								'<p>%s</p>',
+								esc_html__( 'No data available.', 'acf-form-blocks' )
+							);
+							return;
+						}
+
+						$notifications = $meta['_notifications'][0];
+						$notifications = unserialize( $notifications );
+
+						$this->render_notifications( $notifications );
+					},
+					ACFFB_SUBMISSION_POST_TYPE,
+					'side'
+				);
+
 				remove_meta_box( 'pageparentdiv', ACFFB_SUBMISSION_POST_TYPE, 'side' );
 			}
 		);
@@ -128,7 +174,14 @@ class Submission {
 	 */
 	private function render_submission_meta( array $meta ): void {
 		foreach ( $meta as $key => $value ) {
-			if ( in_array( $key, [ '_form_markup', '_form_context', '_edit_lock' ], true ) ) {
+			$excluded = [
+				'_form_markup',
+				'_form_context',
+				'_confirmation',
+				'_notifications',
+				'_edit_lock',
+			];
+			if ( in_array( $key, $excluded, true ) ) {
 				continue;
 			}
 
@@ -140,6 +193,57 @@ class Submission {
 				'<p><strong>%s:</strong> %s</p>',
 				esc_html( $label ),
 				esc_html( $value[0] )
+			);
+		}
+	}
+
+	/**
+	 * Render the confirmation data.
+	 *
+	 * @param array $confirmations Confirmations.
+	 *
+	 * @return void
+	 */
+	private function render_confirmation( array $confirmations ): void {
+		foreach ( $confirmations as $key => $value ) {
+			$label = ltrim( $key, '_' );
+			$label = ucwords( str_replace( '_', ' ', $label ) );
+			$label = str_replace( [ 'Id', 'Url', 'Ip' ], [ 'ID', 'URL', 'IP' ], $label );
+
+			printf(
+				'<p><strong>%s:</strong> %s</p>',
+				esc_html( $label ),
+				esc_html( $value )
+			);
+		}
+	}
+
+	/**
+	 * Render the notifications data.
+	 *
+	 * @param array $notifications Notifications.
+	 *
+	 * @return void
+	 */
+	private function render_notifications( array $notifications ): void {
+		foreach ( $notifications as $key => $value ) {
+			$label = ltrim( $key, '_' );
+			$label = ucwords( str_replace( '_', ' ', $label ) );
+
+			$bools = [
+				'admin',
+				'confirmation',
+				'custom',
+			];
+
+			if ( in_array( $key, $bools, true ) ) {
+				$value = $value ? __( 'Yes', 'acf-form-blocks' ) : __( 'No', 'acf-form-blocks' );
+			}
+
+			printf(
+				'<p><strong>%s:</strong> %s</p>',
+				esc_html( $label ),
+				esc_html( $value )
 			);
 		}
 	}
