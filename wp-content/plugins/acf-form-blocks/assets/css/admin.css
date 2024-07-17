@@ -53,6 +53,9 @@ a.page-title-action:empty {
 	border: 2px solid #000;
 	margin: 0;
 }
+.acffb-checkbox-list .cbx-label {
+	opacity: 0.75;
+}
 
 .acffb-radio-list {
 	display: flex;

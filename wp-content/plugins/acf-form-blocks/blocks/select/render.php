@@ -39,7 +39,8 @@ $has_selected = false;
 		<?php else : ?>
 			<?php
 			foreach ( $options as $option ) :
-				$selected = ! $has_selected ? selected( $option['value'], $field->get_value(), false ) : '';
+				$is_selected = is_array( $field->get_value() ) ? in_array( $option['value'], $field->get_value(), true ) : $option['value'] === $field->get_value();
+				$selected    = ! $has_selected || $field->is_multiple() ? selected( $is_selected, true, false ) : '';
 				if ( $selected ) :
 					$has_selected = true;
 				endif;

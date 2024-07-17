@@ -13,11 +13,11 @@ namespace ACFFormBlocks;
 class Confirmation {
 
 	/**
-	 * The Form.
+	 * The Form ID.
 	 *
-	 * @var Form
+	 * @var string
 	 */
-	protected Form $form;
+	protected string $form_id;
 
 	/**
 	 * Constructor.
@@ -25,7 +25,43 @@ class Confirmation {
 	 * @param Form $form The Form.
 	 */
 	public function __construct( Form $form ) {
-		$this->form = $form;
+		$this->form_id = $form->get_form_object()->get_id();
+
+		// Add the hooks.
+		$this->add_hooks();
+	}
+
+	/**
+	 * Add the hooks.
+	 *
+	 * @return void
+	 */
+	private function add_hooks(): void {
+		// Handle redirect.
+		add_action( 'acffb_process_submission', [ $this, 'handle_redirect' ], 999 );
+	}
+
+	/**
+	 * Get the form instance.
+	 *
+	 * @return ?Form
+	 */
+	public function get_form(): ?Form {
+		return Form::get_instance( $this->form_id );
+	}
+
+	/**
+	 * Handle the redirect.
+	 *
+	 * @return void
+	 */
+	public function handle_redirect(): void {
+		if ( 'redirect' !== $this->get_type() ) {
+			return;
+		}
+
+		wp_safe_redirect( $this->get_redirect() );
+		exit;
 	}
 
 	/**
@@ -34,7 +70,7 @@ class Confirmation {
 	 * @return string
 	 */
 	public function get_type(): string {
-		$confirmation = $this->form->get_form_object()->get_form_data( 'confirmation' );
+		$confirmation = $this->get_form()?->get_form_object()->get_form_data( 'confirmation' );
 
 		if ( ! $confirmation ) {
 			return 'message';
@@ -49,7 +85,7 @@ class Confirmation {
 	 * @return string
 	 */
 	public function get_message(): string {
-		$message = $this->form->get_form_object()->get_form_data( 'message' );
+		$message = $this->get_form()?->get_form_object()->get_form_data( 'message' );
 
 		if ( ! $message ) {
 			return __( 'Thank you for your submission.', 'acf-form-blocks' );
@@ -64,13 +100,14 @@ class Confirmation {
 	 * @return string
 	 */
 	public function get_redirect(): string {
-		$custom = $this->form->get_form_object()->get_form_data( 'custom_url' );
+		$form   = $this->get_form();
+		$custom = $form?->get_form_object()->get_form_data( 'custom_url' );
 
 		if ( $custom ) {
-			$redirect = $this->form->get_form_object()->get_form_data( 'redirect' );
+			$redirect = $form?->get_form_object()->get_form_data( 'redirect' );
 		} else {
-			$page     = $this->form->get_form_object()->get_form_data( 'page' );
-			$redirect = get_permalink( $page->ID );
+			$page     = $form?->get_form_object()->get_form_data( 'page' );
+			$redirect = $page ? get_permalink( $page->ID ) : false;
 		}
 
 		if ( ! $redirect ) {
@@ -86,17 +123,21 @@ class Confirmation {
 	 * @return void
 	 */
 	public function render(): void {
+		$form = $this->get_form();
 		?>
 		<div class="acffb-confirmation">
-			<?php if ( 'content' === $this->get_type() ) :
-				$page = $this->form->get_form_object()->get_form_data( 'page' );
-				echo apply_filters( 'the_content', $page->post_content );
-			else :
+			<?php if ( 'content' === $this->get_type() ) {
+				$page = $form?->get_form_object()->get_form_data( 'page' );
+				if ( $page ) {
+					$page = is_numeric( $page ) ? get_post( $page ) : $page;
+					echo apply_filters( 'the_content', $page?->post_content );
+				}
+			} else {
 				printf(
 					'<p>%s</p>',
-					wp_kses_post( $this->get_message() )
+					wp_kses_post($this->get_message())
 				);
-			endif;
+			}
 			?>
 		</div>
 		<?php

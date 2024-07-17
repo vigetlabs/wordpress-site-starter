@@ -165,6 +165,24 @@ class Field {
 	}
 
 	/**
+	 * Set the field context manually.
+	 *
+	 * @param array $new_context
+	 *
+	 * @return void
+	 */
+	public function set_context( array $new_context ): void {
+		$context = $this->get_context();
+
+		if ( empty( $context ) ) {
+			$this->context = $new_context;
+			return;
+		}
+
+		$this->context = array_merge( $context, $new_context );
+	}
+
+	/**
 	 * Get the form object.
 	 *
 	 * @return ?Form
@@ -290,17 +308,11 @@ class Field {
 	/**
 	 * Get the field value.
 	 *
-	 * @return string|array
+	 * @return mixed
 	 */
-	public function get_value(): string|array {
-		$value = $_REQUEST[ $this->get_name() ] ?? $this->get_default_value();
-
-		if ( is_array( $value ) ) {
-			return array_map( 'sanitize_text_field', $value );
-		}
-
-		$value = sanitize_text_field( $value );
-		return trim( $value );
+	public function get_value(): mixed {
+		$value = $this->get_form()->get_submission()->get_field_data( $this->get_name() );
+		return $value ?? $this->get_default_value();
 	}
 
 	/**
@@ -525,7 +537,7 @@ class Field {
 	 */
 	public function sanitize_input( mixed $input ): string|array|null {
 		if ( is_array( $input ) ) {
-			return array_map( 'sanitize_text_field', $input );
+			return array_map( [ $this, 'sanitize_input' ], $input );
 		}
 
 		if ( 'textarea' === $this->get_block_name() ) {

@@ -56,6 +56,12 @@ class Submission {
 	 */
 	public function __construct( Form $form ) {
 		$this->form = $form;
+
+		// Disable caching.
+		$this->submission_nocache_headers();
+
+		// Save the form data
+		$this->save_submission();
 	}
 
 	/**
@@ -88,11 +94,41 @@ class Submission {
 	}
 
 	/**
+	 * Prepare for submission.
+	 *
+	 * @return void
+	 */
+	private function prepare_submission(): void {
+		// Disable caching.
+		$this->set_nocache_headers();
+
+		// Start Session
+		$this->start_session();
+	}
+
+	/**
+	 * Start the session.
+	 *
+	 * @return void
+	 */
+	private function start_session(): void {
+		if ( headers_sent() ) {
+			return;
+		}
+
+		if ( ! session_id() ) {
+			session_start();
+		}
+	}
+
+	/**
 	 * Process the form submission.
 	 *
 	 * @return void
 	 */
 	public function process(): void {
+		$this->prepare_submission();
+
 		if ( $this->is_processed() ) {
 			return;
 		}
@@ -106,19 +142,53 @@ class Submission {
 		}
 
 		$this->is_processed = true;
+		$this->form->get_notification();
+		$this->form->get_confirmation();
 		$this->form->update_cache();
 
 		do_action( 'acffb_process_submission', $this );
-		$this->save();
+	}
 
-		$this->form->get_notification()->process();
+	/**
+	 * Hook during the submission to no cache headers.
+	 *
+	 * @return void
+	 */
+	public function submission_nocache_headers(): void {
+		add_action(
+			'acffb_process_submission',
+			function () {
+				$this->set_nocache_headers();
+			},
+			2
+		);
+	}
 
-		if ( 'redirect' !== $this->form->get_confirmation()->get_type() ) {
+	/**
+	 * Set the no cache headers.
+	 *
+	 * @return void
+	 */
+	private function set_nocache_headers(): void {
+		if ( headers_sent() ) {
 			return;
 		}
 
-		wp_safe_redirect( $this->form->get_confirmation()->get_redirect() );
-		exit;
+		header( 'Cache-Control: no-cache, no-store, must-revalidate, max-age=0' );
+		header( 'Cache-Control: post-check=0, pre-check=0', false );
+		header( 'Pragma: no-cache' );
+	}
+
+	/**
+	 * Get the field data.
+	 *
+	 * @param string $field_name The Field Name.
+	 *
+	 * @return mixed
+	 */
+	public function get_field_data( string $field_name ): mixed {
+		$data = $this->get_data();
+		return $data['content'][ $field_name ]['value'] ?? null;
 	}
 
 	/**
@@ -204,7 +274,7 @@ class Submission {
 			return null;
 		}
 
-		$user_input = ! is_array( $_REQUEST[ $field->get_name() ] ) ? trim( $_REQUEST[ $field->get_name() ] ) : $_REQUEST[ $field->get_name() ];
+		$user_input = ! is_array( $_REQUEST[ $field->get_name() ] ) ? trim( $_REQUEST[ $field->get_name() ] ) : array_filter( $_REQUEST[ $field->get_name() ] );
 
 		if ( empty( $user_input ) && '0' !== $user_input ) {
 			return null;
@@ -266,34 +336,40 @@ class Submission {
 	 *
 	 * @return void
 	 */
-	protected function save(): void {
-		$form_name      = $this->form->get_form_object()->get_name();
-		$form_data      = $this->get_data();
-		$submission_key = md5( serialize( $form_data['content'] ) );
-		$form_post      = apply_filters(
-			'acffb_submission_post',
-			[
-				'post_type'    => ACFFB_SUBMISSION_POST_TYPE,
-				'post_title'   => $form_name  . ' ' . __( 'Submission', 'acf-form-blocks' ),
-				'post_status'  => 'publish',
-				'post_name'    => sanitize_title( $form_name . ' ' . $submission_key ),
-				'post_content' => wp_json_encode(  $form_data['content'] ),
-			]
+	public function save_submission(): void {
+		add_action(
+			'acffb_process_submission',
+			function () {
+				$form_name      = $this->form->get_form_object()->get_name();
+				$form_data      = $this->get_data();
+				$submission_key = md5( serialize( $form_data['content'] ) );
+				$form_post      = apply_filters(
+					'acffb_submission_post',
+					[
+						'post_type'    => ACFFB_SUBMISSION_POST_TYPE,
+						'post_title'   => $form_name  . ' ' . __( 'Submission', 'acf-form-blocks' ),
+						'post_status'  => 'publish',
+						'post_name'    => sanitize_title( $form_name . ' ' . $submission_key ),
+						'post_content' => wp_json_encode(  $form_data['content'] ),
+					]
+				);
+
+				$submission_id = wp_insert_post( $form_post );
+
+				if ( ! $submission_id ) {
+					return;
+				}
+
+				$this->submission_id = $submission_id;
+
+				foreach ( $form_data['meta'] as $meta_key => $meta_value ) {
+					update_post_meta( $submission_id, $meta_key, $meta_value );
+				}
+
+				$this->form->update_cache();
+			},
+			5
 		);
-
-		$submission_id = wp_insert_post( $form_post );
-
-		if ( ! $submission_id ) {
-			return;
-		}
-
-		$this->submission_id = $submission_id;
-
-		foreach ( $form_data['meta'] as $meta_key => $meta_value ) {
-			update_post_meta( $submission_id, $meta_key, $meta_value );
-		}
-
-		$this->form->update_cache();
 	}
 
 	/**

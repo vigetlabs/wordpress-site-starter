@@ -10,13 +10,13 @@
  */
 
 use ACFFormBlocks\Elements\Field;
-use ACFFormBlocks\Utilities\BlockTemplate\Block;
-use ACFFormBlocks\Utilities\BlockTemplate\Template;
+use ACFFormBlocks\Elements\Textarea;
 
+/** @var Textarea $field */
 $field = Field::factory( $block, $context, $wp_block );
 
 $inner = [
-	'template' => ( new Template( new Block( 'core/paragraph', [ 'placeholder' => __( 'Field Label...', 'acf-form-blocks' ) ] ) ) )->get(),
+	'template' => $field->get_template(),
 ];
 ?>
 <div class="form-input type-textarea">

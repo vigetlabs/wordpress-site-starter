@@ -7,7 +7,6 @@
 
 namespace ACFFormBlocks\Admin;
 
-use ACFFormBlocks\Elements\Field;
 use ACFFormBlocks\Form;
 
 /**
@@ -16,17 +15,10 @@ use ACFFormBlocks\Form;
 class Submission {
 
 	/**
-	 * The Form instance.
-	 *
-	 * @var ?Form
-	 */
-	private ?Form $form = null;
-
-	/**
 	 * Submission constructor.
 	 */
 	public function __construct() {
-		$this->content_meta_box();
+		$this->meta_boxes();
 	}
 
 	/**
@@ -37,17 +29,21 @@ class Submission {
 	private function get_form(): ?Form {
 		$markup  = get_post_meta( get_the_ID(), '_form_markup', true );
 		$context = get_post_meta( get_the_ID(), '_form_context', true );
+		$form    = Form::get_instance( null, $markup, $context );
 
-		return Form::get_instance( null, $markup, $context );
+		$form->preload_meta();
+		$form->get_form_object()->update_field_context();
+		$form->update_cache();
+
+		return $form;
 	}
 
 	/**
-	 * Add the content meta box to display the form submission.
+	 * Add the meta boxes to display the form submission data.
 	 *
 	 * @return void
 	 */
-	private function content_meta_box(): void {
-		// Add meta box for submission data.
+	private function meta_boxes(): void {
 		add_action(
 			'add_meta_boxes',
 			function() {
@@ -154,10 +150,11 @@ class Submission {
 			<tbody>
 				<?php foreach ( $data as $key => $content ) :
 					$field = $form->get_form_object()->get_field_by_id( $key );
+					$label = $field->get_field_label() ?: $content['label'];
 					?>
 					<tr id="<?php echo esc_attr( $key ); ?>">
-						<th scope="row" title="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $content['label'] ); ?></th>
-						<td><?php $field->render_value( $content['value'], $form ); ?></td>
+						<th scope="row" title="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></th>
+						<td title="<?php echo esc_attr( $field->get_label() ); ?>"><?php $field->render_value( $content['value'], $form ); ?></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>

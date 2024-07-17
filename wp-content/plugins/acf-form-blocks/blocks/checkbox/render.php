@@ -21,7 +21,7 @@ $inner = [
 <div <?php block_attrs( $block, 'form-input type-checkbox' ); ?>>
 	<input
 		type="checkbox"
-		value="<?php echo esc_attr( $field->get_value() ); ?>"
+		value="<?php echo esc_attr( $field->get_value_attr() ); ?>"
 		id="<?php echo esc_attr( $field->get_id_attr() ); ?>"
 		name="<?php echo esc_attr( $field->get_name_attr() ); ?>"
 		<?php checked( $field->is_checked() ); ?>
