@@ -346,7 +346,7 @@ class Submission {
 				$form_post      = apply_filters(
 					'acffb_submission_post',
 					[
-						'post_type'    => ACFFB_SUBMISSION_POST_TYPE,
+						'post_type'    => Admin\Submission::POST_TYPE,
 						'post_title'   => $form_name  . ' ' . __( 'Submission', 'acf-form-blocks' ),
 						'post_status'  => 'publish',
 						'post_name'    => sanitize_title( $form_name . ' ' . $submission_key ),
