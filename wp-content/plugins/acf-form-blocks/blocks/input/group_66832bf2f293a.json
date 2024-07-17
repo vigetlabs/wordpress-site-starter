@@ -23,7 +23,12 @@
                 "tel": "Phone",
                 "number": "Number",
                 "password": "Password",
-                "file": "File\/Upload"
+                "file": "File\/Upload",
+                "datetime-local": "Date/Time",
+                "date": "Date",
+                "time": "Time",
+                "color": "Color Picker",
+                "hidden": "Hidden"
             },
             "default_value": "text",
             "return_format": "value",
