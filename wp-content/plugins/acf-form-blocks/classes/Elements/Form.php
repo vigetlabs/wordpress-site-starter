@@ -299,10 +299,11 @@ class Form {
 	 * Get the form data.
 	 *
 	 * @param string $selector Field selector.
+	 * @param mixed  $default Default value.
 	 *
 	 * @return mixed
 	 */
-	public function get_form_data( string $selector ): mixed {
+	public function get_form_data( string $selector, mixed $default = null ): mixed {
 		$value = get_field( $selector, $this->get_acf_id() );
 
 		if ( ! is_null( $value ) ) {
@@ -314,7 +315,7 @@ class Form {
 			return $this->block['data'][ $selector ];
 		}
 
-		return null;
+		return $default;
 	}
 
 	/**
@@ -360,5 +361,14 @@ class Form {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Should we save the form data?
+	 *
+	 * @return bool
+	 */
+	public function save_data_enabled(): bool {
+		return boolval( $this->get_form_data( 'save_data', true ) );
 	}
 }

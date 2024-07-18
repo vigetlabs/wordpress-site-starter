@@ -263,6 +263,27 @@ class Submission {
 	}
 
 	/**
+	 * Get the form ID.
+	 *
+	 * @param ?int $post_id The post ID.
+	 *
+	 * @return ?string
+	 */
+	private function get_form_id( ?int $post_id = null ): ?string {
+		if ( ! $post_id ) {
+			$post_id = get_the_ID();
+		}
+
+		$form_id = get_post_meta( $post_id, '_form_id', true );
+
+		if ( ! $form_id ) {
+			return null;
+		}
+
+		return $form_id;
+	}
+
+	/**
 	 * Add the meta boxes to display the form submission data.
 	 *
 	 * @return void

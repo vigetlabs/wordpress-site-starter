@@ -7,6 +7,8 @@
 
 namespace ACFFormBlocks;
 
+use ACFFormBlocks\Elements\Field;
+
 /**
  * Submission Validation
  */
@@ -43,6 +45,20 @@ class Validation {
 	}
 
 	/**
+	 * Add an error.
+	 *
+	 * @param Field $field
+	 * @param string $error_message
+	 *
+	 * @return void
+	 */
+	public function add_error( Field $field, string $error_message ): void {
+		$this->errors[ $field->get_id() ] = $error_message;
+
+		$this->get_form()->update_cache();
+	}
+
+	/**
 	 * Check if the form has errors.
 	 *
 	 * @return bool
@@ -70,10 +86,8 @@ class Validation {
 				continue;
 			}
 
-			$this->errors[] = $field->get_label() . ' ' . __( 'is required.', 'acf-form-blocks' );
+			$this->add_error( $field, $field->get_label() . ' ' . __( 'is required.', 'acf-form-blocks' ) );
 		}
-
-		$form->update_cache();
 
 		return count( $this->errors ) > 0;
 	}

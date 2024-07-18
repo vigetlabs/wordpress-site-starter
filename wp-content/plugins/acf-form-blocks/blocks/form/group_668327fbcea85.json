@@ -63,6 +63,26 @@
             "endpoint": 0
         },
         {
+            "key": "field_66992c02d61ed",
+            "label": "Save to Database?",
+            "name": "save_data",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
             "key": "field_66832f771e208",
             "label": "Confirmation",
             "name": "confirmation",
@@ -342,5 +362,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1720278960
+    "modified": 1721314343
 }

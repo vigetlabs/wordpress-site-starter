@@ -59,7 +59,7 @@ class Checkbox extends Field {
 			return $this->get_value_attr() === parent::get_value();
 		}
 
-		$values = $this->get_fieldset()->get_value() ?? [];
+		$values = $this->get_fieldset()->get_value() ?: [];
 
 		if ( in_array( $this->get_value(), $values, true ) ) {
 			return true;
