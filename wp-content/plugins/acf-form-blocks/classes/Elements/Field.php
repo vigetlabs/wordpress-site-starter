@@ -312,7 +312,7 @@ class Field {
 	 */
 	public function get_value(): mixed {
 		$value = $this->get_form()->get_submission()->get_field_data( $this->get_name() );
-		return $value ?? $this->get_default_value();
+		return $value ?: $this->get_default_value();
 	}
 
 	/**
@@ -532,12 +532,28 @@ class Field {
 	 * Sanitize input from the field
 	 *
 	 * @param mixed $input
+	 * @param ?Form $form
 	 *
-	 * @return string|array|null
+	 * @return string|array
 	 */
-	public function sanitize_input( mixed $input ): string|array|null {
+	public function sanitize_input( mixed $input = null, ?Form $form = null ): string|array {
+		if ( is_null( $input ) ) {
+			if ( ! isset( $_REQUEST[ $this->get_name() ] ) ) {
+				return '';
+			}
+
+			$input = ! is_array( $_REQUEST[ $this->get_name() ] ) ? trim( $_REQUEST[ $this->get_name() ] ) : array_filter( $_REQUEST[ $this->get_name() ] );
+		}
+
+		if ( empty( $input ) && '0' !== $input ) {
+			return '';
+		}
+
 		if ( is_array( $input ) ) {
-			return array_map( [ $this, 'sanitize_input' ], $input );
+			return array_map(
+				fn( $item ) => $this->sanitize_input( $item, $form ),
+				$input
+			);
 		}
 
 		if ( 'textarea' === $this->get_block_name() ) {

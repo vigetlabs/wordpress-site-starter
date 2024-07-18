@@ -32,8 +32,8 @@ trait Options {
 
 			$value = $option['custom'] ? $option['value'] : $option['label'];
 
-			if ( $option['default'] && ! $this->default_value ) {
-				$this->default_value = $value;
+			if ( $option['default'] && ! $this->get_default_value() ) {
+				$this->set_default_value( $value );
 			}
 
 			$options[] = [

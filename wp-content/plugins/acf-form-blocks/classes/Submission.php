@@ -244,13 +244,8 @@ class Submission {
 		foreach ( $fields as $field ) {
 			$data = [
 				'label' => $field->get_field_label(),
+				'value' => $field->sanitize_input( null, $this->form ),
 			];
-
-			if ( 'input' === $field->get_block_name() && 'file' === $field->get_type() ) {
-				$data['value'] = $this->handle_upload( $field );
-			} else {
-				$data['value'] = $this->sanitize_input( $field );
-			}
 
 			$this->data['content'][ $field->get_name() ] = $data;
 		}
@@ -263,75 +258,6 @@ class Submission {
 	}
 
 	/**
-	 * Sanitize the input.
-	 *
-	 * @param Field $field The Field.
-	 *
-	 * @return string|array|null
-	 */
-	private function sanitize_input( Field $field ): string|array|null {
-		if ( ! isset( $_REQUEST[ $field->get_name() ] ) ) {
-			return null;
-		}
-
-		$user_input = ! is_array( $_REQUEST[ $field->get_name() ] ) ? trim( $_REQUEST[ $field->get_name() ] ) : array_filter( $_REQUEST[ $field->get_name() ] );
-
-		if ( empty( $user_input ) && '0' !== $user_input ) {
-			return null;
-		}
-
-		return $field->sanitize_input( $user_input );
-	}
-
-	/**
-	 * Handle the file upload.
-	 *
-	 * @param Field $field The Field.
-	 *
-	 * @return ?array
-	 */
-	private function handle_upload( Field $field ): ?array {
-		$upload = $_FILES[ $field->get_name() ] ?? null;
-
-		if ( ! $upload ) {
-			return null;
-		}
-
-		$upload_dir  = wp_upload_dir();
-		$folder_path = '/form-submissions';
-		$upload_path = $upload_dir['basedir'] . $folder_path;
-
-		// Make sure root directory is protected.
-		if ( ! is_dir( $upload_path ) ) {
-			wp_mkdir_p( $upload_path );
-			file_put_contents( $upload_path . '/index.php', "<?php // Silence is golden.\n" );
-		}
-
-		$form_dir     = '/' . $this->form->get_form_object()->get_id();
-		$folder_path .= $form_dir;
-		$upload_path .= $form_dir;
-
-		// Make sure upload directory is protected.
-		if ( ! is_dir( $upload_path ) ) {
-			wp_mkdir_p( $upload_path );
-			file_put_contents( $upload_path . '/index.php', "<?php // Silence is golden.\n" );
-		}
-
-		$upload_name  = wp_unique_filename( $upload_path, $upload['name'] );
-		$folder_path .= '/' . $upload_name;
-		$upload_path .= '/' . $upload_name;
-
-		if ( ! move_uploaded_file( $upload['tmp_name'], $upload_path ) ) {
-			return null;
-		}
-
-		return [
-			'path' => $upload_path,
-			'url'  => $upload_dir['baseurl'] . $folder_path,
-		];
-	}
-
-	/**
 	 * Save the form data.
 	 *
 	 * @return void
@@ -340,6 +266,10 @@ class Submission {
 		add_action(
 			'acffb_process_submission',
 			function () {
+				if ( ! $this->form->get_form_object()->save_data_enabled() ) {
+					return;
+				}
+
 				$form_name      = $this->form->get_form_object()->get_name();
 				$form_data      = $this->get_data();
 				$submission_key = md5( serialize( $form_data['content'] ) );

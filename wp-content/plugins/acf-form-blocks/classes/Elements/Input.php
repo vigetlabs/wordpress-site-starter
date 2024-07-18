@@ -7,7 +7,6 @@
 
 namespace ACFFormBlocks\Elements;
 
-use ACFFormBlocks\Form;
 use ACFFormBlocks\Utilities\BlockTemplate\Block;
 use ACFFormBlocks\Utilities\BlockTemplate\Template;
 use Exception;
@@ -30,6 +29,15 @@ class Input extends Field {
 		}
 
 		return $default;
+	}
+
+	/**
+	 * Get the field value.
+	 *
+	 * @return mixed
+	 */
+	public function get_value_attr(): mixed {
+		return parent::get_value();
 	}
 
 	/**
@@ -78,7 +86,7 @@ class Input extends Field {
 		$attrs['data-supports-jsx'] = null;
 
 		$attrs['type']  = $this->get_input_type();
-		$attrs['value'] = $this->get_value();
+		$attrs['value'] = $this->get_value_attr();
 
 		if ( $this->get_maxlength() ) {
 			$attrs['maxlength'] = $this->get_maxlength();
@@ -106,26 +114,5 @@ class Input extends Field {
 		}
 
 		return $attrs;
-	}
-
-	/**
-	 * Render the input value.
-	 *
-	 * @param mixed $value Value to render.
-	 * @param Form $form Form object.
-	 *
-	 * @return void
-	 */
-	public function render_value( mixed $value, Form $form ): void {
-		if ( 'file' !== $this->get_input_type() || empty( $value ) ) {
-			parent::render_value( $value, $form );
-			return;
-		}
-
-		printf(
-			'<div class="text-input"><a href="%s" target="_blank" rel="noopener">%s</a></div>',
-			esc_attr( $value['url'] ),
-			esc_html__( 'View File', 'acf-form-blocks' )
-		);
 	}
 }
