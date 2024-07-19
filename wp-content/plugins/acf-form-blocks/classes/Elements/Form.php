@@ -26,6 +26,27 @@ class Form {
 	protected array $block;
 
 	/**
+	 * The Form ID.
+	 *
+	 * @var ?string
+	 */
+	protected ?string $form_id = null;
+
+	/**
+	 * The Form Name.
+	 *
+	 * @var ?string
+	 */
+	protected ?string $form_name = null;
+
+	/**
+	 * The Pattern ID.
+	 *
+	 * @var ?int
+	 */
+	protected ?int $pattern_id = null;
+
+	/**
 	 * The Form markup from Gutenberg.
 	 *
 	 * @var string
@@ -57,6 +78,14 @@ class Form {
 		$this->block   = $block;
 		$this->markup  = $markup;
 		$this->context = $context;
+
+		if ( ! empty( $block['block_id'] ) ) {
+			$this->form_id = FormObject::prefix_id($block['block_id'] );
+		}
+
+		if ( ! empty( $block['pattern_id'] ) ) {
+			$this->pattern_id = intval( $block['pattern_id'] );
+		}
 	}
 
 	/**
@@ -119,8 +148,7 @@ class Form {
 			return get_block_id( $this->block, true );
 		}
 
-		$block_name = str_replace( '/', '_', $this->block['name'] );
-		return $block_name . '_' . $this->block['block_id'];
+		return FormObject::prefix_id( $this->block['block_id'] );
 	}
 
 	/**
@@ -133,8 +161,7 @@ class Form {
 			return get_block_id( $this->block, true );
 		}
 
-		$block_name = str_replace( '/', '_', $this->block['name'] );
-		return $block_name . '_' . $this->block['block_id'];
+		return FormObject::prefix_id( $this->block['block_id'] );
 	}
 
 	/**
@@ -152,7 +179,33 @@ class Form {
 	 * @return string
 	 */
 	public function get_name(): string {
-		return $this->get_form_meta( 'name' ) ?: get_the_title();
+		if ( $this->form_name ) {
+			return $this->form_name;
+		}
+
+		if ( $this->get_pattern_id() ) {
+			$pattern_title = get_the_title( $this->get_pattern_id() );
+			if ( $pattern_title ) {
+				return $pattern_title;
+			}
+		}
+
+		if ( $this->get_form_meta( 'name' ) ) {
+			return $this->get_form_meta( 'name' );
+		}
+
+		return get_the_title();
+	}
+
+	/**
+	 * Set the form name.
+	 *
+	 * @param string $form_name
+	 *
+	 * @return void
+	 */
+	public function set_name( string $form_name ): void {
+		$this->form_name = $form_name;
 	}
 
 	/**
@@ -170,7 +223,7 @@ class Form {
 	 * @param string $content
 	 * @param array  $context
 	 *
-	 * @return array
+	 * @return Field[]
 	 */
 	public function get_fields( string $content = '', array $context = [] ): array {
 		$all_fields   = $this->get_all_fields( $content, $context );
@@ -198,8 +251,12 @@ class Form {
 			return $this->fields;
 		}
 
+		if ( ! $context ) {
+			$context = $this->get_form_context() ?: [ 'postId' => get_the_ID(), 'postType' => get_post_type() ];
+		}
+
 		if ( ! $content ) {
-			$content = $this->get_form_markup() ?: get_the_content();
+			$content = $this->get_form_markup() ?: FormObject::get_form_content( $context, $this->get_form_id() );
 		}
 
 		if ( ! $content ) {
@@ -212,11 +269,7 @@ class Form {
 			return [];
 		}
 
-		if ( ! $context ) {
-			$context = $this->get_form_context() ?: [ 'postId' => get_the_ID(), 'postType' => get_post_type() ];
-		}
-
-		$this->fields = $this->extract_field_blocks( $blocks, $context );
+		$this->fields = $this->prepare_field_blocks( $blocks, $context );
 
 		return $this->fields;
 	}
@@ -246,21 +299,37 @@ class Form {
 	 * @return bool
 	 */
 	public function has_field_type( string $field_type, string $sub_type = '' ): bool {
+		$types = $this->get_fields_by_type( $field_type, $sub_type );
+
+		return count( $types ) > 0;
+	}
+
+	/**
+	 * Get all fields by type
+	 *
+	 * @param string $field_type
+	 * @param string $sub_type
+	 *
+	 * @return array
+	 */
+	public function get_fields_by_type( string $field_type, string $sub_type = '' ): array {
 		$fields = $this->get_fields();
 
 		if ( ! str_starts_with( $field_type, 'acf/' ) ) {
 			$field_type = 'acf/' . $field_type;
 		}
 
+		$types = [];
+
 		foreach ( $fields as $field ) {
 			if ( $field->get_block_name( true ) === $field_type ) {
 				if ( ! $sub_type || $sub_type === $field->get_type() ) {
-					return true;
+					$types[ $field->get_id() ] = $field;
 				}
 			}
 		}
 
-		return false;
+		return $types;
 	}
 
 	/**
@@ -271,7 +340,7 @@ class Form {
 	 *
 	 * @return array
 	 */
-	private function extract_field_blocks( array $blocks, array $context ): array {
+	private function prepare_field_blocks( array $blocks, array $context ): array {
 		$fields   = [];
 		$filtered = Blocks::get_blocks_by_type( $blocks, FormObject::ALL_FIELD_TYPES );
 
@@ -370,5 +439,23 @@ class Form {
 	 */
 	public function save_data_enabled(): bool {
 		return boolval( $this->get_form_data( 'save_data', true ) );
+	}
+
+	/**
+	 * Get the Form ID.
+	 *
+	 * @return ?string
+	 */
+	public function get_form_id(): ?string {
+		return $this->form_id;
+	}
+
+	/**
+	 * Get the pattern ID if any.
+	 *
+	 * @return ?int
+	 */
+	public function get_pattern_id(): ?int {
+		return $this->pattern_id;
 	}
 }

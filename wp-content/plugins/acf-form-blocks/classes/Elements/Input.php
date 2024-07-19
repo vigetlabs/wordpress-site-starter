@@ -107,7 +107,7 @@ class Input extends Field {
 				if ( $this->get_min() ) {
 					$attrs['min'] = $this->get_min();
 				}
-				if ( $this->field->get_max() ) {
+				if ( $this->get_max() ) {
 					$attrs['max'] = $this->get_max();
 				}
 			}

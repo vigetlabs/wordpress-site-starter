@@ -98,13 +98,17 @@ class Notification {
 	 * @return void
 	 */
 	private function send_confirmation_email(): void {
+		$recipient = $this->get_confirmation_recipient();
+
+		if ( ! $recipient ) {
+			return;
+		}
+
 		$form      = $this->get_form();
 		$form_name = $form->get_form_object()->get_name();
 		$subject   = __( 'Form Submission Confirmation', 'acf-form-blocks' );
 		$body      = __( 'This is a confirmation that your submission has been received for the form', 'acf-blocks-toolkit' ) . ': ' . $form_name . '<br><br>';
 		$body     .= wp_json_encode( $form->get_submission()->get_data(), JSON_PRETTY_PRINT );
-
-		$recipient = $this->get_confirmation_recipient();
 
 		$this->send_email( $recipient, $subject, $body );
 	}
@@ -115,13 +119,22 @@ class Notification {
 	 * @return string
 	 */
 	private function get_confirmation_recipient(): string {
-		foreach ( $this->get_form()->get_form_object()->get_fields() as $field ) {
-			if ( 'input' === $field->get_block_name() && 'email' === $field->get_type() ) {
-				return $field->get_value();
+		$emails = $this->get_form()->get_form_object()->get_fields_by_type( 'input', 'email' );
+
+		if ( ! $emails ) {
+			return '';
+		}
+
+		$recipients = '';
+
+		foreach ( $emails as $email ) {
+			$recipient = $email->get_value_attr();
+			if ( $recipient ) {
+				$recipients .= $recipients ? ',' . $recipient : $recipient;
 			}
 		}
 
-		return '';
+		return $recipients;
 	}
 
 	/**

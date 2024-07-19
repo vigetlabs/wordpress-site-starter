@@ -212,6 +212,7 @@ class Submission {
 				'_form_id'       => $this->form->get_form_object()->get_id(),
 				'_form_markup'   => $this->form->get_form_object()->get_form_markup(),
 				'_form_context'  => $this->form->get_form_object()->get_form_context(),
+				'_form_name'     => $this->form->get_form_object()->get_name(),
 				'_post_id'       => get_queried_object_id(),
 				'_confirmation'  => [
 					'type' => $this->form->get_confirmation()->get_type(),

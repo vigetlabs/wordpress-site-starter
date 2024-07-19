@@ -79,7 +79,12 @@ class Block {
 			'template_redirect',
 			function() {
 				if ( ! $this->form ) {
-					$this->form = Form::get_instance();
+					$posted_form = $_REQUEST[ Form::HIDDEN_FORM_ID ] ?? null;
+					if ( ! $posted_form ) {
+						return;
+					}
+
+					$this->form = Form::get_instance( $posted_form );
 
 					// Skip if we don't have a form.
 					if ( ! $this->form ) {

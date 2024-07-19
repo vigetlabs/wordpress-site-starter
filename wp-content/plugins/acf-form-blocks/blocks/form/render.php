@@ -8,7 +8,9 @@
  * @package ACFFormBlocks
  */
 
-$form = ACFFormBlocks\Form::get_instance( $block, '', $context );
+use ACFFormBlocks\Form;
+
+$form = Form::get_instance( $block, '', $context );
 
 wp_enqueue_script( 'acfformblocks-conditional-logic' );
 
