@@ -25,7 +25,7 @@
       "name": "input-email",
       "icon": "email",
       "title": "Email Address",
-      "scope": ["inserter"],
+      "scope": ["inserter", "transform"],
       "innerBlocks": [ [ "core/paragraph", { "content": "Email Address" } ] ],
       "attributes": {
         "data": {
@@ -38,7 +38,7 @@
       "name": "input-url",
       "icon": "admin-links",
       "title": "Website Field",
-      "scope": ["inserter"],
+      "scope": ["inserter", "transform"],
       "innerBlocks": [ [ "core/paragraph", { "content": "Website" } ] ],
       "attributes": {
         "data": {
@@ -51,7 +51,7 @@
       "name": "input-tel",
       "icon": "smartphone",
       "title": "Phone Number",
-      "scope": ["inserter"],
+      "scope": ["inserter", "transform"],
       "innerBlocks": [ [ "core/paragraph", { "content": "Phone Number" } ] ],
       "attributes": {
         "data": {
@@ -64,7 +64,7 @@
       "name": "input-number",
       "icon": "edit",
       "title": "Number Field",
-      "scope": ["inserter"],
+      "scope": ["inserter", "transform"],
       "innerBlocks": [ [ "core/paragraph", { "content": "Number" } ] ],
       "attributes": {
         "data": {
@@ -77,7 +77,7 @@
       "name": "input-hidden",
       "icon": "hidden",
       "title": "Hidden Field",
-      "scope": ["inserter"],
+      "scope": ["inserter", "transform"],
       "innerBlocks": [ [ "core/paragraph", { "content": "Hidden" } ] ],
       "attributes": {
         "data": {
@@ -90,7 +90,7 @@
       "name": "input-date",
       "icon": "calendar-alt",
       "title": "Date Field",
-      "scope": ["inserter"],
+      "scope": ["inserter", "transform"],
       "innerBlocks": [ [ "core/paragraph", { "content": "Date" } ] ],
       "attributes": {
         "data": {
@@ -103,7 +103,7 @@
       "name": "input-time",
       "icon": "clock",
       "title": "Time Field",
-      "scope": ["inserter"],
+      "scope": ["inserter", "transform"],
       "innerBlocks": [ [ "core/paragraph", { "content": "Time" } ] ],
       "attributes": {
         "data": {
@@ -116,7 +116,7 @@
       "name": "input-color",
       "icon": "color-picker",
       "title": "Color Picker",
-      "scope": ["inserter"],
+      "scope": ["inserter", "transform"],
       "innerBlocks": [ [ "core/paragraph", { "content": "Pick a color" } ] ],
       "attributes": {
         "data": {
