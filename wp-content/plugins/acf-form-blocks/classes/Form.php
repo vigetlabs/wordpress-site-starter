@@ -306,6 +306,60 @@ class Form {
 	}
 
 	/**
+	 * Get all forms.
+	 *
+	 * @return Form[]
+	 */
+	public static function get_all_forms(): array {
+		$search = new \WP_Query(
+			[
+				'post_type'      => 'any',
+				'posts_per_page' => -1,
+				'post_status'    => 'any',
+				's'              => 'acf/form',
+			]
+		);
+
+		$forms = [];
+
+		while ( $search->have_posts() ) {
+			$search->the_post();
+			$content = get_the_content();
+
+			if ( ! $content ) {
+				continue;
+			}
+
+			$blocks = parse_blocks( $content );
+
+			if ( empty( $blocks ) ) {
+				continue;
+			}
+
+			$context     = [ 'postId' => get_the_ID(), 'postType' => get_post_type() ];
+			$form_blocks = Blocks::get_blocks_by_type( $blocks, 'acf/form' );
+
+			foreach ( $form_blocks as $block ) {
+				$attrs       = $block['attrs'] ?? [];
+				$attrs['id'] = acf_get_block_id( $attrs, $context );
+				$attrs['id'] = acf_ensure_block_id_prefix( $attrs['id'] );
+
+				$form_block = acf_prepare_block( $attrs );
+				$form       = self::get_instance( $form_block, $content, $context );
+
+				if ( ! $form ) {
+					continue;
+				}
+
+				$forms[] = $form;
+			}
+		}
+		wp_reset_postdata();
+
+		return $forms;
+	}
+
+	/**
 	 * Get the form object.
 	 *
 	 * @return Elements\Form

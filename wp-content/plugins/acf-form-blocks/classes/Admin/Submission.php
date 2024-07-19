@@ -15,6 +15,10 @@ use WP_Query;
  */
 class Submission {
 
+	/**
+	 * The Submission post type.
+	 * @var string
+	 */
 	const POST_TYPE = 'acffb-submission';
 
 	/**
@@ -43,53 +47,57 @@ class Submission {
 		add_action(
 			'init',
 			function() {
-				register_post_type( self::POST_TYPE, array(
-					'labels' => array(
-						'name' => 'Form Submissions',
-						'singular_name' => 'Form Submission',
-						'menu_name' => 'Form Submissions',
-						'all_items' => 'Form Submissions',
-						'edit_item' => 'View Form Submission',
-						'view_item' => 'View Form Submission',
-						'view_items' => 'View Form Submissions',
-						'add_new_item' => '',
-						'add_new' => '',
-						'new_item' => 'New Form Submission',
-						'parent_item_colon' => 'Parent Form Submission:',
-						'search_items' => 'Search Form Submissions',
-						'not_found' => 'No form submissions found',
-						'not_found_in_trash' => 'No form submissions found in Trash',
-						'archives' => 'Form Submission Archives',
-						'attributes' => 'Form Submission Attributes',
-						'insert_into_item' => 'Insert into form submission',
-						'uploaded_to_this_item' => 'Uploaded to this form submission',
-						'filter_items_list' => 'Filter form submissions list',
-						'filter_by_date' => 'Filter form submissions by date',
-						'items_list_navigation' => 'Form Submissions list navigation',
-						'items_list' => 'Form Submissions list',
-						'item_published' => 'Form Submission published.',
-						'item_published_privately' => 'Form Submission published privately.',
-						'item_reverted_to_draft' => 'Form Submission reverted to draft.',
-						'item_scheduled' => 'Form Submission scheduled.',
-						'item_updated' => 'Form Submission updated.',
-						'item_link' => 'Form Submission Link',
-						'item_link_description' => 'A link to a form submission.',
-					),
-					'description' => 'ACF Form Block Submissions',
-					'public' => true,
+				$labels = [
+					'name'                  => _x( 'Submissions', 'Post Type General Name', 'acf-form-blocks' ),
+					'singular_name'         => _x( 'Submission', 'Post Type Singular Name', 'acf-form-blocks' ),
+					'menu_name'             => __( 'Submissions', 'acf-form-blocks' ),
+					'name_admin_bar'        => __( 'Submission', 'acf-form-blocks' ),
+					'archives'              => '',
+					'attributes'            => __( 'Submission Attributes', 'acf-form-blocks' ),
+					'parent_item_colon'     => __( 'Parent Submission:', 'acf-form-blocks' ),
+					'all_items'             => __( 'All Submissions', 'acf-form-blocks' ),
+					'add_new_item'          => '',
+					'add_new'               => '',
+					'new_item'              => '',
+					'edit_item'             => __( 'Edit Submission', 'acf-form-blocks' ),
+					'update_item'           => __( 'Update Submission', 'acf-form-blocks' ),
+					'view_item'             => __( 'View Submission', 'acf-form-blocks' ),
+					'view_items'            => __( 'View Submissions', 'acf-form-blocks' ),
+					'search_items'          => __( 'Search Submission', 'acf-form-blocks' ),
+					'not_found'             => __( 'Not found', 'acf-form-blocks' ),
+					'not_found_in_trash'    => __( 'Not found in Trash', 'acf-form-blocks' ),
+					'featured_image'        => __( 'Featured Image', 'acf-form-blocks' ),
+					'set_featured_image'    => __( 'Set featured image', 'acf-form-blocks' ),
+					'remove_featured_image' => __( 'Remove featured image', 'acf-form-blocks' ),
+					'use_featured_image'    => __( 'Use as featured image', 'acf-form-blocks' ),
+					'insert_into_item'      => __( 'Insert into submission', 'acf-form-blocks' ),
+					'uploaded_to_this_item' => __( 'Uploaded to this submission', 'acf-form-blocks' ),
+					'items_list'            => __( 'Submissions list', 'acf-form-blocks' ),
+					'items_list_navigation' => __( 'Submissions list navigation', 'acf-form-blocks' ),
+					'filter_items_list'     => __( 'Filter submissions list', 'acf-form-blocks' ),
+				];
+				$args = [
+					'label'               => __( 'Submission', 'acf-form-blocks' ),
+					'description'         => __( 'ACF Form Block Submissions', 'acf-form-blocks' ),
+					'labels'              => $labels,
+					'supports'            => [ 'title' ],
+					'hierarchical'        => false,
+					'public'              => true,
+					'show_ui'             => true,
+					'show_in_menu'        => 'acffb-forms',
+					'menu_position'       => 10,
+					'menu_icon'           => 'dashicons-feedback',
+					'show_in_admin_bar'   => true,
+					'show_in_nav_menus'   => false,
+					'can_export'          => true,
+					'has_archive'         => false,
 					'exclude_from_search' => true,
-					'show_in_menu' => 'edit.php?post_type=acf-field-group',
-					'show_in_nav_menus' => false,
-					'show_in_admin_bar' => false,
-					'show_in_rest' => true,
-					'menu_position' => 50,
-					'menu_icon' => 'dashicons-feedback',
-					'supports' => array(
-						'title',
-					),
-					'rewrite' => false,
-					'delete_with_user' => false,
-				) );
+					'publicly_queryable'  => true,
+					'rewrite'             => false,
+					'capability_type'     => 'page',
+				];
+
+				register_post_type( self::POST_TYPE, $args );
 			}
 		);
 	}
