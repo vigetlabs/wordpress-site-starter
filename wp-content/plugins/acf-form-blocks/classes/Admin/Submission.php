@@ -186,20 +186,46 @@ class Submission {
 			}
 		);
 
-		add_filter(
-			'parse_query',
-			function( WP_Query $query ) {
-				global $pagenow;
+		$this->apply_admin_filters();
+	}
 
-				if ( ! is_admin() || self::POST_TYPE !== $query->query['post_type'] || 'edit.php' !== $pagenow || empty( $_GET['acffb_form_id'] ) ) {
-					return;
-				}
+	/**
+	 * Apply admin filters
+	 *
+	 * @return void
+	 */
+	private function apply_admin_filters(): void {
+		add_action( 'pre_get_posts', [ $this, 'filter_by_form' ] );
+	}
 
-				$query->query_vars['meta_key']   = '_form_id';
-				$query->query_vars['meta_value'] = sanitize_text_field( $_GET['acffb_form_id'] );
-			}
-		);
+	/**
+	 * Disable admin filters
+	 *
+	 * @return void
+	 */
+	private function disable_admin_filters(): void {
+		remove_action( 'pre_get_posts', [ $this, 'filter_by_form' ] );
+	}
 
+	/**
+	 * Filter Results by Form ID.
+	 *
+	 * @param WP_Query $query
+	 *
+	 * @return void
+	 */
+	public function filter_by_form( WP_Query $query ): void {
+		global $pagenow;
+
+		if ( ! is_admin() || self::POST_TYPE !== $query->query['post_type'] || 'edit.php' !== $pagenow || empty( $_GET['acffb_form_id'] ) || ! $query->is_main_query() ) {
+			return;
+		}
+
+		$post_status = ! empty( $_GET['post_status'] ) ? sanitize_text_field( $_GET['post_status'] ) : 'publish';
+
+		$query->set( 'post_status', $post_status );
+		$query->set( 'meta_key', '_form_id' );
+		$query->set( 'meta_value', sanitize_text_field( $_GET['acffb_form_id'] ) );
 	}
 
 	/**
@@ -212,6 +238,7 @@ class Submission {
 
 		$post_status = ! empty( $_GET['post_status'] ) ? sanitize_text_field( $_GET['post_status'] ) : 'publish';
 
+		$this->disable_admin_filters();
 		$submissions = new WP_Query(
 			[
 				'post_type'      => self::POST_TYPE,
@@ -220,6 +247,7 @@ class Submission {
 				'post_status'    => $post_status,
 			]
 		);
+		$this->apply_admin_filters();
 
 		foreach ( $submissions->posts as $post_id ) {
 			$form = $this->get_form( $post_id );
@@ -231,8 +259,11 @@ class Submission {
 			$form_name = $form->get_form_object()->get_name();
 
 			if ( empty( $forms[ $form_id ] ) ) {
-				$form_name .= ' (...' . substr( $form_id, -5 ) . ')';
-				$forms[ $form_id ] = $form_name;
+				$forms[ $form_id ] = $form_name . ' (...' . substr( $form_id, -5 ) . ')';
+			} else {
+				if ( ! str_contains( $forms[ $form_id ], $form_name ) ) {
+					$forms[ $form_id ] .= ' ' . __( 'aka', 'acf-form-blocks' ) . ' ' . $form_name;
+				}
 			}
 		}
 
@@ -253,7 +284,13 @@ class Submission {
 
 		$markup  = get_post_meta( $post_id, '_form_markup', true );
 		$context = get_post_meta( $post_id, '_form_context', true );
-		$form    = Form::get_instance( null, $markup, $context );
+		$form_id = $this->get_form_id( $post_id );
+		$form    = Form::get_instance( $form_id, $markup, $context );
+
+		$form_name = get_post_meta( $post_id, '_form_name', true );
+		if ( $form_name ) {
+			$form->get_form_object()->set_name( $form_name );
+		}
 
 		$form->preload_meta();
 		$form->get_form_object()->update_field_context();

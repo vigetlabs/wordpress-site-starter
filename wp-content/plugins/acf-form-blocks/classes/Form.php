@@ -125,21 +125,27 @@ class Form {
 		$form_id = is_string( $form ) ? $form : ( ! empty( $form['block_id'] ) ? $form['block_id'] : null );
 
 		if ( $form_id ) {
-			$cache = Cache::get( $form_id );
+			$form_id = self::prefix_id( $form_id );
+			$cache   = Cache::get( $form_id );
 
 			if ( $cache ) {
 				return $cache;
 			}
 
 			if ( is_array( $form ) ) {
-				$form = new self( new FormElement( $form, $content, $context ), true );
+				$content = self::get_form_content( $context, $form_id );
+				$form    = new self( new FormElement( $form, $content, $context ), true );
 				Cache::set( $form->get_form_object()->get_id(), $form, true );
 				return $form;
 			}
 		}
 
+		if ( ! $context ) {
+			$context = [ 'postId' => get_the_ID(), 'postType' => get_post_type() ];
+		}
+
 		if ( ! $content ) {
-			$content = get_the_content();
+			$content = Form::get_form_content( $context );
 		}
 
 		if ( ! $content ) {
@@ -152,11 +158,7 @@ class Form {
 			return null;
 		}
 
-		if ( ! $context ) {
-			$context = [ 'postId' => get_the_ID(), 'postType' => get_post_type() ];
-		}
-
-		$form = self::get_form_block( $blocks, $context );
+		$form = self::get_form_block( $blocks, $context, $form_id );
 
 		if ( ! $form ) {
 			return null;
@@ -168,26 +170,139 @@ class Form {
 	/**
 	 * Get the Form Block Recursively.
 	 *
-	 * @param array $blocks Blocks.
-	 * @param array $context Context.
+	 * @param array   $blocks Blocks.
+	 * @param array   $context Context.
+	 * @param ?string $form_id The targeted form ID.
 	 *
 	 * @return ?array
 	 */
-	private static function get_form_block( array $blocks, array $context = [] ): ?array {
+	private static function get_form_block( array $blocks, array $context = [], ?string $form_id = null ): ?array {
 		$forms = Blocks::get_blocks_by_type( $blocks, 'acf/form' );
 
 		if ( ! $forms ) {
 			return null;
 		}
 
-		// Return first form block.
-		$block = $forms[0];
+		$form = null;
 
-		$attrs       = $block['attrs'] ?? [];
-		$attrs['id'] = acf_get_block_id( $attrs, $context );
-		$attrs['id'] = acf_ensure_block_id_prefix( $attrs['id'] );
+		foreach ( $forms as $block ) {
+			$attrs       = $block['attrs'] ?? [];
+			$attrs['id'] = acf_get_block_id( $attrs, $context );
+			$attrs['id'] = acf_ensure_block_id_prefix( $attrs['id'] );
 
-		return acf_prepare_block( $attrs );
+			$form = acf_prepare_block( $attrs );
+
+			// Return the first form if no Form ID.
+			if ( ! $form_id ) {
+				return $form;
+			}
+
+			if ( ! empty( $form['block_id'] ) ) {
+				$block_form_id = self::prefix_id( $form['block_id'] );
+
+				if ( $block_form_id === $form_id ) {
+					return $form;
+				}
+			}
+		}
+
+		return $form;
+	}
+
+	/**
+	 * Extract the form from the post content.
+	 *
+	 * @param array   $context
+	 * @param ?string $form_id
+	 *
+	 * @return string
+	 */
+	public static function get_form_content( array $context = [], ?string $form_id = null ): string {
+		if ( empty( $context['postId'] ) ) {
+			$content = get_the_content();
+		} else {
+			$the_post = get_post( $context['postId'] );
+			$content  = $the_post->post_content;
+		}
+
+		if ( ! $form_id ) {
+			return $content;
+		}
+
+		$content = self::replace_patterns( $content );
+
+		$pattern = '/<!-- wp:acf\/form {.*?"block_id":"[^"]*".*?} -->.*?<!-- \/wp:acf\/form -->/s';
+		preg_match_all( $pattern, $content, $form_blocks );
+
+		if ( empty( $form_blocks[0] ) ) {
+			return $content;
+		}
+
+		foreach ( $form_blocks[0] as $form_block ) {
+			$block_id = self::unprefix_id( $form_id );
+			if ( preg_match( '/<!-- wp:acf\/form {.*?"block_id":"' . preg_quote( $block_id ) . '"/', $form_block ) ) {
+				return $form_block;
+			}
+		}
+
+		return $content;
+	}
+
+	/**
+	 * Replace the pattern with the pattern content.
+	 *
+	 * @param string $content
+	 *
+	 * @return string
+	 */
+	public static function replace_patterns( string $content ): string {
+		preg_match_all( '/<!-- wp:block {.*?"ref":(\d+).*?} \/-->/s', $content, $patterns );
+
+		if ( ! $patterns ) {
+			return $content;
+		}
+
+		foreach ( $patterns[1] as $pattern_id ) {
+			$pattern = Blocks::get_pattern( intval( $pattern_id ), false );
+
+			if ( ! $pattern ) {
+				continue;
+			}
+
+			$content = preg_replace( '/<!-- wp:block {.*?"ref":' . preg_quote( intval( $pattern_id ) ) . '.*?} \/-->/', $pattern, $content );
+		}
+
+		return $content;
+	}
+
+	/**
+	 * Ensure Block ID is prefixed.
+	 *
+	 * @param string $id
+	 *
+	 * @return string
+	 */
+	public static function prefix_id( string $id ): string {
+		if ( ! str_starts_with( $id, 'acf_form_' ) ) {
+			$id = 'acf_form_' . $id;
+		}
+
+		return $id;
+	}
+
+	/**
+	 * Remove the prefix from the Block ID.
+	 *
+	 * @param string $id
+	 *
+	 * @return string
+	 */
+	public static function unprefix_id( string $id ): string {
+		if ( str_starts_with( $id, 'acf_form_' ) ) {
+			$id = str_replace( 'acf_form_', '', $id );
+		}
+
+		return $id;
 	}
 
 	/**

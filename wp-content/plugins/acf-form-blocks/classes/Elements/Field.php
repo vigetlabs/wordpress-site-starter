@@ -37,6 +37,13 @@ class Field {
 	protected ?string $parent_id = null;
 
 	/**
+	 * The Pattern ID if any.
+	 *
+	 * @var ?int
+	 */
+	protected ?int $pattern_id = null;
+
+	/**
 	 * WP Block instance.
 	 *
 	 * @var ?WP_Block
@@ -64,6 +71,9 @@ class Field {
 
 		if ( ! empty( $block['parent_id'] ) ) {
 			$this->parent_id = $block['parent_id'];
+		}
+		if ( ! empty( $block['pattern_id'] ) ) {
+			$this->pattern_id = $block['pattern_id'];
 		}
 	}
 
@@ -603,5 +613,14 @@ class Field {
 	 */
 	public function get_parent_id(): ?string {
 		return $this->parent_id;
+	}
+
+	/**
+	 * Get the pattern ID.
+	 *
+	 * @return ?int
+	 */
+	public function get_pattern_id(): ?int {
+		return $this->pattern_id;
 	}
 }

@@ -29,10 +29,7 @@ class Cache {
 	 * @return ?Form
 	 */
 	public static function get( string $key ): ?Form {
-		if ( ! str_starts_with( $key, 'acf_form_' ) ) {
-			$key = 'acf_form_' . $key;
-		}
-
+		$key = Form::prefix_id( $key );
 		return self::$storage[ $key ] ?? null;
 	}
 
@@ -46,9 +43,7 @@ class Cache {
 	 * @return void
 	 */
 	public static function set( string $key, Form $form, bool $new = false ): void {
-		if ( ! str_starts_with( $key, 'acf_form_' ) ) {
-			$key = 'acf_form_' . $key;
-		}
+		$key = Form::prefix_id( $key );
 
 		if ( $new && ! empty( self::$storage[ $key ] ) ) {
 			// Not sure why this would ever happen, but it does.

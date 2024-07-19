@@ -25,7 +25,7 @@ class File extends Input {
 	public function sanitize_input( mixed $input = null, ?Form $form = null ): array {
 		$upload = $_FILES[ $this->get_name() ] ?? null;
 
-		if ( ! $upload ) {
+		if ( ! $upload || 4 === $upload['error'] ) {
 			return [];
 		}
 
