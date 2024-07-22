@@ -277,6 +277,42 @@
             "ui": 1
         },
         {
+            "key": "field_669eb7e04224d",
+            "label": "Admin Template",
+            "name": "admin_template",
+            "aria-label": "",
+            "type": "post_object",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_66895ec6c1063",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "acffb-email-template"
+            ],
+            "post_status": [
+                "publish"
+            ],
+            "taxonomy": "",
+            "return_format": "id",
+            "multiple": 0,
+            "allow_null": 0,
+            "bidirectional": 0,
+            "ui": 1,
+            "bidirectional_target": []
+        },
+        {
             "key": "field_66895efdc1064",
             "label": "Confirmation Email",
             "name": "confirmation_email",
@@ -295,6 +331,42 @@
             "ui_on_text": "Enabled",
             "ui_off_text": "Disabled",
             "ui": 1
+        },
+        {
+            "key": "field_669eb8184224e",
+            "label": "Confirmation Template",
+            "name": "confirmation_template",
+            "aria-label": "",
+            "type": "post_object",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_66895efdc1064",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "acffb-email-template"
+            ],
+            "post_status": [
+                "publish"
+            ],
+            "taxonomy": "",
+            "return_format": "id",
+            "multiple": 0,
+            "allow_null": 0,
+            "bidirectional": 0,
+            "ui": 1,
+            "bidirectional_target": []
         },
         {
             "key": "field_66895f4bc1065",
@@ -342,6 +414,42 @@
             "placeholder": "name@domain.com",
             "prepend": "",
             "append": ""
+        },
+        {
+            "key": "field_669eb8394224f",
+            "label": "Custom Template",
+            "name": "custom_tempalte",
+            "aria-label": "",
+            "type": "post_object",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_66895f4bc1065",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "acffb-email-template"
+            ],
+            "post_status": [
+                "publish"
+            ],
+            "taxonomy": "",
+            "return_format": "id",
+            "multiple": 0,
+            "allow_null": 0,
+            "bidirectional": 0,
+            "ui": 1,
+            "bidirectional_target": []
         }
     ],
     "location": [
@@ -362,5 +470,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1721314343
+    "modified": 1721677905
 }

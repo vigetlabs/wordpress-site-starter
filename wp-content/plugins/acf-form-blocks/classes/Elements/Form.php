@@ -104,6 +104,10 @@ class Form {
 			$attrs['enctype'] = 'multipart/form-data';
 		}
 
+		if ( is_admin() ) {
+			$attrs['autocomplete'] = 'off';
+		}
+
 		return $attrs;
 	}
 

@@ -88,6 +88,10 @@ class Input extends Field {
 		$attrs['type']  = $this->get_input_type();
 		$attrs['value'] = $this->get_value_attr();
 
+		if ( is_admin() ) {
+			$attrs['readonly'] = 'readonly';
+		}
+
 		if ( $this->get_maxlength() ) {
 			$attrs['maxlength'] = $this->get_maxlength();
 

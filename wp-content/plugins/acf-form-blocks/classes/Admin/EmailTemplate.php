@@ -33,6 +33,9 @@ class EmailTemplate {
 		// Populate the Forms meta select field.
 		$this->populate_forms_select();
 
+		// Populate the Form Fields meta select field.
+		$this->populate_fields_select();
+
 		// Customize admin columns
 		$this->admin_columns();
 	}
@@ -95,7 +98,9 @@ class EmailTemplate {
 					'rewrite'             => false,
 					'capability_type'     => 'page',
 					'show_in_rest'        => true,
-					'template'            => [],
+					'template'            => [
+						[ 'acf/all-fields' ]
+					],
 				];
 
 				register_post_type( self::POST_TYPE, $args );
@@ -238,6 +243,33 @@ class EmailTemplate {
 					$short_id   = substr( $form->get_form_object()->get_id(), -5 );
 					$form_name .= ' (...' . $short_id . ')';
 					$field['choices'][ $form->get_form_object()->get_id() ] = $form_name;
+				}
+
+				return $field;
+			}
+		);
+	}
+
+	/**
+	 * Populate the Form Field select with available fields.
+	 *
+	 * @return void
+	 */
+	private function populate_fields_select(): void {
+		add_filter(
+			'acf/prepare_field/key=field_669ea8d7298be',
+			function ( array $field ): array {
+				$form = Form::get_instance();
+
+				if ( ! $form ) {
+					$field['choices'] = [
+						'' => __( 'Select a form and update to see fields.', 'acf-form-blocks' ),
+					];
+					return $field;
+				}
+
+				foreach ( $form->get_form_object()->get_all_fields() as $form_field ) {
+					$field['choices'][ $form_field->get_id() ] = $form_field->get_label();
 				}
 
 				return $field;

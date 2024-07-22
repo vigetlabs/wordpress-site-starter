@@ -10,12 +10,18 @@
 .acf-block-form input[type="datetime-local"],
 .acf-block-form select,
 .acf-block-form textarea {
-	display: block;
-	width: 100%;
-	max-width: 100%;
-	border: 1px solid #000;
+	background-color: #fff;
 	border-radius: 3px;
+	border: 1px solid #000;
+	display: block;
+	max-width: 100%;
 	padding: 0.5rem 0.75rem;
+	width: 100%;
+}
+
+.acf-block-form input[type="file"],
+.acf-block-form input[type="color"] {
+	background-color: #fff;
 }
 
 .acf-block-form > .form-input.input-type-hidden,
