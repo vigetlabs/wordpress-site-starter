@@ -14,5 +14,6 @@ Alpine.plugin(persist);
 Alpine.plugin(focus)
 Alpine.start();
 
+
 // Import styles
 import './styles/main.css';

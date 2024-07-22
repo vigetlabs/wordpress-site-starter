@@ -14,11 +14,11 @@
 @import './core-blocks/quote.css';
 
 /*Import custom styles for custom blocks*/
-@import './custom-blocks/accordion.css';
-@import './custom-blocks/alert-banner.css';
-@import './custom-blocks/breadcrumbs.css';
-@import './custom-blocks/cta.css';
-@import './custom-blocks/logo-grid.css';
-@import './custom-blocks/text-image.css';
-@import './custom-blocks/text-icon-cards.css';
-@import './custom-blocks/video-embed.css';
+@import '../../blocks/accordion/style.css';
+@import '../../blocks/alert-banner/style.css';
+@import '../../blocks/breadcrumbs/style.css';
+@import '../../blocks/cta/style.css';
+@import '../../blocks/logo-grid/style.css';
+@import '../../blocks/text-image/style.css';
+@import '../../blocks/text-icon-cards/style.css';
+@import '../../blocks/video-embed/style.css';
