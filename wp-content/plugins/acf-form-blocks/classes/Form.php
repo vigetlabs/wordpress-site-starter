@@ -7,6 +7,7 @@
 
 namespace ACFFormBlocks;
 
+use ACFFormBlocks\Admin\EmailTemplate;
 use ACFFormBlocks\Elements\Form as FormElement;
 use ACFFormBlocks\Utilities\Blocks;
 use ACFFormBlocks\Utilities\Cache;
@@ -15,6 +16,13 @@ use ACFFormBlocks\Utilities\Cache;
  * Class for Forms
  */
 class Form {
+
+	/**
+	 * All Forms.
+	 *
+	 * @var Form[]
+	 */
+	private static array $all_forms = [];
 
 	/**
 	 * Hidden form ID.
@@ -122,11 +130,10 @@ class Form {
 	 * @return ?self
 	 */
 	public static function get_instance( mixed $form = null, string $content = '', array $context = [] ): ?self {
-		$form_id = is_string( $form ) ? $form : ( ! empty( $form['block_id'] ) ? $form['block_id'] : null );
+		$form_id = is_string( $form ) ? self::prefix_id( $form ) : ( ! empty( $form['block_id'] ) ? $form['block_id'] : null );
 
 		if ( $form_id ) {
-			$form_id = self::prefix_id( $form_id );
-			$cache   = Cache::get( $form_id );
+			$cache = Cache::get( $form_id );
 
 			if ( $cache ) {
 				return $cache;
@@ -141,7 +148,26 @@ class Form {
 		}
 
 		if ( ! $context ) {
-			$context = [ 'postId' => get_the_ID(), 'postType' => get_post_type() ];
+			$post_id   = ! empty( $_GET['post'] ) ? intval( $_GET['post'] ) : get_the_ID();
+			$post_type = get_post_type( $post_id );
+			$context   = [ 'postId' => $post_id, 'postType' => $post_type ];
+
+			if ( EmailTemplate::POST_TYPE === $post_type ) {
+				$template_form_id = get_field( '_acffb_form_id', $post_id );
+
+				if ( $template_form_id && $form_id !== $template_form_id ) {
+					return self::find_form($template_form_id);
+				}
+
+				if ( $form_id ) {
+					$lookup = self::find_form( $form_id );
+					if ( $lookup ) {
+						return $lookup;
+					}
+				}
+
+				$context = [];
+			}
 		}
 
 		if ( ! $content ) {
@@ -222,11 +248,11 @@ class Form {
 			$content = get_the_content();
 		} else {
 			$the_post = get_post( $context['postId'] );
-			$content  = $the_post->post_content;
+			$content  = $the_post?->post_content;
 		}
 
 		if ( ! $form_id ) {
-			return $content;
+			return $content ?? '';
 		}
 
 		$content = self::replace_patterns( $content );
@@ -311,6 +337,10 @@ class Form {
 	 * @return Form[]
 	 */
 	public static function get_all_forms(): array {
+		if ( ! empty( self::$all_forms ) ) {
+			return self::$all_forms;
+		}
+
 		$search = new \WP_Query(
 			[
 				'post_type'      => 'any',
@@ -319,8 +349,6 @@ class Form {
 				's'              => 'acf/form',
 			]
 		);
-
-		$forms = [];
 
 		while ( $search->have_posts() ) {
 			$search->the_post();
@@ -351,12 +379,30 @@ class Form {
 					continue;
 				}
 
-				$forms[] = $form;
+				self::$all_forms[] = $form;
 			}
 		}
+
 		wp_reset_postdata();
 
-		return $forms;
+		return self::$all_forms;
+	}
+
+	/**
+	 * Find a Form by ID
+	 *
+	 * @param string $form_id
+	 *
+	 * @return ?Form
+	 */
+	private static function find_form( string $form_id ): ?Form {
+		foreach ( self::get_all_forms() as $form ) {
+			if ( $form_id === $form->get_form_object()->get_id() ) {
+				return $form;
+			}
+		}
+
+		return null;
 	}
 
 	/**

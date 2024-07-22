@@ -43,4 +43,19 @@ class Textarea extends Field {
 		$value = parent::get_value() ?: '';
 		return str_replace( '\r\n', "\r\n", $value );
 	}
+
+	/**
+	 * Get the Textarea Attributes.
+	 *
+	 * @return array
+	 */
+	public function get_attrs(): array {
+		$attrs = parent::get_attrs();
+
+		if ( is_admin() ) {
+			$attrs['readonly'] = 'readonly';
+		}
+
+		return $attrs;
+	}
 }

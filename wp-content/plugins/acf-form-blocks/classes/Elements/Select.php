@@ -53,6 +53,10 @@ class Select extends Field {
 	public function get_attrs(): array {
 		$attrs = parent::get_attrs();
 
+		if ( is_admin() ) {
+			$attrs['readonly'] = 'readonly';
+		}
+
 		if ( $this->is_multiple() ) {
 			$attrs['multiple'] = 'multiple';
 		}
