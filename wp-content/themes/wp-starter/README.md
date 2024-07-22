@@ -12,6 +12,11 @@ The `theme.json` holds a lot of the core WordPress theme settings. The `theme.js
 
 Several of the Tailwind variables are pulled in and Tailwind should be used as the primary way to style elements. If you need to, you can pull in more Tailwind variable for custom styling in `theme.json`.
 
+The files that create the `theme.json` can be used to set custom settings for blocks, global theme, or for custom templates. Here are a few references:
+- [Global Settings & Styles](https://developer.wordpress.org/block-editor/how-to-guides/themes/global-settings-and-styles/)
+- [Theme.json reference](https://developer.wordpress.org/block-editor/reference-guides/theme-json-reference/theme-json-living/)
+- [Global Styles & theme.json](https://fullsiteediting.com/lessons/global-styles/)
+
 ## Custom Blocks 🧱
 Blocks are build using ACF and core WordPress blocks. Styles for the blocks are in `src/styles/blocks`.
 
@@ -78,6 +83,11 @@ If you have need to apply the buttons style to the mark up you can add one of th
 | `.btn-outline-light` |
 | `.btn-text`          |
 
+#### Adding more Buttons Styles
+If you need to add more button styles you can [register](https://developer.wordpress.org/reference/functions/register_block_style/) a new block style on the `core/button`. Once you have the new button style registered you add the Tailwind style in `plugins-tailwind/buttons.js` and assign the class to the button in `/src/styles/core-blocks/buttons.css`. It is recommended that you create descriptive button styles and not generic styles like "primary" or "secondary". 
+
+#### Custom Button Icons
+The theme has a custom filter to add in custom icons for buttons. You can your custom SVG icons into `/src/images/icons/` and then pull in that SVG icon in `inc/icons.php`. In order for your SVG icon to update with the text you need to set `fill` or `stroke` (depending on your icon) to `currentColor`. 
 
 ### Navigation
 The navigation has been set up to be fully accessible and is built using [Alpine](https://alpinejs.dev/) and the styles are set in CSS. You can edit the JS in `/src/components/dropdown.js` and the CSS in `/src/styles/core-blocks/navigation.css` if you need to customize the navigation. 
