@@ -38,6 +38,8 @@ Following the series of prompts, the project will be set up with the following:
 
 After the setup is complete, it is recommended to perform your initial commit and push to your project repository.
 
+Information on developing the theme, styling, and building blocks can be found in the theme [README](wp-content/themes/wp-starter/README.md).
+
 # Development
 
 The following command will create a directory (`project-name`) and run `composer create-project` using your local repository as the source. Be sure to replace the path with the correct path to your local repository.

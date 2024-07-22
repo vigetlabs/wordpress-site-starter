@@ -23,6 +23,8 @@ This will install the WordPress files, composer packages, npm packages, and star
 
 You are all ready to start working on the site.
 
+Information on developing the theme, styling, and building blocks can be found in the theme [README](wp-content/themes/#UPDATETHIS/README.md).
+
 ### Build for production
 The deploy script should build the files for production, but if you want to test that out on your local server you can change the DDEV config.yaml `ENVIRONMENT` to `prod` and then `cd` into your custom theme folder and run `ddev npm run build`. This will build the JS and CSS files in the dist folder and out put a manifest file.
 
