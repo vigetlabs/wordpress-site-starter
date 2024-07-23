@@ -26,3 +26,6 @@ require_once get_stylesheet_directory() . '/inc/patterns.php';
 
 // Block Functions.
 require_once get_stylesheet_directory() . '/inc/blocks.php';
+
+// Custom Icons.
+require_once get_stylesheet_directory() . '/inc/icons.php';
