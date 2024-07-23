@@ -201,34 +201,11 @@ class Submission {
 			return $this->data;
 		}
 
-		$fields     = $this->form->get_form_object()->get_fields();
-		$this->data = [
+		$fields      = $this->form->get_form_object()->get_fields();
+		$meta_fields = $this->form->get_meta();
+		$this->data  = [
 			'content' => [],
-			'meta'    => [
-				'_url'           => esc_url( $_SERVER['REQUEST_URI'] ),
-				'_ip'            => sanitize_text_field( $_SERVER['REMOTE_ADDR'] ),
-				'_agent'         => sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ),
-				'_method'        => sanitize_text_field( $_SERVER['REQUEST_METHOD'] ),
-				'_form_id'       => $this->form->get_form_object()->get_id(),
-				'_form_markup'   => $this->form->get_form_object()->get_form_markup(),
-				'_form_context'  => $this->form->get_form_object()->get_form_context(),
-				'_form_name'     => $this->form->get_form_object()->get_name(),
-				'_post_id'       => get_queried_object_id(),
-				'_confirmation'  => [
-					'type' => $this->form->get_confirmation()->get_type(),
-					'page' => $this->form->get_form_object()->get_form_data( 'page' ),
-					'url'  => $this->form->get_form_object()->get_form_data( 'custom_url' ),
-				],
-				'_notifications' => [
-					'admin'                 => $this->form->get_notification()->is_admin_email_enabled(),
-					'admin_template'        => $this->form->get_notification()->get_admin_template(),
-					'confirmation'          => $this->form->get_notification()->is_confirmation_email_enabled(),
-					'confirmation_template' => $this->form->get_notification()->get_confirmation_template(),
-					'custom'                => $this->form->get_notification()->is_custom_email_enabled(),
-					'recipient'             => $this->form->get_notification()->get_custom_email(),
-					'custom_template'       => $this->form->get_notification()->get_custom_template(),
-				],
-			],
+			'meta'    => [],
 		];
 
 		foreach ( $fields as $field ) {
@@ -252,6 +229,10 @@ class Submission {
 			];
 
 			$this->data['content'][ $field->get_name() ] = $data;
+		}
+
+		foreach ( $meta_fields as $meta_field ) {
+			$this->data['meta'][ $meta_field->get_key() ] = $meta_field->get_value();
 		}
 
 		$this->data = apply_filters( 'acffb_submission_data', $this->data );

@@ -9,6 +9,15 @@ namespace ACFFormBlocks;
 
 use ACFFormBlocks\Admin\EmailTemplate;
 use ACFFormBlocks\Elements\Form as FormElement;
+use ACFFormBlocks\Meta\Confirmation as ConfirmationMeta;
+use ACFFormBlocks\Meta\Form as FormMeta;
+use ACFFormBlocks\Meta\IP;
+use ACFFormBlocks\Meta\Meta;
+use ACFFormBlocks\Meta\Notifications;
+use ACFFormBlocks\Meta\PostID;
+use ACFFormBlocks\Meta\RequestMethod;
+use ACFFormBlocks\Meta\URL;
+use ACFFormBlocks\Meta\UserAgent;
 use ACFFormBlocks\Utilities\Blocks;
 use ACFFormBlocks\Utilities\Cache;
 
@@ -103,6 +112,11 @@ class Form {
 	 * @var ?Notification
 	 */
 	protected ?Notification $notification = null;
+
+	/**
+	 * @var Meta[]
+	 */
+	protected array $registered_meta = [];
 
 	/**
 	 * Constructor.
@@ -535,5 +549,47 @@ class Form {
 		}
 
 		return $this->notification;
+	}
+
+	/**
+	 * Get the form meta.
+	 *
+	 * @return Meta[]
+	 */
+	public function get_meta(): array {
+		if ( empty( $this->registered_meta ) ) {
+			$this->register_meta();
+		}
+
+		return $this->registered_meta;
+	}
+
+	/**
+	 * Register the Form Meta
+	 *
+	 * @return void
+	 */
+	public function register_meta(): void {
+		$meta_classes = [
+			URL::class,
+			IP::class,
+			UserAgent::class,
+			RequestMethod::class,
+			PostID::class,
+			FormMeta::class,
+			ConfirmationMeta::class,
+			Notifications::class,
+		];
+
+		$meta_classes = apply_filters( 'acffb_meta_classes', $meta_classes );
+
+		foreach ( $meta_classes as $meta_class ) {
+			if ( ! class_exists( $meta_class ) ) {
+				return;
+			}
+
+			$meta = new $meta_class( $this->form->get_id() );
+			$this->registered_meta[ $meta->get_key() ] = $meta;
+		}
 	}
 }
