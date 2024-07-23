@@ -204,11 +204,26 @@ class Form {
 	/**
 	 * Set the form name.
 	 *
-	 * @param string $form_name
+	 * @param ?string $form_name
 	 *
 	 * @return void
 	 */
-	public function set_name( string $form_name ): void {
+	public function set_name( ?string $form_name = null ): void {
+		if ( $this->get_pattern_id() ) {
+			$pattern_title = get_the_title( $this->get_pattern_id() );
+			if ( $pattern_title ) {
+				$form_name = $pattern_title;
+			}
+		}
+
+		if ( ! $form_name && $this->get_form_meta( 'name' ) ) {
+			$form_name = $this->get_form_meta( 'name' );
+		}
+
+		if ( ! $form_name ) {
+			$form_name = get_the_title();
+		}
+
 		$this->form_name = $form_name;
 	}
 

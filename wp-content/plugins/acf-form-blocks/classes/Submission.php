@@ -220,10 +220,13 @@ class Submission {
 					'url'  => $this->form->get_form_object()->get_form_data( 'custom_url' ),
 				],
 				'_notifications' => [
-					'admin'        => $this->form->get_notification()->is_admin_email_enabled(),
-					'confirmation' => $this->form->get_notification()->is_confirmation_email_enabled(),
-					'custom'       => $this->form->get_notification()->is_custom_email_enabled(),
-					'recipient'    => $this->form->get_notification()->get_custom_email(),
+					'admin'                 => $this->form->get_notification()->is_admin_email_enabled(),
+					'admin_template'        => $this->form->get_notification()->get_admin_template(),
+					'confirmation'          => $this->form->get_notification()->is_confirmation_email_enabled(),
+					'confirmation_template' => $this->form->get_notification()->get_confirmation_template(),
+					'custom'                => $this->form->get_notification()->is_custom_email_enabled(),
+					'recipient'             => $this->form->get_notification()->get_custom_email(),
+					'custom_template'       => $this->form->get_notification()->get_custom_template(),
 				],
 			],
 		];

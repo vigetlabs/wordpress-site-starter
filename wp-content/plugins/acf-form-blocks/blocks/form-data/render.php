@@ -24,29 +24,35 @@ if ( ! $form_id || ! $form_field ) {
 }
 
 $form  = Form::get_instance( $form_id );
-$field = $form->get_form_object()->get_field_by_id( $form_field );
+$field = $form?->get_form_object()->get_field_by_id( $form_field );
 
-$label = get_field( 'show_label' );
-$value = get_field( 'show_value' );
+$show_label = get_field( 'show_label' );
+$show_value = get_field( 'show_value' );
 
 $template = ( new Template(
 	new Block(
 		'core/paragraph',
-		[ 'placeholder' => $field->get_label() ]
+		[ 'placeholder' => $field?->get_label() ?? __( 'Field Label...', 'acf-form-blocks' ) ]
 	),
 ) )->get();
 ?>
 <section <?php block_attrs( $block ); ?>>
 	<label clas="acffb-form-data">
-		<?php if ( $label ) : ?>
+		<?php if ( $show_label ) : ?>
 			<?php inner_blocks( [ 'template' => $template ] ); ?>
 		<?php endif; ?>
-		<span class="acffb-value-placeholder">
-			<?php esc_html_e( 'Value', 'acf-form-blocks' ); ?>
-			<?php if ( ! $label ) : ?>
-				<?php esc_html_e( 'for', 'acf-form-blocks' ); ?>
-				<?php echo esc_html( $field->get_label() ); ?>
-			<?php endif; ?>
-		</span>
+
+		<?php if ( $show_value ): ?>
+			<span class="acffb-value-placeholder">
+				<?php
+				esc_html_e( 'Value', 'acf-form-blocks' );
+
+				if ( ! $show_label ) :
+					esc_html_e( ' for ', 'acf-form-blocks' );
+					echo esc_html( $field->get_label() );
+				endif;
+				?>
+			</span>
+		<?php endif; ?>
 	</label>
 </section>
