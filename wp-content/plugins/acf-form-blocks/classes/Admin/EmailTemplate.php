@@ -21,6 +21,13 @@ class EmailTemplate {
 	const POST_TYPE = 'acffb-email-template';
 
 	/**
+	 * Array of template IDs.
+	 *
+	 * @var int[]
+	 */
+	private array $templates = [];
+
+	/**
 	 * Submission constructor.
 	 */
 	public function __construct() {
@@ -35,6 +42,9 @@ class EmailTemplate {
 
 		// Populate the Form Fields meta select field.
 		$this->populate_fields_select();
+
+		// Filter the Template selects by form ID.
+		$this->filter_template_selects();
 
 		// Customize admin columns
 		$this->admin_columns();
@@ -138,15 +148,35 @@ class EmailTemplate {
 							'id' => '',
 						),
 						'choices' => array(
-							'any' => 'Any Form',
+							'0' => 'Any Form',
 						),
-						'default_value' => 'any',
+						'default_value' => '0',
 						'return_format' => 'value',
 						'multiple' => 0,
 						'allow_null' => 0,
 						'ui' => 1,
 						'ajax' => 0,
 						'placeholder' => '',
+					),
+					array(
+						'key' => 'field_669ec6e670126',
+						'label' => 'Email Subject',
+						'name' => 'email_subject',
+						'aria-label' => '',
+						'type' => 'text',
+						'instructions' => '',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '',
+							'class' => '',
+							'id' => '',
+						),
+						'default_value' => '',
+						'maxlength' => '',
+						'placeholder' => 'New Form Submission',
+						'prepend' => '',
+						'append' => '',
 					),
 				),
 				'location' => array(
@@ -273,33 +303,75 @@ class EmailTemplate {
 				}
 
 				return $field;
-
-//				$form = ACFFormBlocks\Form::get_instance();
-//
-//				if ( ! $form ) {
-//					return $field;
-//				}
-//
-//				$block    = acffb_get_posted_acf_block();
-//				$block_id = acffb_get_block_id_from_acf_block_data( $block );
-//
-//				$field['choices'] = [];
-//
-//				foreach ( $form->get_form_object()->get_fields() as $form_field ) {
-//					if ( $form_field->get_name() === $block_id ) {
-//						continue;
-//					}
-//					$field['choices'][ $form_field->get_name() ] = $form_field->get_label();
-//				}
-//
-//				if ( empty( $field['choices'] ) ) {
-//					$field['choices'] = [
-//						'' => 'Save changes to update options.',
-//					];
-//				}
-//
-//				return $field;
 			}
 		);
+	}
+
+	/**
+	 * Filter specific forms for template dropdowns.
+	 *
+	 * @return void
+	 */
+	private function filter_template_selects(): void {
+		$filter = function ( array $field ): array {
+
+			$block   = acffb_get_posted_acf_block();
+			$form_id = acffb_get_block_id_from_acf_block_data( $block );
+
+			if ( ! $form_id ) {
+				return $field;
+			}
+
+			$field['choices'] = [];
+
+			foreach ( $this->get_templates() as $template_id ) {
+				$template_form_id = get_post_meta( $template_id, '_acffb_form_id', true );
+				if ( $form_id && $template_form_id && $template_form_id === $form_id ) {
+					continue;
+				}
+
+				$field['choices'][ $template_id ] = get_the_title( $template_id );
+			}
+
+			return $field;
+		};
+
+		// Admin Template
+		add_filter( 'acf/prepare_field/key=field_669eb7e04224d', $filter );
+
+		// Confirmation Template
+		add_filter( 'acf/prepare_field/key=field_669eb8184224e', $filter );
+
+		// Custom Template
+		add_filter( 'acf/prepare_field/key=field_669eb8394224f', $filter );
+	}
+
+	/**
+	 * Get Email Templates
+	 *
+	 * @return array
+	 */
+	public function get_templates(): array {
+		if ( ! empty( $this->templates ) ) {
+			return $this->templates;
+		}
+
+		$args = [
+			'post_type'      => self::POST_TYPE,
+			'posts_per_page' => -1,
+			'post_status'    => 'publish',
+			'order'          => 'ASC',
+			'orderby'        => 'title',
+		];
+
+		$templates = get_posts( $args );
+
+		if ( ! $templates ) {
+			return [];
+		}
+
+		$this->templates = wp_list_pluck( $templates, 'ID' );
+
+		return $this->templates;
 	}
 }

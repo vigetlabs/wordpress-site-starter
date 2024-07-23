@@ -379,6 +379,8 @@ class Form {
 					continue;
 				}
 
+				$form->get_form_object()->set_name();
+
 				self::$all_forms[] = $form;
 			}
 		}

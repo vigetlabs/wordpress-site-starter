@@ -74,6 +74,7 @@ class Notification {
 		$submission_url = $form->get_submission()->get_submission_url();
 
 		$form_name = $form->get_form_object()->get_name();
+		$recipient = get_option( 'admin_email' );
 		$subject   = __( 'New Form Submission', 'acf-form-blocks' ) . ': ' . $form_name;
 		$body      = __( 'A new form submission has been received for the form', 'acf-blocks-toolkit' ) . ': ' . $form_name . '<br><br>';
 		$body     .= wp_json_encode( $form->get_submission()->get_data(), JSON_PRETTY_PRINT );
@@ -87,7 +88,13 @@ class Notification {
 			);
 		}
 
-		$recipient = get_option( 'admin_email' );
+		$template_id = $this->get_admin_template();
+
+		if ( $template_id ) {
+			$template = get_post( $template_id );
+			$subject  = get_field( 'email_subject', $template_id ) ?: $subject;
+			$body     = apply_filters( 'the_content', $template->post_content ) ?: $body;
+		}
 
 		$this->send_email( $recipient, $subject, $body );
 	}
@@ -109,6 +116,14 @@ class Notification {
 		$subject   = __( 'Form Submission Confirmation', 'acf-form-blocks' );
 		$body      = __( 'This is a confirmation that your submission has been received for the form', 'acf-blocks-toolkit' ) . ': ' . $form_name . '<br><br>';
 		$body     .= wp_json_encode( $form->get_submission()->get_data(), JSON_PRETTY_PRINT );
+
+		$template_id = $this->get_confirmation_template();
+
+		if ( $template_id ) {
+			$template = get_post( $template_id );
+			$subject  = get_field( 'email_subject', $template_id ) ?: $subject;
+			$body     = apply_filters( 'the_content', $template->post_content ) ?: $body;
+		}
 
 		$this->send_email( $recipient, $subject, $body );
 	}
@@ -145,11 +160,18 @@ class Notification {
 	private function send_custom_email(): void {
 		$form      = $this->get_form();
 		$form_name = $form->get_form_object()->get_name();
+		$recipient = $this->get_custom_email();
 		$subject   = __( 'New Form Submission', 'acf-form-blocks' ) . ': ' . $form_name;
 		$body      = __( 'A new form submission has been received for the form', 'acf-blocks-toolkit' ) . ': ' . $form_name . '<br><br>';
 		$body     .= wp_json_encode( $form->get_submission()->get_data(), JSON_PRETTY_PRINT );
 
-		$recipient = $this->get_custom_email();
+		$template_id = $this->get_custom_template();
+
+		if ( $template_id ) {
+			$template = get_post( $template_id );
+			$subject  = get_field( 'email_subject', $template_id ) ?: $subject;
+			$body     = apply_filters( 'the_content', $template->post_content ) ?: $body;
+		}
 
 		$this->send_email( $recipient, $subject, $body );
 	}
@@ -188,6 +210,33 @@ class Notification {
 	 */
 	public function get_custom_email(): string {
 		return (string) $this->get_form()->get_form_object()->get_form_data( 'email_recipient' );
+	}
+
+	/**
+	 * Get the Admin Email Template
+	 *
+	 * @return int
+	 */
+	public function get_admin_template(): int {
+		return intval( $this->get_form()->get_form_object()->get_form_data( 'admin_template' ) );
+	}
+
+	/**
+	 * Get the Confirmation Email Template
+	 *
+	 * @return int
+	 */
+	public function get_confirmation_template(): int {
+		return intval( $this->get_form()->get_form_object()->get_form_data( 'confirmation_template' ) );
+	}
+
+	/**
+	 * Get the Custom Email Template
+	 *
+	 * @return int
+	 */
+	public function get_custom_template(): int {
+		return intval( $this->get_form()->get_form_object()->get_form_data( 'custom_template' ) );
 	}
 
 	/**

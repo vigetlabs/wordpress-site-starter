@@ -281,7 +281,7 @@
             "label": "Admin Template",
             "name": "admin_template",
             "aria-label": "",
-            "type": "post_object",
+            "type": "select",
             "instructions": "",
             "required": 0,
             "conditional_logic": [
@@ -298,19 +298,16 @@
                 "class": "",
                 "id": ""
             },
-            "post_type": [
-                "acffb-email-template"
+            "choices": [
+                "All Fields"
             ],
-            "post_status": [
-                "publish"
-            ],
-            "taxonomy": "",
-            "return_format": "id",
+            "default_value": 0,
+            "return_format": "value",
             "multiple": 0,
             "allow_null": 0,
-            "bidirectional": 0,
             "ui": 1,
-            "bidirectional_target": []
+            "ajax": 0,
+            "placeholder": ""
         },
         {
             "key": "field_66895efdc1064",
@@ -337,7 +334,7 @@
             "label": "Confirmation Template",
             "name": "confirmation_template",
             "aria-label": "",
-            "type": "post_object",
+            "type": "select",
             "instructions": "",
             "required": 0,
             "conditional_logic": [
@@ -354,19 +351,16 @@
                 "class": "",
                 "id": ""
             },
-            "post_type": [
-                "acffb-email-template"
+            "choices": [
+                "All Fields"
             ],
-            "post_status": [
-                "publish"
-            ],
-            "taxonomy": "",
-            "return_format": "id",
+            "default_value": 0,
+            "return_format": "value",
             "multiple": 0,
             "allow_null": 0,
-            "bidirectional": 0,
             "ui": 1,
-            "bidirectional_target": []
+            "ajax": 0,
+            "placeholder": ""
         },
         {
             "key": "field_66895f4bc1065",
@@ -418,9 +412,9 @@
         {
             "key": "field_669eb8394224f",
             "label": "Custom Template",
-            "name": "custom_tempalte",
+            "name": "custom_template",
             "aria-label": "",
-            "type": "post_object",
+            "type": "select",
             "instructions": "",
             "required": 0,
             "conditional_logic": [
@@ -437,19 +431,16 @@
                 "class": "",
                 "id": ""
             },
-            "post_type": [
-                "acffb-email-template"
+            "choices": [
+                "All Fields"
             ],
-            "post_status": [
-                "publish"
-            ],
-            "taxonomy": "",
-            "return_format": "id",
+            "default_value": 0,
+            "return_format": "value",
             "multiple": 0,
             "allow_null": 0,
-            "bidirectional": 0,
             "ui": 1,
-            "bidirectional_target": []
+            "ajax": 0,
+            "placeholder": ""
         }
     ],
     "location": [
@@ -470,5 +461,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1721677905
+    "modified": 1721743431
 }
