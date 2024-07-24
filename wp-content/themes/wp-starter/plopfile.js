@@ -55,7 +55,7 @@ module.exports = function (plop) {
 				{
 					type: "append",
 					path: "src/styles/main.css",
-					pattern: /\/\*Everything below this line is automatically generated DO NOT REMOVE\*\//i,
+					pattern: /\/\*DO NOT REMOVE Everything below this line is automatically generated\*\//i,
 					templateFile: 'plop-templates/parts/css-link.css.hbs'
 				},
 			];
@@ -65,14 +65,15 @@ module.exports = function (plop) {
 				actions.push({
 					type: 'modify',
 					path: 'blocks/{{dashCase name}}/block.json',
-					pattern: /-- PREPEND STYLES HERE --/gi,
+					pattern: /-- STYLES HERE --/gi,
 					templateFile: 'plop-templates/parts/styles.json.hbs'
 				});
 			} else {
+				// if no styles remove prepend text
 				actions.push({
 					type: 'modify',
 					path: 'blocks/{{dashCase name}}/block.json',
-					pattern: /-- PREPEND STYLES HERE --/gi
+					pattern: /-- STYLES HERE --/gi
 				});
 			}
 
@@ -81,14 +82,14 @@ module.exports = function (plop) {
 				actions.push({
 					type: 'modify',
 					path: 'blocks/{{dashCase name}}/block.json',
-					pattern: /-- PREPEND VARIATIONS HERE --/gi,
+					pattern: /-- VARIATIONS HERE --/gi,
 					templateFile: 'plop-templates/parts/variations.json.hbs'
 				});
 			} else {
 				actions.push({
 					type: 'modify',
 					path: 'blocks/{{dashCase name}}/block.json',
-					pattern: /-- PREPEND VARIATIONS HERE --/gi
+					pattern: /-- VARIATIONS HERE --/gi
 				});
 			}
 
