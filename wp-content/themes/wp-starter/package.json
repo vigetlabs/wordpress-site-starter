@@ -1,6 +1,7 @@
 {
 	"name": "wp-starter",
 	"version": "0.1.0",
+  "type": "commonjs",
 	"engines": {
 		"node": ">=20.0.0",
 		"npm": ">=10.0.0"
@@ -9,7 +10,8 @@
 		"dev": "APP_ENV=dev vite --host",
 		"build": "vite build",
 		"format": "prettier \"./src/**/*.{css,ts,tsx,js}\" --check",
-		"format:fix": "prettier \"./src/**/*.{css,ts,tsx,js}\" --write"
+		"format:fix": "prettier \"./src/**/*.{css,ts,tsx,js}\" --write",
+    "plop": "plop"
 	},
 	"devDependencies": {
 		"autoprefixer": "^10.4.19",
@@ -20,6 +22,7 @@
 		"install": "^0.13.0",
 		"npm": "^10.5.2",
 		"path": "^0.12.7",
+		"plop": "^4.0.1",
 		"postcss": "^8.4.38",
 		"postcss-import": "^16.1.0",
 		"postcss-nested-import": "^0.2.0",

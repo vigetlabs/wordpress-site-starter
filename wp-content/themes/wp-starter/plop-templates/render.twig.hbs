@@ -1,0 +1,26 @@
+{#
+  Block: {{titleCase name}}
+#}
+
+{% set template = [
+	[
+		'core/pattern',
+		{
+			'slug': 'wp-starter/{{dashCase name}}-inner-blocks',
+		}
+	]
+] %}
+
+{% set allowed = [
+	'core/group',
+] %}
+
+{% set inner = {
+	template: template,
+	allowedBlocks: allowed
+} %}
+
+
+<section \{{ block_attrs( attributes ) }}>
+  \{{ inner_blocks( inner ) }}
+</section>
