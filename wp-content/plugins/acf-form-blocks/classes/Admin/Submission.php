@@ -129,6 +129,14 @@ class Submission {
 			function( $column_name, $post_id ) {
 				if ( 'form' === $column_name ) {
 					$form = $this->get_form( $post_id );
+					if ( ! $form ) {
+						printf(
+							'<span>%s</span>',
+							esc_html__( 'Unknown', 'acf-form-blocks' )
+						);
+						return;
+					}
+
 					printf(
 						'<span title="%s">%s</span>',
 						esc_attr( $form->get_form_object()->get_id() ),
@@ -290,8 +298,14 @@ class Submission {
 			$post_id = get_the_ID();
 		}
 
-		$markup  = get_post_meta( $post_id, '_form_markup', true );
-		$context = get_post_meta( $post_id, '_form_context', true );
+		$form_meta = get_post_meta( $post_id, '_form', true );
+
+		if ( ! $form_meta ) {
+			return null;
+		}
+
+		$markup  = $form_meta['markup'] ?? '';
+		$context = $form_meta['context'] ?? [];
 		$form_id = $this->get_form_id( $post_id );
 		$form    = Form::get_instance( $form_id, $markup, $context );
 

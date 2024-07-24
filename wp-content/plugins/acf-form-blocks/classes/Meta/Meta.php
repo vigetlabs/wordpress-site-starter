@@ -123,6 +123,10 @@ class Meta {
 	 * @return mixed
 	 */
 	public function get_value( ?string $child = null ): mixed {
+		if ( is_null( $this->value ) ) {
+			$this->set_value(); // Init the built-in value.
+		}
+
 		if ( ! is_null( $child ) && is_array( $this->value ) ) {
 			return $this->value[ $child ] ?? null;
 		}
