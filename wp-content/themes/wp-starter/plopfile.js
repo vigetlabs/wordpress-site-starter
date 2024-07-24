@@ -27,9 +27,20 @@ module.exports = function (plop) {
 				  },
 			},
 			{
+				type: 'input',
+				name: 'themeslug',
+				message: 'What is the slug for your theme?',
+				validate: function (value) {
+					if (/.+/.test(value)) {
+					  return true;
+					}
+					return "Theme slug is required";
+				  },
+			},
+			{
 				type: 'list',
 				name: 'icon',
-				message: 'Pick an WordPress icon for the block',
+				message: 'Pick a WordPress icon for the block',
 				choices: WPIcons,
 			},
 			{
@@ -41,7 +52,7 @@ module.exports = function (plop) {
 				type: 'confirm',
 				name: 'variations',
 				message: 'Do you need block variations?'
-			}
+			},
 		],
 		actions: function(data) {
 			var actions = [
@@ -53,9 +64,16 @@ module.exports = function (plop) {
 					abortOnFail: true,
 				},
 				{
+					type: 'addMany',
+					destination: 'blocks/{{dashCase name}}/',
+					base: 'plop-templates',
+					templateFiles: 'plop-templates/patterns/*.hbs',
+					abortOnFail: true,
+				},
+				{
 					type: "append",
 					path: "src/styles/main.css",
-					pattern: /\/\*DO NOT REMOVE Everything below this line is automatically generated\*\//i,
+					pattern: /\/\*DO NOT REMOVE - Everything below this line is automatically generated\*\//i,
 					templateFile: 'plop-templates/parts/css-link.css.hbs'
 				},
 			];
