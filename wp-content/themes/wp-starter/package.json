@@ -11,7 +11,7 @@
 		"build": "vite build",
 		"format": "prettier \"./src/**/*.{css,ts,tsx,js}\" --check",
 		"format:fix": "prettier \"./src/**/*.{css,ts,tsx,js}\" --write",
-    "plop": "plop"
+    "new:block": "plop"
 	},
 	"devDependencies": {
 		"autoprefixer": "^10.4.19",

@@ -1,5 +1,17 @@
 module.exports = function (plop) {
-	// controller generator
+
+	// Block icons from https://developer.wordpress.org/resource/dashicons/
+	const WPIcons = [
+		"default",
+		"align-left",
+		"cover-image",
+		"embed-video",
+		"format-gallery",
+		"layout",
+		"schedule",
+	]
+
+	// Block generator
 	plop.setGenerator('block', {
 		description: 'Set up a new block',
 		prompts: [
@@ -15,24 +27,38 @@ module.exports = function (plop) {
 				  },
 			},
 			{
+				type: 'list',
+				name: 'icon',
+				message: 'Pick an WordPress icon for the block',
+				choices: WPIcons,
+			},
+			{
 				type: 'confirm',
 				name: 'styles',
-				message: 'Do you want block styles?'
+				message: 'Do you need block styles?'
 			},
 			{
 				type: 'confirm',
 				name: 'variations',
-				message: 'Do you want block variations?'
+				message: 'Do you need block variations?'
 			}
 		],
 		actions: function(data) {
-			var actions = [{
-				type: 'addMany',
-				destination: 'blocks/{{dashCase name}}/',
-				base: 'plop-templates',
-				templateFiles: 'plop-templates/*.hbs',
-				abortOnFail: true,
-			}];
+			var actions = [
+				{
+					type: 'addMany',
+					destination: 'blocks/{{dashCase name}}/',
+					base: 'plop-templates',
+					templateFiles: 'plop-templates/*.hbs',
+					abortOnFail: true,
+				},
+				{
+					type: "append",
+					path: "src/styles/main.css",
+					pattern: /\/\*Everything below this line is automatically generated DO NOT REMOVE\*\//i,
+					templateFile: 'plop-templates/parts/css-link.css.hbs'
+				},
+			];
 
 			// add styles
 			if (data.styles) {
@@ -50,7 +76,7 @@ module.exports = function (plop) {
 				});
 			}
 
-			// add styles
+			// add variations
 			if (data.styles) {
 				actions.push({
 					type: 'modify',
