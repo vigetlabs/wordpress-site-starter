@@ -7,6 +7,8 @@
 
 namespace ACFFormBlocks;
 
+use ACFFormBlocks\Admin\EmailTemplate;
+
 /**
  * Form Confirmation
  */
@@ -218,7 +220,7 @@ class Notification {
 	 * @return int
 	 */
 	public function get_admin_template(): int {
-		return intval( $this->get_form()->get_form_object()->get_form_data( 'admin_template' ) );
+		return $this->get_template( 'admin_template' );
 	}
 
 	/**
@@ -227,7 +229,7 @@ class Notification {
 	 * @return int
 	 */
 	public function get_confirmation_template(): int {
-		return intval( $this->get_form()->get_form_object()->get_form_data( 'confirmation_template' ) );
+		return $this->get_template( 'confirmation_template' );
 	}
 
 	/**
@@ -236,7 +238,24 @@ class Notification {
 	 * @return int
 	 */
 	public function get_custom_template(): int {
-		return intval( $this->get_form()->get_form_object()->get_form_data( 'custom_template' ) );
+		return $this->get_template( 'custom_template' );
+	}
+
+	/**
+	 * Get an Email Template form setting.
+	 *
+	 * @param string $key
+	 *
+	 * @return int
+	 */
+	private function get_template( string $key ): int {
+		$template = intval( $this->get_form()->get_form_object()->get_form_data( $key ) );
+
+		if ( ! $template ) {
+			return EmailTemplate::get_default_template();
+		}
+
+		return $template;
 	}
 
 	/**

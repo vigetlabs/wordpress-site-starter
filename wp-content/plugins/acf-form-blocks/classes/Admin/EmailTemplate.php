@@ -21,11 +21,22 @@ class EmailTemplate {
 	const POST_TYPE = 'acffb-email-template';
 
 	/**
+	 * The Default Template ID Option Key.
+	 * @var string
+	 */
+	const OPTION_DEFAULT_TEMPLATE_ID = 'acffb-default-email-template';
+
+	/**
 	 * Array of template IDs.
 	 *
 	 * @var int[]
 	 */
 	private array $templates = [];
+
+	/**
+	 * @var ?int
+	 */
+	private static ?int $default_template = null;
 
 	/**
 	 * Submission constructor.
@@ -48,6 +59,9 @@ class EmailTemplate {
 
 		// Customize admin columns
 		$this->admin_columns();
+
+		// Prevent Deletion of the default template.
+		$this->protect_default_template();
 	}
 
 	/**
@@ -228,8 +242,10 @@ class EmailTemplate {
 			function( $column_name, $post_id ) {
 				if ( '_acffb_form_id' === $column_name ) {
 					$form_id = get_post_meta( $post_id, '_acffb_form_id', true );
-					if ( 'any' === $form_id ) {
-						esc_html_e( __( 'Any', 'acf-form-blocks' ) );
+					if ( ! $form_id ) {
+						printf( '<em>%s</em>',
+							esc_html__(  'Any Form', 'acf-form-blocks' )
+						);
 						return;
 					}
 
@@ -245,6 +261,7 @@ class EmailTemplate {
 						esc_attr( $form->get_form_object()->get_id() ),
 						esc_html( $form->get_form_object()->get_name() )
 					);
+
 					return;
 				}
 			},
@@ -356,6 +373,8 @@ class EmailTemplate {
 			return $this->templates;
 		}
 
+		$default_template = self::get_default_template();
+
 		$args = [
 			'post_type'      => self::POST_TYPE,
 			'posts_per_page' => -1,
@@ -370,8 +389,131 @@ class EmailTemplate {
 			return [];
 		}
 
-		$this->templates = wp_list_pluck( $templates, 'ID' );
+		$templates = wp_list_pluck( $templates, 'ID' );
+
+		// Move the default template ID to the top of the array
+		if ( $default_template ) {
+			$default_template_index = array_search( $default_template, $templates );
+			if ( $default_template_index !== false ) {
+				unset( $templates[ $default_template_index ] );
+				array_unshift( $templates, $default_template );
+			}
+		}
+
+		$this->templates = $templates;
 
 		return $this->templates;
+	}
+
+	/**
+	 * Get the default template.
+	 *
+	 * @return ?int
+	 */
+	public static function get_default_template(): ?int {
+		if ( self::$default_template ) {
+			return self::$default_template;
+		}
+
+		$default_template = get_option( self::OPTION_DEFAULT_TEMPLATE_ID );
+
+		if ( ! $default_template ) {
+			$default_template = self::init_default_template();
+		}
+
+		if ( $default_template ) {
+			self::$default_template = $default_template;
+		}
+
+		return self::$default_template;
+	}
+
+	/**
+	 * Initialize the default template.
+	 *
+	 * @return ?int
+	 */
+	private static function init_default_template(): ?int {
+		$default_template = wp_insert_post( [
+			'post_title'   => __( 'All Fields', 'acf-form-blocks' ),
+			'post_content' => '<!-- wp:acf/all-fields {"name":"acf/all-fields","data":{},"mode":"preview"} /-->',
+			'post_status'  => 'publish',
+			'post_type'    => self::POST_TYPE,
+		] );
+
+		if ( ! $default_template ) {
+			return null;
+		}
+
+		update_option( self::OPTION_DEFAULT_TEMPLATE_ID, $default_template );
+
+		return $default_template;
+	}
+
+	/**
+	 * Prevent deletion of the default template
+	 *
+	 * @return void
+	 */
+	private function protect_default_template(): void {
+		add_action(
+			'before_delete_post',
+			function( int $post_id ) {
+				if ( self::get_default_template() === $post_id ) {
+					wp_die( __( 'You cannot delete the default template.', 'acf-form-blocks' ) );
+				}
+			}
+		);
+
+		add_filter(
+			'acf/pre_save_post',
+			function( array $post_data ): array {
+				if ( self::get_default_template() === $post_data['ID'] ) {
+					unset( $post_data['post_status'] );
+				}
+
+				return $post_data;
+			}
+		);
+
+		add_filter(
+			'post_row_actions',
+			function( array $actions, \WP_Post $post ): array {
+				if ( self::get_default_template() === $post->ID ) {
+					unset( $actions['trash'] );
+				}
+
+				return $actions;
+			},
+			10,
+			2
+		);
+
+		add_filter(
+			'display_post_states',
+			function( array $post_states, \WP_Post $post ): array {
+				if ( self::get_default_template() === $post->ID ) {
+					$post_states['default_template'] = __( 'Default', 'acf-form-blocks' );
+				}
+
+				return $post_states;
+			},
+			10,
+			2
+		);
+
+		add_action(
+			'admin_head',
+			function () {
+				global $post;
+
+				if ( ! $post || self::get_default_template() !== $post->ID ) {
+					return;
+				}
+
+				// Not sure how stable this is. The alternative is using :last-child, but no guarantee Trash is the last item.
+				echo '<style>div[role=menuitem][id=":r11:"] { display: none; }</style>';
+			}
+		);
 	}
 }
