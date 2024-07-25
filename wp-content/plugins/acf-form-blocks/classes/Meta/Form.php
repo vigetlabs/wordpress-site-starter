@@ -39,6 +39,11 @@ class Form extends Meta {
 	 * @return void
 	 */
 	public function set_value( mixed $value = null ): void {
+		if ( ! is_null( $value ) ) {
+			parent::set_value( $value );
+			return;
+		}
+
 		$this->value = [
 			'id'      => $this->get_form()->get_form_object()->get_id(),
 			'name'    => $this->get_form()->get_form_object()->get_name(),
