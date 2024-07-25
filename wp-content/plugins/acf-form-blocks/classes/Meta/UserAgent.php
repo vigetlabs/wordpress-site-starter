@@ -32,6 +32,11 @@ class UserAgent extends Meta {
 	 * @return void
 	 */
 	public function set_value( mixed $value = null ): void {
+		if ( ! is_null( $value ) ) {
+			parent::set_value( $value );
+			return;
+		}
+
 		$this->value = $_SERVER['HTTP_USER_AGENT'] ?? '';
 	}
 

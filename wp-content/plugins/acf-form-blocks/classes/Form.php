@@ -565,6 +565,21 @@ class Form {
 	}
 
 	/**
+	 * Load meta from Post meta.
+	 *
+	 * @param int $post_id
+	 *
+	 * @return void
+	 */
+	public function load_meta( int $post_id ): void {
+		foreach ( $this->get_meta() as $meta_field ) {
+			// Set value no matter what when loading so we don't end up with default values.
+			$meta_value = get_post_meta( $post_id, $meta_field->get_key(), true );
+			$meta_field->set_value( $meta_value );
+		}
+	}
+
+	/**
 	 * Register the Form Meta
 	 *
 	 * @return void

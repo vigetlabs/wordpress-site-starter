@@ -32,6 +32,12 @@ class Notifications extends Meta {
 			'recipient'             => __( 'Custom Email Recipient', 'acf-form-blocks' ),
 			'custom_template'       => __( 'Custom Template', 'acf-form-blocks' ),
 		];
+
+		$this->booleans = [
+			'admin',
+			'confirmation',
+			'custom',
+		];
 	}
 
 	/**
@@ -42,6 +48,11 @@ class Notifications extends Meta {
 	 * @return void
 	 */
 	public function set_value( mixed $value = null ): void {
+		if ( ! is_null( $value ) ) {
+			parent::set_value( $value );
+			return;
+		}
+
 		$this->value = [
 			'admin'                 => $this->get_form()->get_notification()->is_admin_email_enabled(),
 			'admin_template'        => $this->get_form()->get_notification()->get_admin_template(),

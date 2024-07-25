@@ -15,13 +15,6 @@ use ACFFormBlocks\Form;
 class Meta {
 
 	/**
-	 * Registered Meta Fields
-	 *
-	 * @var Meta[]
-	 */
-	public static array $registered = [];
-
-	/**
 	 * The Meta Key
 	 *
 	 * @var string
@@ -55,6 +48,20 @@ class Meta {
 	 * @var ?string
 	 */
 	protected ?string $form_id;
+
+	/**
+	 * Booleans of child meta values.
+	 *
+	 * @var array
+	 */
+	public array $booleans = [];
+
+	/**
+	 * If Meta Value is Boolean
+	 *
+	 * @var bool
+	 */
+	public bool $is_boolean = false;
 
 	/**
 	 * Meta Constructor
@@ -122,9 +129,13 @@ class Meta {
 	 *
 	 * @return mixed
 	 */
-	public function get_value( ?string $child = null ): mixed {
+	public function get_value( ?string $child = null, bool $for_display = false ): mixed {
 		if ( is_null( $this->value ) ) {
 			$this->set_value(); // Init the built-in value.
+		}
+
+		if ( $for_display ) {
+			$this->convert_booleans();
 		}
 
 		if ( ! is_null( $child ) && is_array( $this->value ) ) {
@@ -132,6 +143,32 @@ class Meta {
 		}
 
 		return $this->value;
+	}
+
+	/**
+	 * Convert boolean values to be readable
+	 *
+	 * @return void
+	 */
+	protected function convert_booleans(): void {
+		if ( is_array( $this->value ) ) {
+			$bools = $this->get_booleans();
+			foreach ( $this->value as $key => &$value ) {
+				if ( in_array( $key, $bools, true ) ) {
+					$value = $value ? __( 'Yes', 'acf-form-blocks' ) : __( 'No', 'acf-form-blocks' );
+				}
+			}
+		} elseif ( $this->is_boolean() ) {
+			$this->value = $this->value ? __( 'Yes', 'acf-form-blocks' ) : __( 'No', 'acf-form-blocks' );
+		}
+	}
+
+	private function get_booleans(): array {
+		return $this->booleans;
+	}
+
+	private function is_boolean(): bool {
+		return $this->is_boolean;
 	}
 
 	/**
