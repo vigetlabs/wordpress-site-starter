@@ -3,8 +3,12 @@ a.page-title-action:empty {
 }
 
 .acffb-submission th {
-	padding-top: 10px;
 	padding-bottom: 5px;
+	padding-top: 10px;
+	padding-right: 0.5rem;
+	text-align: left;
+	width: 35%;
+	vertical-align: top;
 }
 .acffb-submission td {
 	padding-top: 5px;
@@ -26,6 +30,7 @@ a.page-title-action:empty {
 	overflow-wrap: break-word;
 	margin-block-end: 0.15rem;
 	margin-block-start: 0.25rem;
+	padding-inline-start: 0;
 }
 .acffb-checkbox-list li,
 .acffb-radio-list li {
@@ -62,6 +67,7 @@ a.page-title-action:empty {
 	gap: 1rem;
 	margin-block-end: 0;
 	margin-block-start: 0.5rem;
+	padding-inline-start: 0;
 }
 .acffb-radio-list li .radio {
 	display: flex;
@@ -73,6 +79,9 @@ a.page-title-action:empty {
 	content: '';
 	line-height: 0;
 	position: relative;
+	top: 0;
+}
+body.wp-admin .acffb-radio-list li .radio:before {
 	top: -0.15rem;
 }
 .acffb-radio-list li.checked .radio:before {
