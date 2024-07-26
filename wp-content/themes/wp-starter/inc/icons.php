@@ -7,7 +7,9 @@
 
 /**
  * Add custom icons to the button icons array.
- * */
+ * Place your custom icon(s) in the `src/images/icons` directory.
+ * Then add the icon(s) to the array, the key and label should be unique for each icon.
+ */
 
 add_filter(
 	'acfbt_button_icons',
@@ -16,8 +18,8 @@ add_filter(
 
 		/* Custom Icons */
 		/*
-		$icons['short-arrow-right'] = [
-			'label'       => __( 'YOUR LABEL', 'wp-starter' ),
+		$icons['your-custom-icon'] = [
+			'label'       => __( 'your custom icon', 'wp-starter' ),
 			'icon'        => file_get_contents( $icon_path . 'file-name.svg' ),
 			'defaultLeft' => false,
 		];*/
