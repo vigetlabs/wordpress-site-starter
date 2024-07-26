@@ -8,6 +8,7 @@
 namespace ACFFormBlocks\Admin;
 
 use ACFFormBlocks\Form;
+use ACFFormBlocks\Views;
 use WP_Query;
 
 /**
@@ -355,8 +356,8 @@ class Submission {
 					'acffb_submission_data',
 					__( 'Submission Data', 'acf-form-blocks' ),
 					function( \WP_Post $post ): void {
-						$data = $post->post_content ? json_decode( $post->post_content, true ) : [];
-						if ( ! $data ) {
+						$content = $post->post_content ? json_decode( $post->post_content, true ) : [];
+						if ( ! $content ) {
 							printf(
 								'<p>%s <strong>%s:</strong></p>',
 								esc_html__( 'There was a problem rendering the submission data.', 'acf-form-blocks' ),
@@ -370,7 +371,7 @@ class Submission {
 							return;
 						}
 
-						$this->render_submission_data( $data );
+						$this->render_submission_content( $content );
 					},
 					self::POST_TYPE,
 					'normal',
@@ -413,29 +414,14 @@ class Submission {
 	}
 
 	/**
-	 * Render the submission data.
+	 * Render the submission content.
 	 *
-	 * @param array $data Submission data.
+	 * @param array $content Submission content.
 	 *
 	 * @return void
 	 */
-	private function render_submission_data( array $data ): void {
-		$form = $this->get_form();
-		?>
-		<table class="form-table acffb-submission">
-			<tbody>
-				<?php foreach ( $data as $key => $content ) :
-					$field = $form->get_form_object()->get_field_by_id( $key );
-					$label = $field->get_field_label() ?: $content['label'];
-					?>
-					<tr id="<?php echo esc_attr( $key ); ?>">
-						<th scope="row" title="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $label ); ?></th>
-						<td title="<?php echo esc_attr( $field->get_label() ); ?>"><?php $field->render_value( $content['value'], $form ); ?></td>
-					</tr>
-				<?php endforeach; ?>
-			</tbody>
-		</table>
-		<?php
+	private function render_submission_content( array $content ): void {
+		Views::render( 'templates/all-fields', [ 'form' => $this->get_form(), 'content' => $content ] );
 	}
 
 	/**

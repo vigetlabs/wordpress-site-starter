@@ -348,6 +348,9 @@ class EmailTemplate {
 				}
 
 				$field['choices'][ $template_id ] = get_the_title( $template_id );
+				if ( $template_id === self::get_default_template() ) {
+					$field['choices'][ $template_id ] .= ' (' . __( 'Default', 'acf-form-blocks' ) . ')';
+				}
 			}
 
 			return $field;

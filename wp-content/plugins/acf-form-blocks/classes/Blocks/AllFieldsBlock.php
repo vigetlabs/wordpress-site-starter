@@ -7,6 +7,8 @@
 
 namespace ACFFormBlocks\Blocks;
 
+use ACFFormBlocks\Views;
+
 /**
  * Submit Block Class
  */
@@ -29,6 +31,14 @@ class AllFieldsBlock extends Block {
 	 * @return string
 	 */
 	public function render( string $block_content ): string {
-		return 'ALL FIELDS SHOW UP HERE!';
+		$data = $this->get_form()->get_submission()->get_data();
+		return Views::get(
+			'templates/all-fields',
+			[
+					'form'    => $this->get_form(),
+					'content' => $data['content'],
+					'block'   => $this,
+				]
+		);
 	}
 }
