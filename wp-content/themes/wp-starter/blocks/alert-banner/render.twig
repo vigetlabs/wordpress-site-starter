@@ -2,14 +2,28 @@
 Block: Alert Banner
 #}
 
+{% set id = 'alert' ~ block.id %}
+
+{% if block.block_id is not empty %}
+    {% set id = 'alert' ~ block.block_id %}
+{% endif %}
+
+
 {% set template = [
 	[
 		'core/paragraph',
 		{
 			'placeholder': 'Enter alert banner message...'
 		}
+	],
+	[
+		'core/button',
+		{
+			'className': 'is-style-outline',
+		}
 	]
 ] %}
+
 {% set allowed = [
 	'core/paragraph',
 	'core/button',
@@ -23,15 +37,15 @@ Block: Alert Banner
 
 {% if function('is_admin') == false %}
 	{% set attrs = {
-		'x-data': '{ ' ~ block.id ~ ': $persist(true) }',
-		'x-show': block.id
+		'x-data': '{ ' ~ id ~ ': $persist(true) }',
+		'x-show': id
 	} %}
 {% endif %}
-<section
-	{{ block_attrs( block, 'gap-24 lg:gap-48', attrs ) }}
->
-	<div class="flex flex-col items-start gap-24 lg:flex-row lg:gap-48 lg:items-center">
+
+<section {{ block_attrs( block, '', attrs ) }} >
+	<div class="wp-block-alert-banner__inner-container">
 		{{ inner_blocks( inner ) }}
 	</div>
-	{{ function( 'alert_banner_dismiss_button', block.id ) }}
+	{{ function( 'alert_banner_dismiss_button', id ) }}
 </section>
+
