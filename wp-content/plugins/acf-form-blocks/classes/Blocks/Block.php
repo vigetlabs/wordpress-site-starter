@@ -98,6 +98,15 @@ class Block {
 	}
 
 	/**
+	 * Get the Form Object
+	 *
+	 * @return ?Form
+	 */
+	public function get_form(): ?Form {
+		return $this->form;
+	}
+
+	/**
 	 * Filter the block during render.
 	 *
 	 * @return void

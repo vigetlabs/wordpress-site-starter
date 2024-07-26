@@ -179,6 +179,20 @@ class Notification {
 	}
 
 	/**
+	 * Wrap Email body in Header and Footer.
+	 *
+	 * @param string $body
+	 *
+	 * @return string
+	 */
+	private function wrap_body( string $body ): string {
+		$header = Views::get( 'parts/email-header' );
+		$footer = Views::get( 'parts/email-footer' );
+
+		return $header . $body . $footer;
+	}
+
+	/**
 	 * Check if Admin Email Notification is enabled.
 	 *
 	 * @return bool
@@ -267,13 +281,20 @@ class Notification {
 	 * @param array  $headers
 	 * @param array  $attachments
 	 *
-	 * @return void
+	 * @return mixed
 	 */
-	public function send_email( string $recipient, string $subject, string $body, array $headers = [], array $attachments = [] ): void {
-		wp_mail(
+	public function send_email( string $recipient, string $subject, string $body, array $headers = [], array $attachments = [] ): mixed {
+		add_filter(
+			'wp_mail_content_type',
+			function ( string $content_type ): string {
+				return 'text/html';
+			}
+		);
+
+		return wp_mail(
 			$recipient,
 			$subject,
-			$body,
+			$this->wrap_body( $body ),
 			$headers,
 			$attachments
 		);
