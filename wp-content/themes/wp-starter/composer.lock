@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca51503320aff9bc3e43346550fc129f",
+    "content-hash": "30d74b11b0da5ffa76774b0fad5c26aa",
     "packages": [
         {
             "name": "composer/installers",
@@ -1066,6 +1066,24 @@
                 }
             ],
             "time": "2024-04-18T11:59:33+00:00"
+        },
+        {
+            "name": "wpackagist-plugin/accessibility-checker",
+            "version": "1.15.0",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/accessibility-checker/",
+                "reference": "tags/1.15.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/accessibility-checker.1.15.0.zip"
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/accessibility-checker/"
         },
         {
             "name": "wpackagist-plugin/seo-by-rank-math",

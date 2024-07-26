@@ -54,6 +54,7 @@ class PostInstallScript extends ComposerScript {
 	 * @var array
 	 */
 	private static array $activatePlugins = [
+		'accessibility-checker' => 'Accessibility Checker',
 		'acf-blocks-toolkit' => [
 			'name' => 'ACF Blocks Toolkit',
 			'dependencies' => [

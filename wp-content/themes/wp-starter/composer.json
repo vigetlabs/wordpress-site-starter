@@ -28,6 +28,7 @@
     "idleberg/wordpress-vite-assets": "^1.0",
     "squizlabs/php_codesniffer": "^3.9",
     "timber/timber": "^2.1",
+    "wpackagist-plugin/accessibility-checker": "^1.15",
     "wpackagist-plugin/seo-by-rank-math": "^1.0",
     "wpackagist-plugin/svg-support": "^2.5",
     "wpackagist-plugin/wordfence": "^7.11"
