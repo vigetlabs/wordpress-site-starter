@@ -291,6 +291,17 @@ class Notification {
 			}
 		);
 
+		add_action(
+			'acffb_email_head',
+			function () {
+				$admin_css_path = ACFFB_PLUGIN_PATH . 'assets/css/admin.css';
+				printf(
+					'<style>%s</style>',
+					file_get_contents( $admin_css_path )
+				);
+			}
+		);
+
 		return wp_mail(
 			$recipient,
 			$subject,
