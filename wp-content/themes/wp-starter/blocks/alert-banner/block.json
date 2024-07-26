@@ -15,21 +15,25 @@
     "dismiss"
   ],
   "attributes": {
+    "block_id": {
+      "type": "string",
+      "default": ""
+    },
     "align": {
       "type": "string",
       "default": "full"
     },
     "backgroundColor": {
       "type": "string",
-      "default": "base-2"
+      "default": "dark-black"
     },
     "style": {
       "type": "object",
       "default": {
         "spacing": {
           "padding": {
-            "top": "var:preset|spacing|20",
-            "bottom": "var:preset|spacing|20",
+            "top": "var:preset|spacing|10",
+            "bottom": "var:preset|spacing|10",
             "left": "var:preset|spacing|20",
             "right": "var:preset|spacing|20"
           }
