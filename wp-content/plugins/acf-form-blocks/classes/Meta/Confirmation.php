@@ -21,12 +21,22 @@ class Confirmation extends Meta {
 		parent::__construct( $form_id );
 
 		$this->key   = '_confirmation';
+		$this->type  = 'array';
 		$this->label = __( 'Confirmation', 'acf-form-blocks' );
 
 		$this->children = [
-			'type' => __( 'Confirmation Type', 'acf-form-blocks' ),
-			'page' => __( 'Confirmation Page', 'acf-form-blocks' ),
-			'url'  => __( 'Redirect URL', 'acf-form-blocks' ),
+			'type' => [
+				'type'  => 'string',
+				'label' => __( 'Confirmation Type', 'acf-form-blocks' ),
+			],
+			'page' => [
+				'type'  => 'post_id',
+				'label' => __( 'Confirmation Page', 'acf-form-blocks' ),
+			],
+			'url'  => [
+				'type'  => 'string',
+				'label' => __( 'Redirect URL', 'acf-form-blocks' ),
+			],
 		];
 	}
 

@@ -464,7 +464,7 @@ class Submission {
 					printf(
 						'<p><strong>%s:</strong> %s</p>',
 						esc_html( $meta_field->get_label( $key ) ),
-						esc_html( $val )
+						$val ? wp_kses_post( $val ) : $val
 					);
 				}
 
@@ -474,7 +474,7 @@ class Submission {
 			printf(
 				'<p><strong>%s:</strong> %s</p>',
 				esc_html( $label ),
-				esc_html( $value )
+				$value ? wp_kses_post( $value ) : ''
 			);
 		}
 	}

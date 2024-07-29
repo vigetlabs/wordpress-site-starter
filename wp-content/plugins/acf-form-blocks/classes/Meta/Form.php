@@ -21,13 +21,26 @@ class Form extends Meta {
 		parent::__construct( $form_id );
 
 		$this->key   = '_form';
+		$this->type  = 'array';
 		$this->label = __( 'Form', 'acf-form-blocks' );
 
 		$this->children = [
-			'id'      => __( 'Form ID', 'acf-form-blocks' ),
-			'name'    => __( 'Form Name', 'acf-form-blocks' ),
-			'markup'  => __( 'Form Markup', 'acf-form-blocks' ),
-			'context' => __( 'Form Context', 'acf-form-blocks' ),
+			'id'      => [
+				'type'  => 'string',
+				'label' => __( 'Form ID', 'acf-form-blocks' ),
+			],
+			'name'    => [
+				'type'  => 'string',
+				'label' => __( 'Form Name', 'acf-form-blocks' ),
+			],
+			'markup'  => [
+				'type'  => 'string',
+				'label' => __( 'Form Markup', 'acf-form-blocks' ),
+			],
+			'context' => [
+				'type'  => 'array',
+				'label' => __( 'Form Context', 'acf-form-blocks' ),
+			],
 		];
 	}
 

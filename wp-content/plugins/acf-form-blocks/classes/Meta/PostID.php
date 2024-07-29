@@ -21,6 +21,7 @@ class PostID extends Meta {
 		parent::__construct( $form_id );
 
 		$this->key   = '_post_id';
+		$this->type  = 'post_id';
 		$this->label = __( 'Post ID', 'acf-form-blocks' );
 	}
 
