@@ -18,7 +18,7 @@ $block_template = [
 $allowed        = [
 	'core/heading',
 	'core/paragraph',
-	'core/embed'
+	'core/embed',
 ];
 $inner          = [
 	'template'      => $block_template,
@@ -26,5 +26,7 @@ $inner          = [
 ];
 ?>
 <section <?php block_attrs( $block ); ?>>
-	<?php inner_blocks( $inner ); ?>
+	<div class="alignwide">
+		<?php inner_blocks( $inner ); ?>
+	</div>
 </section>

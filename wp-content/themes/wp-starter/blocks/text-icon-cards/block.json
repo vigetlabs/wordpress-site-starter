@@ -34,9 +34,7 @@
     },
     "layout": {
       "default": {
-        "type": "flex",
-        "justifyContent": "left",
-        "flexWrap": "wrap"
+        "type": "constrained"
       },
       "allowOrientation": false,
       "allowCustomContentAndWideSize": false

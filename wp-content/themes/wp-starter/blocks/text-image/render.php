@@ -27,5 +27,7 @@ $inner          = [
 ];
 ?>
 <section <?php block_attrs( $block ); ?>>
-	<?php inner_blocks( $inner ); ?>
+	<div class="alignwide">
+		<?php inner_blocks( $inner ); ?>
+	</div>
 </section>

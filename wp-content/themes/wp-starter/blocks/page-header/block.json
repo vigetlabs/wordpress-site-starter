@@ -39,16 +39,16 @@
     "color": {
       "background": true
     },
+    "spacing": {
+      "padding": true
+    },
     "layout": {
       "default": {
-        "justifyContent": "left"
+        "type": "constrained"
       },
       "allowOrientation": false,
       "allowInheriting": false,
       "allowCustomContentAndWideSize": false
-    },
-    "spacing": {
-      "padding": true
     }
   },
   "acf": {

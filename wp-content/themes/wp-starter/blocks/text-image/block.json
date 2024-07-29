@@ -34,6 +34,13 @@
     },
     "spacing": {
       "padding": ["top", "bottom"]
+    },
+    "layout": {
+      "default": {
+        "type": "constrained"
+      },
+      "allowOrientation": false,
+      "allowCustomContentAndWideSize": false
     }
   },
   "acf": {

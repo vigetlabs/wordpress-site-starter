@@ -19,8 +19,8 @@ $inner          = [
 	'template' => $block_template,
 ];
 ?>
-<section <?php block_attrs( $block, 'flex flex-col gap-24 mx-auto p-24 lg:p-64' ); ?>>
-	<div class="flex flex-col gap-8 flex-1">
+<section <?php block_attrs( $block ); ?>>
+	<div class="alignwide">
 		<?php inner_blocks( $inner ); ?>
 	</div>
 </section>

@@ -12,5 +12,7 @@
 ] %}
 {% set inner = { template: template } %}
 <section {{ block_attrs( block ) }}>
+	<div class="alignwide">
 	{{ inner_blocks( inner ) }}
+	</div>
 </section>

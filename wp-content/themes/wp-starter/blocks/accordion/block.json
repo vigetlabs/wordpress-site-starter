@@ -31,6 +31,11 @@
     "alignWide": true,
     "color": {
       "background": true
+    },
+    "layout": {
+      "default": {
+        "type": "constrained"
+      }
     }
   },
   "acf": {

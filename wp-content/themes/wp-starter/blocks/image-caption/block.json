@@ -29,6 +29,11 @@
     "jsx": true,
     "mode": false,
     "alignWide": true,
+    "layout": {
+      "default": {
+        "type": "constrained"
+      }
+    },
     "color": {
       "background": true
     },
