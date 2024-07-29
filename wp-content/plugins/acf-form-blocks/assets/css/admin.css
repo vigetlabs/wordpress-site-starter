@@ -90,7 +90,8 @@ body.wp-admin .acffb-radio-list li .radio:before {
 }
 
 .acffb-sub-field,
-.acffb-form-data-block {
+.acffb-form-data-block,
+.acffb-form-meta-block {
 	display: flex;
 	gap: 0.5rem;
 	margin-bottom: 0.15rem;

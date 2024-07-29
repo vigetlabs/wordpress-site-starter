@@ -607,4 +607,20 @@ class Form {
 			$this->registered_meta[ $meta->get_key() ] = $meta;
 		}
 	}
+
+	/**
+	 * Get a meta field
+	 *
+	 * @param string $key
+	 *
+	 * @return ?Meta
+	 */
+	public function get_meta_field( string $key ): ?Meta {
+		$meta = $this->get_meta();
+		if ( empty( $meta[ $key ] ) ) {
+			return null;
+		}
+
+		return $meta[ $key ];
+	}
 }
