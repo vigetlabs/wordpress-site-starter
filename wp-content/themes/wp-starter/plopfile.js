@@ -1,16 +1,4 @@
 module.exports = function (plop) {
-
-	// Block icons from https://developer.wordpress.org/resource/dashicons/
-	const WPIcons = [
-		"default",
-		"align-left",
-		"cover-image",
-		"embed-video",
-		"format-gallery",
-		"layout",
-		"schedule",
-	]
-
 	// Block generator
 	plop.setGenerator('block', {
 		description: 'Set up a new block',
@@ -36,12 +24,6 @@ module.exports = function (plop) {
 					}
 					return "Theme slug is required";
 				  },
-			},
-			{
-				type: 'list',
-				name: 'icon',
-				message: 'Pick a WordPress icon for the block',
-				choices: WPIcons,
 			},
 			{
 				type: 'confirm',
@@ -72,7 +54,7 @@ module.exports = function (plop) {
 				},
 				{
 					type: "append",
-					path: "src/styles/main.css",
+					path: "src/styles/custom-blocks.css",
 					pattern: /\/\*DO NOT REMOVE - Everything below this line is automatically generated\*\//i,
 					templateFile: 'plop-templates/parts/css-link.css.hbs'
 				},

@@ -13,7 +13,7 @@
 @import './core-blocks/navigation.css';
 @import './core-blocks/quote.css';
 
-/*Import custom styles for custom blocks*/
+/*Import custom styles for main theme blocks*/
 @import '../../blocks/accordion/style.css';
 @import '../../blocks/alert-banner/style.css';
 @import '../../blocks/breadcrumbs/style.css';
@@ -23,4 +23,5 @@
 @import '../../blocks/text-icon-cards/style.css';
 @import '../../blocks/video-embed/style.css';
 
-/*DO NOT REMOVE - Everything below this line is automatically generated*/
+/*Import styles for custom blocks*/
+@import './custom-blocks.css';
