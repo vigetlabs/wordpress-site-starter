@@ -54,6 +54,9 @@ class EmailTemplate {
 		// Populate the Form Fields meta select field.
 		$this->populate_fields_select();
 
+		// Populate the meta fields select field.
+		$this->populate_meta_select();
+
 		// Filter the Template selects by form ID.
 		$this->filter_template_selects();
 
@@ -317,6 +320,30 @@ class EmailTemplate {
 
 				foreach ( $form->get_form_object()->get_all_fields() as $form_field ) {
 					$field['choices'][ $form_field->get_id() ] = $form_field->get_label();
+				}
+
+				return $field;
+			}
+		);
+	}
+
+	/**
+	 * Populate the Meta select with available meta.
+	 *
+	 * @return void
+	 */
+	private function populate_meta_select(): void {
+		add_filter(
+			'acf/prepare_field/key=field_66a7b91132f2d',
+			function ( array $field ): array {
+				$form = Form::get_instance();
+
+				if ( ! $form ) {
+					return $field;
+				}
+
+				foreach ( $form->get_meta() as $meta_field ) {
+					$field['choices'][ $meta_field->get_key() ] = $meta_field->get_label();
 				}
 
 				return $field;
