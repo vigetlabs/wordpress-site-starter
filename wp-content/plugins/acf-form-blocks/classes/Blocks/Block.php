@@ -37,7 +37,7 @@ class Block {
 	protected ?Field $field = null;
 
 	/**
-	 * The block array.
+	 * The ACF Block array.
 	 *
 	 * @var array
 	 */
@@ -67,6 +67,72 @@ class Block {
 
 		// Filter the block during render
 		$this->render_block();
+	}
+
+	/**
+	 * Get the Block array
+	 *
+	 * @return array
+	 */
+	public function get_block(): array {
+		if ( empty( $this->block ) ) {
+			$attrs       = $this->wp_block['attrs'] ?? [];
+			$context     = [ 'postType' => get_post_type(), 'postId' => get_the_ID() ];
+			$attrs['id'] = acf_get_block_id( $attrs, $context );
+			$attrs['id'] = acf_ensure_block_id_prefix( $attrs['id'] );
+
+			$this->block = acf_prepare_block( $attrs );
+		}
+
+		return $this->block;
+	}
+
+	/**
+	 * Get the WP Block array
+	 *
+	 * @return array
+	 */
+	public function get_wp_block(): array {
+		return $this->wp_block;
+	}
+
+	/**
+	 * Get the block data.
+	 *
+	 * @param string $selector Field selector.
+	 * @param mixed $default Default value.
+	 *
+	 * @return mixed
+	 */
+	public function get_block_data( string $selector, mixed $default = null ): mixed {
+		$this->preload_meta();
+
+		$value = get_field( $selector );
+
+		if ( ! is_null( $value ) ) {
+			return $value;
+		}
+
+		$value = get_field( $selector, $this->get_acf_id() );
+
+		if ( ! is_null( $value ) ) {
+			return $value;
+		}
+
+		if ( ! empty( $this->wp_block['attrs']['data'][ $selector ] ) ) {
+			return $this->wp_block['attrs']['data'][ $selector ];
+		}
+
+		return $default;
+	}
+
+	/**
+	 * Get the block ACF ID
+	 *
+	 * @return string
+	 */
+	public function get_acf_id(): string {
+		return get_block_id( $this->get_block(), true );
 	}
 
 	/**
@@ -121,10 +187,29 @@ class Block {
 
 				$this->wp_block = $block;
 
+				$this->preload_meta();
+
 				return $this->render( $block_content );
 			},
 			10,
 			2
+		);
+	}
+
+	/**
+	 * Preload the meta data.
+	 *
+	 * @return void
+	 */
+	public function preload_meta(): void {
+		add_filter(
+			'acf/pre_load_metadata',
+			function ( $null, $post_id, $name, $hidden ) {
+				$name = ( $hidden ? '_' : '' ) . $name;
+				return $this->wp_block['data'][ $name ] ?? $null;
+			},
+			5,
+			4
 		);
 	}
 

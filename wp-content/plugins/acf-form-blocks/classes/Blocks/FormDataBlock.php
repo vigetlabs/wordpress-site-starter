@@ -7,6 +7,8 @@
 
 namespace ACFFormBlocks\Blocks;
 
+use ACFFormBlocks\Views;
+
 /**
  * Submit Block Class
  */
@@ -29,6 +31,18 @@ class FormDataBlock extends Block {
 	 * @return string
 	 */
 	public function render( string $block_content ): string {
-		return 'THE FIELD VALUE WILL SHOW UP HERE!';
+		if ( ! $this->get_form() ) {
+			return $block_content;
+		}
+
+		$data = $this->get_form()->get_submission()->get_data();
+		return Views::get(
+			'templates/form-data/default',
+			[
+				'form'    => $this->get_form(),
+				'content' => $data['content'],
+				'block'   => $this,
+			]
+		);
 	}
 }

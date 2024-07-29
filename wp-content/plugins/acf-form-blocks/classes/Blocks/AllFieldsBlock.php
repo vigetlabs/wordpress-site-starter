@@ -31,6 +31,10 @@ class AllFieldsBlock extends Block {
 	 * @return string
 	 */
 	public function render( string $block_content ): string {
+		if ( ! $this->get_form() ) {
+			return $block_content;
+		}
+
 		$data = $this->get_form()->get_submission()->get_data();
 		return Views::get(
 			'templates/all-fields',
