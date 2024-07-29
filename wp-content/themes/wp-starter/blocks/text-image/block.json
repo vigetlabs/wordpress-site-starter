@@ -9,7 +9,7 @@
   "attributes": {
     "align": {
       "type": "string",
-      "default": "wide"
+      "default": "full"
     },
     "style": {
       "type": "object",

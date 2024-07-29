@@ -15,11 +15,7 @@
   "attributes": {
     "align": {
       "type": "string",
-      "default": "wide"
-    },
-    "backgroundColor": {
-      "type": "string",
-      "default": "base"
+      "default": "full"
     },
     "style": {
       "type": "object",

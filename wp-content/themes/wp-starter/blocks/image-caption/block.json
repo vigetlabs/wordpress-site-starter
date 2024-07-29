@@ -6,10 +6,32 @@
   "category": "components",
   "textdomain": "wp-starter",
   "keywords": ["photo", "upload", "media", "picture", "image", "caption"],
+  "attributes": {
+    "align": {
+      "type": "string",
+      "default": "full"
+    },
+    "style": {
+      "type": "object",
+      "default": {
+        "spacing": {
+          "padding": {
+            "top": "var:preset|spacing|20",
+            "bottom": "var:preset|spacing|20",
+            "left": "var:preset|spacing|20",
+            "right": "var:preset|spacing|20"
+          }
+        }
+      }
+    }
+  },
   "supports": {
     "jsx": true,
     "mode": false,
     "alignWide": true,
+    "color": {
+      "background": true
+    },
     "spacing": {
       "margin": ["top", "bottom"]
     }

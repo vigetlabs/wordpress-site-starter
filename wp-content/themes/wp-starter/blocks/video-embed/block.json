@@ -14,6 +14,10 @@
     "play"
   ],
   "attributes": {
+    "align": {
+      "type": "string",
+      "default": "full"
+    },
     "style": {
       "type": "object",
       "default": {
@@ -30,6 +34,9 @@
     "jsx": true,
     "mode": false,
     "alignWide": true,
+    "color": {
+      "background": true
+    },
     "layout": {
       "default": {
         "type": "constrained",
