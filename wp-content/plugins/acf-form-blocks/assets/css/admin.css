@@ -89,7 +89,8 @@ body.wp-admin .acffb-radio-list li .radio:before {
 	font-size: 32px;
 }
 
-.acffb-sub-field {
+.acffb-sub-field,
+.acffb-form-data-block {
 	display: flex;
 	gap: 0.5rem;
 	margin-bottom: 0.15rem;
