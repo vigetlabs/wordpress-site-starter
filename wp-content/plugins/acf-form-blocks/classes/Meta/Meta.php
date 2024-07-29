@@ -22,6 +22,13 @@ class Meta {
 	public string $key = '';
 
 	/**
+	 * Type of Meta Value.
+	 *
+	 * @var string
+	 */
+	public string $type = 'string';
+
+	/**
 	 * The Meta Label
 	 *
 	 * @var string
@@ -48,20 +55,6 @@ class Meta {
 	 * @var ?string
 	 */
 	protected ?string $form_id;
-
-	/**
-	 * Booleans of child meta values.
-	 *
-	 * @var array
-	 */
-	public array $booleans = [];
-
-	/**
-	 * If Meta Value is Boolean
-	 *
-	 * @var bool
-	 */
-	public bool $is_boolean = false;
 
 	/**
 	 * Meta Constructor
@@ -105,7 +98,7 @@ class Meta {
 	 */
 	public function get_label( ?string $child = null ): string {
 		if ( ! is_null( $child ) ) {
-			return $this->children[ $child ] ?? '';
+			return $this->children[ $child ]['label'] ?? 'Undefined';
 		}
 
 		return $this->label;
@@ -135,7 +128,7 @@ class Meta {
 		}
 
 		if ( $for_display ) {
-			$this->convert_booleans();
+			$this->set_display_values();
 		}
 
 		if ( ! is_null( $child ) && is_array( $this->value ) ) {
@@ -150,25 +143,65 @@ class Meta {
 	 *
 	 * @return void
 	 */
-	protected function convert_booleans(): void {
+	protected function set_display_values(): void {
 		if ( is_array( $this->value ) ) {
-			$bools = $this->get_booleans();
 			foreach ( $this->value as $key => &$value ) {
-				if ( in_array( $key, $bools, true ) ) {
-					$value = $value ? __( 'Yes', 'acf-form-blocks' ) : __( 'No', 'acf-form-blocks' );
-				}
+				$value = $this->get_display_value( $this->get_type( $key ), $value );
 			}
-		} elseif ( $this->is_boolean() ) {
-			$this->value = $this->value ? __( 'Yes', 'acf-form-blocks' ) : __( 'No', 'acf-form-blocks' );
+		} else {
+			$this->value = $this->get_display_value( $this->get_type(), $this->value );
 		}
 	}
 
-	private function get_booleans(): array {
-		return $this->booleans;
+	/**
+	 * Get Display Value based on type
+	 *
+	 * @param string $type
+	 * @param mixed $value
+	 *
+	 * @return mixed
+	 */
+	private function get_display_value( string $type, mixed $value ): mixed {
+		if ( 'bool' === $type ) {
+			return $value ? __( 'Yes', 'acf-form-blocks' ) : __( 'No', 'acf-form-blocks' );
+		}
+
+		if ( 'post_id' === $type && false !== get_post_status( $value ) ) {
+			return sprintf(
+				'<a href="%s">%s</a> (%s)',
+				get_edit_post_link( $value ),
+				get_the_title( $value ),
+				esc_html( $value )
+			);
+		}
+
+		return $value;
 	}
 
-	private function is_boolean(): bool {
-		return $this->is_boolean;
+	/**
+	 * Get the Meta value type.
+	 *
+	 * @param ?string $child
+	 *
+	 * @return string
+	 */
+	public function get_type( ?string $child = null ): string {
+		if ( ! is_null( $child ) && 'array' === $this->type ) {
+			return $this->children[ $child ]['type'] ?? 'string';
+		}
+
+		return $this->type;
+	}
+
+	/**
+	 * Check if meta value is a specific type
+	 *
+	 * @param string $type
+	 *
+	 * @return bool
+	 */
+	private function is_type( string $type ): bool {
+		return $type === $this->type;
 	}
 
 	/**

@@ -21,22 +21,38 @@ class Notifications extends Meta {
 		parent::__construct( $form_id );
 
 		$this->key   = '_notifications';
+		$this->type  = 'array';
 		$this->label = __( 'Notifications', 'acf-form-blocks' );
 
 		$this->children = [
-			'admin'                 => __( 'Admin Notification', 'acf-form-blocks' ),
-			'admin_template'        => __( 'Admin Template', 'acf-form-blocks' ),
-			'confirmation'          => __( 'Confirmation Notification', 'acf-form-blocks' ),
-			'confirmation_template' => __( 'Confirmation Template', 'acf-form-blocks' ),
-			'custom'                => __( 'Custom Notification', 'acf-form-blocks' ),
-			'recipient'             => __( 'Custom Email Recipient', 'acf-form-blocks' ),
-			'custom_template'       => __( 'Custom Template', 'acf-form-blocks' ),
-		];
-
-		$this->booleans = [
-			'admin',
-			'confirmation',
-			'custom',
+			'admin'                 => [
+				'type'  => 'bool',
+				'label' => __( 'Admin Notification', 'acf-form-blocks' ),
+			],
+			'admin_template'        => [
+				'type'  => 'post_id',
+				'label' => __( 'Admin Template', 'acf-form-blocks' ),
+			],
+			'confirmation'          => [
+				'type'  => 'bool',
+				'label' => __( 'Confirmation Notification', 'acf-form-blocks' ),
+			],
+			'confirmation_template' => [
+				'type'  => 'post_id',
+				'label' => __( 'Confirmation Template', 'acf-form-blocks' ),
+			],
+			'custom'                => [
+				'type'  => 'bool',
+				'label' => __( 'Custom Notification', 'acf-form-blocks' ),
+			],
+			'recipient'             => [
+				'type'  => 'string',
+				'label' => __( 'Custom Email Recipient', 'acf-form-blocks' ),
+			],
+			'custom_template'       => [
+				'type'  => 'post_id',
+				'label' => __( 'Custom Template', 'acf-form-blocks' ),
+			],
 		];
 	}
 
