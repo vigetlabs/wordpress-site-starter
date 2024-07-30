@@ -24,6 +24,21 @@ Blocks are build using ACF and core WordPress blocks. Styles for the blocks are 
 * Text Image
 * Video Embed
 
+### Creating New Blocks
+The theme is set up with [plop](https://plopjs.com/) which will auto generate a new block based on the options you input. 
+In order build a new block run:
+
+```
+ddev npm run plop block
+```
+
+It will ask you a few question:
+* __What is the block name?__ - *This can be whatever you want.*
+* __What is the slug for your theme?__ - *This would your theme slug. If you are unsure of what that is, you can look at `textdomain:` in side of any `block.json` files.*
+* __Pick a WordPress icon for the block__ - *Icons are from [WordPress Icons](https://developer.wordpress.org/resource/dashicons/) and you can change the icon if you don't see one you want.*
+* __Do you need block styles?__ - *Adds the option for adding a class to the block’s wrapper - [Block Styles](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-styles/)*
+* __Do you need block variations?__ - *Adds the option for a block variant - [Block Variations](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-variations/)*
+
 ## Customizing Theme 🎨
 ### Fonts
 Fonts are pulled in by [typography.js](/src/theme-json/settings/typography.js). Update the `src` to pull in the font files in `/src/fonts`. For more info on setting up WordPress fonts check out [fullsiteediting](https://fullsiteediting.com/lessons/creating-theme-json/#h-typography).
