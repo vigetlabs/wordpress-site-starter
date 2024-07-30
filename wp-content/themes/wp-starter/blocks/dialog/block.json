@@ -1,0 +1,41 @@
+{
+  "name": "dialog",
+  "title": "Dialog",
+  "description": "Displays a Dialog/Modal Component.",
+  "icon": "cover-image",
+  "category": "components",
+  "textdomain": "wp-starter",
+  "keywords": ["popup", "overlay", "cta", "section", "dialog"],
+  "attributes": {
+    "align": {
+      "type": "string",
+      "default": "full"
+    }
+  },
+  "supports": {
+    "jsx": true,
+    "mode": false,
+    "alignWide": true,
+    "color": {
+      "background": true
+    },
+    "background": {
+      "backgroundImage": true,
+      "backgroundSize": true
+    },
+    "layout": {
+      "default": {
+        "type": "constrained",
+        "justifyContent": "center"
+      },
+      "allowOrientation": false,
+      "allowCustomContentAndWideSize": false
+    }
+  },
+  "viewStyle": "file:./view.css",
+  "editorStyle": "file:./editor.css",
+  "viewScript": "file:./view.js",
+  "acf": {
+    "mode": "preview"
+  }
+}
