@@ -2,6 +2,11 @@
 	.acf-block-text-icon-cards {
 		@apply flex gap-y-32 md:gap-y-80;
 
+		> div,
+		.block-editor-block-list__layout {
+			@apply flex flex-wrap justify-start gap-24;
+		}
+
 		.acf-block-text-icon-card,
 		.wp-block-acf-text-icon-card {
 			@apply flex flex-col gap-8 sm:basis-1/2-gap lg:basis-1/3-gap;

@@ -21,7 +21,7 @@ $inner          = [
 ];
 ?>
 <section <?php block_attrs( $block ); ?>>
-	<div class="flex flex-wrap gap-24 justify-left alignwide">
+	<div class="alignwide">
 		<?php inner_blocks( $inner ); ?>
 	</div>
 </section>
