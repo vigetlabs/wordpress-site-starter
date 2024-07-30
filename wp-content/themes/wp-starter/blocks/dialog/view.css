@@ -1,0 +1,46 @@
+html:has(.acf-block-dialog[open]),
+body:has(.acf-block-dialog[open]) {
+	overflow: hidden;
+}
+
+.acf-block-dialog {
+	border-radius: 5px;
+	border: 0;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: #fff;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+	display: none;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.acf-block-dialog::backdrop {
+	background: rgba(0, 0, 0, 0.4);
+	cursor: pointer;
+}
+
+.acf-block-dialog[open],
+.acf-block-dialog::backdrop {
+	animation: show 500ms ease;
+}
+
+.acf-block-dialog[open] {
+	display: block;
+}
+
+.acf-block-dialog > .inner {
+	padding: 50px;
+	display: flex;
+	flex-direction: column;
+}
+
+@keyframes show {
+	0% {
+		opacity: 0;
+	}
+}
+
