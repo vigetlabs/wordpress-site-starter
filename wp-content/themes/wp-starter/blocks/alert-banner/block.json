@@ -32,8 +32,8 @@
       "default": {
         "spacing": {
           "padding": {
-            "top": "var:preset|spacing|10",
-            "bottom": "var:preset|spacing|10",
+            "top": "var:preset|spacing|20",
+            "bottom": "var:preset|spacing|20",
             "left": "var:preset|spacing|20",
             "right": "var:preset|spacing|20"
           }
@@ -62,9 +62,7 @@
     },
     "layout": {
       "default": {
-        "type": "flex",
-        "justifyContent": "space-between",
-        "flexWrap": "nowrap"
+        "type": "constrained"
       },
       "allowOrientation": false,
       "allowCustomContentAndWideSize": false
