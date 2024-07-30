@@ -6,6 +6,12 @@
   "category": "components",
   "textdomain": "wp-starter",
   "keywords": ["photo", "upload", "media", "picture", "image", "align", "left", "right", "content", "text"],
+  "allowedBlocks": [
+    "core/media-text",
+    "core/paragraph",
+    "core/heading",
+    "core/group"
+  ],
   "attributes": {
     "align": {
       "type": "string",
@@ -43,6 +49,14 @@
       "allowCustomContentAndWideSize": false
     }
   },
+  "variations": [
+    {
+      "name": "text-image-default",
+      "title": "Text & Image Default",
+      "scope": ["transform"],
+      "isDefault": true
+    }
+  ],
   "acf": {
     "mode": "preview"
   }

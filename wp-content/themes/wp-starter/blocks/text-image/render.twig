@@ -33,15 +33,9 @@
 		]
 	]
 ] %}
-{% set allowed = [
-	'core/media-text',
-	'core/paragraph',
-	'core/heading',
-	'core/group',
-] %}
+
 {% set inner = {
 	template: template,
-	allowedBlocks: allowed
 } %}
 <section {{ block_attrs( block ) }}>
 	<div class="alignwide">

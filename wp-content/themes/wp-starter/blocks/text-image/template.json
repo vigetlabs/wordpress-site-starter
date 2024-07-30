@@ -1,0 +1,33 @@
+{
+  "template": [
+    [
+      "core/media-text",
+      [],
+      [
+        [
+          "core/paragraph",
+          {
+            "className":"is-style-eyebrow",
+            "placeholder":"test Text"
+          }
+        ],
+        [
+          "core/heading",
+          {
+            "level":3,
+            "placeholder":"Headline Text"
+          }
+        ],
+        [
+          "core/paragraph",
+          {
+            "placeholder":"Body Text"
+          }
+        ],
+        [
+          "core/buttons"
+        ]
+      ]
+    ]
+  ]
+}

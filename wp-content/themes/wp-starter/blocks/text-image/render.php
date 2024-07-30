@@ -38,15 +38,8 @@ $block_template = [
 		],
 	],
 ];
-$allowed        = [
-	'core/media-text',
-	'core/paragraph',
-	'core/heading',
-	'core/group',
-];
 $inner          = [
-	'template'      => $block_template,
-	'allowedBlocks' => $allowed,
+	'template' => $block_template,
 ];
 ?>
 <section <?php block_attrs( $block ); ?>>
