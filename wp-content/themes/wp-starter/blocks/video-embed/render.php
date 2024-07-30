@@ -9,9 +9,21 @@
 
 $block_template = [
 	[
-		'core/pattern',
+		'core/heading',
 		[
-			'slug' => 'wp-starter/video-embed-inner-blocks',
+			'textAlign' => 'center',
+		],
+	],
+	[
+		'core/paragraph',
+		[
+			'align' => 'center',
+		],
+	],
+	[
+		'core/embed',
+		[
+			'align' => 'center',
 		],
 	],
 ];

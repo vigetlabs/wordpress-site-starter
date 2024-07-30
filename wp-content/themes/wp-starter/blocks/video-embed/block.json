@@ -5,14 +5,7 @@
   "icon": "embed-video",
   "category": "components",
   "textdomain": "wp-starter",
-  "keywords": [
-    "video",
-    "embed",
-    "youtube",
-    "vimeo",
-    "url",
-    "play"
-  ],
+  "keywords": ["video","embed","youtube","vimeo","url","play"],
   "attributes": {
     "align": {
       "type": "string",
