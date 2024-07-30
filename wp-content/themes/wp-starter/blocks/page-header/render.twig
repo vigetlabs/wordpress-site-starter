@@ -3,16 +3,51 @@
 #}
 
 {% set template = [
-  [
-    'core/pattern',
-    {
-      'slug': 'wp-starter/page-header-inner-blocks'
-    }
-  ]
-] %}
+	[
+		'acf/breadcrumbs'
+	],
+	[
+		'core/columns',
+		{
+			'verticalAlignment':'center'
+		},
+		[
+			[
+				'core/column',
+				{
+					'verticalAlignment':'center',
+					'width':'66.66%'
+				},
+				[
+					[
+						'core/post-title'
+					],
+					[
+						'core/paragraph',
+						{
+							'placeholder': 'Page description ponam in culpa idiota aliis pravitatis. Principium ponere culpam in se justum praeceptum. Neque improperes et aliis qui non perfecte ipse docuit.'
+						}
+					]
+				]
+			],
+			[
+				'core/column',
+				{
+					'verticalAlignment':'center',
+					'width':'33.33%'
+				},
+				[
+					[
+						'core/image'
+					]
+				]
+			]
+		],
+	]
+]%}
 {% set inner = { template: template } %}
 <section {{ block_attrs( block ) }}>
 	<div class="alignwide">
-	{{ inner_blocks( inner ) }}
+		{{ inner_blocks( inner ) }}
 	</div>
 </section>
