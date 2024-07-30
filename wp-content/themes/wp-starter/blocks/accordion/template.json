@@ -1,0 +1,14 @@
+{
+  "template": [
+    [
+      [
+        "core/details",
+        {
+          "showContent": true
+        }
+      ],
+      [ "core/details" ],
+      [ "core/details" ]
+    ]
+  ]
+}

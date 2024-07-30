@@ -1,0 +1,22 @@
+{
+  "template": [
+    [
+      "core/heading",
+      {
+        "textAlign":"center"
+      }
+    ],
+    [
+      "core/paragraph",
+      {
+        "align":"center"
+      }
+    ],
+    [
+      "core/embed",
+      {
+        "align":"center"
+      }
+    ]
+  ]
+}
