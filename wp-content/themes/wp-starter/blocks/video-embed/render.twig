@@ -2,33 +2,13 @@
   Block: Video Embed
 #}
 
-{% set template = [
-	[
-		"core/heading",
-		{
-			"textAlign":"center"
-		}
-	],
-	[
-		"core/paragraph",
-		{
-			"align":"center"
-		}
-	],
-	[
-		"core/embed",
-		{
-			"align":"center"
-		}
-	],
-] %}
 {% set allowed = [
 	'core/heading',
 	'core/paragraph',
 	'core/embed'
 ] %}
 {% set inner = {
-	template: template,
+	template: attributes.template ?? [],
 	allowedBlocks: allowed
 } %}
 <section {{ block_attrs( block ) }}>

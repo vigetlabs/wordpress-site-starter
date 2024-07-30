@@ -7,16 +7,11 @@
  * @package WPStarter
  */
 
-$block_template = [
-	[ 'core/image' ],
-	[ 'core/image' ],
-	[ 'core/image' ],
-];
-$allowed        = [
+$allowed = [
 	'core/image',
 ];
-$inner          = [
-	'template'      => $block_template,
+$inner   = [
+	'template'      => $block['template'] ?? [],
 	'allowedBlocks' => $allowed,
 ];
 ?>

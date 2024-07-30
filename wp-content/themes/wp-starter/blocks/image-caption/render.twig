@@ -2,12 +2,9 @@
   Block: Image with Caption
 #}
 
-{% set template = [
-  [ 'core/image' ]
-] %}
 {% set allowed = [ 'core/image' ] %}
 {% set inner = {
-	template: template,
+	template: attributes.template ?? [],
 	allowedBlocks: allowed,
 	templateLock: 'all'
 } %}

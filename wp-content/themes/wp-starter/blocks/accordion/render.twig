@@ -2,19 +2,9 @@
   Block: Accordion
 #}
 
-{% set template = [
-  [
-    'core/details',
-    {
-      'showContent': true
-    }
-  ],
-  [ 'core/details' ],
-  [ 'core/details' ],
-] %}
 {% set allowed = [ 'core/details' ] %}
 {% set inner = {
-	template: template,
+	template: attributes.template ?? [],
 	allowedBlocks: allowed
 } %}
 <section {{ block_attrs( block ) }}>

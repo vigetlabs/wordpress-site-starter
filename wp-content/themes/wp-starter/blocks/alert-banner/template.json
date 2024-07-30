@@ -9,7 +9,7 @@
     [
       "core/button",
       {
-        "className": "is-style-outline",
+        "className": "is-style-outline"
       }
     ]
   ]

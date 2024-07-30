@@ -7,33 +7,13 @@
  * @package WPStarter
  */
 
-$block_template = [
-	[
-		'core/heading',
-		[
-			'textAlign' => 'center',
-		],
-	],
-	[
-		'core/paragraph',
-		[
-			'align' => 'center',
-		],
-	],
-	[
-		'core/embed',
-		[
-			'align' => 'center',
-		],
-	],
-];
-$allowed        = [
+$allowed = [
 	'core/heading',
 	'core/paragraph',
 	'core/embed',
 ];
-$inner          = [
-	'template'      => $block_template,
+$inner   = [
+	'template'      => $block['template'] ?? [],
 	'allowedBlocks' => $allowed,
 ];
 ?>

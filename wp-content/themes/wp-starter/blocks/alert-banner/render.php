@@ -7,30 +7,16 @@
  * @package WPStarter
  */
 
-$id             = 'alert' . $block['block_id'] ?? $block['id'];
-$block_template = [
-	[
-		'core/paragraph',
-		[
-			'placeholder' => 'Enter alert banner message...',
-		],
-	],
-	[
-		'core/button',
-		[
-			'className' => 'is-style-outline',
-		],
-	],
-];
-$allowed        = [
+$id      = 'alert' . $block['block_id'] ?? $block['id'];
+$allowed = [
 	'core/paragraph',
 	'core/button',
 ];
-$inner          = [
-	'template'      => $block_template,
+$inner   = [
+	'template'      => $block['template'] ?? [],
 	'allowedBlocks' => $allowed,
 ];
-$attrs          = [];
+$attrs   = [];
 
 if ( ! is_admin() ) {
 	$attrs['x-data'] = '{ ' . $id . ': $persist(true) }';

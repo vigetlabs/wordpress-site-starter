@@ -23,14 +23,14 @@ class BlockRegistration {
 	/**
 	 * @var array
 	 */
-	public static array $blocks = [];
+	public static array $blocks = array();
 
 	/**
 	 * Local cache of block IDs.
 	 *
 	 * @var array
 	 */
-	public static array $block_ids = [];
+	public static array $block_ids = array();
 
 	/**
 	 * Register ACF Blocks.
@@ -97,7 +97,7 @@ class BlockRegistration {
 					return $metadata;
 				}
 
-				$metadata['acf']['renderCallback'] = function ( array $block, string $content = '', bool $is_preview = false, int $post_id = 0, ?WP_Block $wp_block = null, array|bool $context = [], bool $is_ajax_render = false ) use ( $metadata ): void {
+				$metadata['acf']['renderCallback'] = function ( array $block, string $content = '', bool $is_preview = false, int $post_id = 0, ?WP_Block $wp_block = null, array|bool $context = array(), bool $is_ajax_render = false ) use ( $metadata ): void {
 					$block_name    = str_replace( 'acf/', '', $block['name'] );
 					$block['slug'] = sanitize_title( $block_name );
 					if ( empty( $block['path'] ) ) {
@@ -108,12 +108,12 @@ class BlockRegistration {
 					}
 
 					// Pass the block template data to the block.
-					$block['template'] = $metadata['acf']['innerBlocks'] ?? $metadata['innerBlocks'] ?? [];
+					$block['template'] = $metadata['acf']['innerBlocks'] ?? $metadata['innerBlocks'] ?? array();
 
 					$twig = $block['path'] . '/render.twig';
 
 					if ( class_exists( '\Timber\Timber' ) && file_exists( $twig ) ) {
-						self::render_twig_block( $twig, $block, $content, $is_preview, $post_id, $wp_block, $context,$is_ajax_render );
+						self::render_twig_block( $twig, $block, $content, $is_preview, $post_id, $wp_block, $context, $is_ajax_render );
 						return;
 					}
 
@@ -167,10 +167,10 @@ class BlockRegistration {
 	public static function get_block_locations(): array {
 		return apply_filters(
 			'acfbt_block_locations',
-			[
+			array(
 				get_template_directory() . '/blocks',
 				self::get_custom_blocks_dir(),
-			]
+			)
 		);
 	}
 
@@ -182,7 +182,7 @@ class BlockRegistration {
 	 *
 	 * @return void
 	 */
-	public static function get_blocks_in_dir( string $path, array &$blocks = [] ): void {
+	public static function get_blocks_in_dir( string $path, array &$blocks = array() ): void {
 		$group = glob( trailingslashit( $path ) . '**/block.json' );
 
 		foreach ( $group as $block_path ) {
@@ -234,6 +234,36 @@ class BlockRegistration {
 		$block['url']  = self::path_to_url( $block['path'] );
 
 		return $block;
+	}
+
+	/**
+	 * Get inner blocks template
+	 *
+	 * @param array $block
+	 * @param array $metadata
+	 *
+	 * @return array
+	 */
+	public static function get_inner_blocks( array $block, array $metadata = array() ): array {
+		if ( ! empty( $metadata['acf']['template'] ) ) {
+			return $metadata['acf']['template'];
+		} elseif ( ! empty( $metadata['acf']['innerBlocks'] ) ) {
+			return $metadata['acf']['innerBlocks'];
+		}
+
+		$json_path = $block['path'] . '/template.json';
+
+		if ( ! file_exists( $json_path ) ) {
+			return array();
+		}
+
+		$json = json_decode( file_get_contents( $json_path ), true );
+
+		if ( empty( $json['template'] ) ) {
+			return array();
+		}
+
+		return $json['template'];
 	}
 
 	/**
@@ -312,11 +342,11 @@ class BlockRegistration {
 	 *
 	 * @return void
 	 */
-	public static function render_twig_block( string $template, array $block = [], string $content = '', bool $is_preview = false, int $post_id = 0, ?WP_Block $wp_block = null, array|bool $block_context = [], bool $is_ajax_render = false ): void {
-		$context = get_queried_object() ? Timber::context() : [];
+	public static function render_twig_block( string $template, array $block = array(), string $content = '', bool $is_preview = false, int $post_id = 0, ?WP_Block $wp_block = null, array|bool $block_context = array(), bool $is_ajax_render = false ): void {
+		$context = get_queried_object() ? Timber::context() : array();
 
 		// Add additional context to the block.
-		$additional = [
+		$additional = array(
 			'fields'         => get_fields(),
 			'block'          => $block,
 			'content'        => $content,
@@ -325,7 +355,7 @@ class BlockRegistration {
 			'wp_block'       => $wp_block,
 			'context'        => $block_context,
 			'is_ajax_render' => $is_ajax_render,
-		];
+		);
 
 		$context = array_merge( $context, $additional );
 
@@ -430,7 +460,7 @@ class BlockRegistration {
 	public static function create_block_id(): void {
 		add_filter(
 			'acf/pre_save_block',
-			function( array $attributes ): array {
+			function ( array $attributes ): array {
 				$wp_block = \WP_Block_Type_Registry::get_instance()->get_registered( $attributes['name'] );
 				if ( ! str_starts_with( $attributes['name'], 'acf/' ) || empty( $wp_block?->attributes['block_id'] ) ) {
 					return $attributes;
@@ -502,7 +532,7 @@ class BlockRegistration {
 	private static function reset_block_ids(): void {
 		add_action(
 			'acf/init',
-			function() {
+			function () {
 				if ( empty( self::$block_ids ) ) {
 					delete_transient( self::BLOCK_IDS_TRANSIENT );
 				}

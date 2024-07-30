@@ -7,21 +7,11 @@
  * @package WPStarter
  */
 
-$block_template = [
-	[
-		'core/details',
-		[
-			'showContent' => true,
-		],
-	],
-	[ 'core/details' ],
-	[ 'core/details' ],
-];
-$allowed        = [
+$allowed = [
 	'core/details',
 ];
-$inner          = [
-	'template'      => $block_template,
+$inner   = [
+	'template'      => $block['template'] ?? [],
 	'allowedBlocks' => $allowed,
 ];
 ?>
