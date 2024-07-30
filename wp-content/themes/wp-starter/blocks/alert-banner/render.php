@@ -11,15 +11,15 @@ $id             = 'alert' . $block['block_id'] ?? $block['id'];
 $block_template = [
 	[
 		'core/paragraph',
-		{
-			'placeholder': 'Enter alert banner message...'
-		},
+		[
+			'placeholder' => 'Enter alert banner message...',
+		],
 	],
 	[
 		'core/button',
-		{
-			'className': 'is-style-outline',
-		},
+		[
+			'className' => 'is-style-outline',
+		],
 	],
 ];
 $allowed        = [
