@@ -1,9 +1,27 @@
 "variations": [
     {
+      "name": "{{dashCase name}}-default",
+      "icon": "schedule",
+      "title": "{{titleCase name}} Default",
+	  "attributes": {
+        "data": {
+          "type": "default"
+        }
+      },
+	  "isActive": ["data"],
+      "scope": ["transform"],
+      "isDefault": true
+    },
+	{
       "name": "{{dashCase name}}-variation",
       "icon": "schedule",
       "title": "{{titleCase name}} Variation",
+	  "attributes": {
+        "data": {
+          "type": "variation"
+        }
+      },
+	  "isActive": ["data"],
       "scope": ["transform"],
-      "isDefault": true
     }
   ],
