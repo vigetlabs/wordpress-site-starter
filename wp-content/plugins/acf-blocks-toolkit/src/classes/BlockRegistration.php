@@ -48,6 +48,9 @@ class BlockRegistration {
 		// Register block patterns within block folders
 		self::register_block_patterns();
 
+		// Reset block IDs on a new request
+		self::reset_block_ids();
+
 		// Add unique, persistent IDs to each ACF block.
 		self::create_block_id();
 	}
@@ -461,7 +464,7 @@ class BlockRegistration {
 
 		if ( ! in_array( $block_id, self::$block_ids, true ) ) {
 			self::$block_ids[] = $block_id;
-			set_transient( self::BLOCK_IDS_TRANSIENT, self::$block_ids, 1 );
+			set_transient( self::BLOCK_IDS_TRANSIENT, self::$block_ids, 5 );
 		}
 	}
 
@@ -489,5 +492,21 @@ class BlockRegistration {
 				self::$block_ids = $transient;
 			}
 		}
+	}
+
+	/**
+	 * Reset the block IDs on a new request.
+	 *
+	 * @return void
+	 */
+	private static function reset_block_ids(): void {
+		add_action(
+			'acf/init',
+			function() {
+				if ( empty( self::$block_ids ) ) {
+					delete_transient( self::BLOCK_IDS_TRANSIENT );
+				}
+			}
+		);
 	}
 }
