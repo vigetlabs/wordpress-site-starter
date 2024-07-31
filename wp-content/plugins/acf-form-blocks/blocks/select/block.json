@@ -1,0 +1,26 @@
+{
+  "name": "select",
+  "title": "Select",
+  "description": "Form select field",
+  "icon": "edit",
+  "category": "forms",
+  "textdomain": "acf-form-blocks",
+  "keywords": ["input", "contact", "feedback", "input", "dropdown", "option"],
+  "ancestor": ["acf/form"],
+  "supports": {
+    "jsx": true,
+    "alignWide": true,
+    "anchor": true
+  },
+  "editorStyle": "file:./editor.css",
+  "attributes": {
+    "block_id": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "usesContext": ["acffb/form_id", "acffb/fieldset_id"],
+  "acf": {
+    "mode": "preview"
+  }
+}
