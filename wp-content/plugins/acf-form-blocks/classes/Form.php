@@ -226,11 +226,7 @@ class Form {
 		$form = null;
 
 		foreach ( $forms as $block ) {
-			$attrs       = $block['attrs'] ?? [];
-			$attrs['id'] = acf_get_block_id( $attrs, $context );
-			$attrs['id'] = acf_ensure_block_id_prefix( $attrs['id'] );
-
-			$form = acf_prepare_block( $attrs );
+			$form = Blocks::prepare_acf_block( $block, $context );
 
 			// Return the first form if no Form ID.
 			if ( ! $form_id ) {
@@ -382,11 +378,7 @@ class Form {
 			$form_blocks = Blocks::get_blocks_by_type( $blocks, 'acf/form' );
 
 			foreach ( $form_blocks as $block ) {
-				$attrs       = $block['attrs'] ?? [];
-				$attrs['id'] = acf_get_block_id( $attrs, $context );
-				$attrs['id'] = acf_ensure_block_id_prefix( $attrs['id'] );
-
-				$form_block = acf_prepare_block( $attrs );
+				$form_block = Blocks::prepare_acf_block( $block, $context );
 				$form       = self::get_instance( $form_block, $content, $context );
 
 				if ( ! $form ) {

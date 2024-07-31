@@ -93,4 +93,19 @@ class Blocks {
 
 		return parse_blocks( self::$patterns[ $pattern_id ]->post_content );
 	}
+
+	/**
+	 * Prepare ACF block from WP Block Array
+	 *
+	 * @param array $block
+	 * @param array $context
+	 *
+	 * @return array
+	 */
+	public static function prepare_acf_block( array $block, array $context = [] ): array {
+		$attrs       = $block['attrs'] ?? [];
+		$attrs['id'] = acf_get_block_id( $attrs, $context );
+		$attrs['id'] = acf_ensure_block_id_prefix( $attrs['id'] );
+		return acf_prepare_block( $attrs );
+	}
 }
