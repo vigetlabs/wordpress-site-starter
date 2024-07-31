@@ -9,6 +9,7 @@ namespace ACFFormBlocks\Blocks;
 
 use ACFFormBlocks\Elements\Field;
 use ACFFormBlocks\Form;
+use ACFFormBlocks\Utilities\Blocks;
 
 /**
  * Class for Block Actions
@@ -76,12 +77,8 @@ class Block {
 	 */
 	public function get_block(): array {
 		if ( empty( $this->block ) ) {
-			$attrs       = $this->wp_block['attrs'] ?? [];
 			$context     = [ 'postType' => get_post_type(), 'postId' => get_the_ID() ];
-			$attrs['id'] = acf_get_block_id( $attrs, $context );
-			$attrs['id'] = acf_ensure_block_id_prefix( $attrs['id'] );
-
-			$this->block = acf_prepare_block( $attrs );
+			$this->block = Blocks::prepare_acf_block( $this->wp_block, $context );
 		}
 
 		return $this->block;
