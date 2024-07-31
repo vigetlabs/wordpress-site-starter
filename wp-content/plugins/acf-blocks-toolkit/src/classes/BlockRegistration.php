@@ -8,6 +8,7 @@
 namespace Viget\ACFBlocksToolkit;
 
 use Timber\Timber;
+use WP_Block;
 
 /**
  * Block Registration Class
@@ -93,7 +94,7 @@ class BlockRegistration {
 					return $metadata;
 				}
 
-				$metadata['acf']['renderCallback'] = function ( array $block, string $content = '', bool $is_preview = false, int $post_id = 0, ?\WP_Block $wp_block = null, array|bool $context = [], bool $is_ajax_render = false ) use ( $metadata ): void {
+				$metadata['acf']['renderCallback'] = function ( array $block, string $content = '', bool $is_preview = false, int $post_id = 0, ?WP_Block $wp_block = null, array|bool $context = [], bool $is_ajax_render = false ) use ( $metadata ): void {
 					$block_name    = str_replace( 'acf/', '', $block['name'] );
 					$block['slug'] = sanitize_title( $block_name );
 					if ( empty( $block['path'] ) ) {
@@ -109,7 +110,7 @@ class BlockRegistration {
 					$twig = $block['path'] . '/render.twig';
 
 					if ( class_exists( '\Timber\Timber' ) && file_exists( $twig ) ) {
-						self::render_twig_block( $twig, $block, $content, $is_preview );
+						self::render_twig_block( $twig, $block, $content, $is_preview, $post_id, $wp_block, $context,$is_ajax_render );
 						return;
 					}
 
@@ -297,28 +298,33 @@ class BlockRegistration {
 	/**
 	 * Render Twig block
 	 *
-	 * @param string $template
-	 * @param array  $block
-	 * @param string $content
-	 * @param bool   $is_preview
-	 * @param int    $post_id
+	 * @param string     $template
+	 * @param array      $block
+	 * @param string     $content
+	 * @param bool       $is_preview
+	 * @param int        $post_id
+	 * @param ?WP_Block  $wp_block
+	 * @param array|bool $block_context
+	 * @param bool       $is_ajax_render
 	 *
 	 * @return void
 	 */
-	public static function render_twig_block( string $template, array $block = [], string $content = '', bool $is_preview = false, int $post_id = 0 ): void {
+	public static function render_twig_block( string $template, array $block = [], string $content = '', bool $is_preview = false, int $post_id = 0, ?WP_Block $wp_block = null, array|bool $block_context = [], bool $is_ajax_render = false ): void {
 		$context = get_queried_object() ? Timber::context() : [];
 
-		// Store block attributes.
-		$context['attributes'] = $block;
+		// Add additional context to the block.
+		$additional = [
+			'fields'         => get_fields(),
+			'block'          => $block,
+			'content'        => $content,
+			'is_preview'     => $is_preview,
+			'post_id'        => $post_id,
+			'wp_block'       => $wp_block,
+			'context'        => $block_context,
+			'is_ajax_render' => $is_ajax_render,
+		];
 
-		// Store field values. These are the fields from your ACF field group for the block.
-		$context['fields'] = get_fields();
-
-		// Store whether the block is being rendered in the editor or on the frontend.
-		$context['is_preview'] = $is_preview;
-
-		// Store the current post ID.
-		$context['post_id'] = $post_id;
+		$context = array_merge( $context, $additional );
 
 		// Render the block.
 		Timber::render( $template, $context );

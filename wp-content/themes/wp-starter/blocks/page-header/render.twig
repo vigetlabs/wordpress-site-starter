@@ -11,6 +11,6 @@
   ]
 ] %}
 {% set inner = { template: template } %}
-<section {{ block_attrs( attributes ) }}>
+<section {{ block_attrs( block ) }}>
 	{{ inner_blocks( inner ) }}
 </section>

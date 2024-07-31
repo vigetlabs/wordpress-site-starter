@@ -11,6 +11,6 @@
   ]
 ] %}
 {% set inner = { template: template } %}
-<article {{ block_attrs( attributes ) }}>
+<article {{ block_attrs( block ) }}>
   {{ inner_blocks( inner ) }}
 </article>
