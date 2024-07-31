@@ -11,48 +11,65 @@ if ( ! function_exists( 'block_attrs' ) ) {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $block
+	 * @param array  $block
 	 * @param string $custom_class
-	 * @param array $attrs
+	 * @param array  $attrs
 	 */
 	function block_attrs( array $block, string $custom_class = '', array $attrs = [] ): void {
+		$id = ! empty( $attrs['id'] ) ? $attrs['id'] : get_block_id( $block );
+		$id = apply_filters( 'acfbt_block_id_attr', $id, $block );
+
 		if ( is_admin() ) {
 			if ( ! empty( $block['anchor'] ) ) {
 				$attrs['data-id'] = $block['anchor'];
+			} else {
+				$attrs['data-id'] = $id;
 			}
 		} else {
-			$attrs['id'] = get_block_id( $block );
+			$attrs['id'] = $id;
 		}
+
+		$block_class = get_block_class( $block, $custom_class );
 
 		if ( ! empty( $attrs['class'] ) ) {
-			$attrs['class'] .= ' ' . get_block_class( $block, $custom_class );
+			$attrs['class'] .= ' ' . $block_class;
 		} else {
-			$attrs['class'] = get_block_class( $block, $custom_class );
+			$attrs['class'] = $block_class;
 		}
 
+		$block_styles = get_core_styles( $block );
 		if ( ! empty( $attrs['style'] ) ) {
-			$attrs['style'] .= get_core_styles( $block );
+			$attrs['style'] .= $block_styles;
 		} else {
-			$attrs['style'] = get_core_styles( $block );
+			$attrs['style'] = $block_styles;
 		}
 
-		if ( ! empty( $block['supports']['jsx'] ) ) {
+		if ( ! array_key_exists( 'data-supports-jsx', $attrs ) && ! empty( $block['supports']['jsx'] ) ) {
 			$attrs['data-supports-jsx'] = 'true';
 		}
+
+		$attrs = apply_filters( 'acfbt_block_attrs', $attrs, $block );
 
 		// Prepare Extra attributes.
 		$extra = [
 			'class' => $attrs['class'],
 			'style' => $attrs['style'],
 		];
-		unset( $attrs['class'] );
-		unset( $attrs['style'] );
+
+		if ( ! is_preview() ) {
+			unset( $attrs['class'] );
+			unset( $attrs['style'] );
+		}
+
 		if ( ! empty( $attrs['id'] ) ) {
 			$extra['id'] = $attrs['id'];
 			unset( $attrs['id'] );
 		}
 
 		foreach ( $attrs as $key => $value ) {
+			if ( is_null( $value ) ) {
+				continue;
+			}
 			echo ' ' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
 		}
 
@@ -75,11 +92,12 @@ if ( ! function_exists( 'get_block_id' ) ) {
 	 * @since 1.0.0
 	 *
 	 * @param array $block
+	 * @param bool $ignore_anchor
 	 *
 	 * @return string
 	 */
-	function get_block_id( array $block ): string {
-		if ( ! empty( $block['anchor'] ) ) {
+	function get_block_id( array $block, bool $ignore_anchor = false ): string {
+		if ( ! empty( $block['anchor'] ) && ! $ignore_anchor ) {
 			$id = $block['anchor'];
 		} else {
 			$prefix = str_replace( 'acf/', '', $block['name'] );
