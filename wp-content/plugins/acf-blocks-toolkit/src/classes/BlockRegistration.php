@@ -8,6 +8,7 @@
 namespace Viget\ACFBlocksToolkit;
 
 use Timber\Timber;
+use WP_Block;
 
 /**
  * Block Registration Class
@@ -15,18 +16,40 @@ use Timber\Timber;
 class BlockRegistration {
 
 	/**
+	 * Keep track of all block IDs
+	 */
+	const BLOCK_IDS_TRANSIENT = 'acfbt_block_ids';
+
+	/**
 	 * @var array
 	 */
 	public static array $blocks = [];
 
 	/**
+	 * Local cache of block IDs.
+	 *
+	 * @var array
+	 */
+	public static array $block_ids = [];
+
+	/**
 	 * Register ACF Blocks.
 	 */
 	public static function init(): void {
+		// Automate block registration
 		self::register_blocks();
+
+		// Set default block render callback for ACF blocks
 		self::set_default_callback();
+
+		// Disable inner blocks wrapper
 		self::disable_inner_blocks_wrap();
+
+		// Register block patterns within block folders
 		self::register_block_patterns();
+
+		// Add unique, persistent IDs to each ACF block.
+		self::create_block_id();
 	}
 
 	/**
@@ -71,7 +94,7 @@ class BlockRegistration {
 					return $metadata;
 				}
 
-				$metadata['acf']['renderCallback'] = function ( array $block, string $content = '', bool $is_preview = false ) use ( $metadata ): void {
+				$metadata['acf']['renderCallback'] = function ( array $block, string $content = '', bool $is_preview = false, int $post_id = 0, ?WP_Block $wp_block = null, array|bool $context = [], bool $is_ajax_render = false ) use ( $metadata ): void {
 					$block_name    = str_replace( 'acf/', '', $block['name'] );
 					$block['slug'] = sanitize_title( $block_name );
 					if ( empty( $block['path'] ) ) {
@@ -82,12 +105,12 @@ class BlockRegistration {
 					}
 
 					// Pass the block template data to the block.
-					$block['template'] = $metadata['acf']['innerBlocks'] ?? [];
+					$block['template'] = $metadata['acf']['innerBlocks'] ?? $metadata['innerBlocks'] ?? [];
 
 					$twig = $block['path'] . '/render.twig';
 
 					if ( class_exists( '\Timber\Timber' ) && file_exists( $twig ) ) {
-						self::render_twig_block( $twig, $block, $content, $is_preview );
+						self::render_twig_block( $twig, $block, $content, $is_preview, $post_id, $wp_block, $context,$is_ajax_render );
 						return;
 					}
 
@@ -275,28 +298,33 @@ class BlockRegistration {
 	/**
 	 * Render Twig block
 	 *
-	 * @param string $template
-	 * @param array  $block
-	 * @param string $content
-	 * @param bool   $is_preview
-	 * @param int    $post_id
+	 * @param string     $template
+	 * @param array      $block
+	 * @param string     $content
+	 * @param bool       $is_preview
+	 * @param int        $post_id
+	 * @param ?WP_Block  $wp_block
+	 * @param array|bool $block_context
+	 * @param bool       $is_ajax_render
 	 *
 	 * @return void
 	 */
-	public static function render_twig_block( string $template, array $block = [], string $content = '', bool $is_preview = false, int $post_id = 0 ): void {
+	public static function render_twig_block( string $template, array $block = [], string $content = '', bool $is_preview = false, int $post_id = 0, ?WP_Block $wp_block = null, array|bool $block_context = [], bool $is_ajax_render = false ): void {
 		$context = get_queried_object() ? Timber::context() : [];
 
-		// Store block attributes.
-		$context['attributes'] = $block;
+		// Add additional context to the block.
+		$additional = [
+			'fields'         => get_fields(),
+			'block'          => $block,
+			'content'        => $content,
+			'is_preview'     => $is_preview,
+			'post_id'        => $post_id,
+			'wp_block'       => $wp_block,
+			'context'        => $block_context,
+			'is_ajax_render' => $is_ajax_render,
+		];
 
-		// Store field values. These are the fields from your ACF field group for the block.
-		$context['fields'] = get_fields();
-
-		// Store whether the block is being rendered in the editor or on the frontend.
-		$context['is_preview'] = $is_preview;
-
-		// Store the current post ID.
-		$context['post_id'] = $post_id;
+		$context = array_merge( $context, $additional );
 
 		// Render the block.
 		Timber::render( $template, $context );
@@ -389,5 +417,77 @@ class BlockRegistration {
 			},
 			11
 		);
+	}
+
+	/**
+	 * Generate a unique block ID for each ACF block
+	 *
+	 * @return void
+	 */
+	public static function create_block_id(): void {
+		add_filter(
+			'acf/pre_save_block',
+			function( array $attributes ): array {
+				$wp_block = \WP_Block_Type_Registry::get_instance()->get_registered( $attributes['name'] );
+				if ( ! str_starts_with( $attributes['name'], 'acf/' ) || empty( $wp_block?->attributes['block_id'] ) ) {
+					return $attributes;
+				}
+
+				if ( empty( $attributes['block_id'] ) ) {
+					$attributes['block_id'] = uniqid();
+				} else {
+					// Ensure the block ID is unique.
+					while ( self::block_id_exists( $attributes['block_id'] ) ) {
+						$attributes['block_id'] = uniqid();
+					}
+				}
+
+				self::store_block_id( $attributes['block_id'] );
+
+				return $attributes;
+			}
+		);
+	}
+
+	/**
+	 * Store a block ID to check for duplicates
+	 *
+	 * @param string $block_id
+	 *
+	 * @return void
+	 */
+	public static function store_block_id( string $block_id ): void {
+		self::load_block_ids();
+
+		if ( ! in_array( $block_id, self::$block_ids, true ) ) {
+			self::$block_ids[] = $block_id;
+			set_transient( self::BLOCK_IDS_TRANSIENT, self::$block_ids, 1 );
+		}
+	}
+
+	/**
+	 * Check if a block ID already exists
+	 *
+	 * @param string $block_id
+	 *
+	 * @return bool
+	 */
+	public static function block_id_exists( string $block_id ): bool {
+		self::load_block_ids();
+		return in_array( $block_id, self::$block_ids, true );
+	}
+
+	/**
+	 * Load block IDs from transient
+	 *
+	 * @return void
+	 */
+	private static function load_block_ids(): void {
+		if ( empty( self::$block_ids ) ) {
+			$transient = get_transient( self::BLOCK_IDS_TRANSIENT );
+			if ( $transient ) {
+				self::$block_ids = $transient;
+			}
+		}
 	}
 }

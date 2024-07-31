@@ -26,7 +26,7 @@
 	} %}
 {% endif %}
 
-<div {{ block_attrs( attributes, 'wp-block-group navigation-container flex flex-col items-end gap-5 md:w-auto w-full', attrs ) }}>
+<div {{ block_attrs( block, 'wp-block-group navigation-container flex flex-col items-end gap-5 md:w-auto w-full', attrs ) }}>
 	<button
 		{% if function('is_admin') == false %}
 			@click="menuIsOpen = !menuIsOpen"
