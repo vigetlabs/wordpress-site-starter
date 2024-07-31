@@ -7,8 +7,8 @@
 
 namespace ACFFormBlocks\Elements;
 
-use ACFFormBlocks\Utilities\BlockTemplate\Block;
-use ACFFormBlocks\Utilities\BlockTemplate\Template;
+use Viget\ACFBlocksToolkit\BlockTemplate\Block;
+use Viget\ACFBlocksToolkit\BlockTemplate\Template;
 
 /**
  * Class for Legend Fields

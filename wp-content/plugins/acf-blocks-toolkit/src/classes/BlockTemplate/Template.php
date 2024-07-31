@@ -7,7 +7,7 @@
  * @package ACFFormBlocks
  */
 
-namespace ACFFormBlocks\Utilities\BlockTemplate;
+namespace Viget\ACFBlocksToolkit\BlockTemplate;
 
 use Exception;
 

@@ -7,8 +7,8 @@
  * @package ACFFormBlocks
  */
 
-use ACFFormBlocks\Utilities\BlockTemplate\Block;
-use ACFFormBlocks\Utilities\BlockTemplate\Template;
+use Viget\ACFBlocksToolkit\BlockTemplate\Block;
+use Viget\ACFBlocksToolkit\BlockTemplate\Template;
 
 $buttons = ( new Block( 'core/buttons', [ 'lock' => [ 'move' => false, 'remove' => true ] ] ) )
 	->add( ( new Block( 'core/button', [

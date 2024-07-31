@@ -9,8 +9,8 @@
  */
 
 use ACFFormBlocks\Form;
-use ACFFormBlocks\Utilities\BlockTemplate\Block;
-use ACFFormBlocks\Utilities\BlockTemplate\Template;
+use Viget\ACFBlocksToolkit\BlockTemplate\Block;
+use Viget\ACFBlocksToolkit\BlockTemplate\Template;
 
 $meta_field = get_field( 'meta_field' );
 $form_id    = get_field( '_acffb_form_id', $post_id );

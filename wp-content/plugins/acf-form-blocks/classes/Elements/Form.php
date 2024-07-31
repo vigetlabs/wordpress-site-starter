@@ -9,9 +9,9 @@ namespace ACFFormBlocks\Elements;
 
 use ACFFormBlocks\Form as FormObject;
 use ACFFormBlocks\Utilities\Blocks;
-use ACFFormBlocks\Utilities\BlockTemplate\Block;
-use ACFFormBlocks\Utilities\BlockTemplate\Template;
 use Exception;
+use Viget\ACFBlocksToolkit\BlockTemplate\Block;
+use Viget\ACFBlocksToolkit\BlockTemplate\Template;
 
 /**
  * Class for Form Elements
