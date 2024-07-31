@@ -7,9 +7,9 @@
 
 namespace ACFFormBlocks\Elements;
 
-use ACFFormBlocks\Utilities\BlockTemplate\Block;
-use ACFFormBlocks\Utilities\BlockTemplate\Template;
 use Exception;
+use Viget\ACFBlocksToolkit\BlockTemplate\Block;
+use Viget\ACFBlocksToolkit\BlockTemplate\Template;
 
 /**
  * Class for Textarea Fields

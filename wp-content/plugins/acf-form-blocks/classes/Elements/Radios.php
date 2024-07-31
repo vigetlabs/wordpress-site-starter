@@ -9,9 +9,9 @@ namespace ACFFormBlocks\Elements;
 
 use ACFFormBlocks\Form;
 use ACFFormBlocks\Traits\Options;
-use ACFFormBlocks\Utilities\BlockTemplate\Block;
-use ACFFormBlocks\Utilities\BlockTemplate\Template;
 use Exception;
+use Viget\ACFBlocksToolkit\BlockTemplate\Block;
+use Viget\ACFBlocksToolkit\BlockTemplate\Template;
 
 /**
  * Class for Radios Fields
