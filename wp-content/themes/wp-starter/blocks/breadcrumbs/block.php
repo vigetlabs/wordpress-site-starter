@@ -33,27 +33,18 @@ add_action(
  *
  * @return void
  */
-function wpstarter_breadcrumbs(): void {
+function wpstarter_breadcrumbs( $block_template ): void {
 	if ( function_exists( 'rank_math_the_breadcrumbs' ) ) {
 		rank_math_the_breadcrumbs();
 		return;
 	}
 
-	$block_template = [
-		[
-			'core/pattern',
-			[
-				'slug' => 'wp-starter/breadcrumbs-inner-blocks',
-			],
-		],
-	];
-	$allowed        = [
-		'core/buttons',
-		'core/button',
-	];
-	$inner          = [
-		'template'      => $block_template,
-		'allowedBlocks' => $allowed,
+	if ( ! $block_template ) {
+		$block_template = [];
+	}
+
+	$inner = [
+		'template' => $block_template,
 	];
 
 	inner_blocks( $inner );

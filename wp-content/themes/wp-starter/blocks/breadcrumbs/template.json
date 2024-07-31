@@ -1,0 +1,32 @@
+{
+  "template": [
+    [
+      "core/buttons",
+      {
+        "align":"wide",
+        "className":"is-style-breadcrumbs"
+      },
+      [
+        [
+          "core/button",
+          {
+            "text":"Breadcrumb"
+          }
+        ],
+        [
+          "core/button",
+          {
+            "text":"Breadcrumb"
+          }
+        ],
+        [
+          "core/button",
+          {
+            "text":"Breadcrumb"
+          }
+        ]
+      ]
+    ]
+  ]
+}
+
