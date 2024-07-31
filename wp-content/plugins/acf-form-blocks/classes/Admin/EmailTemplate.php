@@ -370,7 +370,7 @@ class EmailTemplate {
 
 			foreach ( $this->get_templates() as $template_id ) {
 				$template_form_id = get_post_meta( $template_id, '_acffb_form_id', true );
-				if ( $form_id && $template_form_id && $template_form_id === $form_id ) {
+				if ( $form_id && $template_form_id && $template_form_id !== $form_id ) {
 					continue;
 				}
 
