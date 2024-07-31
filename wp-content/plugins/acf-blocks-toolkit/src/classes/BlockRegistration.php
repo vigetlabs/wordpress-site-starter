@@ -455,7 +455,7 @@ class BlockRegistration {
 
 		if ( ! in_array( $block_id, self::$block_ids, true ) ) {
 			self::$block_ids[] = $block_id;
-			set_transient( self::BLOCK_IDS_TRANSIENT, self::$block_ids, 4 );
+			set_transient( self::BLOCK_IDS_TRANSIENT, self::$block_ids, 1 );
 		}
 	}
 
