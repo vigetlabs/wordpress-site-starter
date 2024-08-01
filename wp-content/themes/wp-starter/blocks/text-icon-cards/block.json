@@ -11,6 +11,12 @@
       "type": "string",
       "default": "full"
     },
+    "layout": {
+      "type": "object",
+      "default": {
+        "justifyContent":"left"
+      }
+    },
     "style": {
       "type": "object",
       "default": {

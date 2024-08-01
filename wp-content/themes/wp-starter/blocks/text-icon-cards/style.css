@@ -3,7 +3,7 @@
 		@apply flex gap-y-32 md:gap-y-80;
 
 		> div,
-		.block-editor-block-list__layout {
+		> div > .block-editor-block-list__layout {
 			@apply flex flex-wrap justify-start gap-24;
 		}
 
