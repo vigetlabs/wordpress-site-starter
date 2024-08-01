@@ -1,27 +1,3 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-
-/*Import base styles*/
-@import './base/global.css';
-@import './base/has-bg.css';
-@import './base/typography.css';
-
-/*Import custom styles for WordPress core blocks*/
-@import './core-blocks/buttons.css';
-@import './core-blocks/list.css';
-@import './core-blocks/navigation.css';
-@import './core-blocks/quote.css';
-
-/*Import custom styles for main theme blocks*/
-@import '../../blocks/accordion/style.css';
-@import '../../blocks/alert-banner/style.css';
-@import '../../blocks/breadcrumbs/style.css';
-@import '../../blocks/cta/style.css';
-@import '../../blocks/logo-grid/style.css';
-@import '../../blocks/text-image/style.css';
-@import '../../blocks/text-icon-cards/style.css';
-@import '../../blocks/video-embed/style.css';
-
-/*Import styles for custom blocks*/
-@import './custom-blocks.css';

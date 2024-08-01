@@ -17,3 +17,12 @@ Alpine.start();
 
 // Import styles
 import './styles/main.css';
+
+/*Import base styles*/
+import.meta.glob('/src/styles/base/*.css', { eager: true })
+
+/*Import custom styles for WordPress core blocks*/
+import.meta.glob('/src/styles/core-blocks/*.css', { eager: true })
+
+/*Import custom styles for main theme blocks*/
+import.meta.glob('/blocks/**/*.css', { eager: true })

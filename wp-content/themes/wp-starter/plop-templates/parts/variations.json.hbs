@@ -2,26 +2,20 @@
     {
       "name": "{{dashCase name}}-default",
       "title": "{{titleCase name}} Default",
-	  "attributes": {
-        "align": "left",
-        "layout": {
-          "justifyContent":"left"
-        }
+      "attributes": {
+        "align": "full"
       },
       "scope": ["transform"],
-	  "isActive": ["layout"]
+      "isActive": ["align"],
       "isDefault": true
     },
-	{
+    {
       "name": "{{dashCase name}}-variation",
       "title": "{{titleCase name}} Variation",
-	  "attributes": {
-        "align": "center",
-        "layout": {
-          "justifyContent":"center"
-        }
+      "attributes": {
+        "align": "wide"
       },
       "scope": ["transform"],
-      "isActive": ["layout"]
+      "isActive": ["align"]
     }
   ],

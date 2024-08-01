@@ -18,6 +18,7 @@ module.exports = function (plop) {
 				type: 'input',
 				name: 'themeslug',
 				message: 'What is the slug for your theme?',
+				default: 'wp-starter',
 				validate: function (value) {
 					if (/.+/.test(value)) {
 					  return true;
@@ -92,7 +93,6 @@ module.exports = function (plop) {
 					pattern: /-- VARIATIONS HERE --/gi
 				});
 			}
-
 
             return actions;
         }
