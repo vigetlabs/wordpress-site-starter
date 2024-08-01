@@ -2,14 +2,26 @@
     {
       "name": "{{dashCase name}}-default",
       "title": "{{titleCase name}} Default",
-	  "interBlock": "",
+	  "attributes": {
+        "align": "left",
+        "layout": {
+          "justifyContent":"left"
+        }
+      },
       "scope": ["transform"],
+	  "isActive": ["layout"]
       "isDefault": true
     },
 	{
       "name": "{{dashCase name}}-variation",
       "title": "{{titleCase name}} Variation",
-
+	  "attributes": {
+        "align": "center",
+        "layout": {
+          "justifyContent":"center"
+        }
+      },
       "scope": ["transform"],
+      "isActive": ["layout"]
     }
   ],
