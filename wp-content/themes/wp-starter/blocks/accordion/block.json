@@ -6,6 +6,7 @@
   "category": "components",
   "textdomain": "wp-starter",
   "keywords": ["toggle", "details", "summary", "accordion"],
+  "allowedBlocks": ["core/details"],
   "attributes": {
     "align": {
       "type": "string",

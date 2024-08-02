@@ -7,12 +7,8 @@
  * @package WPStarter
  */
 
-$allowed = [
-	'core/details',
-];
-$inner   = [
-	'template'      => $block['template'] ?? [],
-	'allowedBlocks' => $allowed,
+$inner = [
+	'template' => $block['template'] ?? [],
 ];
 ?>
 <section <?php block_attrs( $block ); ?>>

@@ -2,10 +2,8 @@
   Block: Accordion
 #}
 
-{% set allowed = [ 'core/details' ] %}
 {% set inner = {
-	template: attributes.template ?? [],
-	allowedBlocks: allowed
+	template: block.template ?? [],
 } %}
 <section {{ block_attrs( block ) }}>
 	<div class="alignwide">
