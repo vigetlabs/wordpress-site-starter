@@ -23,14 +23,14 @@ class BlockRegistration {
 	/**
 	 * @var array
 	 */
-	public static array $blocks = array();
+	public static array $blocks = [];
 
 	/**
 	 * Local cache of block IDs.
 	 *
 	 * @var array
 	 */
-	public static array $block_ids = array();
+	public static array $block_ids = [];
 
 	/**
 	 * Register ACF Blocks.
@@ -97,7 +97,7 @@ class BlockRegistration {
 					return $metadata;
 				}
 
-				$metadata['acf']['renderCallback'] = function ( array $block, string $content = '', bool $is_preview = false, int $post_id = 0, ?WP_Block $wp_block = null, array|bool $context = array(), bool $is_ajax_render = false ) use ( $metadata ): void {
+				$metadata['acf']['renderCallback'] = function ( array $block, string $content = '', bool $is_preview = false, int $post_id = 0, ?WP_Block $wp_block = null, array|bool $context = [], bool $is_ajax_render = false ) use ( $metadata ): void {
 					$block_name    = str_replace( 'acf/', '', $block['name'] );
 					$block['slug'] = sanitize_title( $block_name );
 					if ( empty( $block['path'] ) ) {
@@ -108,7 +108,7 @@ class BlockRegistration {
 					}
 
 					// Pass the block template data to the block.
-					$block['template'] = $metadata['acf']['innerBlocks'] ?? $metadata['innerBlocks'] ?? array();
+					$block['template'] = $metadata['acf']['innerBlocks'] ?? $metadata['innerBlocks'] ?? [];
 
 					$twig = $block['path'] . '/render.twig';
 
@@ -167,10 +167,10 @@ class BlockRegistration {
 	public static function get_block_locations(): array {
 		return apply_filters(
 			'acfbt_block_locations',
-			array(
+			[
 				get_template_directory() . '/blocks',
 				self::get_custom_blocks_dir(),
-			)
+			]
 		);
 	}
 
@@ -182,7 +182,7 @@ class BlockRegistration {
 	 *
 	 * @return void
 	 */
-	public static function get_blocks_in_dir( string $path, array &$blocks = array() ): void {
+	public static function get_blocks_in_dir( string $path, array &$blocks = [] ): void {
 		$group = glob( trailingslashit( $path ) . '**/block.json' );
 
 		foreach ( $group as $block_path ) {
@@ -244,7 +244,7 @@ class BlockRegistration {
 	 *
 	 * @return array
 	 */
-	public static function get_inner_blocks( array $block, array $metadata = array() ): array {
+	public static function get_inner_blocks( array $block, array $metadata = [] ): array {
 		if ( ! empty( $metadata['acf']['template'] ) ) {
 			return $metadata['acf']['template'];
 		} elseif ( ! empty( $metadata['acf']['innerBlocks'] ) ) {
@@ -254,13 +254,13 @@ class BlockRegistration {
 		$json_path = $block['path'] . '/template.json';
 
 		if ( ! file_exists( $json_path ) ) {
-			return array();
+			return [];
 		}
 
 		$json = json_decode( file_get_contents( $json_path ), true );
 
 		if ( empty( $json['template'] ) ) {
-			return array();
+			return [];
 		}
 
 		return $json['template'];
@@ -342,11 +342,11 @@ class BlockRegistration {
 	 *
 	 * @return void
 	 */
-	public static function render_twig_block( string $template, array $block = array(), string $content = '', bool $is_preview = false, int $post_id = 0, ?WP_Block $wp_block = null, array|bool $block_context = array(), bool $is_ajax_render = false ): void {
-		$context = get_queried_object() ? Timber::context() : array();
+	public static function render_twig_block( string $template, array $block = [], string $content = '', bool $is_preview = false, int $post_id = 0, ?WP_Block $wp_block = null, array|bool $block_context = [], bool $is_ajax_render = false ): void {
+		$context = get_queried_object() ? Timber::context() : [];
 
 		// Add additional context to the block.
-		$additional = array(
+		$additional = [
 			'fields'         => get_fields(),
 			'block'          => $block,
 			'content'        => $content,
@@ -355,7 +355,7 @@ class BlockRegistration {
 			'wp_block'       => $wp_block,
 			'context'        => $block_context,
 			'is_ajax_render' => $is_ajax_render,
-		);
+		];
 
 		$context = array_merge( $context, $additional );
 
@@ -376,7 +376,7 @@ class BlockRegistration {
 				$registry    = \WP_Block_Patterns_Registry::get_instance();
 				$text_domain = wp_get_theme()->get( 'TextDomain' );
 
-				$default_headers     = array(
+				$default_headers     = [
 					'title'         => 'Title',
 					'slug'          => 'Slug',
 					'description'   => 'Description',
@@ -387,14 +387,14 @@ class BlockRegistration {
 					'blockTypes'    => 'Block Types',
 					'postTypes'     => 'Post Types',
 					'templateTypes' => 'Template Types',
-				);
-				$properties_to_parse = array(
+				];
+				$properties_to_parse = [
 					'categories',
 					'keywords',
 					'blockTypes',
 					'postTypes',
 					'templateTypes',
-				);
+				];
 
 				foreach ( $blocks as $block ) {
 					$patterns = glob( $block['path'] . '/patterns/*.php' );
@@ -431,7 +431,7 @@ class BlockRegistration {
 						if ( ! empty( $pattern[ $property ] ) ) {
 							$pattern[ $property ] = in_array(
 								strtolower( $pattern[ $property ] ),
-								array( 'yes', 'true' ),
+								[ 'yes', 'true' ],
 								true
 							);
 						} else {
