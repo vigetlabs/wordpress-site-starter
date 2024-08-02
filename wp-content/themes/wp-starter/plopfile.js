@@ -52,13 +52,7 @@ module.exports = function (plop) {
 					base: 'plop-templates',
 					templateFiles: 'plop-templates/patterns/*.hbs',
 					abortOnFail: true,
-				},
-				{
-					type: "append",
-					path: "src/styles/custom-blocks.css",
-					pattern: /\/\*DO NOT REMOVE - Everything below this line is automatically generated\*\//i,
-					templateFile: 'plop-templates/parts/css-link.css.hbs'
-				},
+				}
 			];
 
 			// add styles
