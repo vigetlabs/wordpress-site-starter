@@ -77,10 +77,6 @@ if ( ! function_exists( 'block_attrs' ) ) {
 
 		do_action( 'acfbt_block_attr', $block );
 
-		if ( is_preview() ) {
-			return;
-		}
-
 		echo wp_kses_data( get_block_wrapper_attributes( $extra ) );
 	}
 }
