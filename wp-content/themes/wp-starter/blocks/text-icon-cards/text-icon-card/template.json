@@ -1,0 +1,20 @@
+{
+  "template": [
+    [
+      "core/image"
+    ],
+    [
+      "core/heading",
+      {
+        "placeholder": "Title Text",
+        "level":3
+      }
+    ],
+    [
+      "core/paragraph",
+      {
+        "placeholder": "Detail text. Sem quis scelerisque integer leo adipiscing orci viverra. Volutpat arcu lectus pretium nibh donec. Ullamcorper vulputate iaculis elit risus augue. Amet, massa consequat fringilla amet enim nibh in a amet. Non aliquam ultricies orci auctor. Nisi sed quis varius feugiat purus magna."
+      }
+    ]
+  ]
+}

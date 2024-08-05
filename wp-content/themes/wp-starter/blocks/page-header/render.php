@@ -7,16 +7,8 @@
  * @package WPStarter
  */
 
-$block_template = [
-	[
-		'core/pattern',
-		[
-			'slug' => 'wp-starter/page-header-inner-blocks',
-		],
-	],
-];
-$inner          = [
-	'template' => $block_template,
+$inner = [
+	'template' => $block['template'] ?? [],
 ];
 ?>
 <section <?php block_attrs( $block ); ?>>

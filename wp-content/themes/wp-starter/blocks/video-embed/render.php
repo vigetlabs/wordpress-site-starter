@@ -7,24 +7,18 @@
  * @package WPStarter
  */
 
-$block_template = [
-	[
-		'core/pattern',
-		[
-			'slug' => 'wp-starter/video-embed-inner-blocks',
-		],
-	],
-];
-$allowed        = [
+$allowed = [
 	'core/heading',
 	'core/paragraph',
-	'core/embed'
+	'core/embed',
 ];
-$inner          = [
-	'template'      => $block_template,
+$inner   = [
+	'template'      => $block['template'] ?? [],
 	'allowedBlocks' => $allowed,
 ];
 ?>
 <section <?php block_attrs( $block ); ?>>
-	<?php inner_blocks( $inner ); ?>
+	<div class="alignwide">
+		<?php inner_blocks( $inner ); ?>
+	</div>
 </section>

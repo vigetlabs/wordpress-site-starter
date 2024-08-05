@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "postcss": "^8.4.40",
+    "postcss-import": "^16.1.0",
+    "postcss-import-ext-glob": "^2.1.1"
+  }
+}

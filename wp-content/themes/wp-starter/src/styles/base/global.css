@@ -3,29 +3,37 @@
 		@apply !hidden;
 	}
 
-	ul {
-		@apply list-disc;
+	ul.wp-block-list {
+		@apply list-disc pl-32;
 
 		li {
-			@apply list-inside;
+			@apply list-outside;
 		}
 	}
 
-	ol {
-		@apply list-decimal;
+	ol.wp-block-list {
+		@apply list-decimal pl-32;
 
 		li {
-			@apply list-inside;
+			@apply list-outside;
 		}
+	}
+
+	a {
+		@apply underline;
+	}
+
+	p + p {
+		@apply mt-24;
 	}
 }
 
 @layer components {
 	/*
-		This adds a bit of space between blocks on a page.
+		Adjust this to add space between blocks on a page.
 		Should be adjusted or removed as needed per project.
 	*/
 	.entry-content > *:not(:first-child) {
-		@apply mt-12;
+		@apply mt-0;
 	}
 }

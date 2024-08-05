@@ -6,10 +6,38 @@
   "category": "components",
   "textdomain": "wp-starter",
   "keywords": ["toggle", "details", "summary", "accordion"],
+  "allowedBlocks": ["core/details"],
+  "attributes": {
+    "align": {
+      "type": "string",
+      "default": "full"
+    },
+    "style": {
+      "type": "object",
+      "default": {
+        "spacing": {
+          "padding": {
+            "top": "var:preset|spacing|30",
+            "bottom": "var:preset|spacing|30",
+            "left": "var:preset|spacing|20",
+            "right": "var:preset|spacing|20"
+          }
+        }
+      }
+    }
+  },
   "supports": {
     "jsx": true,
     "mode": false,
-    "alignWide": true
+    "alignWide": true,
+    "color": {
+      "background": true
+    },
+    "layout": {
+      "default": {
+        "type": "constrained"
+      }
+    }
   },
   "acf": {
     "mode": "preview"

@@ -5,22 +5,21 @@
   "icon": "embed-video",
   "category": "components",
   "textdomain": "wp-starter",
-  "keywords": [
-    "video",
-    "embed",
-    "youtube",
-    "vimeo",
-    "url",
-    "play"
-  ],
+  "keywords": ["video","embed","youtube","vimeo","url","play"],
   "attributes": {
+    "align": {
+      "type": "string",
+      "default": "full"
+    },
     "style": {
       "type": "object",
       "default": {
         "spacing": {
           "padding": {
-            "top": "var:preset|spacing|20",
-            "bottom": "var:preset|spacing|20"
+            "top": "var:preset|spacing|30",
+            "bottom": "var:preset|spacing|30",
+            "left": "var:preset|spacing|20",
+            "right": "var:preset|spacing|20"
           }
         }
       }
@@ -30,6 +29,9 @@
     "jsx": true,
     "mode": false,
     "alignWide": true,
+    "color": {
+      "background": true
+    },
     "layout": {
       "default": {
         "type": "constrained",

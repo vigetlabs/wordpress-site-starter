@@ -18,6 +18,7 @@ module.exports = function (plop) {
 				type: 'input',
 				name: 'themeslug',
 				message: 'What is the slug for your theme?',
+				default: 'wp-starter',
 				validate: function (value) {
 					if (/.+/.test(value)) {
 					  return true;
@@ -51,13 +52,7 @@ module.exports = function (plop) {
 					base: 'plop-templates',
 					templateFiles: 'plop-templates/patterns/*.hbs',
 					abortOnFail: true,
-				},
-				{
-					type: "append",
-					path: "src/styles/custom-blocks.css",
-					pattern: /\/\*DO NOT REMOVE - Everything below this line is automatically generated\*\//i,
-					templateFile: 'plop-templates/parts/css-link.css.hbs'
-				},
+				}
 			];
 
 			// add styles
@@ -92,7 +87,6 @@ module.exports = function (plop) {
 					pattern: /-- VARIATIONS HERE --/gi
 				});
 			}
-
 
             return actions;
         }

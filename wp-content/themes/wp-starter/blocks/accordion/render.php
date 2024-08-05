@@ -7,24 +7,12 @@
  * @package WPStarter
  */
 
-$block_template = [
-	[
-		'core/details',
-		[
-			'showContent' => true,
-		],
-	],
-	[ 'core/details' ],
-	[ 'core/details' ],
-];
-$allowed        = [
-	'core/details',
-];
-$inner          = [
-	'template'      => $block_template,
-	'allowedBlocks' => $allowed,
+$inner = [
+	'template' => $block['template'] ?? [],
 ];
 ?>
 <section <?php block_attrs( $block ); ?>>
-	<?php inner_blocks( $inner ); ?>
+	<div class="alignwide">
+		<?php inner_blocks( $inner ); ?>
+	</div>
 </section>
