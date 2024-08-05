@@ -7,16 +7,11 @@
  * @package WPStarter
  */
 
-$id      = 'alert' . $block['block_id'] ?? $block['id'];
-$allowed = [
-	'core/paragraph',
-	'core/button',
+$id    = 'alert' . $block['block_id'] ?? $block['id'];
+$inner = [
+	'template' => $block['template'] ?? [],
 ];
-$inner   = [
-	'template'      => $block['template'] ?? [],
-	'allowedBlocks' => $allowed,
-];
-$attrs   = [];
+$attrs = [];
 
 if ( ! is_admin() ) {
 	$attrs['x-data'] = '{ ' . $id . ': $persist(true) }';

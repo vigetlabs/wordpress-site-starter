@@ -8,7 +8,7 @@
 	'core/embed'
 ] %}
 {% set inner = {
-	template: attributes.template ?? [],
+	template: block.template ?? [],
 	allowedBlocks: allowed
 } %}
 <section {{ block_attrs( block ) }}>

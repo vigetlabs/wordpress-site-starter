@@ -6,6 +6,7 @@
   "category": "components",
   "textdomain": "wp-starter",
   "keywords": ["text", "card", "icon", "grid"],
+  "allowedBlocks": [ "acf/text-icon-card" ],
   "attributes": {
     "align": {
       "type": "string",

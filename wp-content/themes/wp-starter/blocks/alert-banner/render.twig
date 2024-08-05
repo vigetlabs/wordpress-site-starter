@@ -8,13 +8,8 @@ Block: Alert Banner
     {% set id = 'alert' ~ block.block_id %}
 {% endif %}
 
-{% set allowed = [
-	'core/paragraph',
-	'core/button',
-] %}
 {% set inner = {
-	template: attributes.template ?? [],
-	allowedBlocks: allowed
+	template: block.template ?? [],
 } %}
 
 {% set attrs = {} %}

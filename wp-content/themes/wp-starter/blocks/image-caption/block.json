@@ -6,6 +6,7 @@
   "category": "components",
   "textdomain": "wp-starter",
   "keywords": ["photo", "upload", "media", "picture", "image", "caption"],
+  "allowedBlocks":[ "core/image" ],
   "attributes": {
     "align": {
       "type": "string",

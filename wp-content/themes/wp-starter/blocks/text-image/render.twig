@@ -3,7 +3,7 @@
 #}
 
 {% set inner = {
-	template: attributes.template ?? [],
+	template: block.template ?? [],
 } %}
 <section {{ block_attrs( block ) }}>
 	<div class="alignwide">

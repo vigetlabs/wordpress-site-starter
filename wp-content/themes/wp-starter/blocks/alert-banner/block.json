@@ -5,15 +5,8 @@
   "icon": "bell",
   "category": "components",
   "textdomain": "wp-starter",
-  "keywords": [
-    "notification",
-    "alert",
-    "banner",
-    "information",
-    "bar",
-    "important",
-    "dismiss"
-  ],
+  "keywords": [ "notification","alert","banner","information","bar","important","dismiss"],
+  "allowedBlocks": ["core/paragraph","core/button"],
   "attributes": {
     "block_id": {
       "type": "string",

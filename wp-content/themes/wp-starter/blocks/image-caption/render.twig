@@ -2,10 +2,8 @@
   Block: Image with Caption
 #}
 
-{% set allowed = [ 'core/image' ] %}
 {% set inner = {
-	template: attributes.template ?? [],
-	allowedBlocks: allowed,
+	template: block.template ?? [],
 	templateLock: 'all'
 } %}
 <section {{ block_attrs( block ) }}>
