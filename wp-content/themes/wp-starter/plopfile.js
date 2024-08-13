@@ -46,13 +46,6 @@ module.exports = function (plop) {
 					templateFiles: 'plop-templates/*.hbs',
 					abortOnFail: true,
 				},
-				{
-					type: 'addMany',
-					destination: 'blocks/{{dashCase name}}/',
-					base: 'plop-templates',
-					templateFiles: 'plop-templates/patterns/*.hbs',
-					abortOnFail: true,
-				}
 			];
 
 			// add styles
@@ -73,7 +66,7 @@ module.exports = function (plop) {
 			}
 
 			// add variations
-			if (data.styles) {
+			if (data.variations) {
 				actions.push({
 					type: 'modify',
 					path: 'blocks/{{dashCase name}}/block.json',
