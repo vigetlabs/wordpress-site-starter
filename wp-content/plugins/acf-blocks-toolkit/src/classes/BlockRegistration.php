@@ -108,7 +108,7 @@ class BlockRegistration {
 					}
 
 					// Pass the block template data to the block.
-					$block['template'] = $metadata['acf']['innerBlocks'] ?? $metadata['innerBlocks'] ?? [];
+					$block['template'] = self::get_inner_blocks( $block, $metadata );
 
 					$twig = $block['path'] . '/render.twig';
 
