@@ -2,7 +2,9 @@
   Block: CTA
 #}
 
-{% set inner = { template: template } %}
+{% set inner = {
+	template: block.template ?? [],
+} %}
 <section {{ block_attrs( block ) }}>
 	<div class="alignwide">
 		{{ inner_blocks( inner ) }}

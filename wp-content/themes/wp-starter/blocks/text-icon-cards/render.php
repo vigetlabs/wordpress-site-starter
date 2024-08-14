@@ -7,13 +7,8 @@
  * @package WPStarter
  */
 
-$block_template = [
-	[ 'acf/text-icon-card' ],
-	[ 'acf/text-icon-card' ],
-	[ 'acf/text-icon-card' ],
-];
-$inner          = [
-	'template' => $block_template,
+$inner = [
+	'template' => $block['template'] ?? [],
 ];
 ?>
 <section <?php block_attrs( $block ); ?>>

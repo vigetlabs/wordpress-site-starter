@@ -6,6 +6,7 @@
   "category": "components",
   "textdomain": "wp-starter",
   "keywords": ["video","embed","youtube","vimeo","url","play"],
+  "allowedBlocks":[ "core/heading","core/paragraph","core/embed" ],
   "attributes": {
     "align": {
       "type": "string",

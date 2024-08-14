@@ -2,15 +2,8 @@
   Block: Text & Icon Cards
 #}
 
-{% set template = [
-  [ 'acf/text-icon-card' ],
-  [ 'acf/text-icon-card' ],
-  [ 'acf/text-icon-card' ]
-] %}
-{% set allowed = [ 'acf/text-icon-card' ] %}
 {% set inner = {
-	template: template,
-	allowedBlocks: allowed,
+	template: block.template ?? [],
 } %}
 <section {{ block_attrs( block ) }}>
 	<div class="alignwide">

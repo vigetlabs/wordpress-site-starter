@@ -2,7 +2,9 @@
   Block: Text & Icon Cards
 #}
 
-{% set inner = { template: template } %}
+{% set inner = {
+	template: block.template ?? [],
+} %}
 <article {{ block_attrs( block ) }}>
   {{ inner_blocks( inner ) }}
 </article>

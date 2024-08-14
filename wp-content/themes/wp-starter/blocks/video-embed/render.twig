@@ -2,14 +2,8 @@
   Block: Video Embed
 #}
 
-{% set allowed = [
-	'core/heading',
-	'core/paragraph',
-	'core/embed'
-] %}
 {% set inner = {
 	template: block.template ?? [],
-	allowedBlocks: allowed
 } %}
 <section {{ block_attrs( block ) }}>
 	<div class="alignwide">
