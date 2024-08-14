@@ -165,12 +165,15 @@ class BlockRegistration {
 	 * @return array
 	 */
 	public static function get_block_locations(): array {
-		return apply_filters(
-			'acfbt_block_locations',
-			[
-				get_template_directory() . '/blocks',
-				self::get_custom_blocks_dir(),
-			]
+		return array_unique(
+			apply_filters(
+				'acfbt_block_locations',
+				[
+					get_template_directory() . '/blocks',
+					get_stylesheet_directory() . '/blocks',
+					self::get_custom_blocks_dir(),
+				]
+			)
 		);
 	}
 
