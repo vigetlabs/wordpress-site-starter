@@ -23,7 +23,7 @@
 		@apply underline;
 	}
 
-	p + p {
+	p:not(:empty):not(:last-child) {
 		@apply mt-24;
 	}
 }

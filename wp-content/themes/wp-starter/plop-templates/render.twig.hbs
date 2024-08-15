@@ -3,8 +3,9 @@
 #}
 
 
-{% set inner = { template: attributes.template ?? [] } %}
-
+{% set inner = {
+	template: block.template ?? [],
+} %}
 <section \{{ block_attrs( attributes ) }}>
   \{{ inner_blocks( inner ) }}
 </section>
