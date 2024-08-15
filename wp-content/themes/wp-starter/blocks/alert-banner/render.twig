@@ -22,7 +22,7 @@ Block: Alert Banner
 {% endif %}
 
 <section {{ block_attrs( block, '', attrs ) }} >
-	<div class="acf-block__container">
+	<div class="acf-block-inner__container">
 		{{ inner_blocks( inner ) }}
 	</div>
 	{{ function( 'alert_banner_dismiss_button', id ) }}

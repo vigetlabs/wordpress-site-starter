@@ -2,7 +2,7 @@
 	.acf-block-alert-banner {
 		@apply flex gap-24 py-24 lg:gap-48;
 
-		.acf-block__container {
+		.acf-block-inner__container {
 			@apply m-auto flex w-full flex-col items-start gap-24 text-sm sm:flex-wrap md:flex-row md:items-center md:py-0 lg:items-center lg:gap-48;
 
 			.wp-block-button .wp-block-button__link {

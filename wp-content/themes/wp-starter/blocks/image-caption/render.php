@@ -13,7 +13,7 @@ $inner = [
 ];
 ?>
 <section <?php block_attrs( $block ); ?>>
-	<div class="acf-block__container">
+	<div class="acf-block-inner__container">
 		<?php inner_blocks( $inner ); ?>
 	</div>
 </section>

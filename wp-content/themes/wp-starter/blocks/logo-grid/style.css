@@ -1,11 +1,11 @@
 @layer components {
 	.acf-block-logo-grid {
-		.acf-block__container {
-			@apply flex flex-wrap justify-start gap-24;
+		.acf-block-inner__container {
+			@apply flex flex-wrap justify-center gap-24;
 		}
 
 		.block-editor-block-list__layout {
-			@apply flex flex-wrap justify-start gap-24;
+			@apply flex flex-wrap justify-center gap-24;
 		}
 
 		& figure {

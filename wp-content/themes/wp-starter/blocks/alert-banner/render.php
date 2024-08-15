@@ -19,7 +19,7 @@ if ( ! is_admin() ) {
 }
 ?>
 <section <?php block_attrs( $block, '', $attrs ); ?>>
-	<div class="acf-block__container">
+	<div class="acf-block-inner__container">
 		<?php inner_blocks( $inner ); ?>
 	</div>
 	<?php alert_banner_dismiss_button( $id ); ?>
