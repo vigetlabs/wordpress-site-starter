@@ -18,8 +18,8 @@ if ( ! is_admin() ) {
 	$attrs['x-show'] = $id;
 }
 ?>
-<section <?php block_attrs( $block, '', $attrs ); ?> >
-	<div class="wp-block-alert-banner__inner-container">
+<section <?php block_attrs( $block, '', $attrs ); ?>>
+	<div class="acf-block__container">
 		<?php inner_blocks( $inner ); ?>
 	</div>
 	<?php alert_banner_dismiss_button( $id ); ?>

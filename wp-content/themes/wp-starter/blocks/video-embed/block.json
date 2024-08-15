@@ -38,7 +38,7 @@
         "type": "constrained",
         "justifyContent": "center"
       },
-      "allowEditing": false,
+      "allowOrientation": false,
       "allowSwitching": false,
       "allowCustomContentAndWideSize": false
     }

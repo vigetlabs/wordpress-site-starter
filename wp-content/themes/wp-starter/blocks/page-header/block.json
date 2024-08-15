@@ -46,8 +46,6 @@
       "default": {
         "type": "constrained"
       },
-      "allowOrientation": false,
-      "allowInheriting": false,
       "allowCustomContentAndWideSize": false
     }
   },
