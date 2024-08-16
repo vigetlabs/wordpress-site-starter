@@ -40,10 +40,16 @@
 	.entry-content > *:not(.alignfull),
 	.alignfull.is-layout-constrained > .acf-block-inner__container {
 		max-width: theme('contentBase');
-		@apply mx-auto;
+		@apply !mx-auto;
 	}
 
-	.entry-content > .alignfull {
-		/* @apply relative left-1/2 ml-[-50vw] w-screen max-w-[100vw]; */
+	.alignfull.is-layout-constrained {
+		&.is-content-justification-right > .acf-block-inner__container {
+			@apply justify-end text-right;
+		}
+
+		&.is-content-justification-left > .acf-block-inner__container {
+			@apply justify-start text-left;
+		}
 	}
 }
