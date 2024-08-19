@@ -38,12 +38,15 @@
 	}
 
 	.entry-content > *:not(.alignfull),
-	.alignfull.is-layout-constrained > .acf-block-inner__container {
+	.is-layout-constrained > .acf-block-inner__container,
+	.block-editor-block-list__block
+		.acf-block-inner__container
+		> .is-layout-constrained {
 		max-width: theme('contentBase');
 		@apply !mx-auto;
 	}
 
-	.alignfull.is-layout-constrained {
+	.is-layout-constrained {
 		&.is-content-justification-right > .acf-block-inner__container {
 			@apply justify-end text-right;
 		}
