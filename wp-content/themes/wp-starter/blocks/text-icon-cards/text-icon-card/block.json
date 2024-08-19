@@ -7,6 +7,18 @@
   "textdomain": "wp-starter",
   "keywords": ["text", "card", "icon", "grid"],
   "parent": [ "acf/text-icon-cards" ],
+  "attributes": {
+    "align": {
+      "type": "string",
+      "default": "left"
+    },
+    "layout": {
+      "type": "object",
+      "default": {
+        "justifyContent":"left"
+      }
+    }
+  },
   "supports": {
     "jsx": true,
     "mode": false,
@@ -22,5 +34,32 @@
   },
   "acf": {
     "mode": "preview"
-  }
+  },
+  "variations": [
+    {
+      "name": "text-icon-card-left",
+      "title": "Text & Icon Card • Left",
+      "attributes": {
+        "align": "left",
+        "layout": {
+            "justifyContent":"left"
+        }
+      },
+      "scope": ["transform"],
+      "isActive": ["layout"],
+      "isDefault": true
+    },
+    {
+      "name": "text-icon-card-center",
+      "title": "Text & Icon Card • Center",
+      "attributes": {
+        "align": "center",
+        "layout": {
+          "justifyContent":"center"
+        }
+      },
+      "scope": ["transform"],
+      "isActive": ["layout"]
+    }
+  ]
 }

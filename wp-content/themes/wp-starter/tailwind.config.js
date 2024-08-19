@@ -34,8 +34,8 @@ module.exports = {
 	],
 	darkMode: 'selector',
 	theme: {
-		contentSmall: minBreakpoint.toString(),
-		contentBase: maxBreakpoint.toString(),
+		contentSmall: minBreakpoint.toString()+'px',
+		contentBase: maxBreakpoint.toString()+'px',
 		accentColor: accentColor,
 		extend: {
 			aspectRatio: {

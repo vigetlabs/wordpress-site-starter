@@ -9,5 +9,5 @@
 
 ?>
 <section <?php block_attrs( $block ); ?>>
-	<?php wpstarter_breadcrumbs(); ?>
+	<?php wpstarter_breadcrumbs( $block['template'] ); ?>
 </section>

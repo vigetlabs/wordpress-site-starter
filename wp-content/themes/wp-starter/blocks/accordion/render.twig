@@ -2,21 +2,11 @@
   Block: Accordion
 #}
 
-{% set template = [
-  [
-    'core/details',
-    {
-      'showContent': true
-    }
-  ],
-  [ 'core/details' ],
-  [ 'core/details' ],
-] %}
-{% set allowed = [ 'core/details' ] %}
 {% set inner = {
-	template: template,
-	allowedBlocks: allowed
+	template: block.template ?? [],
 } %}
 <section {{ block_attrs( block ) }}>
-  {{ inner_blocks( inner ) }}
+	<div class="acf-block-inner__container">
+  		{{ inner_blocks( inner ) }}
+	</div>
 </section>

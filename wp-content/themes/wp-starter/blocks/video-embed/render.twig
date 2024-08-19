@@ -2,23 +2,11 @@
   Block: Video Embed
 #}
 
-{% set template = [
-	[
-		'core/pattern',
-		{
-			slug: 'wp-starter/video-embed-inner-blocks'
-		}
-	],
-] %}
-{% set allowed = [
-	'core/heading',
-	'core/paragraph',
-	'core/embed'
-] %}
 {% set inner = {
-	template: template,
-	allowedBlocks: allowed
+	template: block.template ?? [],
 } %}
 <section {{ block_attrs( block ) }}>
-  {{ inner_blocks( inner ) }}
+	<div class="acf-block-inner__container">
+		{{ inner_blocks( inner ) }}
+	</div>
 </section>

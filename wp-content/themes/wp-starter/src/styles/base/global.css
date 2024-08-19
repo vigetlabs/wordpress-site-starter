@@ -3,29 +3,56 @@
 		@apply !hidden;
 	}
 
-	ul {
-		@apply list-disc;
+	ul.wp-block-list {
+		@apply list-disc pl-32;
 
 		li {
-			@apply list-inside;
+			@apply list-outside;
 		}
 	}
 
-	ol {
-		@apply list-decimal;
+	ol.wp-block-list {
+		@apply list-decimal pl-32;
 
 		li {
-			@apply list-inside;
+			@apply list-outside;
 		}
+	}
+
+	a {
+		@apply underline;
+	}
+
+	p:not(:empty):not(:last-child) {
+		@apply mt-24;
 	}
 }
 
 @layer components {
 	/*
-		This adds a bit of space between blocks on a page.
+		Adjust this to add space between blocks on a page.
 		Should be adjusted or removed as needed per project.
 	*/
 	.entry-content > *:not(:first-child) {
-		@apply mt-12;
+		@apply mt-0;
+	}
+
+	.entry-content > *:not(.alignfull),
+	.is-layout-constrained > .acf-block-inner__container,
+	.block-editor-block-list__block
+		.acf-block-inner__container
+		> .is-layout-constrained {
+		max-width: theme('contentBase');
+		@apply !mx-auto;
+	}
+
+	.is-layout-constrained {
+		&.is-content-justification-right > .acf-block-inner__container {
+			@apply justify-end text-right;
+		}
+
+		&.is-content-justification-left > .acf-block-inner__container {
+			@apply justify-start text-left;
+		}
 	}
 }

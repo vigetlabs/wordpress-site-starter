@@ -39,16 +39,14 @@
     "color": {
       "background": true
     },
-    "layout": {
-      "default": {
-        "justifyContent": "left"
-      },
-      "allowOrientation": false,
-      "allowInheriting": false,
-      "allowCustomContentAndWideSize": false
-    },
     "spacing": {
       "padding": true
+    },
+    "layout": {
+      "default": {
+        "type": "constrained"
+      },
+      "allowCustomContentAndWideSize": false
     }
   },
   "acf": {

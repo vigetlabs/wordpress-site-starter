@@ -2,15 +2,9 @@
   Block: Page Header
 #}
 
-{% set template = [
-  [
-    'core/pattern',
-    {
-      'slug': 'wp-starter/page-header-inner-blocks'
-    }
-  ]
-] %}
-{% set inner = { template: template } %}
+{% set inner = { template: block.template } %}
 <section {{ block_attrs( block ) }}>
-	{{ inner_blocks( inner ) }}
+	<div class="acf-block-inner__container">
+		{{ inner_blocks( inner ) }}
+	</div>
 </section>

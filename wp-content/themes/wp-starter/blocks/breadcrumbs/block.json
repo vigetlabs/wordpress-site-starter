@@ -14,6 +14,10 @@
     "seo",
     "sitemap"
   ],
+  "allowedBlocks": [
+    "core/buttons",
+    "core/button"
+  ],
   "supports": {
     "jsx": true,
     "mode": false,

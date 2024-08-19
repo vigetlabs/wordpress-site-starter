@@ -7,35 +7,20 @@
  * @package WPStarter
  */
 
-$block_template = [
-	[
-		'core/paragraph',
-		[
-			'placeholder' => __( 'Enter alert banner message...', 'wp-starter' ),
-		],
-	],
+$id    = 'alert' . $block['block_id'] ?? $block['id'];
+$inner = [
+	'template' => $block['template'] ?? [],
 ];
-$allowed        = [
-	'core/paragraph',
-	'core/button',
-];
-$inner          = [
-	'template'      => $block_template,
-	'allowedBlocks' => $allowed,
-];
-
 $attrs = [];
 
 if ( ! is_admin() ) {
-	$attrs['x-data'] = '{ ' . $block['id'] . ': $persist(true) }';
-	$attrs['x-show'] = $block['id'];
+	$attrs['x-data'] = '{ ' . $id . ': $persist(true) }';
+	$attrs['x-show'] = $id;
 }
 ?>
-<section
- 	<?php block_attrs( $block, "gap-24 lg:gap-48", $attrs ); ?>
- >
-	<div class="flex flex-col items-start gap-24 lg:flex-row lg:gap-48 lg:items-center">
+<section <?php block_attrs( $block, '', $attrs ); ?>>
+	<div class="acf-block-inner__container">
 		<?php inner_blocks( $inner ); ?>
 	</div>
-	<?php alert_banner_dismiss_button( $block['id'] ); ?>
+	<?php alert_banner_dismiss_button( $id ); ?>
 </section>

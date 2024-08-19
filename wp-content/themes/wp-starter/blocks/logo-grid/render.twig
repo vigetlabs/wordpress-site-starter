@@ -2,16 +2,11 @@
   Block: Logo Grid
 #}
 
-{% set template = [
-  [ 'core/image' ],
-  [ 'core/image' ],
-  [ 'core/image' ],
-] %}
-{% set allowed = [ 'core/image' ] %}
 {% set inner = {
-	template: template,
-	allowedBlocks: allowed,
+	template: block.template ?? [],
 } %}
 <section {{ block_attrs( block ) }}>
-  {{ inner_blocks( inner ) }}
+	<div class="acf-block-inner__container">
+  		{{ inner_blocks( inner ) }}
+	</div>
 </section>

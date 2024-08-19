@@ -108,12 +108,12 @@ class BlockRegistration {
 					}
 
 					// Pass the block template data to the block.
-					$block['template'] = $metadata['acf']['innerBlocks'] ?? $metadata['innerBlocks'] ?? [];
+					$block['template'] = self::get_inner_blocks( $block, $metadata );
 
 					$twig = $block['path'] . '/render.twig';
 
 					if ( class_exists( '\Timber\Timber' ) && file_exists( $twig ) ) {
-						self::render_twig_block( $twig, $block, $content, $is_preview, $post_id, $wp_block, $context,$is_ajax_render );
+						self::render_twig_block( $twig, $block, $content, $is_preview, $post_id, $wp_block, $context, $is_ajax_render );
 						return;
 					}
 
@@ -240,6 +240,36 @@ class BlockRegistration {
 	}
 
 	/**
+	 * Get inner blocks template
+	 *
+	 * @param array $block
+	 * @param array $metadata
+	 *
+	 * @return array
+	 */
+	public static function get_inner_blocks( array $block, array $metadata = [] ): array {
+		if ( ! empty( $metadata['acf']['template'] ) ) {
+			return $metadata['acf']['template'];
+		} elseif ( ! empty( $metadata['acf']['innerBlocks'] ) ) {
+			return $metadata['acf']['innerBlocks'];
+		}
+
+		$json_path = $block['path'] . '/template.json';
+
+		if ( ! file_exists( $json_path ) ) {
+			return [];
+		}
+
+		$json = json_decode( file_get_contents( $json_path ), true );
+
+		if ( empty( $json['template'] ) ) {
+			return [];
+		}
+
+		return $json['template'];
+	}
+
+	/**
 	 * Get path to custom uploaded blocks.
 	 *
 	 * @return string
@@ -349,7 +379,7 @@ class BlockRegistration {
 				$registry    = \WP_Block_Patterns_Registry::get_instance();
 				$text_domain = wp_get_theme()->get( 'TextDomain' );
 
-				$default_headers     = array(
+				$default_headers     = [
 					'title'         => 'Title',
 					'slug'          => 'Slug',
 					'description'   => 'Description',
@@ -360,14 +390,14 @@ class BlockRegistration {
 					'blockTypes'    => 'Block Types',
 					'postTypes'     => 'Post Types',
 					'templateTypes' => 'Template Types',
-				);
-				$properties_to_parse = array(
+				];
+				$properties_to_parse = [
 					'categories',
 					'keywords',
 					'blockTypes',
 					'postTypes',
 					'templateTypes',
-				);
+				];
 
 				foreach ( $blocks as $block ) {
 					$patterns = glob( $block['path'] . '/patterns/*.php' );
@@ -404,7 +434,7 @@ class BlockRegistration {
 						if ( ! empty( $pattern[ $property ] ) ) {
 							$pattern[ $property ] = in_array(
 								strtolower( $pattern[ $property ] ),
-								array( 'yes', 'true' ),
+								[ 'yes', 'true' ],
 								true
 							);
 						} else {
@@ -433,7 +463,7 @@ class BlockRegistration {
 	public static function create_block_id(): void {
 		add_filter(
 			'acf/pre_save_block',
-			function( array $attributes ): array {
+			function ( array $attributes ): array {
 				$wp_block = \WP_Block_Type_Registry::get_instance()->get_registered( $attributes['name'] );
 				if ( ! str_starts_with( $attributes['name'], 'acf/' ) || empty( $wp_block?->attributes['block_id'] ) ) {
 					return $attributes;
@@ -505,7 +535,7 @@ class BlockRegistration {
 	private static function reset_block_ids(): void {
 		add_action(
 			'acf/init',
-			function() {
+			function () {
 				if ( empty( self::$block_ids ) ) {
 					delete_transient( self::BLOCK_IDS_TRANSIENT );
 				}

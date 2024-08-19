@@ -7,17 +7,12 @@
  * @package WPStarter
  */
 
-$block_template = [
-	[ 'acf/text-icon-card' ],
-	[ 'acf/text-icon-card' ],
-	[ 'acf/text-icon-card' ],
-];
-$allowed        = [ 'acf/text-icon-card' ];
-$inner          = [
-	'template'      => $block_template,
-	'allowedBlocks' => $allowed,
+$inner = [
+	'template' => $block['template'] ?? [],
 ];
 ?>
 <section <?php block_attrs( $block ); ?>>
-	<?php inner_blocks( $inner ); ?>
+	<div class="acf-block-inner__container">
+		<?php inner_blocks( $inner ); ?>
+	</div>
 </section>

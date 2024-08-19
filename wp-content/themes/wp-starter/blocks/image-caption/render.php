@@ -7,16 +7,13 @@
  * @package WPStarter
  */
 
-$block_template = [
-	[ 'core/image' ],
-];
-$allowed        = [ 'core/image' ];
-$inner          = [
-	'template'      => $block_template,
-	'allowedBlocks' => $allowed,
-	'templateLock'  => 'all',
+$inner = [
+	'template'     => $block['template'] ?? [],
+	'templateLock' => 'all',
 ];
 ?>
 <section <?php block_attrs( $block ); ?>>
-	<?php inner_blocks( $inner ); ?>
+	<div class="acf-block-inner__container">
+		<?php inner_blocks( $inner ); ?>
+	</div>
 </section>

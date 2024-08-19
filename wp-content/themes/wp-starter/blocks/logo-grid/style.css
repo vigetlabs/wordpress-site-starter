@@ -1,11 +1,23 @@
 @layer components {
 	.acf-block-logo-grid {
+		.acf-block-inner__container {
+			@apply flex flex-wrap justify-center gap-24;
+		}
+
+		.block-editor-block-list__layout {
+			@apply flex flex-wrap justify-center gap-24;
+		}
+
 		& figure {
 			@apply flex;
 			@apply aspect-5/3;
 			@apply basis-1/2-gap lg:basis-1/4-gap;
 
-			& img {
+			> div {
+				@apply !h-full;
+			}
+
+			& > img {
 				@apply block;
 				@apply h-full max-w-full;
 				@apply object-contain;

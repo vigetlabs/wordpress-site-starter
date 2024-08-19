@@ -1,0 +1,16 @@
+{
+  "template": [
+    [
+      "core/paragraph",
+      {
+        "placeholder": "Enter alert banner message..."
+      }
+    ],
+    [
+      "core/button",
+      {
+        "className": "is-style-outline"
+      }
+    ]
+  ]
+}

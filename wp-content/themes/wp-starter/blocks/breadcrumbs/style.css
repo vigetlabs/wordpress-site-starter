@@ -15,7 +15,7 @@
 		@apply flex flex-wrap gap-8;
 
 		.wp-block-button {
-			@apply after:ml-10 after:content-['>'];
+			@apply after:ml-10;
 
 			&:last-of-type {
 				@apply after:hidden;
