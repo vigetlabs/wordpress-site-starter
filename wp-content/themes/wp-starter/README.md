@@ -43,6 +43,8 @@ It will ask you a few question:
 ### Fonts
 Fonts are pulled in by [typography.js](/src/theme-json/settings/typography.js). Update the `src` to pull in the font files in `/src/fonts`. For more info on setting up WordPress fonts check out [fullsiteediting](https://fullsiteediting.com/lessons/creating-theme-json/#h-typography).
 
+The default font settings can be found in [_index.js](https://github.com/vigetlabs/wordpress-site-starter/blob/main/wp-content/themes/wp-starter/src/theme-json/styles/_index.js).
+
 ### Colors
 You have access to all of [Tailwind's colors](https://tailwindcss.com/docs/customizing-colors) but feel free to create your own custom colors in the Tailwind config. 
 The theme comes with one accent color. The color name can be set in the top of the Tailwind config and the color are set in config theme. 

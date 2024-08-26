@@ -23,6 +23,6 @@ function buildJSON() {
 		styles: styles,
 	};
 
-	fs.writeFileSync('theme.json', JSON.stringify(data));
+	fs.writeFileSync('theme.json', JSON.stringify(data, null, 2));
 }
 export { buildJSON };

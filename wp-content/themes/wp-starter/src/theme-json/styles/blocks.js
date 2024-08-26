@@ -1,4 +1,4 @@
-//Move any block that you are working to a new file to make it easyer to maintain
+// Move any block that you are working to a new file to make it easier to maintain
 import theme from '../import_tailwind.js';
 import image from './blocks/image.js';
 

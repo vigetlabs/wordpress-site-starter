@@ -16,7 +16,11 @@ add_filter(
 	function ( array $icons ): array {
 		$icon_path = get_stylesheet_directory() . '/src/images/icons/';
 
+		/* Remove unused default icons */
+		// unset( $icons['wordpress'] );
+
 		/* Custom Icons */
+		/* Be sure icon fill color is set to `currentColor` */
 		/*
 		$icons['your-custom-icon'] = [
 			'label'       => __( 'your custom icon', 'wp-starter' ),
