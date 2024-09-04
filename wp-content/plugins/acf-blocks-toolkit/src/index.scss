@@ -1,6 +1,6 @@
-.wp-block-button[class*="has-icon__"],
-.wp-block-navigation-item[class*="has-icon__"] {
+*[class*="has-icon__"] {
 	.wp-block-button__link,
+	.wp-block-post-excerpt__more-link,
 	.wp-block-navigation-item__content {
 		display: flex;
 		gap: 0.5em;
