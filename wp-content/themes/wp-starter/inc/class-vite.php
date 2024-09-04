@@ -85,6 +85,9 @@ class Vite {
 
 		add_filter( 'script_loader_tag', [ $this, 'script_loader' ], 10, 3 );
 		add_filter( 'style_loader_tag', [ $this, 'style_loader' ], 10, 4 );
+
+		// Load admin assets.
+		$this->admin_assets( 'editor' );
 	}
 
 	/**
