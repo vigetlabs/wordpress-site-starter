@@ -52,6 +52,11 @@ class Vite {
 	private bool $initialized = false;
 
 	/**
+	 * @var bool
+	 */
+	private bool $did_admin_notice = false;
+
+	/**
 	 * Set up vars and hooks
 	 */
 	public function __construct() {
@@ -239,6 +244,10 @@ class Vite {
 		$manifest = $this->dist_path . '/manifest.json';
 
 		if ( ! file_exists( $manifest ) ) {
+			if ( ! $this->did_admin_notice ) {
+				return [];
+			}
+
 			add_action(
 				'admin_notices',
 				function () {
@@ -246,10 +255,12 @@ class Vite {
 						'<div class="notice notice-warning is-dismissible">
 						<p>%s</p>
 					</div>',
-						esc_html__( 'Manifest.json file is missing. Run "ddev restart" to fix.', 'wp-starter' )
+						esc_html__( 'Manifest.json file is missing. Run "ddev npm run build" to fix.', 'wp-starter' )
 					);
 				}
 			);
+
+			$this->did_admin_notice = true;
 
 			return [];
 		}
