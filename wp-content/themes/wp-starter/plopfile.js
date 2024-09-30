@@ -42,8 +42,8 @@ module.exports = function (plop) {
 				{
 					type: 'addMany',
 					destination: 'blocks/{{dashCase name}}/',
-					base: 'plop-templates',
-					templateFiles: 'plop-templates/*.hbs',
+					base: 'src/plop-templates',
+					templateFiles: 'src/plop-templates/*.hbs',
 					abortOnFail: true,
 				},
 			];
@@ -54,7 +54,7 @@ module.exports = function (plop) {
 					type: 'modify',
 					path: 'blocks/{{dashCase name}}/block.json',
 					pattern: /-- STYLES HERE --/gi,
-					templateFile: 'plop-templates/parts/styles.json.hbs'
+					templateFile: 'src/plop-templates/parts/styles.json.hbs'
 				});
 			} else {
 				// if no styles remove prepend text
@@ -71,7 +71,7 @@ module.exports = function (plop) {
 					type: 'modify',
 					path: 'blocks/{{dashCase name}}/block.json',
 					pattern: /-- VARIATIONS HERE --/gi,
-					templateFile: 'plop-templates/parts/variations.json.hbs'
+					templateFile: 'src/plop-templates/parts/variations.json.hbs'
 				});
 			} else {
 				actions.push({

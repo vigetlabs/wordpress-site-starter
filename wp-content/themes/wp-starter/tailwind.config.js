@@ -45,8 +45,8 @@ module.exports = {
 			},
 			colors: {
 				transparent: 'transparent',
-				//If you update the names or add more colors you will need to update the file in theme-json/settings/color.js
 				white: "#ffffff",
+				black: "#000000",
 				gray: {
 					100: "#e5e5e5",
 					500: "#737373",
