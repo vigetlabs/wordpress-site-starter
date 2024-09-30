@@ -19,15 +19,16 @@ add_filter(
 		/* Remove unused default icons */
 		// unset( $icons['wordpress'] );
 
-		/* Custom Icons */
-		/* Be sure icon fill color is set to `currentColor` */
-		/*
-		$icons['your-custom-icon'] = [
-			'label'       => __( 'your custom icon', 'wp-starter' ),
-			'icon'        => file_get_contents( $icon_path . 'file-name.svg' ),
-			'defaultLeft' => false,
-		];*/
-
-		return $icons;
+		return array_merge([
+			/* Custom Icons */
+			/* Be sure icon fill color is set to `currentColor` */
+			/*
+			'our-custom-icon'  => [
+				'label'       => __( 'your custom icon', 'wp-starter' ),
+				'icon'        => file_get_contents( $icon_path . 'file-name.svg' ),
+				'defaultLeft' => false,
+			],
+			*/
+		], $icons );
 	}
 );
