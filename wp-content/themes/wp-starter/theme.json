@@ -1,6 +1,4 @@
 {
-  "$schema": "https://schemas.wp.org/trunk/theme.json",
-  "version": 2,
   "settings": {
     "appearanceTools": true,
     "useRootPaddingAwareAlignments": true,
@@ -759,5 +757,7 @@
       "lineHeight": "1.55"
     },
     "css": ":where(.wp-site-blocks *:focus){outline-width:2px;outline-style:solid}"
-  }
+  },
+  "version": 3,
+  "$schema": "https://schemas.wp.org/wp/6.6/theme.json"
 }
