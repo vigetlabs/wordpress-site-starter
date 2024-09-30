@@ -129,7 +129,7 @@ module.exports = {
 		},
 	},
 	plugins: [
-		require('./plugins-tailwind/buttons.js')({
+		require('./src/plugins-tailwind/buttons.js')({
 			accentColor: accentColor,
 		}),
 	],
