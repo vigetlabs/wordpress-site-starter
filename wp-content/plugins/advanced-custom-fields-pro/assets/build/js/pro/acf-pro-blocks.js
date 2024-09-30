@@ -1401,7 +1401,7 @@ const md5 = __webpack_require__(/*! md5 */ "./node_modules/md5/md5.js");
             data
           });
         }
-        if (blockSupportsValidation(name) && !silent && thisBlockForm.getMode() !== 'preview') {
+        if (blockSupportsValidation(name) && !silent && thisBlockForm.getMode() === 'edit') {
           acf.debug('No block preview currently available. Need to trigger a validation only fetch.');
           thisBlockForm.fetch(true, data);
         }

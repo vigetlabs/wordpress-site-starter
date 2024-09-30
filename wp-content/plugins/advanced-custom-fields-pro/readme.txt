@@ -4,7 +4,7 @@ Tags: acf, fields, custom fields, meta, repeater
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 6.3.4
+Stable tag: 6.3.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,24 @@ From your WordPress dashboard
 
 
 == Changelog ==
+
+= 6.3.6 =
+*Release Date 28th August 2024*
+
+* Security - Newly added fields now have to be explicitly set to allow access in the content editor (when using the ACF shortcode or Block Bindings) to increase the security around field permissions. [See the release notes for more details](https://www.advancedcustomfields.com/blog/acf-6-3-6/#field-value-access-editor)
+* Security Fix - Field labels are now correctly escaped when rendered in the Field Group editor, to prevent a potential XSS issue. Thanks to Ryo Sotoyama of Mitsui Bussan Secure Directions, Inc. for the responsible disclosure
+* Fix - Validation and Block AJAX requests nonces will no longer be overridden by third party plugins
+* Fix - Detection of third party select2 libraries will now default to v4 rather than v3
+* Fix - Block previews will now display an error if the render template PHP file is not found
+
+= 6.3.5 =
+*Release Date 1st August 2024*
+
+* Fix - The ACF Shortcode now correctly outputs a comma separated list of values for arrays
+* Fix - ACF Blocks rendered in auto mode now correctly re-render their previews after editing fields
+* Fix - ACF Block validation no longer raises required validation messages if HTML will automatically select the first value when rendered
+* Fix - ACF Block validation no longer raises required validation messages if a default value will be rendered as the field value
+* Fix - ACF Block validation no longer raises required validation messages for fields hidden by conditional logic when adding a new block
 
 = 6.3.4 =
 *Release Date 18th July 2024*
