@@ -3,7 +3,7 @@
  * Plugin Name:       ACF Blocks Toolkit
  * Plugin URI:        https://viget.com
  * Description:       ACF Block Registration and Helper functions.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Requires at least: 5.7
  * Requires PHP:      8.1
  * Requires Plugins:  advanced-custom-fields-pro
@@ -22,7 +22,7 @@ use Viget\ACFBlocksToolkit\BlockRegistration;
 use Viget\ACFBlocksToolkit\Settings;
 
 // Plugin version.
-const ACFBT_VERSION = '1.0.1';
+const ACFBT_VERSION = '1.0.2';
 
 // Plugin path.
 define( 'ACFBT_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
