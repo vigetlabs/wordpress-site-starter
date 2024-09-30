@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const defaultTheme = require('tailwindcss/defaultTheme');
 const { remPair, rem } = require('@viget/tailwindcss-plugins/utilities/fns')
 
 // Breakpoints and content widths for the site
@@ -119,6 +120,11 @@ module.exports = {
 				...remPair(96),
 				...remPair(112),
 				...remPair(128),
+			},
+			screens: {
+				"wp-cols": "781px",
+				"mobile-menu": "900px",
+				...defaultTheme.screens,
 			},
 		},
 	},
