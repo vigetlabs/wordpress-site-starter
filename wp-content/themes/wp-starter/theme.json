@@ -15,24 +15,79 @@
           "slug": "white"
         },
         {
+          "color": "#000000",
+          "name": "Dark Black",
+          "slug": "dark-black"
+        },
+        {
           "color": "#e5e5e5",
           "name": "Gray 100",
           "slug": "gray-100"
         },
         {
           "color": "#737373",
-          "name": "Gray 500",
+          "name": "Dark Gray 500",
           "slug": "dark-gray-500"
         },
         {
           "color": "#0a0a0a",
-          "name": "Black",
-          "slug": "dark-black"
+          "name": "Dark Gray 900",
+          "slug": "dark-gray-900"
+        },
+        {
+          "color": "#f0f9ff",
+          "name": "Your-accent-color-name 50",
+          "slug": "your-accent-color-name-50"
+        },
+        {
+          "color": "#e0f2fe",
+          "name": "Your-accent-color-name 100",
+          "slug": "your-accent-color-name-100"
+        },
+        {
+          "color": "#bae6fd",
+          "name": "Your-accent-color-name 200",
+          "slug": "your-accent-color-name-200"
+        },
+        {
+          "color": "#7dd3fc",
+          "name": "Your-accent-color-name 300",
+          "slug": "your-accent-color-name-300"
+        },
+        {
+          "color": "#38bdf8",
+          "name": "Your-accent-color-name 400",
+          "slug": "your-accent-color-name-400"
+        },
+        {
+          "color": "#0ea5e9",
+          "name": "Your-accent-color-name 500",
+          "slug": "your-accent-color-name-500"
+        },
+        {
+          "color": "#0284c7",
+          "name": "Your-accent-color-name 600",
+          "slug": "your-accent-color-name-600"
+        },
+        {
+          "color": "#0369a1",
+          "name": "Dark Your-accent-color-name 700",
+          "slug": "dark-your-accent-color-name-700"
         },
         {
           "color": "#075985",
-          "name": "Accent",
-          "slug": "dark-accent"
+          "name": "Dark Your-accent-color-name 800",
+          "slug": "dark-your-accent-color-name-800"
+        },
+        {
+          "color": "#0c4a6e",
+          "name": "Dark Your-accent-color-name 900",
+          "slug": "dark-your-accent-color-name-900"
+        },
+        {
+          "color": "#082f49",
+          "name": "Dark Your-accent-color-name 950",
+          "slug": "dark-your-accent-color-name-950"
         }
       ]
     },
