@@ -21,6 +21,7 @@
       "allowCustomContentAndWideSize": false
     }
   },
+  "editorStyle": "file:./editor.css",
   "acf": {
     "mode": "preview"
   }

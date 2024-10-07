@@ -47,7 +47,7 @@ export default {
 					fontWeight: '300 900',
 					src: ['file:./src/fonts/FONT_NAME_HERE.woff2'],
 				},
-			*/
+			],*/
 		},
 		{
 			fontFamily:
@@ -62,6 +62,8 @@ export default {
 			slug: 'system-serif',
 		},
 	],
+	// See tailwind.config.js for the sizes
+	// Uses var(--wp--preset--font-size--{slug}) for the variable.
 	fontSizes: [
 		{
 			fluid: false,

@@ -17,12 +17,12 @@ export default {
 
 function buildJSON() {
 	const data = {
-		$schema: 'https://schemas.wp.org/trunk/theme.json',
-		version: 2,
 		settings: settings,
 		styles: styles,
+		version: 3,
+		$schema: "https://schemas.wp.org/wp/6.6/theme.json"
 	};
 
-	fs.writeFileSync('theme.json', JSON.stringify(data));
+	fs.writeFileSync('theme.json', JSON.stringify(data, null, 2));
 }
 export { buildJSON };

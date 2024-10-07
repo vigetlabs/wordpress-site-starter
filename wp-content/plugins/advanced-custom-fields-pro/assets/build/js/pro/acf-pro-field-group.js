@@ -233,11 +233,11 @@
       const name = this.get('layoutName');
       const $layoutHeaderLabelText = this.$el.find('> .acf-label .acf-fc-layout-label');
       if (label) {
-        $layoutHeaderLabelText.html(label);
+        $layoutHeaderLabelText.text(acf.decode(label));
       }
       const $layoutHeaderNameText = this.$el.find('> .acf-label .acf-fc-layout-name span');
       if (name) {
-        $layoutHeaderNameText.html(name);
+        $layoutHeaderNameText.text(name);
         $layoutHeaderNameText.parent().css('display', '');
       } else {
         $layoutHeaderNameText.parent().css('display', 'none');
@@ -297,10 +297,11 @@
       acf.doAction('hide', $settings);
     },
     onChangeLabel: function (e, $el) {
-      var label = $el.val();
-      this.set('layoutLabel', label);
-      this.$el.attr('data-layout-label', label);
-      var $name = this.$input('name');
+      let label = $el.val();
+      const safeLabel = acf.encode(label);
+      this.set('layoutLabel', safeLabel);
+      this.$el.attr('data-layout-label', safeLabel);
+      let $name = this.$input('name');
 
       // render name
       if ($name.val() == '') {

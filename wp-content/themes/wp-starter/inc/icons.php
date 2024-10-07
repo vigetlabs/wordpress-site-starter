@@ -16,14 +16,19 @@ add_filter(
 	function ( array $icons ): array {
 		$icon_path = get_stylesheet_directory() . '/src/images/icons/';
 
-		/* Custom Icons */
-		/*
-		$icons['your-custom-icon'] = [
-			'label'       => __( 'your custom icon', 'wp-starter' ),
-			'icon'        => file_get_contents( $icon_path . 'file-name.svg' ),
-			'defaultLeft' => false,
-		];*/
+		/* Remove unused default icons */
+		// unset( $icons['wordpress'] );
 
-		return $icons;
+		return array_merge([
+			/* Custom Icons */
+			/* Be sure icon fill color is set to `currentColor` */
+			/*
+			'our-custom-icon'  => [
+				'label'       => __( 'your custom icon', 'wp-starter' ),
+				'icon'        => file_get_contents( $icon_path . 'file-name.svg' ),
+				'defaultLeft' => false,
+			],
+			*/
+		], $icons );
 	}
 );

@@ -53,6 +53,7 @@ class BlockIcons {
 				'core/button',
 				'core/navigation-link',
 				'core/home-link',
+				'core/post-excerpt',
 			]
 		);
 	}
@@ -225,12 +226,25 @@ class BlockIcons {
 		}
 
 		$position_left = $block['attrs']['iconPositionLeft'] ?? false;
+		$icon_class    = 'has-icon__' . $icon['value'];
 
 		// Append the icon class to the block.
 		$p = new WP_HTML_Tag_Processor( $block_content );
-		if ( $p->next_tag() ) {
-			$p->add_class( 'has-icon__' . $icon['value'] );
+		if ( 'core/post-excerpt' === $block['blockName'] ) {
+			$query = [
+				'tag_name'     => 'p',
+				'match_offset' => 2,
+				'class_name'   => [ 'wp-block-post-excerpt__more-text' ],
+			];
+			if ( $p->next_tag( $query ) ) {
+				$p->add_class( $icon_class );
+			}
+		} else {
+			if ( $p->next_tag() ) {
+				$p->add_class( $icon_class );
+			}
 		}
+
 		$block_content = $p->get_updated_html();
 		$block_content = str_replace( '$', '\$', $block_content );
 
@@ -333,10 +347,12 @@ class BlockIcons {
 			$slug    = $icon['value'];
 			$content = 'data:image/svg+xml;utf8,' . rawurlencode( $icon['icon'] );
 
-			$css .= ".wp-block-button.has-icon__{$slug} .wp-block-button__link::after,";
-			$css .= ".wp-block-button.has-icon__{$slug} .wp-block-button__link::before,";
-			$css .= ".wp-block-navigation-item.has-icon__{$slug} .wp-block-navigation-item__content::after,";
-			$css .= ".wp-block-navigation-item.has-icon__{$slug} .wp-block-navigation-item__content::before {";
+			$css .= ".has-icon__{$slug} .wp-block-button__link::after,";
+			$css .= ".has-icon__{$slug} .wp-block-button__link::before,";
+			$css .= ".has-icon__{$slug} .wp-block-post-excerpt__more-link::after,";
+			$css .= ".has-icon__{$slug} .wp-block-post-excerpt__more-link::before,";
+			$css .= ".has-icon__{$slug} .wp-block-navigation-item__content::after,";
+			$css .= ".has-icon__{$slug} .wp-block-navigation-item__content::before {";
 			$css .= 'height: 0.7em;';
 			$css .= 'width: 1em;';
 			$css .= "mask-image: url( $content );";
