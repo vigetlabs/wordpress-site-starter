@@ -57,6 +57,18 @@ ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.6
+* Added 2 new breakpoints: `wp-cols` and `mobile-menu`.
+* Added Full Site Editor style support.
+* Added Button Icon support for the Post Excerpt block.
+* Added Default templates for Archive and Singular posts.
+* Fixed duplicate admin notice.
+* Fixed a deployment issue where a package was missing.
+* Automated the WordPress color palette from the Tailwind config.
+* Reorganized some of the source files.
+* Updated Dependencies
+* Other minor bug fixes, corrections, and code comments.
+
 ### v1.0.5
 * Fixed issue where WordPress was not installing correctly.
 * Fixed issue where Viget WP Composer installation was not working.
