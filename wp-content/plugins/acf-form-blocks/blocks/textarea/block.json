@@ -1,0 +1,29 @@
+{
+  "name": "textarea",
+  "title": "Textarea",
+  "description": "Form textarea field",
+  "icon": "edit",
+  "category": "forms",
+  "textdomain": "acf-form-blocks",
+  "keywords": ["input", "contact", "feedback", "input"],
+  "ancestor": ["acf/form"],
+  "supports": {
+    "jsx": true,
+    "mode": false,
+    "alignWide": true,
+    "anchor": true,
+    "dimensions": {
+      "minHeight": true
+    }
+  },
+  "attributes": {
+    "block_id": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "usesContext": ["acffb/form_id", "acffb/fieldset_id"],
+  "acf": {
+    "mode": "preview"
+  }
+}
