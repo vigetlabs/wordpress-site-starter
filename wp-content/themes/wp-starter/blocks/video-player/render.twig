@@ -1,0 +1,25 @@
+{#
+Block: Video Player
+#}
+
+{% set allowed = [
+	'core/cover',
+	'core/embed'
+] %}
+
+{% set inner = {
+	template: block.template ?? [],
+	allowedBlocks: allowed
+} %}
+
+{% set attrs = {} %}
+
+{% if function('is_admin') == false %}
+	{% set attrs = {
+		'x-data': 'playvideo',
+	} %}
+{% endif %}
+
+<section {{ block_attrs( block, "", attrs ) }}>
+	{{ inner_blocks( inner ) }}
+</section>

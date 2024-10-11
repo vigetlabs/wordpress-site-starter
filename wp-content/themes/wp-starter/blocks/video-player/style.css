@@ -1,0 +1,54 @@
+@layer components {
+	div:not(.block-editor-block-list__block) {
+		> .acf-block-video-player {
+			@apply relative;
+
+			> .wp-block-cover {
+				@apply aspect-video h-full w-full p-fluid-sm;
+			}
+
+			.wp-block-embed__wrapper,
+			.wp-block-embed__wrapper > .bt-video-container {
+				@apply absolute inset-0 h-full w-full z-20;
+			}
+
+			.wp-block-embed:not(.block-editor-block-list__block) {
+				@apply absolute inset-0 h-full w-full z-10;
+
+				iframe {
+					@apply h-full w-full;
+				}
+			}
+		}
+	}
+
+	.wp-embed-responsive div.block-editor-block-list__block {
+		> .acf-block-video-player {
+			.wp-has-aspect-ratio iframe {
+				@apply relative bottom-auto left-auto right-auto top-auto;
+			}
+		}
+	}
+
+	.acf-block-video-player {
+		p, > .wp-block-group {
+			@apply mt-16 mx-auto max-w-[var(--wp--style--global--wide-size)];
+		}
+
+		.wp-block-cover {
+			@apply relative !z-20 h-full mt-0;
+		}
+
+		> .wp-block-group {
+			@apply relative overflow-hidden aspect-video max-w-[1000px] mx-auto;
+		}
+
+		.wp-block-embed {
+			margin-block-start: 0;
+		}
+
+		.wp-embed-aspect-16-9 .wp-block-embed__wrapper:before {
+			@apply pt-0;
+		}
+	}
+}

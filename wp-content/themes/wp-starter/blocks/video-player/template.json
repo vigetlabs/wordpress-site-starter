@@ -1,0 +1,64 @@
+{
+  "template": [
+    [
+      "core/heading",
+      {
+        "content": "Headline goes here",
+        "textAlign": "center"
+      }
+    ],
+    [
+      "core/paragraph",
+      {
+        "content": "Lorem ipsum dolor sit amet consectetur. Egestas turpis gravida vestibulum auctor lacinia mattis ultrices viverra placerat. Mauris risus vel mattis nulla mi odio lobortis. Donec dignissim convallis turpis sapien nisi.",
+        "align": "center"
+      }
+    ],
+    [
+      "core/group",
+      [],
+      [
+        [
+          "core/cover",
+          {
+            "className": "video-overlay-content",
+            "dimRatio": 100,
+            "overlayColor": "black",
+            "contentPosition": "center center",
+            "isUserOverlayColor": true,
+            "layout": {
+              "type":"constrained"
+            }
+          },
+          [
+            [
+              "core/buttons",
+              {
+                "layout": {
+                  "type": "flex",
+                  "justifyContent": "center"
+                }
+              },
+              [
+                [
+                  "core/button",
+                  {
+                    "className": "is-style-play-video",
+                    "text": "Watch Video",
+                    "icon": "video-play-button"
+                  }
+                ]
+              ]
+            ]
+          ]
+        ],
+        [
+          "core/embed",
+          {
+            "align": "center"
+          }
+        ]
+      ]
+    ]
+  ]
+}
