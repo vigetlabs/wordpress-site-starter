@@ -501,8 +501,8 @@ class PostCreateProjectScript extends ComposerScript {
 		// Remove site-starter vendor files
 		self::removeRootVendorDir();
 
-		// Remove site-starter deployment integration.
-		self::removeDeployment();
+		// Remove site-starter related Github integrated files.
+		self::removeGithubFiles();
 
 		self::writeInfo( 'Self-destruction complete.' );
 	}
@@ -532,18 +532,27 @@ class PostCreateProjectScript extends ComposerScript {
 	 *
 	 * @return void
 	 */
-	private static function removeDeployment(): void {
-		self::writeLine( 'Removing deployment script...' );
+	private static function removeGithubFiles(): void {
+		self::writeLine( 'Removing GitHub integration files...' );
 
 		$deployFile = self::translatePath( '.github/workflows/deploy.yaml' );
 
 		if ( ! file_exists( $deployFile ) ) {
 			self::writeWarning( 'Deployment script not found. Skipping removal.' );
-			return;
+		} else {
+			unlink( $deployFile );
+			self::writeInfo( 'Deployment script removed.' );
 		}
 
-		unlink( $deployFile );
+		$componentTemplate = self::translatePath( '.github/ISSUE_TEMPLARTE/new-component-ticket.md' );
 
-		self::writeInfo( 'Deployment script removed.' );
+		if ( ! file_exists( $componentTemplate ) ) {
+			self::writeWarning( 'Component Issue template not found. Skipping removal.' );
+		} else {
+			unlink( $componentTemplate );
+			self::writeInfo( 'Component Issue template removed.' );
+		}
+
+
 	}
 }
