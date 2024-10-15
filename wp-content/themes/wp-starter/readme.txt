@@ -24,6 +24,6 @@ text by Smarty from <a href="https://thenounproject.com/browse/icons/term/text/"
 
 == Recommended Plugins ==
 
-SVG Support
-https://wordpress.org/plugins/svg-support/
+Safe SVG
+https://wordpress.org/plugins/safe-svg/
 Safely upload SVGs

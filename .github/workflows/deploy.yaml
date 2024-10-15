@@ -78,7 +78,7 @@ jobs:
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp.php &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/acf-blocks-toolkit &&\
-            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/svg-support &&\
+            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/safe-svg &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/advanced-custom-fields-pro"
           rsync -rlptzv --exclude="node_modules" ./wp-content/ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_TARGET }}:${{ secrets.APP_PATH }}/wp-content/
           ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_TARGET }} "\
@@ -92,7 +92,7 @@ jobs:
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp.php &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/acf-blocks-toolkit &&\
-            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/svg-support &&\
+            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/safe-svg &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/advanced-custom-fields-pro"
           rsync -rlptzv --exclude="node_modules" ./wp-content/ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_KIT_TARGET }}:${{ secrets.APP_PATH }}/wp-content/
           ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_KIT_TARGET }} "\

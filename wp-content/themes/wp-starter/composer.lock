@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "30d74b11b0da5ffa76774b0fad5c26aa",
+    "content-hash": "3b63970dc27be0142c2ad3f03e20ce01",
     "packages": [
         {
             "name": "composer/installers",
@@ -1086,6 +1086,24 @@
             "homepage": "https://wordpress.org/plugins/accessibility-checker/"
         },
         {
+            "name": "wpackagist-plugin/safe-svg",
+            "version": "2.2.6",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/safe-svg/",
+                "reference": "tags/2.2.6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/safe-svg.2.2.6.zip"
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/safe-svg/"
+        },
+        {
             "name": "wpackagist-plugin/seo-by-rank-math",
             "version": "1.0.219",
             "source": {
@@ -1102,24 +1120,6 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/seo-by-rank-math/"
-        },
-        {
-            "name": "wpackagist-plugin/svg-support",
-            "version": "2.5.5",
-            "source": {
-                "type": "svn",
-                "url": "https://plugins.svn.wordpress.org/svg-support/",
-                "reference": "tags/2.5.5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/svg-support.2.5.5.zip"
-            },
-            "require": {
-                "composer/installers": "^1.0 || ^2.0"
-            },
-            "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/svg-support/"
         },
         {
             "name": "wpackagist-plugin/wordfence",
