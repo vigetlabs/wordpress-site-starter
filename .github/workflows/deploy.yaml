@@ -40,11 +40,11 @@ jobs:
 
       # Build theme
       - name: Install Theme Dependencies
-        uses: "php-actions/composer@v6"
+        uses: 'php-actions/composer@v6'
         with:
-          php_version: "8.2"
+          php_version: '8.2'
           dev: no
-          args: "--optimize-autoloader"
+          args: '--optimize-autoloader'
           working_dir: wp-content/themes/wp-starter
 
       - name: Build Theme
@@ -55,11 +55,11 @@ jobs:
 
       # Install viget-wp composer dependencies
       - name: Install viget-wp Dependencies
-        uses: "php-actions/composer@v6"
+        uses: 'php-actions/composer@v6'
         with:
-          php_version: "8.2"
+          php_version: '8.2'
           dev: no
-          args: "--optimize-autoloader"
+          args: '--optimize-autoloader'
           working_dir: wp-content/mu-plugins/viget-wp
 
       # Build ACF plugin
@@ -70,7 +70,7 @@ jobs:
         working-directory: wp-content/plugins/acf-blocks-toolkit
 
       # Deploy code
-      - name: Deploy
+      - name: Deploy Starter
         run: |
 
           ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_TARGET }} "\
@@ -82,4 +82,18 @@ jobs:
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/advanced-custom-fields-pro"
           rsync -rlptzv --exclude="node_modules" ./wp-content/ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_TARGET }}:${{ secrets.APP_PATH }}/wp-content/
           ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_TARGET }} "\
+            sudo chown -R ${{ secrets.DEPLOY_USER }}:${{ secrets.DEPLOY_DAEMON }} ${{ secrets.APP_PATH }}/wp-content"
+
+      - name: Deploy Kit
+        run: |
+
+          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_KIT_TARGET }} "\
+            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/themes/wp-starter &&\
+            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp &&\
+            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp.php &&\
+            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/acf-blocks-toolkit &&\
+            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/svg-support &&\
+            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/advanced-custom-fields-pro"
+          rsync -rlptzv --exclude="node_modules" ./wp-content/ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_KIT_TARGET }}:${{ secrets.APP_PATH }}/wp-content/
+          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_KIT_TARGET }} "\
             sudo chown -R ${{ secrets.DEPLOY_USER }}:${{ secrets.DEPLOY_DAEMON }} ${{ secrets.APP_PATH }}/wp-content"
