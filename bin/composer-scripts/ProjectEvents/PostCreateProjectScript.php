@@ -501,6 +501,9 @@ class PostCreateProjectScript extends ComposerScript {
 		// Remove site-starter vendor files
 		self::removeRootVendorDir();
 
+		// Remove site-starter deployment integration.
+		self::removeDeployment();
+
 		self::writeInfo( 'Self-destruction complete.' );
 	}
 
@@ -522,5 +525,25 @@ class PostCreateProjectScript extends ComposerScript {
 		self::deleteDirectory( $vendorDir );
 
 		self::writeInfo( 'Root vendor directory removed.' );
+	}
+
+	/**
+	 * Remove the deployment script.
+	 *
+	 * @return void
+	 */
+	private static function removeDeployment(): void {
+		self::writeLine( 'Removing deployment script...' );
+
+		$deployFile = self::translatePath( '.github/workflows/deploy.yaml' );
+
+		if ( ! file_exists( $deployFile ) ) {
+			self::writeWarning( 'Deployment script not found. Skipping removal.' );
+			return;
+		}
+
+		unlink( $deployFile );
+
+		self::writeInfo( 'Deployment script removed.' );
 	}
 }
