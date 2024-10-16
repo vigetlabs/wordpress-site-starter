@@ -25,6 +25,7 @@ jobs:
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-add - <<< "${{ secrets.DEPLOY_KEY }}"
           ssh-keyscan ${{ secrets.DEPLOY_TARGET }} >> ~/.ssh/known_hosts
+          ssh-keyscan ${{ secrets.DEPLOY_KIT_TARGET }} >> ~/.ssh/known_hosts
 
       - name: Use Node.js 20
         uses: actions/setup-node@v4
