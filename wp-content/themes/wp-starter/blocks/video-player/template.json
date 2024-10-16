@@ -21,7 +21,6 @@
         [
           "core/cover",
           {
-            "className": "video-overlay-content",
             "dimRatio": 100,
             "overlayColor": "black",
             "contentPosition": "center center",

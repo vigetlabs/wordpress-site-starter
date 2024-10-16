@@ -40,7 +40,7 @@
 		}
 
 		> .wp-block-group {
-			@apply relative overflow-hidden aspect-video max-w-[1000px] mx-auto;
+			@apply relative overflow-hidden aspect-video mx-auto;
 		}
 
 		.wp-block-embed {
