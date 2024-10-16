@@ -57,6 +57,12 @@ ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.8
+* Allow `core/search` block to be nested within the Navigation Container block.
+* Many updates to deployment
+* Removal of `accentColor`
+* Removal of all variations of pre-defined gray.
+
 ### v1.0.7
 * Added Custom Video Player Component.
 * Replaced SVG Support with Safe SVG.
