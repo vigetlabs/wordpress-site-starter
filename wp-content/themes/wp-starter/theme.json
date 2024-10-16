@@ -16,82 +16,12 @@
           "color": "#000000",
           "name": "Dark Black",
           "slug": "dark-black"
-        },
-        {
-          "color": "#e5e5e5",
-          "name": "Gray 100",
-          "slug": "gray-100"
-        },
-        {
-          "color": "#737373",
-          "name": "Dark Gray 500",
-          "slug": "dark-gray-500"
-        },
-        {
-          "color": "#0a0a0a",
-          "name": "Dark Gray 900",
-          "slug": "dark-gray-900"
-        },
-        {
-          "color": "#f0f9ff",
-          "name": "Your-accent-color-name 50",
-          "slug": "your-accent-color-name-50"
-        },
-        {
-          "color": "#e0f2fe",
-          "name": "Your-accent-color-name 100",
-          "slug": "your-accent-color-name-100"
-        },
-        {
-          "color": "#bae6fd",
-          "name": "Your-accent-color-name 200",
-          "slug": "your-accent-color-name-200"
-        },
-        {
-          "color": "#7dd3fc",
-          "name": "Your-accent-color-name 300",
-          "slug": "your-accent-color-name-300"
-        },
-        {
-          "color": "#38bdf8",
-          "name": "Your-accent-color-name 400",
-          "slug": "your-accent-color-name-400"
-        },
-        {
-          "color": "#0ea5e9",
-          "name": "Your-accent-color-name 500",
-          "slug": "your-accent-color-name-500"
-        },
-        {
-          "color": "#0284c7",
-          "name": "Your-accent-color-name 600",
-          "slug": "your-accent-color-name-600"
-        },
-        {
-          "color": "#0369a1",
-          "name": "Dark Your-accent-color-name 700",
-          "slug": "dark-your-accent-color-name-700"
-        },
-        {
-          "color": "#075985",
-          "name": "Dark Your-accent-color-name 800",
-          "slug": "dark-your-accent-color-name-800"
-        },
-        {
-          "color": "#0c4a6e",
-          "name": "Dark Your-accent-color-name 900",
-          "slug": "dark-your-accent-color-name-900"
-        },
-        {
-          "color": "#082f49",
-          "name": "Dark Your-accent-color-name 950",
-          "slug": "dark-your-accent-color-name-950"
         }
       ]
     },
     "layout": {
       "contentSize": "640px",
-      "wideSize": "1440px"
+      "wideSize": "1200px"
     },
     "spacing": {
       "spacingScale": {
@@ -100,32 +30,32 @@
       "spacingSizes": [
         {
           "name": "1",
-          "size": "clamp(0.125rem, 1.75vw + -0.575rem, 1rem)",
+          "size": "clamp(0.125rem, 2.50vw + -0.875rem, 1rem)",
           "slug": "10"
         },
         {
           "name": "2",
-          "size": "clamp(1.25rem, 2.50vw + 0.25rem, 2.5rem)",
+          "size": "clamp(1.25rem, 3.57vw + -0.17875rem, 2.5rem)",
           "slug": "20"
         },
         {
           "name": "3",
-          "size": "clamp(2rem, 4.00vw + 0.4rem, 4rem)",
+          "size": "clamp(2rem, 5.71vw + -0.285625rem, 4rem)",
           "slug": "30"
         },
         {
           "name": "4",
-          "size": "clamp(3.5rem, 7.00vw + 0.7rem, 7rem)",
+          "size": "clamp(3.5rem, 10.00vw + -0.5rem, 7rem)",
           "slug": "40"
         },
         {
           "name": "5",
-          "size": "clamp(6rem, 8.00vw + 2.8rem, 10rem)",
+          "size": "clamp(6rem, 11.43vw + 1.42875rem, 10rem)",
           "slug": "50"
         },
         {
           "name": "6",
-          "size": "clamp(9rem, 12.00vw + 4.2rem, 15rem)",
+          "size": "clamp(9rem, 17.14vw + 2.143125rem, 15rem)",
           "slug": "60"
         }
       ],
@@ -188,34 +118,34 @@
         {
           "fluid": false,
           "name": "Extra Small",
-          "size": "clamp(0.5rem, 0.25vw + 0.4rem, 0.625rem)",
+          "size": "clamp(0.5rem, 0.36vw + 0.356875rem, 0.625rem)",
           "slug": "x-small"
         },
         {
           "fluid": false,
           "name": "Small",
-          "size": "clamp(0.75rem, 0.50vw + 0.55rem, 1rem)",
+          "size": "clamp(0.75rem, 0.71vw + 0.464375rem, 1rem)",
           "slug": "small"
         },
         {
           "fluid": false,
           "name": "Medium",
-          "size": "clamp(1rem, 0.25vw + 0.9rem, 1.125rem)",
+          "size": "clamp(1rem, 0.36vw + 0.856875rem, 1.125rem)",
           "slug": "medium"
         },
         {
           "name": "Large",
-          "size": "clamp(1.25rem, 1.75vw + 0.55rem, 2.125rem)",
+          "size": "clamp(1.25rem, 2.50vw + 0.25rem, 2.125rem)",
           "slug": "large"
         },
         {
           "name": "Extra Large",
-          "size": "clamp(1.5rem, 2.50vw + 0.5rem, 2.75rem)",
+          "size": "clamp(1.5rem, 3.57vw + 0.07125rem, 2.75rem)",
           "slug": "x-large"
         },
         {
           "name": "Extra Extra Large",
-          "size": "clamp(2rem, 3.50vw + 0.6rem, 3.75rem)",
+          "size": "clamp(2rem, 5.00vw + 0rem, 3.75rem)",
           "slug": "xx-large"
         }
       ]
@@ -306,7 +236,7 @@
       "core/code": {
         "color": {
           "background": "var(--wp--preset--color--white)",
-          "text": "var(--wp--preset--color--gray-500)"
+          "text": "var(--wp--preset--color--black)"
         },
         "spacing": {
           "padding": {

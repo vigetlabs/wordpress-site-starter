@@ -67,16 +67,16 @@ To adjust the spacing you can edit them in `tailwind.config.js` under `spacing >
 ### Buttons
 WordPress button styles are normally built in the `theme.json` but because there is a limitations on hover/focus for button variants all the buttons style are build in Tailwind.
 
-The Tailwind button plugin is in `plugins-tailwind/buttons.js` and has `contained`, `outline`, and both light and dark version. In that file (`buttons.js`) is where you will update and style all of the buttons on the site. Those button styles are getting applied to the HTML in `/src/styles/core-blocks/buttons.css`. 
+The Tailwind button plugin is in `plugins-tailwind/buttons.js` and has `default`, `outline`, and both light and dark version. In that file (`buttons.js`) is where you will update and style all of the buttons on the site. Those button styles are getting applied to the HTML in `/src/styles/core-blocks/buttons.css`. 
 If you have need to apply the buttons style to the mark up you can add one of these button classes.
-| Button Class | Button Sizes |
-|--------------|--------------
-| `.btn-contained` | `.btn-sm` |
-| `.btn-contained-light` | `.btn-lg` |
-| `.btn-outlined` |
-| `.btn-outlined-light` |
-| `.btn-subtle` |
-| `.btn-text` |
+
+| Button Classes       |
+|----------------------|
+| `.btn-default`       |
+| `.btn-default-light` |
+| `.btn-outline`       |
+| `.btn-outline-light` |
+| `.btn-text`          |
 
 
 ### Navigation

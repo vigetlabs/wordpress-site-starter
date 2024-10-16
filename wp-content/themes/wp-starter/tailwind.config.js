@@ -4,13 +4,7 @@ const { remPair, rem } = require('@viget/tailwindcss-plugins/utilities/fns')
 
 // Breakpoints and content widths for the site
 const minBreakpoint = 640;
-const maxBreakpoint = 1440;
-/*
-* This sets the accent color name which is used in theme-json/settings/color.js and plugins-tailwind/buttons.js
-* Preferable use lowercase and one word. Use - for spaces and don't use capital letters or numbers.
-* Any colors set in CSS will need to be manually updated.
-*/
-const accentColor = 'your-accent-color-name';
+const maxBreakpoint = 1200;
 
 const fluidSize = (
 	minSize,
@@ -37,7 +31,6 @@ module.exports = {
 	theme: {
 		contentSmall: minBreakpoint.toString()+'px',
 		contentBase: maxBreakpoint.toString()+'px',
-		accentColor: accentColor,
 		extend: {
 			aspectRatio: {
 				'5/3': '5/3',
@@ -47,25 +40,6 @@ module.exports = {
 				transparent: 'transparent',
 				white: "#ffffff",
 				black: "#000000",
-				gray: {
-					100: "#e5e5e5",
-					500: "#737373",
-					900: "#0a0a0a",
-				},
-				//This pulls in the accentColor as the color name
-				[accentColor]: {
-					50: "#f0f9ff",
-					100: "#e0f2fe",
-					200: "#bae6fd",
-					300: "#7dd3fc",
-					400: "#38bdf8",
-					500: "#0ea5e9",
-					600: "#0284c7",
-					700: "#0369a1",
-					800: "#075985",
-					900: "#0c4a6e",
-					950: "#082f49",
-				},
 			},
 			flexBasis: {
 				'1/2-gap': 'calc((100%/2) - var(--wp--style--block-gap))',
@@ -129,9 +103,7 @@ module.exports = {
 		},
 	},
 	plugins: [
-		require('./src/plugins-tailwind/buttons.js')({
-			accentColor: accentColor,
-		}),
+		require('./src/plugins-tailwind/buttons.js'),
 	],
 }
 

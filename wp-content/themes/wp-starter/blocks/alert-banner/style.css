@@ -6,8 +6,8 @@
 			@apply m-auto flex w-full flex-col items-start gap-24 text-sm sm:flex-wrap md:flex-row md:items-center md:py-0 lg:items-center lg:gap-48;
 
 			.wp-block-button .wp-block-button__link {
-				@apply border-gray-900 text-sm text-gray-900;
-				@apply hover:bg-gray-900 hover:text-white;
+				@apply border-black text-sm text-black;
+				@apply hover:bg-black hover:text-white;
 			}
 		}
 
@@ -15,8 +15,8 @@
 			@apply relative;
 
 			.dismiss {
-				@apply z-10 m-auto size-24 cursor-pointer border border-none border-gray-900 bg-transparent md:inset-y-0 lg:absolute lg:right-16;
-				@apply after:flex after:items-center after:justify-center after:text-gray-900 after:content-['\2715'];
+				@apply z-10 m-auto size-24 cursor-pointer border border-none border-black bg-transparent md:inset-y-0 lg:absolute lg:right-16;
+				@apply after:flex after:items-center after:justify-center after:text-black after:content-['\2715'];
 			}
 		}
 
@@ -34,11 +34,11 @@
 		&[class*='has-dark'] {
 			.wp-block-button .wp-block-button__link {
 				@apply border-white text-white;
-				@apply hover:bg-white hover:text-gray-900;
+				@apply hover:bg-white hover:text-black;
 			}
 			.dismiss {
 				@apply border-white after:text-white;
-				@apply hover:after:bg-white hover:after:text-gray-900;
+				@apply hover:after:bg-white hover:after:text-black;
 			}
 		}
 	}

@@ -1,12 +1,12 @@
 @layer components {
 	.wp-block-button {
 		.wp-block-button__link {
-			@apply btn-contained;
+			@apply btn-default;
 		}
 
 		&.is-style-outline {
 			.wp-block-button__link {
-				@apply btn-outlined;
+				@apply btn-outline;
 			}
 		}
 	}
@@ -15,12 +15,12 @@
 	[class*='has-dark'] {
 		.wp-block-button {
 			.wp-block-button__link {
-				@apply btn-contained-light;
+				@apply btn-default-light;
 			}
 
 			&.is-style-outline {
 				.wp-block-button__link {
-					@apply btn-outlined-light;
+					@apply btn-outline-light;
 				}
 			}
 		}

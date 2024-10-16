@@ -36,7 +36,7 @@ $inner          = [
 		<?php if ( ! is_admin() ) : ?>
 			@click="menuIsOpen = !menuIsOpen"
 			x-cloak
-			class="absolute inset-y-0 right-0 flex items-center justify-center w-32 h-32 text-gray-900 md:hidden dark:text-white"
+			class="absolute inset-y-0 right-0 flex items-center justify-center w-32 h-32 text-black md:hidden dark:text-white"
 		<?php else : ?>
 			class="hidden"
 		<?php endif; ?>

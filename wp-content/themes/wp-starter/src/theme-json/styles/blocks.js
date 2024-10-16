@@ -25,7 +25,7 @@ const blocks = {
 	'core/code': {
 		color: {
 			background: 'var(--wp--preset--color--white)',
-			text: 'var(--wp--preset--color--gray-500)',
+			text: 'var(--wp--preset--color--black)',
 		},
 		spacing: {
 			padding: {
