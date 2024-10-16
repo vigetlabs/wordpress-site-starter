@@ -43,6 +43,11 @@ class PostCreateProjectScript extends ComposerScript {
 	public static function execute( Event $event ): void {
 		self::setEvent( $event );
 
+		// Do not run on deployment.
+		if ( ! $event->isDevMode() ) {
+			return;
+		}
+
 		if ( ! self::needsSetup() ) {
 			return;
 		}
