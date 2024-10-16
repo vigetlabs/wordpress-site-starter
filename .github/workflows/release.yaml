@@ -6,7 +6,7 @@ on:
       - 'v*' # Create release for any tag starting with 'v'
 
 concurrency:
-  group: deploy
+  group: release
   cancel-in-progress: true
 
 jobs:
