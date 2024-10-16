@@ -19,7 +19,7 @@
       "type": "object",
       "default": {
         "color": {
-          "background": "var(--wp--preset--color--gray-100)"
+          "background": "var(--wp--preset--color--white)"
         },
         "spacing": {
           "padding": {
