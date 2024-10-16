@@ -17,6 +17,7 @@ $allowed = [
 	'core/paragraph',
 	'core/button',
 	'core/navigation',
+	'core/search',
 ];
 
 $block_template = [
