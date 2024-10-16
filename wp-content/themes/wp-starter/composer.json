@@ -29,8 +29,8 @@
     "squizlabs/php_codesniffer": "^3.9",
     "timber/timber": "^2.1",
     "wpackagist-plugin/accessibility-checker": "^1.15",
+    "wpackagist-plugin/safe-svg": "^2.2",
     "wpackagist-plugin/seo-by-rank-math": "^1.0",
-    "wpackagist-plugin/svg-support": "^2.5",
     "wpackagist-plugin/wordfence": "^7.11"
   },
   "require-dev": {
