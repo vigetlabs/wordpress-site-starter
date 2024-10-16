@@ -1,0 +1,27 @@
+{
+  "name": "video-player",
+  "title": "Video Player",
+  "description": "Displays the Video Player Component.",
+  "icon": "video-alt3",
+  "category": "components",
+  "textdomain": "wp-starter",
+  "keywords": [
+    "video",
+    "embed",
+    "youtube",
+    "vimeo",
+    "url",
+    "play",
+    "cover",
+    "control",
+    "custom"
+  ],
+  "supports": {
+    "jsx": true,
+    "mode": false,
+    "alignWide": true
+  },
+  "acf": {
+    "mode": "preview"
+  }
+}
