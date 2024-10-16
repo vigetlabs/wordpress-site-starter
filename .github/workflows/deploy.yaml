@@ -75,7 +75,7 @@ jobs:
         run: |
 
           ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_TARGET }} "\
-            sudo chown -R ${{ secrets.DEPLOY_USER }}:${{ secrets.DEPLOY_DAEMON }} ${{ secrets.APP_PATH }}/wp-content" &&\
+            sudo chown -R ${{ secrets.DEPLOY_USER }}:${{ secrets.DEPLOY_DAEMON }} ${{ secrets.APP_PATH }}/wp-content &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/themes/wp-starter &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp.php &&\
@@ -84,14 +84,14 @@ jobs:
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/advanced-custom-fields-pro"
           rsync -rlptzv --exclude="node_modules" ./wp-content/ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_TARGET }}:${{ secrets.APP_PATH }}/wp-content/
           ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_TARGET }} "\
-            sudo chown -R ${{ secrets.DEPLOY_USER }}:${{ secrets.DEPLOY_DAEMON }} ${{ secrets.APP_PATH }}/wp-content" &&\
+            sudo chown -R ${{ secrets.DEPLOY_USER }}:${{ secrets.DEPLOY_DAEMON }} ${{ secrets.APP_PATH }}/wp-content &&\
             sudo chown -R ${{ secrets.DEPLOY_DAEMON }}:${{ secrets.DEPLOY_DAEMON }} ${{ secrets.APP_PATH }}/wp-content/plugins"
 
       - name: Deploy Kit
         run: |
 
           ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_KIT_TARGET }} "\
-            sudo chown -R ${{ secrets.DEPLOY_USER }}:${{ secrets.DEPLOY_DAEMON }} ${{ secrets.APP_PATH }}/wp-content" &&\
+            sudo chown -R ${{ secrets.DEPLOY_USER }}:${{ secrets.DEPLOY_DAEMON }} ${{ secrets.APP_PATH }}/wp-content &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/themes/wp-starter &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp.php &&\
@@ -100,5 +100,5 @@ jobs:
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/advanced-custom-fields-pro"
           rsync -rlptzv --exclude="node_modules" ./wp-content/ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_KIT_TARGET }}:${{ secrets.APP_PATH }}/wp-content/
           ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_KIT_TARGET }} "\
-            sudo chown -R ${{ secrets.DEPLOY_USER }}:${{ secrets.DEPLOY_DAEMON }} ${{ secrets.APP_PATH }}/wp-content" &&\
+            sudo chown -R ${{ secrets.DEPLOY_USER }}:${{ secrets.DEPLOY_DAEMON }} ${{ secrets.APP_PATH }}/wp-content &&\
             sudo chown -R ${{ secrets.DEPLOY_DAEMON }}:${{ secrets.DEPLOY_DAEMON }} ${{ secrets.APP_PATH }}/wp-content/plugins"
