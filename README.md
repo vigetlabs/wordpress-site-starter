@@ -57,6 +57,12 @@ ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.7
+* Added Custom Video Player Component.
+* Replaced SVG Support with Safe SVG.
+* Fixed issue with deployment script.
+* Other post-create-project cleanup.
+
 ### v1.0.6
 * Added 2 new breakpoints: `wp-cols` and `mobile-menu`.
 * Added Full Site Editor style support.
