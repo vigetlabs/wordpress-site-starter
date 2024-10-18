@@ -97,7 +97,7 @@ module.exports = {
 			},
 			screens: {
 				"wp-cols": "781px",
-				"mobile-menu": "900px",
+				"mobile-menu": "600px",
 				...defaultTheme.screens,
 			},
 		},
