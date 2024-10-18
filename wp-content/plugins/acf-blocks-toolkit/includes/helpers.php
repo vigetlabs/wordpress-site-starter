@@ -37,7 +37,7 @@ if ( ! function_exists( 'block_attrs' ) ) {
 			$attrs['class'] = $block_class;
 		}
 
-		$block_styles = get_core_styles( $block );
+		$block_styles = ! is_admin() ? get_core_styles( $block ) : '';
 		if ( ! empty( $attrs['style'] ) ) {
 			$attrs['style'] .= $block_styles;
 		} else {
