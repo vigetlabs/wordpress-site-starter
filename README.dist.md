@@ -10,7 +10,7 @@ This is the README for your new site. Feel free to update any of this info to ma
 * [Composer](https://getcomposer.org/) - [Installation](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos)
 * [DDEV](https://ddev.readthedocs.io/en/stable/) - [Installation](https://ddev.readthedocs.io/en/stable/users/install/ddev-installation/)
 * [Docker](https://docs.docker.com/desktop/install/mac-install/) (or compatible container alternative like OrbStack)
-* For ACF Pro, create an `auth.json` file in `wp-content/mu-plugins/viget-base/` from the [ACF Website](https://www.advancedcustomfields.com/my-account/view-licenses/). (Credentials are in 1Password)
+* For ACF Pro, create an `auth.json` file in `wp-content/themes/wp-starter/` from the [ACF Website](https://www.advancedcustomfields.com/my-account/view-licenses/). (Credentials are in 1Password). Update the password to the actual URL of the site, then run `composer require wpengine/advanced-custom-fields-pro` to install ACF Pro.
 
 ## Setup and Running
 To start the local server and build process, run: 
