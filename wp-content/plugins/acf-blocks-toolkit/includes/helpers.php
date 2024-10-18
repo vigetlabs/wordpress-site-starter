@@ -40,7 +40,7 @@ if ( ! function_exists( 'block_attrs' ) ) {
 		$block_styles = ! is_admin() ? get_core_styles( $block ) : '';
 		if ( ! empty( $attrs['style'] ) ) {
 			$attrs['style'] .= $block_styles;
-		} elseif ( $block_styles ) {
+		} else {
 			$attrs['style'] = $block_styles;
 		}
 
