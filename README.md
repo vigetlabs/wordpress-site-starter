@@ -32,9 +32,14 @@ Following the series of prompts, the project will be set up with the following:
 2. **WordPress Core**: The latest version of WordPress will be downloaded.
 3. **Local Development Environment**: A DDEV configuration file will be created and the local environment will be started.
 4. **Theme Setup**: The theme will be set up with the project name and slug.
-5. **ACF Pro**: If an `auth.json` file is present in the project root, ACF Pro will be installed.
-6. **`package.json` Dependencies**: All necessary script and style build dependencies for the theme will be installed and initialized.
-7. **Cleanup**: Any setup files will be removed and the project will be ready for development.
+5. **`package.json` Dependencies**: All necessary script and style build dependencies for the theme will be installed and initialized.
+6. **Cleanup**: Any setup files will be removed and the project will be ready for development.
+
+### Adding ACF Pro via Composer
+
+Create an `auth.json` file in the theme root directory from the [ACF Website](https://www.advancedcustomfields.com/my-account/view-licenses/). (Credentials are in 1Password). Update the password to the local URL, then run `composer require wpengine/advanced-custom-fields-pro` to install ACF Pro.
+
+### Initial Commit
 
 After the setup is complete, it is recommended to perform your initial commit and push to your project repository.
 
