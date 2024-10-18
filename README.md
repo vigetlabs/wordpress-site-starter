@@ -32,7 +32,7 @@ Following the series of prompts, the project will be set up with the following:
 2. **WordPress Core**: The latest version of WordPress will be downloaded.
 3. **Local Development Environment**: A DDEV configuration file will be created and the local environment will be started.
 4. **Theme Setup**: The theme will be set up with the project name and slug.
-5. **ACF Pro**: If an `auth.json` file is present in the project root, ACF Pro will be installed.
+5. **ACF Pro**: If an `auth.json` file is present in the theme root, ACF Pro will be installed via Composer.
 6. **`package.json` Dependencies**: All necessary script and style build dependencies for the theme will be installed and initialized.
 7. **Cleanup**: Any setup files will be removed and the project will be ready for development.
 
