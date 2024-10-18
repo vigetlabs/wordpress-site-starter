@@ -30,7 +30,7 @@
 
 /** Breadcrumb Block Style */
 :root
-	.wp-block-buttons.is-style-breadcrumbs,
+	.wp-block-buttons.is-style-breadcrumbs
 	.wp-block-button__link:not(.btn-text) {
 	padding: 0;
 	color: var(--wp--preset--color--black);

@@ -27,35 +27,35 @@ module.exports = plugin.withOptions(function (options = {}) {
 				...base,
 				[`@apply
 				bg-black text-white
-				hover:bg-black/90
-				active:bg-black/80
+				hover:bg-black/85
+				active:bg-black/70
 				focus-visible:bg-black focus-visible:ring-black/50`]: {},
 			},
 
 			'.btn-default-light': {
 				...base,
 				[`@apply
-				bg-black text-white
-				hover:bg-black/90
-				active:bg-black/80
-				focus-visible:bg-black focus-visible:ring-white/50`]: {},
+				bg-white text-black
+				hover:bg-white/85
+				active:bg-white/70
+				focus-visible:bg-white/10 focus-visible:ring-white/15`]: {},
 			},
 
 			'.btn-outline': {
 				...base,
 				[`@apply
 				border border-current bg-transparent text-black
-				hover:border-black/90 hover:border-black hover:text-black
-				active:border-black/80 active:text-black
-				focus-visible:border-black/90 focus-visible:ring-black/50`]: {},
+				hover:bg-black/5 hover:border-black hover:text-black
+				active:bg-black/15 active:text-black
+				focus-visible:bg-black/10 focus-visible:ring-black/15`]: {},
 			},
 
 			'.btn-outline-light': {
 				...base,
 				[`@apply
 				border-current text-white bg-transparent
-				hover:bg-white/25
-				active:bg-white/30
+				hover:bg-white/15
+				active:bg-white/25
 				focus-visible:bg-black/30 focus-visible:ring-white/50`]: {},
 			},
 
