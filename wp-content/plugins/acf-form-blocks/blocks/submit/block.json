@@ -1,0 +1,26 @@
+{
+  "name": "submit",
+  "title": "Submit",
+  "description": "Form submit field",
+  "icon": "button",
+  "category": "forms",
+  "textdomain": "acf-form-blocks",
+  "keywords": ["input", "contact", "feedback", "input", "button"],
+  "ancestor": ["acf/form"],
+  "supports": {
+    "jsx": true,
+    "mode": false,
+    "alignWide": false,
+    "anchor": true
+  },
+  "attributes": {
+    "block_id": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "usesContext": ["acffb/form_id", "acffb/fieldset_id"],
+  "acf": {
+    "mode": "preview"
+  }
+}

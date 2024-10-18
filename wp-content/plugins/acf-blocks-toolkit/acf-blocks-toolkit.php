@@ -48,6 +48,10 @@ require_once 'src/classes/Settings.php';
 // Block Icons support.
 require_once 'src/classes/BlockIcons.php';
 
+// Block Templates support.
+require_once 'src/classes/BlockTemplate/Template.php';
+require_once 'src/classes/BlockTemplate/Block.php';
+
 BlockRegistration::init();
 Settings::init();
 new BlockIcons();
