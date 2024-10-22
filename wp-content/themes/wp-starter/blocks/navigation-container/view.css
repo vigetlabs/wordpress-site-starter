@@ -1,0 +1,16 @@
+@layer components {
+	.acf-block-navigation-container {
+		@apply flex flex-col items-end gap-5 md:w-auto w-full;
+
+		.navigation-toggle {
+			@apply absolute inset-y-0 right-0 flex items-center justify-center w-32 h-32 text-black md:hidden dark:text-white;
+		}
+		.acf-block-inner__container {
+			@apply pt-24 md:pt-0 w-full md:!block md:w-auto;
+		}
+
+		.navigation-content {
+			@apply flex flex-row;
+		}
+	}
+}

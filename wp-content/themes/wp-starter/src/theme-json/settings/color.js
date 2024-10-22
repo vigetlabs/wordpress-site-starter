@@ -85,9 +85,8 @@ function getPalette() {
 
 		if ( typeof colors[color] === 'object' ) {
 			for ( const shade in colors[color] ) {
-				let dark = isDark( colors[color][shade] );
-				let slug = dark ? `dark-${color}-${shade}` : `${color}-${shade}`;
-				let name = dark ? `Dark ${toTitleCase(color)} ${shade}` : `${toTitleCase(color)} ${shade}`;
+				let slug = isDark( colors[color][shade] ) ? `dark-${color}-${shade}` : `${color}-${shade}`;
+				let name = `${toTitleCase(color)} ${shade}`;
 				palette.push( {
 					color: colors[color][shade],
 					name: name,
@@ -95,9 +94,8 @@ function getPalette() {
 				} );
 			}
 		} else {
-			let dark = isDark( colors[color] );
-			let slug = dark ? `dark-${color}` : color;
-			let name = dark ? `Dark ${toTitleCase(color)}` : toTitleCase(color);
+			let slug = isDark( colors[color] ) ? `dark-${color}` : color;
+			let name = toTitleCase(color);
 			palette.push( {
 				color: colors[color],
 				name: name,
