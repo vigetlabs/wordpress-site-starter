@@ -1,0 +1,83 @@
+.acf-block-form {
+	border: 1px dotted red;
+	margin: -0.5rem;
+	padding: 0.5rem;
+}
+
+.acf-block-form,
+.acf-block-form .form-input.type-input input,
+.acf-block-form .form-input.type-textarea textarea {
+	position: relative;
+}
+
+.acf-block-form::before,
+.acf-block-form .form-input.type-input input:before,
+.acf-block-form .form-input.type-textarea textarea:before {
+	color: red;
+	display: flex;
+	flex-direction : row-reverse;
+	font-family: monospace;
+	font-size: 10px;
+	justify-items: flex-start;
+	letter-spacing: 0.03rem;
+	max-width: 90px;
+	overflow: hidden;
+	position: absolute;
+	right: 0;
+	text-align: right;
+	text-overflow: ellipsis;
+	text-transform: uppercase;
+	top: -0.9rem;
+	white-space: nowrap;
+	pointer-events: none;
+}
+
+.acf-block-form[id]:before,
+.acf-block-form .form-input.type-input input[id]:before,
+.acf-block-form .form-input.type-textarea textarea[id]:before {
+	content: '#' attr(id);
+}
+
+.acf-block-form[data-id]:before,
+.acf-block-form .form-input.type-input input[data-id]:before,
+.acf-block-form .form-input.type-textarea textarea[data-id]:before {
+	content: '#' attr(data-id);
+}
+
+.acf-block-form .form-input.type-input input:before,
+.acf-block-form .form-input.type-textarea textarea:before {
+	top: -0.25rem;
+	color: #666;
+	right: 0.05rem;
+}
+
+.acf-block-form .form-input.type-input.input-type-file input:before,
+.acf-block-form .form-input.type-input.input-type-color input:before {
+	top: calc( 50% - 0.5rem );
+	right: 0;
+	transform: translateX( calc( 100% + 0.35rem ) );
+}
+
+.acf-block-form input[readonly=readonly],
+.acf-block-form select[readonly=readonly],
+.acf-block-form textarea[readonly=readonly] {
+	cursor: pointer;
+}
+
+.acf-block-form .form-input > label > .acf-innerblocks-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25rem;
+}
+.acf-block-form .form-input > label > .acf-innerblocks-container:has(.block-list-appender) {
+	padding-right: 1.75rem;
+}
+
+.acf-block-form > .acf-innerblocks-container > *:not(:last-child) {
+	margin-bottom: 1.75rem;
+}
+
+.acf-block-form select,
+.acf-block-form input[type=file] {
+	pointer-events: none;
+}

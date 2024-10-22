@@ -1,0 +1,30 @@
+{
+  "name": "radios",
+  "title": "Radios",
+  "description": "Form radio button field",
+  "icon": "edit",
+  "category": "forms",
+  "textdomain": "acf-form-blocks",
+  "keywords": ["input", "contact", "feedback", "input", "choose", "option", "options"],
+  "ancestor": ["acf/form"],
+  "styles": [
+    { "name": "default", "label": "Default", "isDefault": true },
+    { "name": "inline", "label": "Inline" }
+  ],
+  "style": "file:./style.css",
+  "supports": {
+    "jsx": true,
+    "alignWide": true,
+    "anchor": true
+  },
+  "attributes": {
+    "block_id": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "usesContext": ["acffb/form_id", "acffb/fieldset_id"],
+  "acf": {
+    "mode": "preview"
+  }
+}
