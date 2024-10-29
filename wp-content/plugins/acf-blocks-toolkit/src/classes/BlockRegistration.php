@@ -45,6 +45,9 @@ class BlockRegistration {
 		// Disable inner blocks wrapper
 		self::disable_inner_blocks_wrap();
 
+		// Allow for core block style de-registration.
+		self::unregister_block_styles();
+
 		// Register block patterns within block folders
 		self::register_block_patterns();
 
@@ -540,6 +543,29 @@ class BlockRegistration {
 					delete_transient( self::BLOCK_IDS_TRANSIENT );
 				}
 			}
+		);
+	}
+
+	/**
+	 * Allow for core block style de-registration.
+	 *
+	 * @return void
+	 */
+	private static function unregister_block_styles(): void {
+		add_action(
+			'enqueue_block_assets',
+			function () {
+				$unregister_styles = apply_filters( 'acfbt_unregister_block_styles', [] );
+
+				wp_localize_script(
+					'acfbt-editor-scripts',
+					'acfbtStyles',
+					[
+						'unregister' => $unregister_styles,
+					]
+				);
+			},
+			20
 		);
 	}
 }

@@ -269,46 +269,24 @@ class BlockIcons {
 	 */
 	private function enqueue_editor_assets(): void {
 		add_action(
-			'enqueue_block_editor_assets',
+			'enqueue_block_assets',
 			function () {
-				$asset_file = include ACFBT_PLUGIN_PATH . 'build/index.asset.php';
-
-				wp_register_script(
-					'acfbt-editor-scripts',
-					ACFBT_PLUGIN_URL . 'build/index.js',
-					$asset_file['dependencies'],
-					$asset_file['version']
-				);
-
 				wp_localize_script(
 					'acfbt-editor-scripts',
-					'acfbtVars',
+					'acfbtIcons',
 					[
-						'iconsJson'       => $this->get_icons(),
+						'json'            => $this->get_icons(),
 						'supportedBlocks' => $this->get_supported_blocks(),
 					]
-				);
-
-				wp_enqueue_script( 'acfbt-editor-scripts' );
-
-				wp_set_script_translations(
-					'acfbt-editor-scripts',
-					'acf-blocks-toolkit',
-					ACFBT_PLUGIN_URL . 'languages'
-				);
-
-				wp_enqueue_style(
-					'acfbt-editor-styles',
-					ACFBT_PLUGIN_URL . 'build/editor.css'
 				);
 
 				wp_add_inline_style(
 					'acfbt-editor-styles',
 					$this->editor_css()
 				);
-			}
+			},
+			20
 		);
-
 	}
 
 	/**
@@ -317,7 +295,7 @@ class BlockIcons {
 	 */
 	private function enqueue_block_assets(): void {
 		add_action(
-			'init',
+			'enqueue_block_assets',
 			function (): void {
 				foreach ( $this->get_supported_blocks() as $block_name ) {
 					wp_enqueue_block_style(
@@ -330,7 +308,8 @@ class BlockIcons {
 						]
 					);
 				}
-			}
+			},
+			20
 		);
 	}
 
