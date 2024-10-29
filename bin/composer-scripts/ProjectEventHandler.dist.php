@@ -22,6 +22,10 @@ class ProjectEventHandler {
 	 * @throws \Exception
 	 */
 	public static function postInstall( Event $event ): void {
+		if ( ! $event->isDevMode() ) {
+			return;
+		}
+
 		PostInstallScript::execute( $event );
 	}
 }
