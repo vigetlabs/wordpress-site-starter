@@ -19,6 +19,7 @@ $allowed = [
 	'core/navigation',
 	'core/search',
 	'core/spacer',
+	'core/separator',
 ];
 
 $block_template = [
