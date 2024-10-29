@@ -18,6 +18,7 @@ $allowed = [
 	'core/button',
 	'core/navigation',
 	'core/search',
+	'core/spacer',
 ];
 
 $block_template = [
