@@ -9,6 +9,12 @@
 				@apply btn-outline;
 			}
 		}
+
+		&.is-style-icon-only {
+			.wp-block-button__link {
+				@apply text-zero gap-0;
+			}
+		}
 	}
 
 	/* Light versions for dark mode*/

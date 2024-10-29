@@ -24,20 +24,6 @@ add_filter(
 	}
 );
 
-// Register Play Button Block Style
-add_action(
-	'init',
-	function () {
-		register_block_style(
-			'core/button',
-			[
-				'name'  => 'play-video',
-				'label' => __( 'Play Video', 'wp-starter' ),
-			]
-		);
-	}
-);
-
 add_filter(
 	'acfbt_button_icons',
 	function ( array $icons ): array {

@@ -59,6 +59,7 @@ module.exports = {
 				"base": [["16px", fluidSize(16, 18)], "1.1"],
 				"sm": [["12px", fluidSize(12, 16)], "1.1"],
 				"xs": [["8px", fluidSize(8, 10)], "1.1"],
+				"zero": ["0px", "1.1"],
 			},
 			spacing: {
 				// If you update the names or add more spacing you will need to update the file in theme-json/settings/spacing.js
