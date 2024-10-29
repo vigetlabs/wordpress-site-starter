@@ -15,6 +15,8 @@ $attrs = [
 $allowed = [
 	'core/group',
 	'core/paragraph',
+	'core/site-logo',
+	'core/buttons',
 	'core/button',
 	'core/navigation',
 	'core/search',
