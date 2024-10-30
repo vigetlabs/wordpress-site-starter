@@ -48,6 +48,7 @@ class PostInstallScript extends ComposerScript {
 	 */
 	private static array $deletePlugins = [
 		'hello',
+		'akismet',
 	];
 
 	/**
@@ -208,10 +209,6 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function deleteCoreThemes(): void {
-		if ( ! self::isWordPressInstalled() ) {
-			self::writeWarning( 'Could not delete stock WordPress themes.' );
-			return;
-		}
 		self::writeInfo( 'Deleting stock WordPress themes...' );
 
 		$themes = [
@@ -241,10 +238,6 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function deleteCorePlugins(): void {
-		if ( ! self::isWordPressInstalled() ) {
-			self::writeWarning( 'Could not delete stock WordPress plugins.' );
-			return;
-		}
 		self::writeInfo( 'Deleting stock WordPress plugins...' );
 
 		foreach ( self::$deletePlugins as $plugin ) {
@@ -282,6 +275,11 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function populateDatabase(): void {
+		if ( self::isWordPressInstalled() ) {
+			self::writeInfo( 'WordPress is already installed.' );
+			return;
+		}
+
 		$options = [
 			self::INSTALL_WP_OPT => 'Install WordPress',
 			self::IMPORT_DB_OPT  => 'Import Local Database File',
@@ -702,10 +700,13 @@ class PostInstallScript extends ComposerScript {
 		$success = [
 			'Congratulations!',
 			'Project has been set up successfully!',
-			'Admin Username: ' . self::$info['username'],
-			'<fg=#F26D20>Important!</> Make a note of the Admin Password:',
-			'<fg=#F26D20>' . self::$info['password'] . '</>',
 		];
+
+		if ( ! empty( self::$info['username'] ) && ! empty( self::$info['password'] ) ) {
+			$success[] = 'Admin Username: ' . self::$info['username'];
+			$success[] = '<fg=#F26D20>Important!</> Make a note of the Admin Password:';
+			$success[] = '<fg=#F26D20>' . self::$info['password'] . '</>';
+		}
 
 		$success = self::centeredText( $success, 2, '*', '#1296BB' );
 
