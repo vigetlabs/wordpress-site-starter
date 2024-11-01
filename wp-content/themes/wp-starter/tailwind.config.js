@@ -28,6 +28,12 @@ module.exports = {
 		'./blocks/**/*.{css,js,jsx,tsx,php}',
 	],
 	darkMode: 'selector',
+	colors: {
+		transparent: 'transparent',
+		current: 'currentColor',
+		white: "#ffffff",
+		black: "#000000",
+	},
 	theme: {
 		contentSmall: minBreakpoint.toString()+'px',
 		contentBase: maxBreakpoint.toString()+'px',
@@ -35,11 +41,6 @@ module.exports = {
 			aspectRatio: {
 				'5/3': '5/3',
 				'5/4': '5/4',
-			},
-			colors: {
-				transparent: 'transparent',
-				white: "#ffffff",
-				black: "#000000",
 			},
 			flexBasis: {
 				'1/2-gap': 'calc((100%/2) - var(--wp--style--block-gap))',

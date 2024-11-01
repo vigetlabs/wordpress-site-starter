@@ -6,6 +6,7 @@ import { theme as currentTheme } from '../../../tailwind.config.js';
  * @returns {string} The title-cased string.
  */
 function toTitleCase( str ) {
+	str = str.replace(/[_-]/g, ' ');
 	return str.replace(
 		/\w\S*/g,
 		text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
@@ -76,10 +77,10 @@ function isDark( color ) {
  */
 function getPalette() {
 	const palette = [];
-	const colors = currentTheme.extend.colors;
+	const colors = currentTheme.colors;
 
 	for ( const color in colors ) {
-		if ( color === 'transparent' ) {
+		if ( ['transparent', 'current', 'currentColor'].includes( color ) ) {
 			continue;
 		}
 
