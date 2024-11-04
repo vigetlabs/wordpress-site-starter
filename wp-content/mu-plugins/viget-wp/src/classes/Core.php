@@ -9,6 +9,7 @@
 namespace VigetWP;
 
 use VigetWP\Admin\Assets;
+use VigetWP\Admin\Blocks;
 use VigetWP\Admin\DashboardWidgets;
 use VigetWP\Admin\FileEditors;
 use VigetWP\Admin\LoginScreen;
@@ -156,6 +157,7 @@ class Core {
 		new Assets();
 		new ColorScheme();
 		new AdminBar();
+		new Blocks();
 		new LoginScreen();
 		new Footer();
 		new TinyMCE();

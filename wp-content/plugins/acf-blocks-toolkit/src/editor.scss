@@ -1,5 +1,6 @@
 // Add icons to Button blocks and style appropriately.
 *[class*="has-icon__"] {
+	&.wp-block-read-more,
 	.wp-block-button__link,
 	.wp-block-post-excerpt__more-link,
 	.wp-block-navigation-item__content {
@@ -24,6 +25,7 @@
 	}
 
 	&.has-icon-position__left {
+		&.wp-block-read-more,
 		.wp-block-button__link,
 		.wp-block-post-excerpt__more-link,
 		.wp-block-navigation-item__content {

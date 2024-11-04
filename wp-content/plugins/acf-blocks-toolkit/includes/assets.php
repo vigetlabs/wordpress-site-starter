@@ -18,7 +18,7 @@ add_action(
 );
 
 add_action(
-	'enqueue_block_assets',
+	'enqueue_block_editor_assets',
 	function () {
 		$asset_file   = include ACFBT_PLUGIN_PATH . 'build/index.asset.php';
 		$dependencies = array_merge( $asset_file['dependencies'], [ 'wp-blocks', 'wp-dom-ready', 'wp-edit-post' ] );
@@ -46,10 +46,24 @@ add_action(
 );
 
 add_action(
-	'enqueue_block_assets',
+	'enqueue_block_editor_assets',
 	function () {
 		wp_enqueue_script( 'acfbt-editor-scripts' );
 		wp_enqueue_style( 'acfbt-editor-styles' );
 	},
 	30
+);
+
+add_action(
+	'enqueue_block_assets',
+	function () {
+		$asset_file = include ACFBT_PLUGIN_PATH . 'build/style.asset.php';
+
+		wp_enqueue_style(
+			'acfbt-block-styles',
+			ACFBT_PLUGIN_URL . 'build/style.css',
+			[],
+			$asset_file['version']
+		);
+	}
 );
