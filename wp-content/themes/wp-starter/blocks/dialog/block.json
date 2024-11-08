@@ -34,7 +34,6 @@
   },
   "viewStyle": "file:./view.css",
   "editorStyle": "file:./editor.css",
-  "viewScript": "file:./view.js",
   "acf": {
     "mode": "preview"
   }
