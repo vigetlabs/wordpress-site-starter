@@ -7,8 +7,8 @@
  * @package WPStarter
  */
 
-$cbx_id = uniqid();
-
+$cbx_id      = uniqid();
+$button_text = get_field( 'button_text' );
 ?>
 <?php if ( is_admin() ) : ?>
 	<input type="checkbox" id="<?php echo esc_attr( $cbx_id ); ?>" class="acfbt-dialog-checkbox">
@@ -68,6 +68,6 @@ $cbx_id = uniqid();
 		@click="$refs.dialogRef.showModal(), openDialog = true"
 	<?php endif; ?>
 >
-	<?php esc_html_e( 'Open', 'wp-site-starter' ); ?>
+	<?php esc_html_e( $button_text ? $button_text : 'Open', 'wp-site-starter' ); ?>
 </button>
 </div>

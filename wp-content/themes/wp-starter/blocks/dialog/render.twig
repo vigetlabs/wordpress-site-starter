@@ -3,6 +3,7 @@
 #}
 
 {% set cbx_id = 'dialog-' ~ random() %}
+{% set button_text = block.data['button_text'] %}
 
 {% if function('is_admin') == true %}
 	<input type="checkbox" id="{{ cbx_id }}" class="acfbt-dialog-checkbox">
@@ -62,6 +63,6 @@
 			@click="$refs.dialogRef.showModal(), openDialog = true"
 		{% endif %}
 	>
-		Open
+		{{ button_text ? button_text : 'Open' }}
 	</button>
 </div>
