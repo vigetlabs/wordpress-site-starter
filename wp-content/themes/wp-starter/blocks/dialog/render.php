@@ -8,10 +8,11 @@
  */
 
 $cbx_id = uniqid();
+
 ?>
 <?php if ( is_admin() ) : ?>
 	<input type="checkbox" id="<?php echo esc_attr( $cbx_id ); ?>" class="acfbt-dialog-checkbox">
-	<label for="<?php echo esc_attr( $cbx_id ); ?>" class="acfbt-dialog-label"><?php esc_html_e( 'Toggle', 'wp-site-starter' ); ?></label>
+	<label for="<?php echo esc_attr( $cbx_id ); ?>" class="acfbt-dialog-label"><?php esc_html_e( 'Toggle Dialog', 'wp-site-starter' ); ?></label>
 <?php endif; ?>
 
 <div
@@ -27,7 +28,6 @@ $cbx_id = uniqid();
 	// Delay close to allow for animation
 	handleDialogClose() {
 		if (!this.openDialog) return
-
 		this.openDialog = false
 		$refs.dialogRef.close()
 	}
@@ -45,19 +45,23 @@ $cbx_id = uniqid();
 >
 	<?php if ( ! is_admin() ) : ?>
 		<button
+			class="acf-dialog-close"
 			@click="handleDialogClose()"
 		>
-			<?php esc_html_e( 'Close', 'wp-site-starter' ); ?>
+			<span class="sr-only"><?php esc_html_e( 'Close', 'wp-site-starter' ); ?></span>
 		</button>
 	<?php endif; ?>
 
 	<div class="inner">
 		<?php if ( is_admin() ) : ?>
-			<label for="<?php echo esc_attr( $cbx_id ); ?>" class="acfbt-dialog-close"><?php esc_html_e( 'Close', 'wp-site-starter' ); ?></label>
+			<label for="<?php echo esc_attr( $cbx_id ); ?>" class="acfbt-dialog-close">
+				<span class="sr-only"><?php esc_html_e( 'Close', 'wp-site-starter' ); ?></span>
+			</label>
 		<?php endif; ?>
 		<?php inner_blocks(); ?>
 	</div>
 </dialog>
+
 <button
 	class="btn-default"
 	<?php if ( ! is_admin() ) : ?>
