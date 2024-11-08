@@ -1,34 +1,23 @@
 @layer components {
 	html:has(.acf-block-dialog[open]),
 	body:has(.acf-block-dialog[open]) {
-		overflow: hidden;
+		@apply overflow-hidden;
 	}
 
 	.acf-block-dialog {
-		border-radius: 0;
-		border: none;
-		background: white;
-		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	}
+		@apply bottom-0 left-0 right-0 top-0 !m-auto h-1/2 w-1/2 rounded border-none bg-white;
 
-	.acf-block-dialog::backdrop {
-		@apply bg-black/40;
-	}
+		&::backdrop {
+			@apply bg-black/70;
+		}
 
-	.acf-block-dialog[open],
-	.acf-block-dialog::backdrop {
-		animation: show 500ms ease;
-	}
+		.acf-dialog-close {
+			@apply absolute right-12 top-12 z-10 m-auto size-32 cursor-pointer border border-none border-black bg-transparent hover:bg-black;
+			@apply after:flex after:items-center after:justify-center after:text-black after:content-['\2715'] hover:after:text-white;
+		}
 
-	.acf-block-dialog > .inner {
-		padding: 50px;
-		display: flex;
-		flex-direction: column;
-	}
-
-	@keyframes show {
-		0% {
-			opacity: 0;
+		> .inner {
+			@apply flex flex-col p-24;
 		}
 	}
 }

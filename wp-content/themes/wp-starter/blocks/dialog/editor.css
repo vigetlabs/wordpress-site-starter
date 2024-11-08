@@ -1,53 +1,29 @@
-/* .acf-block-dialog {
-	position: absolute;
-	top: 0;
-	left: 50%;
-	transform: translate(-50%, 0);
-	width: 75vw;
-	max-height: 60vh;
-	display: none;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	z-index: 800;
-	overflow: auto;
-}
-.acf-block-dialog .inner {
-	padding: 1.5rem 2rem;
-	position: relative;
-}
-.acfbt-dialog-close {
-	position: absolute;
-	top: 0;
-	right: 0;
-	padding: 0.35rem 0.75rem;
-	cursor: pointer;
-	text-transform: uppercase;
-	font-size: 1rem;
-	display: flex;
-	gap: 0.25rem;
-}
-.acfbt-dialog-close::before {
-	content: '×';
-	font-size: 1.5rem;
-	line-height: 0.85;
-	font-weight: lighter;
-}
-.acfbt-dialog-label {
-	display: block;
-	cursor: pointer;
-}
-.acfbt-dialog-checkbox {
-	position: absolute;
-	visibility: hidden;
-	width: 0;
-	height: 0;
-	overflow: hidden;
-	opacity: 0;
-}
-input:checked + label + .acf-block-dialog {
-	display: block;
-}
+@layer components {
+	.acf-block-dialog {
+		@apply relative !border !border-black;
+		.inner {
+			@apply relative p-24;
+		}
 
-.is-root-container:has(.acf-block-dialog) {
-	position: relative;
-}
+		.acfbt-dialog-close {
+			@apply absolute right-12 top-12 z-50 m-auto size-32 cursor-pointer border border-none border-black bg-transparent hover:bg-black;
+			@apply after:flex after:items-center after:justify-center after:text-black after:content-['\2715'] hover:after:text-white;
+		}
+	}
 
+	.acfbt-dialog-label {
+		@apply block cursor-pointer;
+	}
+
+	.acfbt-dialog-checkbox {
+		@apply sr-only;
+	}
+
+	input:checked + label + div .acf-block-dialog {
+		@apply block w-2/3;
+	}
+
+	.is-root-container:has(.acf-block-dialog) {
+		@apply relative;
+	}
+}
