@@ -1,4 +1,4 @@
-.acf-block-dialog {
+/* .acf-block-dialog {
 	position: absolute;
 	top: 0;
 	left: 50%;
@@ -50,3 +50,4 @@ input:checked + label + .acf-block-dialog {
 .is-root-container:has(.acf-block-dialog) {
 	position: relative;
 }
+
