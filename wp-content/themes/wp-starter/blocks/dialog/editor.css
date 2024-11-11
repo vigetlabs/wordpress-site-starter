@@ -12,7 +12,7 @@
 	}
 
 	.acfbt-dialog-label {
-		@apply block cursor-pointer;
+		@apply mb-24 block cursor-pointer;
 	}
 
 	.acfbt-dialog-checkbox {
