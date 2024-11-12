@@ -80,7 +80,7 @@ class BlockIcons {
 	 *
 	 * @return array
 	 */
-	private function get_icons( bool $from_file = true ): array {
+	public function get_icons( bool $from_file = true ): array {
 		if ( $from_file ) {
 			$path = $this->get_icons_file_path();
 			return file_exists( $path ) ? json_decode( file_get_contents( $path ), true ) : [];
@@ -192,7 +192,7 @@ class BlockIcons {
 	 *
 	 * @return array
 	 */
-	private function get_icon( string $slug ): array {
+	public function get_icon( string $slug ): array {
 		$icons = $this->get_icons();
 
 		foreach ( $icons as $icon ) {

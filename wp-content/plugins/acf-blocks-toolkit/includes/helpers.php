@@ -5,6 +5,19 @@
  * @package ACFBlocksToolkit
  */
 
+use Viget\ACFBlocksToolkit\Core;
+
+if ( ! function_exists( 'acfbt' ) ) {
+	/**
+	 * ACF Blocks Toolkit Core API instance.
+	 *
+	 * @return Core
+	 */
+	function acfbt(): Core {
+		return Core::instance();
+	}
+}
+
 if ( ! function_exists( 'block_attrs' ) ) {
 	/**
 	 * Render the block attributes.

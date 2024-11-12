@@ -39,6 +39,9 @@ require_once 'includes/timber.php';
 // Assets.
 require_once 'includes/assets.php';
 
+// Core API class.
+require_once 'src/classes/Core.php';
+
 // Block Registration class.
 require_once 'src/classes/BlockRegistration.php';
 
