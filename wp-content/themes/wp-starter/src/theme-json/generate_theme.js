@@ -22,7 +22,7 @@ function buildJSON() {
 		styles: styles,
 		templateParts: templateParts,
 		version: 3,
-		$schema: "https://schemas.wp.org/wp/6.6/theme.json"
+		$schema: "https://schemas.wp.org/wp/6.7/theme.json"
 	};
 
 	fs.writeFileSync('theme.json', JSON.stringify(data, null, 2));
