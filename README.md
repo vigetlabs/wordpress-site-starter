@@ -57,6 +57,21 @@ ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.9
+* Alternative method for identifying elements on dark background
+* Cleanup Navigation Container component, moved styles into CSS file.
+* Remove "Dark" label from colors prefixed with `dark-`
+* Added default logo
+* Added Icon Only Button Style
+* Added more block support in the Navigation Container component (Site Logo, Buttons, Search, Spacer, and Separator)
+* Added new filter to unregister core block styles: `acfbt_unregister_block_styles`
+* PostInstall Enhancements
+* Improvements to the Color Palette feature
+* Moved some core functionality from the theme to the MU Plugin
+* Block Icon Support for the Read More Block
+* Disable the Template Part wrapper div when using Template parts
+* Implemented ACF Blocks Toolkit API function `acfbt()` to access functionality from ACF BT.
+
 ### v1.0.8
 * Allow `core/search` block to be nested within the Navigation Container block.
 * Many updates to deployment
