@@ -209,6 +209,11 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function deleteCoreThemes(): void {
+		if ( ! self::isWordPressInstalled() ) {
+			self::writeWarning( 'Could not delete stock WordPress themes.' );
+			return;
+		}
+
 		self::writeInfo( 'Deleting stock WordPress themes...' );
 
 		$themes = [
@@ -238,6 +243,11 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function deleteCorePlugins(): void {
+		if ( ! self::isWordPressInstalled() ) {
+			self::writeWarning( 'Could not delete stock WordPress plugins.' );
+			return;
+		}
+
 		self::writeInfo( 'Deleting stock WordPress plugins...' );
 
 		foreach ( self::$deletePlugins as $plugin ) {
@@ -275,7 +285,7 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function populateDatabase(): void {
-		if ( self::isWordPressInstalled() ) {
+		if ( self::isWordPressDbInstalled() ) {
 			self::writeInfo( 'WordPress is already installed.' );
 			return;
 		}
@@ -315,7 +325,7 @@ class PostInstallScript extends ComposerScript {
 		self::wait( 2 );
 
 		// Make sure WordPress was installed successfully.
-		if ( ! self::isWordPressInstalled() ) {
+		if ( ! self::isWordPressInstalled() || ! self::isWordPressDbInstalled() ) {
 			self::writeError( 'WordPress installation failed.' );
 			return;
 		}
@@ -417,6 +427,15 @@ class PostInstallScript extends ComposerScript {
 	 */
 	private static function isWordPressInstalled(): bool {
 		return false !== shell_exec( 'wp core is-installed' );
+	}
+
+	/**
+	 * Check if WordPress Database is installed.
+	 *
+	 * @return bool
+	 */
+	private static function isWordPressDbInstalled(): bool {
+		return boolval( shell_exec( 'wp option get siteurl --quiet' ) );
 	}
 
 	/**
