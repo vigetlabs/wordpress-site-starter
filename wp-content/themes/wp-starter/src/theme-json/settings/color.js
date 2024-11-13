@@ -77,7 +77,7 @@ function isDark( color ) {
  */
 function getPalette() {
 	const palette = [];
-	const colors = currentTheme.extend.colors;
+	const colors = currentTheme.colors;
 
 	for ( const color in colors ) {
 		if ( ['transparent', 'current', 'currentColor'].includes( color ) ) {

@@ -31,16 +31,16 @@ module.exports = {
 	theme: {
 		contentSmall: minBreakpoint.toString()+'px',
 		contentBase: maxBreakpoint.toString()+'px',
+		colors: {
+			transparent: 'transparent',
+			current: 'currentColor',
+			white: "#ffffff",
+			black: "#000000",
+		},
 		extend: {
 			aspectRatio: {
 				'5/3': '5/3',
 				'5/4': '5/4',
-			},
-			colors: {
-				transparent: 'transparent',
-				current: 'currentColor',
-				white: "#ffffff",
-				black: "#000000",
 			},
 			flexBasis: {
 				'1/2-gap': 'calc((100%/2) - var(--wp--style--block-gap))',
