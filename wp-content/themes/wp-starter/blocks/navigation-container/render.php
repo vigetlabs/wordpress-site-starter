@@ -15,9 +15,13 @@ $attrs = [
 $allowed = [
 	'core/group',
 	'core/paragraph',
+	'core/site-logo',
+	'core/buttons',
 	'core/button',
 	'core/navigation',
 	'core/search',
+	'core/spacer',
+	'core/separator',
 ];
 
 $block_template = [
@@ -31,12 +35,12 @@ $inner          = [
 ];
 
 ?>
-<div <?php block_attrs( $block, 'wp-block-group navigation-container flex flex-col items-end gap-5 md:w-auto w-full', $attrs ); ?>>
+<div <?php block_attrs( $block, '', $attrs ); ?>>
 	<button
 		<?php if ( ! is_admin() ) : ?>
 			@click="menuIsOpen = !menuIsOpen"
 			x-cloak
-			class="absolute inset-y-0 right-0 flex items-center justify-center w-32 h-32 text-black md:hidden dark:text-white"
+			class="navigation-toggle"
 		<?php else : ?>
 			class="hidden"
 		<?php endif; ?>
@@ -67,9 +71,9 @@ $inner          = [
 			x-show="menuIsOpen"
 			@click.away="menuIsOpen = false"
 		<?php endif; ?>
-		class="wp-block-group pt-24 md:pt-0 navigation-content md:!block w-full md:w-auto"
+		class="acf-block-inner__container"
 	>
-		<div>
+		<div class="navigation-content">
 			<?php inner_blocks( $inner ); ?>
 		</div>
 	</div>

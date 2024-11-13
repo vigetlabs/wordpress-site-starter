@@ -9,9 +9,13 @@
 {% set allowed = [
 	'core/group',
 	'core/paragraph',
+	'core/site-logo',
+	'core/buttons',
 	'core/button',
 	'core/navigation',
-	'core/search'
+	'core/search',
+	'core/spacer',
+	'core/separator'
 ] %}
 {% set inner = {
 	template: template,
@@ -27,12 +31,12 @@
 	} %}
 {% endif %}
 
-<div {{ block_attrs( block, 'wp-block-group navigation-container flex flex-col items-end gap-5 md:w-auto w-full', attrs ) }}>
+<div {{ block_attrs( block, '', attrs ) }}>
 	<button
 		{% if function('is_admin') == false %}
 			@click="menuIsOpen = !menuIsOpen"
 			x-cloak
-			class="absolute inset-y-0 right-0 flex items-center justify-center w-32 h-32 text-black md:hidden dark:text-white"
+			class="navigation-toggle"
 		{% else %}
 			class="hidden"
 		{% endif %}
@@ -63,9 +67,9 @@
 			x-show="menuIsOpen"
 			@click.away="menuIsOpen = false"
 		{% endif %}
-		class="wp-block-group pt-24 md:pt-0 navigation-content md:!block w-full md:w-auto"
+		class="acf-block-inner__container"
 	>
-		<div>
+		<div class="navigation-content">
 			{{ inner_blocks( inner ) }}
 		</div>
 	</div>

@@ -5,7 +5,7 @@ document.addEventListener('alpine:init', () => {
 function YouTubePlayer() {
 	//Get the video cover and play button
 	const videoCover = document.querySelectorAll(".acf-block-video-player .wp-block-cover");
-	const playButton = document.querySelectorAll(".acf-block-video-player .is-style-play-video > a");
+	const playButton = document.querySelectorAll(".acf-block-video-player .is-style-icon-only > a");
 	const iframe = document.querySelectorAll('.acf-block-video-player iframe');
 
 	//Add Alpine to the HTML

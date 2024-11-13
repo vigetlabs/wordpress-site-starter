@@ -42,7 +42,7 @@
                 [
                   "core/button",
                   {
-                    "className": "is-style-play-video",
+                    "className": "is-style-icon-only",
                     "text": "Watch Video",
                     "icon": "video-play-button"
                   }

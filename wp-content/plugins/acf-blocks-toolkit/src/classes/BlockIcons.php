@@ -34,8 +34,8 @@ class BlockIcons {
 		// Enqueue editor assets.
 		$this->enqueue_editor_assets();
 
-		// Enqueue block assets.
-		$this->enqueue_block_assets();
+		// Enqueue block editor assets.
+		$this->enqueue_block_editor_assets();
 
 		// Add hooks to render icons on frontend.
 		$this->add_render_hooks();
@@ -54,6 +54,7 @@ class BlockIcons {
 				'core/navigation-link',
 				'core/home-link',
 				'core/post-excerpt',
+				'core/read-more',
 			]
 		);
 	}
@@ -79,7 +80,7 @@ class BlockIcons {
 	 *
 	 * @return array
 	 */
-	private function get_icons( bool $from_file = true ): array {
+	public function get_icons( bool $from_file = true ): array {
 		if ( $from_file ) {
 			$path = $this->get_icons_file_path();
 			return file_exists( $path ) ? json_decode( file_get_contents( $path ), true ) : [];
@@ -191,7 +192,7 @@ class BlockIcons {
 	 *
 	 * @return array
 	 */
-	private function get_icon( string $slug ): array {
+	public function get_icon( string $slug ): array {
 		$icons = $this->get_icons();
 
 		foreach ( $icons as $icon ) {
@@ -256,10 +257,17 @@ class BlockIcons {
 			$icon['icon']
 		);
 
+		// Add a wrapper for the Read More link block.
+		if ( 'core/read-more' === $block['blockName'] ) {
+			$element = '<span class="wp-block-read-more__content">$2</span>';
+		} else {
+			$element = '$2';
+		}
+
 		// Add the SVG icon either to the left of right of the button text.
 		return $position_left
-			? preg_replace( $pattern, '$1' . $markup . '$2$3', $block_content )
-			: preg_replace( $pattern, '$1$2' . $markup . '$3', $block_content );
+			? preg_replace( $pattern, '$1' . $markup . $element . '$3', $block_content )
+			: preg_replace( $pattern, '$1' . $element . $markup . '$3', $block_content );
 	}
 
 	/**
@@ -271,53 +279,31 @@ class BlockIcons {
 		add_action(
 			'enqueue_block_editor_assets',
 			function () {
-				$asset_file = include ACFBT_PLUGIN_PATH . 'build/index.asset.php';
-
-				wp_register_script(
-					'acfbt-editor-scripts',
-					ACFBT_PLUGIN_URL . 'build/index.js',
-					$asset_file['dependencies'],
-					$asset_file['version']
-				);
-
 				wp_localize_script(
 					'acfbt-editor-scripts',
-					'acfbtVars',
+					'acfbtIcons',
 					[
-						'iconsJson'       => $this->get_icons(),
+						'json'            => $this->get_icons(),
 						'supportedBlocks' => $this->get_supported_blocks(),
 					]
-				);
-
-				wp_enqueue_script( 'acfbt-editor-scripts' );
-
-				wp_set_script_translations(
-					'acfbt-editor-scripts',
-					'acf-blocks-toolkit',
-					ACFBT_PLUGIN_URL . 'languages'
-				);
-
-				wp_enqueue_style(
-					'acfbt-editor-styles',
-					ACFBT_PLUGIN_URL . 'build/editor.css'
 				);
 
 				wp_add_inline_style(
 					'acfbt-editor-styles',
 					$this->editor_css()
 				);
-			}
+			},
+			20
 		);
-
 	}
 
 	/**
 	 * Enqueue block styles
 	 * (Applies to both frontend and Editor)
 	 */
-	private function enqueue_block_assets(): void {
+	private function enqueue_block_editor_assets(): void {
 		add_action(
-			'init',
+			'enqueue_block_editor_assets',
 			function (): void {
 				foreach ( $this->get_supported_blocks() as $block_name ) {
 					wp_enqueue_block_style(
@@ -330,7 +316,8 @@ class BlockIcons {
 						]
 					);
 				}
-			}
+			},
+			20
 		);
 	}
 
@@ -342,17 +329,27 @@ class BlockIcons {
 	private function editor_css(): string {
 		$icons = $this->get_icons();
 		$css   = '';
+		$selectors = apply_filters(
+			'acfbt_button_icons_editor_css_selectors',
+			[
+				'.wp-block-button__link',
+				'.wp-block-post-excerpt__more-link',
+				'.wp-block-navigation-item__content',
+			]
+		);
 
 		foreach ( $icons as $icon ) {
 			$slug    = $icon['value'];
 			$content = 'data:image/svg+xml;utf8,' . rawurlencode( $icon['icon'] );
 
-			$css .= ".has-icon__{$slug} .wp-block-button__link::after,";
-			$css .= ".has-icon__{$slug} .wp-block-button__link::before,";
-			$css .= ".has-icon__{$slug} .wp-block-post-excerpt__more-link::after,";
-			$css .= ".has-icon__{$slug} .wp-block-post-excerpt__more-link::before,";
-			$css .= ".has-icon__{$slug} .wp-block-navigation-item__content::after,";
-			$css .= ".has-icon__{$slug} .wp-block-navigation-item__content::before {";
+			foreach ( $selectors as $selector ) {
+				$css .= ".has-icon__{$slug} $selector::after,";
+				$css .= ".has-icon__{$slug} $selector::before,";
+			}
+
+			$css .= ".has-icon__{$slug}.wp-block-read-more::after,";
+			$css .= ".has-icon__{$slug}.wp-block-read-more::before {";
+
 			$css .= 'height: 0.7em;';
 			$css .= 'width: 1em;';
 			$css .= "mask-image: url( $content );";

@@ -14,7 +14,7 @@
         },
         {
           "color": "#000000",
-          "name": "Dark Black",
+          "name": "Black",
           "slug": "dark-black"
         }
       ]
@@ -686,8 +686,15 @@
       "fontWeight": "400",
       "lineHeight": "1.55"
     },
-    "css": ":where(.wp-site-blocks *:focus){outline-width:2px;outline-style:solid}"
+    "css": ":where(.wp-site-blocks *:focus){outline-width:2px;outline-style:solid}.has-dark-black-background-color:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) .wp-block-button .wp-block-button__link:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) .wp-block-button.is-style-outline .wp-block-button__link:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) *:not(.has-text-color) {color:var(--wp--preset--color--white) !important;}"
   },
+  "templateParts": [
+    {
+      "name": "footer-stacked-navigation",
+      "title": "Footer Stacked Navigation",
+      "area": "uncategorized"
+    }
+  ],
   "version": 3,
-  "$schema": "https://schemas.wp.org/wp/6.6/theme.json"
+  "$schema": "https://schemas.wp.org/wp/6.7/theme.json"
 }

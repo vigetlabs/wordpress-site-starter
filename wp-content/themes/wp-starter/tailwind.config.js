@@ -31,15 +31,16 @@ module.exports = {
 	theme: {
 		contentSmall: minBreakpoint.toString()+'px',
 		contentBase: maxBreakpoint.toString()+'px',
+		colors: {
+			transparent: 'transparent',
+			current: 'currentColor',
+			white: "#ffffff",
+			black: "#000000",
+		},
 		extend: {
 			aspectRatio: {
 				'5/3': '5/3',
 				'5/4': '5/4',
-			},
-			colors: {
-				transparent: 'transparent',
-				white: "#ffffff",
-				black: "#000000",
 			},
 			flexBasis: {
 				'1/2-gap': 'calc((100%/2) - var(--wp--style--block-gap))',
@@ -59,6 +60,7 @@ module.exports = {
 				"base": [["16px", fluidSize(16, 18)], "1.1"],
 				"sm": [["12px", fluidSize(12, 16)], "1.1"],
 				"xs": [["8px", fluidSize(8, 10)], "1.1"],
+				"zero": ["0px", "1.1"],
 			},
 			spacing: {
 				// If you update the names or add more spacing you will need to update the file in theme-json/settings/spacing.js
@@ -97,7 +99,7 @@ module.exports = {
 			},
 			screens: {
 				"wp-cols": "781px",
-				"mobile-menu": "900px",
+				"mobile-menu": "600px",
 				...defaultTheme.screens,
 			},
 		},

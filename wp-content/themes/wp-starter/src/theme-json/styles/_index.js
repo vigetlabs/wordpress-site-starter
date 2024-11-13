@@ -1,6 +1,7 @@
 import theme from '../import_tailwind.js';
 import blocks from './blocks.js';
 import elements from './elements.js';
+import css from './css.js';
 
 const styles = {
 	blocks: blocks,
@@ -23,7 +24,7 @@ const styles = {
 		fontWeight: '400',
 		lineHeight: '1.55',
 	},
-	css: ':where(.wp-site-blocks *:focus){outline-width:2px;outline-style:solid}',
+	css: css,
 };
 
 export default styles;

@@ -9,19 +9,10 @@
 				@apply btn-outline;
 			}
 		}
-	}
 
-	/* Light versions for dark mode*/
-	[class*='has-dark'] {
-		.wp-block-button {
+		&.is-style-icon-only {
 			.wp-block-button__link {
-				@apply btn-default-light;
-			}
-
-			&.is-style-outline {
-				.wp-block-button__link {
-					@apply btn-outline-light;
-				}
+				@apply text-zero gap-0;
 			}
 		}
 	}

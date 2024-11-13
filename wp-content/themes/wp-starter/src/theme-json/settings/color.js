@@ -6,6 +6,7 @@ import { theme as currentTheme } from '../../../tailwind.config.js';
  * @returns {string} The title-cased string.
  */
 function toTitleCase( str ) {
+	str = str.replace(/[_-]/g, ' ');
 	return str.replace(
 		/\w\S*/g,
 		text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
@@ -70,24 +71,23 @@ function isDark( color ) {
  * Get the color palette from the theme.
  *
  * Colors that are darker should be prefixed with 'dark-'
- * This allows us to use [class*='has-dark'] in the css to change the HTML elements from a light to a dark version.
+ * This allows us to use [class*="has-dark-"] in the css to change the HTML elements from a light to a dark version.
  *
  * @returns {*[]}
  */
 function getPalette() {
 	const palette = [];
-	const colors = currentTheme.extend.colors;
+	const colors = currentTheme.colors;
 
 	for ( const color in colors ) {
-		if ( color === 'transparent' ) {
+		if ( ['transparent', 'current', 'currentColor'].includes( color ) ) {
 			continue;
 		}
 
 		if ( typeof colors[color] === 'object' ) {
 			for ( const shade in colors[color] ) {
-				let dark = isDark( colors[color][shade] );
-				let slug = dark ? `dark-${color}-${shade}` : `${color}-${shade}`;
-				let name = dark ? `Dark ${toTitleCase(color)} ${shade}` : `${toTitleCase(color)} ${shade}`;
+				let slug = isDark( colors[color][shade] ) ? `dark-${color}-${shade}` : `${color}-${shade}`;
+				let name = `${toTitleCase(color)} ${shade}`;
 				palette.push( {
 					color: colors[color][shade],
 					name: name,
@@ -95,9 +95,8 @@ function getPalette() {
 				} );
 			}
 		} else {
-			let dark = isDark( colors[color] );
-			let slug = dark ? `dark-${color}` : color;
-			let name = dark ? `Dark ${toTitleCase(color)}` : toTitleCase(color);
+			let slug = isDark( colors[color] ) ? `dark-${color}` : color;
+			let name = toTitleCase(color);
 			palette.push( {
 				color: colors[color],
 				name: name,
