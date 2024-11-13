@@ -6,7 +6,18 @@
       "defaultDuotone": false,
       "defaultPalette": false,
       "defaultGradients": false,
-      "palette": []
+      "palette": [
+        {
+          "color": "#ffffff",
+          "name": "White",
+          "slug": "white"
+        },
+        {
+          "color": "#000000",
+          "name": "Black",
+          "slug": "dark-black"
+        }
+      ]
     },
     "layout": {
       "contentSize": "640px",
@@ -675,7 +686,7 @@
       "fontWeight": "400",
       "lineHeight": "1.55"
     },
-    "css": ":where(.wp-site-blocks *:focus){outline-width:2px;outline-style:solid}"
+    "css": ":where(.wp-site-blocks *:focus){outline-width:2px;outline-style:solid}.has-dark-black-background-color:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) .wp-block-button .wp-block-button__link:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) .wp-block-button.is-style-outline .wp-block-button__link:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) *:not(.has-text-color) {color:var(--wp--preset--color--white) !important;}"
   },
   "templateParts": [
     {

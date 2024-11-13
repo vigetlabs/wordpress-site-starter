@@ -71,13 +71,13 @@ function isDark( color ) {
  * Get the color palette from the theme.
  *
  * Colors that are darker should be prefixed with 'dark-'
- * This allows us to use [class*='has-dark'] in the css to change the HTML elements from a light to a dark version.
+ * This allows us to use [class*="has-dark-"] in the css to change the HTML elements from a light to a dark version.
  *
  * @returns {*[]}
  */
 function getPalette() {
 	const palette = [];
-	const colors = currentTheme.colors;
+	const colors = currentTheme.extend.colors;
 
 	for ( const color in colors ) {
 		if ( ['transparent', 'current', 'currentColor'].includes( color ) ) {

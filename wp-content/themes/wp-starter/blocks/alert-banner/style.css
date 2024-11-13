@@ -29,17 +29,5 @@
 		& > p {
 			@apply flex-1;
 		}
-
-		[class*='has-dark'],
-		&[class*='has-dark'] {
-			.wp-block-button .wp-block-button__link {
-				@apply border-white text-white;
-				@apply hover:bg-white hover:text-black;
-			}
-			.dismiss {
-				@apply border-white after:text-white;
-				@apply hover:after:bg-white hover:after:text-black;
-			}
-		}
 	}
 }
