@@ -186,7 +186,7 @@ class PostInstallScript extends ComposerScript {
 	public static function downloadWordPress(): void {
 		$wordpress_dir = self::translatePath( './', true );
 
-		self::writeInfo( 'Downloading the last version of WordPress...' );
+		self::writeInfo( 'Downloading the latest version of WordPress...' );
 
 		$cmd = sprintf(
 			'wp core download --path=%s --version=latest',
@@ -200,7 +200,7 @@ class PostInstallScript extends ComposerScript {
 			exit( 1 );
 		}
 
-		self::writeInfo( 'WordPress Download complete.' );
+		self::writeInfo( 'WordPress download complete.' );
 	}
 
 	/**
