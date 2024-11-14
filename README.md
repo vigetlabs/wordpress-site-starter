@@ -57,6 +57,10 @@ ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.10
+* Fixed a bug preventing WordPress Database install.
+* Some relatively harmless error message suppression.
+
 ### v1.0.9
 * Alternative method for identifying elements on dark background
 * Cleanup Navigation Container component, moved styles into CSS file.

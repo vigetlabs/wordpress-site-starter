@@ -265,7 +265,7 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function deletePlugin( string $plugin ): void {
-		if ( false === shell_exec( sprintf( 'wp plugin is-installed %s', escapeshellarg( $plugin ) ) ) ) {
+		if ( false === shell_exec( sprintf( 'wp plugin is-installed %s >/dev/null 2>&1', escapeshellarg( $plugin ) ) ) ) {
 			return;
 		}
 
@@ -495,7 +495,7 @@ class PostInstallScript extends ComposerScript {
 	 */
 	private static function activateTheme(): void {
 		$slug = self::$env['PROJECT_SLUG'] ?? basename( self::$env['VITE_PROJECT_DIR'] ) ?? '';
-		if ( ! $slug || false === shell_exec( sprintf( 'wp theme is-installed %s', escapeshellarg( $slug ) ) ) ) {
+		if ( ! $slug || false === shell_exec( sprintf( 'wp theme is-installed %s >/dev/null 2>&1', escapeshellarg( $slug ) ) ) ) {
 			self::writeWarning( 'Skipping theme activation. Theme "' . $slug . '" not found.' );
 			return;
 		}
