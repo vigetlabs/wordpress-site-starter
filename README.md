@@ -43,11 +43,11 @@ After the setup is complete, it is recommended to perform your initial commit an
 After the project is set up, you can run the following commands to add your remote repository and push your initial commit:
 
 ```bash
-git init
+git init -b main
 git add .
 git commit -m "Initial Commit"
 git remote add origin <git@github.com:YOURGITHUB/your-repo.git>
-git push -u origin master
+git push -u origin main
 ```
 
 Be sure to update the origin with the correct remote repository URL (and remove the `<>` brackets).
