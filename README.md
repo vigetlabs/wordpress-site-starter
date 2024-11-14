@@ -38,6 +38,20 @@ Following the series of prompts, the project will be set up with the following:
 
 After the setup is complete, it is recommended to perform your initial commit and push to your project repository.
 
+## Pushing to your Project Repository
+
+After the project is set up, you can run the following commands to add your remote repository and push your initial commit:
+
+```bash
+git init
+git add .
+git commit -m "Initial Commit"
+git remote add origin <git@github.com:YOURGITHUB/your-repo.git>
+git push -u origin master
+```
+
+Be sure to update the origin with the correct remote repository URL (and remove the `<>` brackets).
+
 # Development
 
 The following command will create a directory (`project-name`) and run `composer create-project` using your local repository as the source. Be sure to replace the path with the correct path to your local repository.
