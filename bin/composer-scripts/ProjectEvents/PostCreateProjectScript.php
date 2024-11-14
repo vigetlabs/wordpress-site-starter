@@ -540,7 +540,7 @@ class PostCreateProjectScript extends ComposerScript {
 	private static function removeGithubFiles(): void {
 		self::writeLine( 'Removing GitHub integration files...' );
 
-		$deployFile = self::translatePath( '.github/workflows/deploy.yaml' );
+		$deployFile = self::translatePath( '.github/workflows/deploy.yaml', true );
 
 		if ( ! file_exists( $deployFile ) ) {
 			self::writeWarning( 'Deployment script not found. Skipping removal.' );
@@ -549,7 +549,7 @@ class PostCreateProjectScript extends ComposerScript {
 			self::writeInfo( 'Deployment script removed.' );
 		}
 
-		$componentTemplate = self::translatePath( '.github/ISSUE_TEMPLARTE/new-component-ticket.md' );
+		$componentTemplate = self::translatePath( '.github/ISSUE_TEMPLATE/new-component-ticket.md', true );
 
 		if ( ! file_exists( $componentTemplate ) ) {
 			self::writeWarning( 'Component Issue template not found. Skipping removal.' );
