@@ -435,7 +435,8 @@ class PostInstallScript extends ComposerScript {
 	 * @return bool
 	 */
 	private static function isWordPressDbInstalled(): bool {
-		return boolval( shell_exec( 'wp option get siteurl --quiet >/dev/null 2>&1' ) );
+		exec('wp option get siteurl --quiet 2>/dev/null', $output, $exitCode);
+		return $exitCode === 0;
 	}
 
 	/**
