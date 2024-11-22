@@ -22,6 +22,12 @@ $tag   = $block['tag'] ?? 'section';
 $inner = [
 	'template' => $block['template'] ?? $block_template ?? [],
 ];
+?>
+<section <?php block_attrs( $block ); ?>>
+	<div class="acf-block-inner__container">
+		<?php inner_blocks( $inner ); ?>
+	</div>
+</section>
 
 $has_container = ! isset( $block['supports']['innerContainer'] ) || true === $block['supports']['innerContainer'];
 ?>
