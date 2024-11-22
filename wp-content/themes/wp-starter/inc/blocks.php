@@ -50,7 +50,7 @@ add_filter(
 	2
 );
 
-// Register Icon Only Block Style
+// Register Button Block Styles.
 add_action(
 	'init',
 	function () {
@@ -59,6 +59,14 @@ add_action(
 			[
 				'name'  => 'icon-only',
 				'label' => __( 'Icon Only', 'wp-starter' ),
+			]
+		);
+
+		register_block_style(
+			'core/button',
+			[
+				'name'  => 'plain',
+				'label' => __( 'Plain', 'sac-wp' ),
 			]
 		);
 	}

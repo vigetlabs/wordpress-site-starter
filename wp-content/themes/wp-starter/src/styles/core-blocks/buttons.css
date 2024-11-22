@@ -15,5 +15,11 @@
 				@apply text-zero gap-0;
 			}
 		}
+
+		&.is-style-plain {
+			.wp-block-button__link {
+				@apply border-0 bg-transparent px-0 text-black rounded-none;
+			}
+		}
 	}
 }
