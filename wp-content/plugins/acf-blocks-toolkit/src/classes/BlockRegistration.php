@@ -127,7 +127,11 @@ class BlockRegistration {
 							return;
 						}
 
-						$render = ACFBT_PLUGIN_PATH . '/views/default.php';
+						if ( ! empty( $block['supports']['jsx'] ) ) {
+							$render = ACFBT_PLUGIN_PATH . '/views/jsx.php';
+						} else {
+							$render = ACFBT_PLUGIN_PATH . '/views/default.php';
+						}
 					}
 
 					require $render;

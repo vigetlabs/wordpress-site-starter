@@ -7,7 +7,7 @@
  * @package ACFBlocksToolkit
  */
 
-if ( ! isset( $block_template ) ) {
+if ( ! isset( $block_template ) && empty( $block['template'] ) ) {
 	$block_template = [
 		[
 			'core/paragraph',
@@ -19,7 +19,11 @@ if ( ! isset( $block_template ) ) {
 }
 
 $inner = [
-	'template' => $block_template,
+	'template' => $block['template'] ?? $block_template ?? [],
 ];
-
-inner_blocks( $inner );
+?>
+<section <?php block_attrs( $block ); ?>>
+	<div class="acf-block-inner__container">
+		<?php inner_blocks( $inner ); ?>
+	</div>
+</section>
