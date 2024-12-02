@@ -4,11 +4,11 @@
 		@apply bg-white dark:bg-black;
 
 		.wp-block-page-list {
-			@apply flex flex-col md:flex-row;
+			@apply flex flex-col mobile-menu:flex-row;
 		}
 
 		.wp-block-navigation {
-			@apply flex w-full flex-col md:w-auto md:flex-row;
+			@apply flex w-full flex-col mobile-menu:w-auto mobile-menu:flex-row;
 
 			/* Hide WP defaults */
 			.wp-block-navigation__responsive-container-open,
@@ -23,7 +23,7 @@
 
 			.wp-block-pages-list__item,
 			.wp-block-navigation-submenu {
-				@apply flex flex-col md:flex-row;
+				@apply flex flex-col mobile-menu:flex-row;
 
 				/* Menu Links */
 				.wp-block-navigation-item__content,
@@ -44,7 +44,7 @@
 				/* Submenu */
 				.wp-block-navigation__submenu-container {
 					@apply relative flex flex-col border-2 p-0 dark:border-black;
-					@apply md:absolute;
+					@apply mobile-menu:absolute;
 
 					.wp-block-navigation-item__content {
 						@apply text-black dark:text-black;
