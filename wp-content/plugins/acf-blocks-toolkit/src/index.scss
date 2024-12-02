@@ -19,3 +19,76 @@
 		}
 	}
 }
+
+/* Desktop (1024px and up) */
+@media screen {
+	[data-visibility-desktop="hide"] {
+		display: block !important;
+	}
+}
+@media (min-width: 1024px) {
+	[data-visibility-desktop="hide"] {
+		display: none !important;
+	}
+}
+
+/* Tablet (768px to 1023px) */
+@media screen {
+	[data-visibility-tablet="hide"] {
+		display: block !important;
+	}
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+	[data-visibility-tablet="hide"] {
+		display: none !important;
+	}
+}
+
+/* Mobile (up to 767px) */
+@media screen {
+	[data-visibility-mobile="hide"] {
+		display: block !important;
+	}
+}
+@media (max-width: 767px) {
+	[data-visibility-mobile="hide"] {
+		display: none !important;
+	}
+}
+
+/* Handle combinations */
+@media screen {
+	[data-visibility-desktop="hide"][data-visibility-tablet="hide"],
+	[data-visibility-desktop="hide"][data-visibility-mobile="hide"],
+	[data-visibility-tablet="hide"][data-visibility-mobile="hide"] {
+		display: block !important;
+	}
+}
+
+/* Desktop + Tablet */
+@media (min-width: 768px) {
+	[data-visibility-desktop="hide"][data-visibility-tablet="hide"] {
+		display: none !important;
+	}
+}
+
+/* Desktop + Mobile */
+@media (max-width: 767px), (min-width: 1024px) {
+	[data-visibility-desktop="hide"][data-visibility-mobile="hide"] {
+		display: none !important;
+	}
+}
+
+/* Tablet + Mobile */
+@media (max-width: 1023px) {
+	[data-visibility-tablet="hide"][data-visibility-mobile="hide"] {
+		display: none !important;
+	}
+}
+
+/* All three */
+@media screen {
+	[data-visibility-desktop="hide"][data-visibility-tablet="hide"][data-visibility-mobile="hide"] {
+		display: none !important;
+	}
+}
