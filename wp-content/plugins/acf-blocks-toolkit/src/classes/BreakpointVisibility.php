@@ -35,17 +35,17 @@ class BreakpointVisibility {
 				}
 
 				$visibility = $block['attrs']['breakpointVisibility'];
-				$client_id  = $block['attrs']['clientId'] ?? uniqid();
+				$block_id   = uniqid();
 				$attributes = [];
 
 				// Add data-block attribute
-				$attributes[] = sprintf( 'data-block="%s"', esc_attr( $client_id ) );
+				$attributes[] = sprintf( 'data-block="%s"', esc_attr( $block_id ) );
 
 				// Add standard breakpoint attributes if not using custom
 				if ( ! empty( $visibility['useCustom'] ) ) {
 					$custom = $visibility['customBreakpoint'];
 					$css    = self::generate_custom_breakpoint_css(
-						$client_id,
+						$block_id,
 						$custom['width'] ?? '768',
 						$custom['unit'] ?? 'px',
 						$custom['action'] ?? 'hide',
@@ -88,7 +88,7 @@ class BreakpointVisibility {
 	/**
 	 * Generate custom CSS for the block
 	 *
-	 * @param string $client_id    Block's client ID
+	 * @param string $block_id    Block's Unique ID
 	 * @param string $width        Breakpoint width
 	 * @param string $unit         CSS unit
 	 * @param string $action       'show' or 'hide'
@@ -97,7 +97,7 @@ class BreakpointVisibility {
 	 * @return string
 	 */
 	private static function generate_custom_breakpoint_css(
-		string $client_id,
+		string $block_id,
 		string $width,
 		string $unit,
 		string $action,
@@ -112,12 +112,12 @@ class BreakpointVisibility {
 
 		return "
 			/* Base styles */
-			[data-block=\"{$client_id}\"] {
+			[data-block=\"{$block_id}\"] {
 				display: {$initial_display} !important;
 			}
 			/* Breakpoint-specific styles */
 			{$media_query} {
-				[data-block=\"{$client_id}\"] {
+				[data-block=\"{$block_id}\"] {
 					display: {$display} !important;
 				}
 			}

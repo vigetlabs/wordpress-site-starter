@@ -1,17 +1,33 @@
-import { ToggleControl, PanelBody, __experimentalNumberControl as NumberControl, SelectControl, __experimentalToggleGroupControl as ToggleGroupControl, __experimentalToggleGroupControlOption as ToggleGroupControlOption } from '@wordpress/components';
+import {
+    ToggleControl,
+    PanelBody,
+    __experimentalNumberControl as NumberControl,
+    SelectControl,
+    __experimentalToggleGroupControl as ToggleGroupControl,
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
+    Panel
+} from '@wordpress/components';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import { InspectorControls } from '@wordpress/block-editor';
 import { useState } from '@wordpress/element';
 
+const excludeBlocks = [
+    'core/rss',
+];
+
 /**
  * Add breakpoint visibility controls to block
  */
 const withBreakpointVisibility = createHigherOrderComponent((BlockEdit) => {
     return (props) => {
+        if (excludeBlocks.includes(props.name) || !props.attributes) {
+            return <BlockEdit {...props} />;
+        }
+
         const { attributes, setAttributes } = props;
-        const [isPanelOpen, setIsPanelOpen] = useState(true);
+        const [isPanelOpen, setIsPanelOpen] = useState(false);
 
         // Define our visibility attributes with defaults
         const visibility = attributes.breakpointVisibility || {
@@ -28,12 +44,12 @@ const withBreakpointVisibility = createHigherOrderComponent((BlockEdit) => {
         };
 
         const updateVisibility = (key, value) => {
-			setAttributes({
-				breakpointVisibility: {
-					...visibility,
-					[key]: value,
-				},
-			});
+            setAttributes({
+                breakpointVisibility: {
+                    ...visibility,
+                    [key]: value,
+                },
+            });
         };
 
         const updateCustomBreakpoint = (key, value) => {
@@ -54,7 +70,6 @@ const withBreakpointVisibility = createHigherOrderComponent((BlockEdit) => {
                 <InspectorControls>
                     <PanelBody
                         title={__('Responsive', 'acf-blocks-toolkit')}
-                        initialOpen={true}
                         opened={isPanelOpen}
                         onToggle={() => setIsPanelOpen(!isPanelOpen)}
                     >
@@ -144,23 +159,24 @@ addFilter(
     'blocks.registerBlockType',
     'acf-blocks-toolkit/breakpoint-visibility-attributes',
     (settings) => {
-        settings.attributes = {
-            ...settings.attributes,
-            breakpointVisibility: {
-                type: 'object',
-                default: {
-                    useCustom: false,
-                    desktop: false,
-                    tablet: false,
-                    mobile: false,
-                    customBreakpoint: {
-                        width: '768',
-                        unit: 'px',
-                        action: 'hide',
-                        mobileFirst: false
-                    }
-                },
-            },
+        if (excludeBlocks.includes(settings.name) || !settings.attributes) {
+            return settings;
+        }
+
+        settings.attributes.breakpointVisibility = {
+            type: 'object',
+            default: {
+                useCustom: false,
+                desktop: false,
+                tablet: false,
+                mobile: false,
+                customBreakpoint: {
+                    width: '768',
+                    unit: 'px',
+                    action: 'hide',
+                    mobileFirst: false
+                }
+            }
         };
         return settings;
     }
@@ -180,17 +196,16 @@ addFilter(
     'blocks.getSaveContent.extraProps',
     'acf-blocks-toolkit/breakpoint-visibility-attributes',
     (extraProps, blockType, attributes) => {
-        if (attributes.breakpointVisibility) {
-            const { useCustom, desktop, tablet, mobile } = attributes.breakpointVisibility;
+        if (!attributes.breakpointVisibility) {
+            return extraProps;
+        }
 
-            // Add data-block attribute for CSS targeting
-            extraProps['data-block'] = attributes.clientId;
+        const { useCustom, desktop, tablet, mobile } = attributes.breakpointVisibility;
 
-            if (!useCustom) {
-                if (desktop) extraProps['data-visibility-desktop'] = 'hide';
-                if (tablet) extraProps['data-visibility-tablet'] = 'hide';
-                if (mobile) extraProps['data-visibility-mobile'] = 'hide';
-            }
+        if (!useCustom) {
+            if (desktop) extraProps['data-visibility-desktop'] = 'hide';
+            if (tablet) extraProps['data-visibility-tablet'] = 'hide';
+            if (mobile) extraProps['data-visibility-mobile'] = 'hide';
         }
         return extraProps;
     }

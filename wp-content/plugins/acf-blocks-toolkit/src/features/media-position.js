@@ -10,6 +10,11 @@ import { useDispatch, useSelect } from '@wordpress/data';
 
 const MediaPosition = BlockEdit => {
 	return props => {
+		// Early return if block doesn't support attributes
+		if (!props.attributes || typeof props.attributes !== 'object') {
+			return <BlockEdit {...props} />;
+		}
+
 		const mediaPositionSupport = getBlockSupport( props.name, 'mediaPosition', false );
 
 		if ( ! mediaPositionSupport?.transformations ) {
