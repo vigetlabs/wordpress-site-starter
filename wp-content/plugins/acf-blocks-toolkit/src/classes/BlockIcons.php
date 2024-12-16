@@ -55,6 +55,8 @@ class BlockIcons {
 				'core/home-link',
 				'core/post-excerpt',
 				'core/read-more',
+				'core/query-pagination-next',
+				'core/query-pagination-previous',
 			]
 		);
 	}
@@ -338,6 +340,15 @@ class BlockIcons {
 			]
 		);
 
+		$selectors2 = apply_filters(
+			'acfbt_button_icons_editor_css_selectors2',
+			[
+				'.wp-block-read-more',
+				'.wp-block-query-pagination-next',
+				'.wp-block-query-pagination-previous',
+			]
+		);
+
 		foreach ( $icons as $icon ) {
 			$slug    = $icon['value'];
 			$content = 'data:image/svg+xml;utf8,' . rawurlencode( $icon['icon'] );
@@ -347,8 +358,15 @@ class BlockIcons {
 				$css .= ".has-icon__{$slug} $selector::before,";
 			}
 
-			$css .= ".has-icon__{$slug}.wp-block-read-more::after,";
-			$css .= ".has-icon__{$slug}.wp-block-read-more::before {";
+			foreach ( $selectors2 as $index => $selector ) {
+				$css .= ".has-icon__{$slug}{$selector}::after,";
+				$css .= ".has-icon__{$slug}{$selector}::before";
+				if ( $index < count( $selectors2 ) - 1 ) {
+					$css .= ',';
+				} else {
+					$css .= '{';
+				}
+			}
 
 			$css .= 'height: 0.7em;';
 			$css .= 'width: 1em;';

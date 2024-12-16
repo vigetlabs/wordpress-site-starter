@@ -39,24 +39,11 @@ class BreakpointVisibility {
 				$attributes = [];
 
 				// Add data-block attribute
-				$attributes[] = sprintf( 'data-block="%s"', esc_attr( $block_id ) );
+				$attributes[]  = sprintf( 'data-block="%s"', esc_attr( $block_id ) );
+				$block_content = trim( $block_content );
 
 				// Add standard breakpoint attributes if not using custom
-				if ( ! empty( $visibility['useCustom'] ) ) {
-					$custom = $visibility['customBreakpoint'];
-					$css    = self::generate_custom_breakpoint_css(
-						$block_id,
-						$custom['width'] ?? '768',
-						$custom['unit'] ?? 'px',
-						$custom['action'] ?? 'hide',
-						$custom['mobileFirst'] ?? false
-					);
-
-					$block_content .= sprintf(
-						"<style>%s</style>\n",
-						$css
-					);
-				} else {
+				if ( empty( $visibility['useCustom'] ) ) {
 					if ( ! empty( $visibility['desktop'] ) ) {
 						$attributes[] = 'data-visibility-desktop="hide"';
 					}
@@ -69,12 +56,28 @@ class BreakpointVisibility {
 				}
 
 				// Apply attributes to the outermost element
-				if ( preg_match( '/^<([a-zA-Z0-9\-]+)([^>]*)>/', $block_content, $matches ) ) {
+				if ( preg_match( '/^<([a-zA-Z0-9\-]+)([^>]*)>/', $block_content, $matches ) >= 0 ) {
 					$block_content = preg_replace(
 						'/^<([a-zA-Z0-9\-]+)([^>]*)>/',
 						sprintf( '<$1$2 %s>', implode( ' ', $attributes ) ),
 						$block_content,
 						1
+					);
+				}
+
+				if ( ! empty( $visibility['useCustom'] ) ) {
+					$custom = $visibility['customBreakpoint'];
+					$css = self::generate_custom_breakpoint_css(
+						$block_id,
+						$custom['width'] ?? '768',
+						$custom['unit'] ?? 'px',
+						$custom['action'] ?? 'hide',
+						$custom['mobileFirst'] ?? false
+					);
+
+					$block_content .= sprintf(
+						"<style>%s</style>\n",
+						$css
 					);
 				}
 

@@ -1,3 +1,30 @@
+@layer utilities {
+	.btn-base {
+		@apply inline-flex items-center transition text-base gap-12 rounded-none;
+		@apply focus:outline-none focus-visible:ring-4;
+		@apply disabled:opacity-20 disabled:pointer-events-none;
+		@apply px-20 min-h-40;
+
+		& svg {
+			@apply size-20;
+		}
+	}
+
+	.btn-default {
+		@apply btn-base;
+		@apply bg-black text-white;
+		@apply hover:bg-black active:bg-black focus-visible:bg-black focus-visible:ring-black;
+	}
+
+	.btn-outline {
+		@apply btn-base;
+		@apply border border-current bg-transparent text-black;
+		@apply hover:bg-black/5 hover:border-black hover:text-black;
+		@apply active:bg-black/15 active:text-black;
+		@apply focus-visible:bg-black/10 focus-visible:ring-black/15;
+	}
+}
+
 @layer components {
 	.wp-block-button {
 		.wp-block-button__link {

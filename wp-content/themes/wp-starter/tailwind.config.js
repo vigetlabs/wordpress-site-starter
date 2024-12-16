@@ -98,14 +98,13 @@ module.exports = {
 				...remPair(128),
 			},
 			screens: {
+				"container": maxBreakpoint.toString()+'px',
 				"wp-cols": "781px",
 				"mobile-menu": "600px",
+				"xs": "480px",
 				...defaultTheme.screens,
 			},
 		},
 	},
-	plugins: [
-		require('./src/plugins-tailwind/buttons.js'),
-	],
 }
 
