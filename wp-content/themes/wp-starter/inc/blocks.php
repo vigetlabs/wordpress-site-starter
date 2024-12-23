@@ -55,6 +55,14 @@ add_action(
 	'init',
 	function () {
 		register_block_style(
+			'core/paragraph',
+			[
+				'name'  => 'eyebrow',
+				'label' => __( 'Eyebrow', 'wp-starter' ),
+			]
+		);
+
+		register_block_style(
 			'core/button',
 			[
 				'name'  => 'icon-only',
@@ -66,7 +74,7 @@ add_action(
 			'core/button',
 			[
 				'name'  => 'plain',
-				'label' => __( 'Plain', 'sac-wp' ),
+				'label' => __( 'Plain', 'wp-starter' ),
 			]
 		);
 	}

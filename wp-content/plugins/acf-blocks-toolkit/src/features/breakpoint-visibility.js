@@ -4,8 +4,7 @@ import {
     __experimentalNumberControl as NumberControl,
     SelectControl,
     __experimentalToggleGroupControl as ToggleGroupControl,
-    __experimentalToggleGroupControlOption as ToggleGroupControlOption,
-    Panel
+    __experimentalToggleGroupControlOption as ToggleGroupControlOption
 } from '@wordpress/components';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { addFilter } from '@wordpress/hooks';
@@ -27,7 +26,6 @@ const withBreakpointVisibility = createHigherOrderComponent((BlockEdit) => {
         }
 
         const { attributes, setAttributes } = props;
-        const [isPanelOpen, setIsPanelOpen] = useState(false);
 
         // Define our visibility attributes with defaults
         const visibility = attributes.breakpointVisibility || {
@@ -42,6 +40,11 @@ const withBreakpointVisibility = createHigherOrderComponent((BlockEdit) => {
                 mobileFirst: false
             }
         };
+
+        // Check if any breakpoint visibility is set
+        const isVisibilitySet = visibility.useCustom || visibility.desktop || visibility.tablet || visibility.mobile;
+
+        const [isPanelOpen, setIsPanelOpen] = useState(isVisibilitySet);
 
         const updateVisibility = (key, value) => {
             setAttributes({
@@ -64,9 +67,16 @@ const withBreakpointVisibility = createHigherOrderComponent((BlockEdit) => {
             });
         };
 
+        // Add class or data attribute to the block
+        const blockProps = {
+            ...props,
+            className: `${props.className || ''} ${isVisibilitySet ? 'has-breakpoint-visibility' : ''}`.trim(),
+            'data-visibility': isVisibilitySet ? 'true' : 'false'
+        };
+
         return (
             <>
-                <BlockEdit {...props} />
+                <BlockEdit {...blockProps} />
                 <InspectorControls>
                     <PanelBody
                         title={__('Responsive', 'acf-blocks-toolkit')}
