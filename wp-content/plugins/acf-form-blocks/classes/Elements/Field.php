@@ -62,7 +62,7 @@ class Field {
 	 *
 	 * @var string
 	 */
-	private string $req_marker_placement = 'after';
+	protected string $req_marker_placement = 'after';
 
 	/**
 	 * Constructor.

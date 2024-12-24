@@ -21,7 +21,7 @@ class Checkbox extends Field {
 	 *
 	 * @var string
 	 */
-	private string $req_marker_placement = 'before';
+	protected string $req_marker_placement = 'before';
 
 	/**
 	 * Get the block template.

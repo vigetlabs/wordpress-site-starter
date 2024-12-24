@@ -132,6 +132,13 @@ add_action(
 						'value' => 'acf/fieldset',
 					),
 				),
+				array(
+					array(
+						'param' => 'block',
+						'operator' => '==',
+						'value' => 'acf/checkbox',
+					),
+				),
 			),
 			'menu_order' => 5,
 			'position' => 'normal',
