@@ -22,16 +22,8 @@ $inner   = [
 $has_selected = false;
 ?>
 <div class="form-input type-select">
-	<label<?php
-		if ( ! is_admin() ) :
-			printf( ' for="%s"', esc_attr( $field->get_id_attr() ) );
-		endif;
-	?>>
-		<?php inner_blocks( $inner ); ?>
-		<?php if ( $field->is_required() ) : ?>
-			<span class="is-required">*</span>
-		<?php endif; ?>
-	</label>
+
+	<?php inner_blocks( $inner ); ?>
 
 	<select <?php block_attrs( $block, '', $field->get_attrs() ); ?>>
 		<?php if ( empty( $options ) ) : ?>

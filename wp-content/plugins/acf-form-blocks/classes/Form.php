@@ -144,7 +144,7 @@ class Form {
 	 * @return ?self
 	 */
 	public static function get_instance( mixed $form = null, string $content = '', array $context = [] ): ?self {
-		$form_id = is_string( $form ) ? self::prefix_id( $form ) : ( ! empty( $form['block_id'] ) ? $form['block_id'] : null );
+		$form_id = is_string( $form ) ? self::prefix_id( $form ) : ( ! empty( $form['blockId'] ) ? $form['blockId'] : null );
 
 		if ( $form_id ) {
 			$cache = Cache::get( $form_id );
@@ -223,6 +223,10 @@ class Form {
 			return null;
 		}
 
+		if ( 1 === count( $forms ) ) {
+			return Blocks::prepare_acf_block( $forms[0], $context );
+		}
+
 		$form = null;
 
 		foreach ( $forms as $block ) {
@@ -233,8 +237,8 @@ class Form {
 				return $form;
 			}
 
-			if ( ! empty( $form['block_id'] ) ) {
-				$block_form_id = self::prefix_id( $form['block_id'] );
+			if ( ! empty( $form['blockId'] ) ) {
+				$block_form_id = self::prefix_id( $form['blockId'] );
 
 				if ( $block_form_id === $form_id ) {
 					return $form;
@@ -267,7 +271,7 @@ class Form {
 
 		$content = self::replace_patterns( $content );
 
-		$pattern = '/<!-- wp:acf\/form {.*?"block_id":"[^"]*".*?} -->.*?<!-- \/wp:acf\/form -->/s';
+		$pattern = '/<!-- wp:acf\/form {.*?"blockId":"[^"]*".*?} -->.*?<!-- \/wp:acf\/form -->/s';
 		preg_match_all( $pattern, $content, $form_blocks );
 
 		if ( empty( $form_blocks[0] ) ) {
@@ -276,7 +280,7 @@ class Form {
 
 		foreach ( $form_blocks[0] as $form_block ) {
 			$block_id = self::unprefix_id( $form_id );
-			if ( preg_match( '/<!-- wp:acf\/form {.*?"block_id":"' . preg_quote( $block_id ) . '"/', $form_block ) ) {
+			if ( preg_match( '/<!-- wp:acf\/form {.*?"blockId":"' . preg_quote( $block_id ) . '"/', $form_block ) ) {
 				return $form_block;
 			}
 		}

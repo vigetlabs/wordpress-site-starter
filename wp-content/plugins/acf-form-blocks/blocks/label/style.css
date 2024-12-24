@@ -1,0 +1,7 @@
+.acf-block-label p:not(:empty):not(:last-child) {
+	margin-top: 0;
+}
+
+.acf-block-label > * {
+	display: inline-block;
+}

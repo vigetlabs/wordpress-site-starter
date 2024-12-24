@@ -472,20 +472,20 @@ class BlockRegistration {
 			'acf/pre_save_block',
 			function ( array $attributes ): array {
 				$wp_block = \WP_Block_Type_Registry::get_instance()->get_registered( $attributes['name'] );
-				if ( ! str_starts_with( $attributes['name'], 'acf/' ) || empty( $wp_block?->attributes['block_id'] ) ) {
+				if ( ! str_starts_with( $attributes['name'], 'acf/' ) || empty( $wp_block?->attributes['blockId'] ) ) {
 					return $attributes;
 				}
 
-				if ( empty( $attributes['block_id'] ) ) {
-					$attributes['block_id'] = uniqid();
+				if ( empty( $attributes['blockId'] ) ) {
+					$attributes['blockId'] = uniqid();
 				} else {
 					// Ensure the block ID is unique.
-					while ( self::block_id_exists( $attributes['block_id'] ) ) {
-						$attributes['block_id'] = uniqid();
+					while ( self::block_id_exists( $attributes['blockId'] ) ) {
+						$attributes['blockId'] = uniqid();
 					}
 				}
 
-				self::store_block_id( $attributes['block_id'] );
+				self::store_block_id( $attributes['blockId'] );
 
 				return $attributes;
 			}

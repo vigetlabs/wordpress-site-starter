@@ -17,20 +17,20 @@ use Viget\ACFBlocksToolkit\BlockTemplate\Template;
 class Checkbox extends Field {
 
 	/**
+	 * Required marker placement
+	 *
+	 * @var string
+	 */
+	private string $req_marker_placement = 'before';
+
+	/**
 	 * Get the block template.
 	 *
 	 * @return array
 	 * @throws Exception
 	 */
 	public function get_template(): array {
-		return (
-			new Template(
-				new Block(
-					'core/paragraph',
-					[ 'placeholder' => __( 'Label...', 'acf-form-blocks' ) ]
-				)
-			)
-		)->get();
+		return ( new Template( new Block( 'acf/label' ) ) )->get();
 	}
 
 	/**

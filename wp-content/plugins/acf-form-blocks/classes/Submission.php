@@ -7,8 +7,6 @@
 
 namespace ACFFormBlocks;
 
-use ACFFormBlocks\Elements\Field;
-
 /**
  * Submission Confirmation
  */

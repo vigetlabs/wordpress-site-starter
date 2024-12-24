@@ -58,9 +58,13 @@ class Blocks {
 			// Check Inner Blocks.
 			if ( ! empty( $block['innerBlocks'] ) ) {
 				$new_parent = $parent_id;
-				if ( ! empty( $block['attrs']['block_id'] ) ) {
-					$new_parent = str_replace( '/', '_', $block['blockName'] ) . '_' . $block['attrs']['block_id'];
+
+				if ( ! empty( $block['attrs']['blockId'] ) ) {
+					$block_name = str_replace( '/', '_', $block['blockName'] );
+					$prefix     = 'acf_form' === $block_name ? $block_name : 'acf_field';
+					$new_parent =  $prefix . '_' . $block['attrs']['blockId'];
 				}
+
 				self::get_blocks_by_type( $block['innerBlocks'], $type, $collection, $new_parent, $pattern_id );
 			}
 		}

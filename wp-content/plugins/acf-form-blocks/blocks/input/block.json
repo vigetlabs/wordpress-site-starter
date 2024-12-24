@@ -13,9 +13,12 @@
     "alignWide": true,
     "anchor": true
   },
+  "providesContext": {
+    "acffb/fieldId": "blockId"
+  },
   "style": "file:./style.css",
   "attributes": {
-    "block_id": {
+    "blockId": {
       "type": "string",
       "default": ""
     }
@@ -126,7 +129,7 @@
       "isActive": ["data"]
     }
   ],
-  "usesContext": ["acffb/form_id", "acffb/fieldset_id"],
+  "usesContext": ["acffb/formId", "acffb/fieldsetId"],
   "acf": {
     "mode": "preview"
   }

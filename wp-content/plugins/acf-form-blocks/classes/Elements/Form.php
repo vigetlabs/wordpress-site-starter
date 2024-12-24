@@ -79,8 +79,8 @@ class Form {
 		$this->markup  = $markup;
 		$this->context = $context;
 
-		if ( ! empty( $block['block_id'] ) ) {
-			$this->form_id = FormObject::prefix_id($block['block_id'] );
+		if ( ! empty( $block['blockId'] ) ) {
+			$this->form_id = FormObject::prefix_id($block['blockId'] );
 		}
 
 		if ( ! empty( $block['pattern_id'] ) ) {
@@ -148,11 +148,11 @@ class Form {
 			return $this->block['anchor'];
 		}
 
-		if ( empty( $this->block['block_id'] ) ) {
+		if ( empty( $this->block['blockId'] ) ) {
 			return get_block_id( $this->block, true );
 		}
 
-		return FormObject::prefix_id( $this->block['block_id'] );
+		return FormObject::prefix_id( $this->block['blockId'] );
 	}
 
 	/**
@@ -161,11 +161,11 @@ class Form {
 	 * @return string
 	 */
 	public function get_id(): string {
-		if ( empty( $this->block['block_id'] ) ) {
+		if ( empty( $this->block['blockId'] ) ) {
 			return get_block_id( $this->block, true );
 		}
 
-		return FormObject::prefix_id( $this->block['block_id'] );
+		return FormObject::prefix_id( $this->block['blockId'] );
 	}
 
 	/**
@@ -301,7 +301,7 @@ class Form {
 	public function update_field_context(): void {
 		$fields  = $this->get_all_fields();
 		$context = [
-			'acffb/form_id' => $this->get_id(),
+			'acffb/formId' => $this->get_id(),
 		];
 
 		foreach ( $fields as $field ) {
@@ -375,7 +375,8 @@ class Form {
 			$attrs['wp_block'] = $block;
 
 			$block_name = str_replace( '/', '_', $attrs['name'] );
-			$block_id   = $block_name . '_' . $attrs['block_id'];
+			$prefix     = 'acf_form' === $block_name ? $block_name : 'acf_field';
+			$block_id   = $prefix . '_' . $attrs['blockId'];
 
 			$fields[ $block_id ] = Field::factory( $attrs, $attrs );
 		}

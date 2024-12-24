@@ -36,10 +36,12 @@ function acffb_get_posted_acf_block(): array {
  * @return ?string
  */
 function acffb_get_block_id_from_acf_block_data( array $block ): ?string {
-	if ( empty( $block['name'] ) || empty( $block['block_id'] ) ) {
+	if ( empty( $block['name'] ) || empty( $block['blockId'] ) ) {
 		return null;
 	}
 
 	$block_name = str_replace( '/', '_', $block['name'] );
-	return $block_name . '_' . $block['block_id'];
+	$prefix     = 'acf_form' === $block_name ? $block_name : 'acf_field';
+
+	return $prefix . '_' . $block['blockId'];
 }

@@ -26,14 +26,6 @@ $inner = [
 		name="<?php echo esc_attr( $field->get_name_attr() ); ?>"
 		<?php checked( $field->is_checked() ); ?>
 	>
-	<label
-		<?php if ( ! is_admin() ) : ?>
-			for="<?php echo esc_attr( $field->get_id_attr() ); ?>"
-		<?php endif; ?>
-	>
-		<?php if ( $field->is_required() ) : ?>
-			<span class="is-required">*</span>
-		<?php endif; ?>
-		<?php inner_blocks( $inner ); ?>
-	</label>
+
+	<?php inner_blocks( $inner ); ?>
 </div>

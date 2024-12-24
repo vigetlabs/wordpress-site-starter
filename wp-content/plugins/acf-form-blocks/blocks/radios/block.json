@@ -18,12 +18,15 @@
     "anchor": true
   },
   "attributes": {
-    "block_id": {
+    "blockId": {
       "type": "string",
       "default": ""
     }
   },
-  "usesContext": ["acffb/form_id", "acffb/fieldset_id"],
+  "providesContext": {
+    "acffb/fieldId": "blockId"
+  },
+  "usesContext": ["acffb/formId", "acffb/fieldsetId"],
   "acf": {
     "mode": "preview"
   }

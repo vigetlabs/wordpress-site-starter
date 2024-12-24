@@ -7,6 +7,7 @@
 
 namespace ACFFormBlocks\Elements;
 
+use ACFFormBlocks\Admin\Submission;
 use ACFFormBlocks\Form;
 use ACFFormBlocks\Traits\ChildFields;
 use Exception;
@@ -42,6 +43,10 @@ class Fieldset extends Field {
 
 			/** @var Checkbox[] $children */
 			foreach ( $children as $child ) {
+				if ( is_admin() && Submission::has_rendered( $child->get_id() ) ) {
+					continue;
+				}
+
 				$checked   = in_array( $child->get_value_attr(), $value, true );
 				$label     = $child->get_value_attr();
 				$cbx_label = '';
@@ -63,6 +68,12 @@ class Fieldset extends Field {
 		}
 
 		foreach ( $children as $child ) {
+			if ( is_admin() && Submission::has_rendered( $child->get_id() ) ) {
+				continue;
+			}
+
+			$rendered = false;
+
 			echo '<div class="acffb-sub-field">';
 			printf(
 				'<p class="sub-field-label" title="%s">%s</p>',
@@ -72,18 +83,26 @@ class Fieldset extends Field {
 
 			if ( empty( $value ) ) {
 				parent::render_value( $value, $form );
+				$rendered = true;
 			} else {
 				foreach ( $value as $child_id => $val ) {
 					if ( $child_id !== $child->get_id() ) {
 						continue;
 					}
 
+					$rendered = true;
 					$child->set_default_value( $val );
 
 					$child->render_value( $val, $form );
 					break;
 				}
 			}
+
+			if ( ! $rendered ) {
+				// Render an empty value.
+				parent::render_value( '', $form );
+			}
+
 			echo '</div>';
 		}
 	}
@@ -107,6 +126,6 @@ class Fieldset extends Field {
 	 * @return bool
 	 */
 	public function is_checkbox_group(): bool {
-		return ! empty( $this->block['is_checkbox_group'] );
+		return ! empty( $this->block['isCheckboxGroup'] );
 	}
 }

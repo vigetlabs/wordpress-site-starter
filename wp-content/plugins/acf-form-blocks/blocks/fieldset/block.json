@@ -14,18 +14,19 @@
     "anchor": true
   },
   "attributes": {
-    "block_id": {
+    "blockId": {
       "type": "string",
       "default": ""
     },
-    "is_checkbox_group": {
+    "isCheckboxGroup": {
       "type": "boolean",
       "default": false
     }
   },
   "providesContext": {
-    "acffb/fieldset_id": "block_id"
+    "acffb/fieldsetId": "blockId"
   },
+  "usesContext": ["acffb/formId"],
   "styles": [
     { "name": "default", "label": "Default", "isDefault": true },
     { "name": "inline", "label": "Inline" },
@@ -36,16 +37,15 @@
       "name": "checkbox-group",
       "icon": "forms",
       "title": "Checkbox Group",
-      "scope": ["inserter"],
+      "scope": ["inserter", "transform"],
       "innerBlocks": [ ["acf/legend"], ["acf/checkbox"], ["acf/checkbox"], ["acf/checkbox"] ],
       "attributes": {
-        "is_checkbox_group": true
+        "isCheckboxGroup": true
       },
-      "isActive": ["is_checkbox_group"]
+      "isActive": ["isCheckboxGroup"]
     }
   ],
   "style": "file:./style.css",
-  "usesContext": ["acffb/form_id"],
   "acf": {
     "mode": "preview"
   }

@@ -30,6 +30,10 @@ trait ChildFields {
 		$fields   = $form->get_form_object()->get_all_fields();
 		$children = [];
 
+		if ( 'fieldset' !== $this->get_block_name() ) {
+			return $children;
+		}
+
 		foreach ( $fields as $field ) {
 			if ( ! $field->get_parent_id() ) {
 				continue;

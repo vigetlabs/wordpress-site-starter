@@ -23,6 +23,13 @@ class Submission {
 	const POST_TYPE = 'acffb-submission';
 
 	/**
+	 * The rendered fields.
+	 *
+	 * @var array
+	 */
+	private static array $rendered = [];
+
+	/**
 	 * Submission constructor.
 	 */
 	public function __construct() {
@@ -308,7 +315,7 @@ class Submission {
 		$markup  = $form_meta['markup'] ?? '';
 		$context = $form_meta['context'] ?? [];
 		$form_id = $this->get_form_id( $post_id );
-		$form    = Form::get_instance( $form_id, $markup, $context );
+		$form    = Form::get_instance( $form_id, $markup, $context, 'content' );
 
 		$form_name = get_post_meta( $post_id, '_form_name', true );
 		if ( $form_name ) {
@@ -425,6 +432,22 @@ class Submission {
 	}
 
 	/**
+	 * Render the submission content.
+	 *
+	 * @param string $field_key Field Key.
+	 *
+	 * @return bool
+	 */
+	public static function has_rendered( string $field_key ): bool {
+		if ( in_array( $field_key, self::$rendered, true ) ) {
+			return true;
+		}
+
+		self::$rendered[] = $field_key;
+		return false;
+	}
+
+	/**
 	 * Render the Submission Meta data
 	 *
 	 * @param int   $post_id
@@ -435,7 +458,7 @@ class Submission {
 	 */
 	private function render_meta( int $post_id, array $excluded = [], array $included = [] ): void {
 		$form_meta = get_post_meta( $post_id, '_form', true );
-		$form      = Form::get_instance( $form_meta['id'], $form_meta['markup'], $form_meta['context'] );
+		$form      = Form::get_instance( $form_meta['id'], $form_meta['markup'], $form_meta['context'], 'content' );
 
 		$form->load_meta( $post_id );
 

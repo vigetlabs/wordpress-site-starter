@@ -14,12 +14,15 @@
   },
   "editorStyle": "file:./editor.css",
   "attributes": {
-    "block_id": {
+    "blockId": {
       "type": "string",
       "default": ""
     }
   },
-  "usesContext": ["acffb/form_id", "acffb/fieldset_id"],
+  "usesContext": ["acffb/formId", "acffb/fieldsetId"],
+  "providesContext": {
+    "acffb/fieldId": "blockId"
+  },
   "acf": {
     "mode": "preview"
   }

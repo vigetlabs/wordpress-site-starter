@@ -23,15 +23,7 @@ class Textarea extends Field {
 	 * @throws Exception
 	 */
 	public function get_template(): array {
-		return (
-			new Template(
-				new Block(
-					'core/paragraph',
-					[ 'placeholder' => __( 'Field Label...', 'acf-form-blocks' )
-					]
-				)
-			)
-		)->get();
+		return ( new Template( new Block( 'acf/label' ) ) )->get();
 	}
 
 	/**

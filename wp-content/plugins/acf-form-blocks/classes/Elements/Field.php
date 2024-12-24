@@ -58,6 +58,13 @@ class Field {
 	protected mixed $default_value = null;
 
 	/**
+	 * Required marker placement.
+	 *
+	 * @var string
+	 */
+	private string $req_marker_placement = 'after';
+
+	/**
 	 * Constructor.
 	 *
 	 * @param array    $block Block data.
@@ -198,7 +205,7 @@ class Field {
 	 * @return ?Form
 	 */
 	public function get_form(): ?Form {
-		return Form::get_instance( $this->get_context( 'acffb/form_id' ) );
+		return Form::get_instance( $this->get_context( 'acffb/formId' ) );
 	}
 
 	/**
@@ -207,12 +214,27 @@ class Field {
 	 * @return ?Field
 	 */
 	public function get_fieldset(): ?Field {
-		if ( ! $this->get_context( 'acffb/fieldset_id' ) ) {
+		if ( ! $this->get_context( 'acffb/fieldsetId' ) ) {
 			return null;
 		}
 
-		$fieldset_id = 'acf_fieldset_' . $this->get_context( 'acffb/fieldset_id' );
+		$fieldset_id = 'acf_field_' . $this->get_context( 'acffb/fieldsetId' );
 		return $this->get_form()?->get_form_object()->get_field_by_id( $fieldset_id );
+	}
+
+	/**
+	 * Get the parent field.
+	 *
+	 * @return ?Field
+	 */
+	public function get_parent_field(): ?Field {
+		if ( ! $this->get_context( 'acffb/fieldId' ) ) {
+			return null;
+		}
+
+		$input_id = 'acf_field_' . $this->get_context( 'acffb/fieldId' );
+
+		return $this->get_form()?->get_form_object()->get_field_by_id( $input_id );
 	}
 
 	/**
@@ -252,13 +274,14 @@ class Field {
 	 * @return string
 	 */
 	public function get_name(): string {
-		if ( empty( $this->block['block_id'] ) ) {
+		if ( empty( $this->block['blockId'] ) ) {
 			return $this->get_acf_id();
 		}
 
 		$block_name = $this->get_block_name( true );
 		$block_name = str_replace( '/', '_', $block_name );
-		return $block_name . '_' . $this->block['block_id'];
+		$prefix     = 'acf_form' === $block_name ? $block_name : 'acf_field';
+		return $prefix . '_' . $this->block['blockId'];
 	}
 
 	/**
@@ -385,6 +408,14 @@ class Field {
 				break;
 			}
 
+			if ( 'acf/label' === $inner_block['blockName'] && ! empty( $inner_block['innerBlocks'] ) ) {
+				$label = $this->find_label( $inner_block['innerBlocks'] );
+
+				if ( $label ) {
+					break;
+				}
+			}
+
 			if ( 'acf/legend' === $inner_block['blockName'] && ! empty( $inner_block['innerBlocks'] ) ) {
 				$label = $this->find_label( $inner_block['innerBlocks'] );
 
@@ -467,6 +498,15 @@ class Field {
 	 */
 	public function is_required(): bool {
 		return boolval( $this->get_field_data( 'required', false ) );
+	}
+
+	/**
+	 * Get the required marker placement.
+	 *
+	 * @return string
+	 */
+	public function get_marker_placement(): string {
+		return $this->req_marker_placement;
 	}
 
 	/**

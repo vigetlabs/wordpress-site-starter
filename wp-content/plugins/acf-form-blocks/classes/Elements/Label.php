@@ -1,6 +1,6 @@
 <?php
 /**
- * Legend Class
+ * Label Class
  *
  * @package ACFFormBlocks
  */
@@ -11,9 +11,9 @@ use Viget\ACFBlocksToolkit\BlockTemplate\Block;
 use Viget\ACFBlocksToolkit\BlockTemplate\Template;
 
 /**
- * Class for Legend Fields
+ * Class for Label Fields
  */
-class Legend extends Field {
+class Label extends Field {
 
 	/**
 	 * Get the block attributes.
@@ -26,6 +26,11 @@ class Legend extends Field {
 		unset( $attrs['name'] );
 		$attrs['data-supports-jsx'] = null;
 
+		$parent = $this->get_parent_field();
+		if ( $parent && ! is_admin() ) {
+			$attrs['for'] = $parent->get_id_attr();
+		}
+
 		return $attrs;
 	}
 
@@ -35,6 +40,6 @@ class Legend extends Field {
 	 * @return array
 	 */
 	public function get_template(): array {
-		return ( new Template( ( new Block( 'core/paragraph', [ 'placeholder' => __( 'Legend...', 'acf-field-blocks' ), 'lock' => 'all' ] ) ) ) )->get();
+		return ( new Template( ( new Block( 'core/paragraph', [ 'placeholder' => __( 'Field Label...', 'acf-field-blocks' ) ] ) ) ) )->get();
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Block: Legend
+ * Block: Label
  *
  * @global array $block
  * @global array $context
@@ -10,21 +10,21 @@
  */
 
 use ACFFormBlocks\Elements\Field;
-use ACFFormBlocks\Elements\Legend;
+use ACFFormBlocks\Elements\Label;
 
-/** @var Legend $field */
+/** @var Label $field */
 $field = Field::factory( $block, $context, $wp_block );
 
-$fieldset  = $field->get_fieldset();
-$required  = $fieldset?->is_required() ?? false;
-$placement = $fieldset?->get_marker_placement() ?? 'after';
+$parent    = $field->get_parent_field();
+$required  = $parent?->is_required() ?? false;
+$placement = $parent?->get_marker_placement() ?? 'before';
 
 $inner = [
 	'template'      => $field->get_template(),
 	'allowedBlocks' => [ 'core/paragraph' ],
 ];
 ?>
-<legend <?php block_attrs( $block, '', $field->get_attrs() ); ?>>
+<label <?php block_attrs( $block, '', $field->get_attrs() ); ?>>
 	<?php if ( $required && 'before' === $placement ) : ?>
 		<span class="is-required">*</span>
 	<?php endif; ?>
@@ -34,4 +34,4 @@ $inner = [
 	<?php if ( $required && 'after' === $placement ) : ?>
 		<span class="is-required">*</span>
 	<?php endif; ?>
-</legend>
+</label>

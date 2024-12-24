@@ -22,12 +22,7 @@ $inner   = [
 $has_checked = false;
 ?>
 <div <?php block_attrs( $block, 'form-input type-radios', $field->get_attrs() ); ?>>
-	<div class="radios-label">
-		<?php inner_blocks( $inner ); ?>
-		<?php if ( $field->is_required() ) : ?>
-			<span class="is-required">*</span>
-		<?php endif; ?>
-	</div>
+	<?php inner_blocks( $inner ); ?>
 
 	<?php if ( empty( $options ) ) : ?>
 		<p><?php esc_html_e( 'No options available.', 'acf-form-blocks' ); ?></p>
