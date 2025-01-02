@@ -7,6 +7,7 @@
 
 namespace ACFFormBlocks\Traits;
 
+use ACFFormBlocks\Admin\Submission;
 use ACFFormBlocks\Form;
 use WP_Query;
 
@@ -14,6 +15,13 @@ use WP_Query;
  * Trait for AdminPostType
  */
 trait AdminPostType {
+
+	/**
+	 * The form meta key.
+	 *
+	 * @var string
+	 */
+	protected string $form_meta_key = '_acffb_form_id';
 
 	/**
 	 * Add Filters by Form ID to Submissions.
@@ -28,7 +36,7 @@ trait AdminPostType {
 					return;
 				}
 
-				$forms = $this->get_forms();
+				$forms = $this->get_forms_list();
 
 				if ( count( $forms ) <= 1 ) {
 					return;
@@ -90,109 +98,47 @@ trait AdminPostType {
 			return;
 		}
 
+		$form_id     = sanitize_text_field( $_GET['acffb_form_id'] );
 		$post_status = ! empty( $_GET['post_status'] ) ? sanitize_text_field( $_GET['post_status'] ) : 'publish';
 
 		$query->set( 'post_status', $post_status );
-		$query->set( 'meta_key', '_form_id' );
-		$query->set( 'meta_value', sanitize_text_field( $_GET['acffb_form_id'] ) );
+		$query->set( 'meta_value', $form_id );
+
+		if ( Submission::POST_TYPE === self::POST_TYPE ) {
+			$query->set( 'meta_key', '_form' );
+			$query->set( 'meta_compare', 'LIKE' );
+		} else {
+			$query->set( 'meta_key', $this->form_meta_key );
+		}
 	}
 
 	/**
-	 * Get the forms with Submissions.
+	 * Get the forms
 	 *
-	 * @return array
+	 * @return Form[]
 	 */
 	private function get_forms(): array {
-		$forms = [];
+		return Form::get_all_forms();
+	}
 
-		$post_status = ! empty( $_GET['post_status'] ) ? sanitize_text_field( $_GET['post_status'] ) : 'publish';
+	/**
+	 * Get the forms list
+	 *
+	 * @return string[]
+	 */
+	private function get_forms_list(): array {
+		$all_forms = $this->get_forms();
+		$forms     = [];
 
-		$this->disable_admin_filters();
-		$submissions = new WP_Query(
-			[
-				'post_type'      => self::POST_TYPE,
-				'posts_per_page' => -1,
-				'fields'         => 'ids',
-				'post_status'    => $post_status,
-			]
-		);
-		$this->apply_admin_filters();
+		if ( ! $all_forms ) {
+			return $forms;
+		}
 
-		foreach ( $submissions->posts as $post_id ) {
-			$form = $this->get_form( $post_id );
-			if ( ! $form ) {
-				continue;
-			}
-
-			$form_id   = $form->get_form_object()->get_id();
-			$form_name = $form->get_form_object()->get_name();
-
-			if ( empty( $forms[ $form_id ] ) ) {
-				$forms[ $form_id ] = $form_name . ' (...' . substr( $form_id, -5 ) . ')';
-			} else {
-				if ( ! str_contains( $forms[ $form_id ], $form_name ) ) {
-					$forms[ $form_id ] .= ' ' . __( 'aka', 'acf-form-blocks' ) . ' ' . $form_name;
-				}
-			}
+		foreach ( $all_forms as $form ) {
+			$forms[ $form->get_form_object()->get_id() ] = $form->get_form_object()->get_unique_name();
 		}
 
 		return $forms;
-	}
-
-	/**
-	 * Get the form instance.
-	 *
-	 * @param ?int $post_id The post ID.
-	 *
-	 * @return ?Form
-	 */
-	private function get_form( ?int $post_id = null ): ?Form {
-		if ( ! $post_id ) {
-			$post_id = get_the_ID();
-		}
-
-		$form_meta = get_post_meta( $post_id, '_form', true );
-
-		if ( ! $form_meta ) {
-			return null;
-		}
-
-		$markup  = $form_meta['markup'] ?? '';
-		$context = $form_meta['context'] ?? [];
-		$form_id = $this->get_form_id( $post_id );
-		$form    = Form::get_instance( $form_id, $markup, $context, 'content' );
-
-		$form_name = get_post_meta( $post_id, '_form_name', true );
-		if ( $form_name ) {
-			$form->get_form_object()->set_name( $form_name );
-		}
-
-		$form->preload_meta();
-		$form->get_form_object()->update_field_context();
-		$form->update_cache();
-
-		return $form;
-	}
-
-	/**
-	 * Get the form ID.
-	 *
-	 * @param ?int $post_id The post ID.
-	 *
-	 * @return ?string
-	 */
-	private function get_form_id( ?int $post_id = null ): ?string {
-		if ( ! $post_id ) {
-			$post_id = get_the_ID();
-		}
-
-		$form_id = get_post_meta( $post_id, '_form_id', true );
-
-		if ( ! $form_id ) {
-			return null;
-		}
-
-		return $form_id;
 	}
 
 	/**
@@ -204,17 +150,14 @@ trait AdminPostType {
 		add_filter(
 			'acf/prepare_field/name=_acffb_form_id',
 			function ( array $field ): array {
-				$forms = Form::get_all_forms();
+				$forms = $this->get_forms();
 
 				if ( ! $forms ) {
 					return $field;
 				}
 
 				foreach ( $forms as $form ) {
-					$form_name  = $form->get_form_object()->get_name();
-					$short_id   = substr( $form->get_form_object()->get_id(), -5 );
-					$form_name .= ' (...' . $short_id . ')';
-					$field['choices'][ $form->get_form_object()->get_id() ] = $form_name;
+					$field['choices'][ $form->get_form_object()->get_id() ] = $form->get_form_object()->get_unique_name();
 				}
 
 				return $field;

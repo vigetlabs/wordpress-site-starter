@@ -7,6 +7,9 @@
 
 namespace ACFFormBlocks\Elements;
 
+use ACFFormBlocks\Admin\EmailTemplate;
+use ACFFormBlocks\Admin\Integration;
+use ACFFormBlocks\Admin\Submission;
 use ACFFormBlocks\Form as FormObject;
 use ACFFormBlocks\Utilities\Blocks;
 use Exception;
@@ -198,7 +201,21 @@ class Form {
 			return $this->get_form_meta( 'name' );
 		}
 
-		return get_the_title();
+		if ( ! in_array( get_post_type(), [ EmailTemplate::POST_TYPE, Integration::POST_TYPE, Submission::POST_TYPE ], true ) ) {
+			return get_the_title(); // Use the current post title.
+		}
+
+		return __( 'Untitled', 'acf-form-blocks' );
+	}
+
+	/**
+	 * Get the form name with a unique identifier.
+	 *
+	 * @return string
+	 */
+	public function get_unique_name(): string {
+		$short_id = substr( $this->get_id(), -5 );
+		return $this->get_name() . ' (...' . $short_id . ')';
 	}
 
 	/**

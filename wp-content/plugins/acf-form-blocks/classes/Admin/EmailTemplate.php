@@ -65,6 +65,9 @@ class EmailTemplate {
 		// Customize admin columns
 		$this->admin_columns();
 
+		// Add Filter by Form ID.
+		$this->admin_filters();
+
 		// Prevent Deletion of the default template.
 		$this->protect_default_template();
 	}

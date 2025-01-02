@@ -7,6 +7,7 @@
 
 namespace ACFFormBlocks\Admin;
 
+use ACFFormBlocks\Form;
 use ACFFormBlocks\Traits\AdminPostType;
 
 /**
@@ -37,11 +38,26 @@ class Integration {
 		// Customize admin columns
 		$this->admin_columns();
 
-		// Add Submission Filters by Form ID.
+		// Add Filter by Form ID.
 		$this->admin_filters();
 
 		// Register the meta boxes.
 		$this->meta_boxes();
+
+		// Temp Fix the post name. TODO: Debug why post slug is being set to the form name.
+		add_filter(
+			'wp_insert_post_data',
+			function ( array $data ): array {
+				if ( self::POST_TYPE !== $data['post_type'] ) {
+					return $data;
+				}
+
+				$data['post_name'] = sanitize_title( $data['post_title'] );
+
+				return $data;
+			},
+			99
+		);
 	}
 
 	/**
@@ -190,8 +206,8 @@ class Integration {
 					$new_columns[ $key ] = 'title' === $key ? __( 'Integration', 'acf-form-blocks' ) : $column;
 
 					if ( 'title' === $key ) {
-						$new_columns['form']        = __( 'Form', 'acf-form-blocks' );
-						$new_columns['third-party'] = __( 'Third-Party', 'acf-form-blocks' );
+						$new_columns['_acffb_form_id'] = __( 'Form', 'acf-form-blocks' );
+						$new_columns['third-party']    = __( 'Third-Party', 'acf-form-blocks' );
 					}
 				}
 
@@ -202,13 +218,19 @@ class Integration {
 		add_action(
 			'manage_' . self::POST_TYPE . '_posts_custom_column',
 			function( $column_name, $post_id ) {
-				if ( 'form' === $column_name ) {
-					$form = $this->get_form( $post_id );
-					if ( ! $form ) {
-						printf(
-							'<span>%s</span>',
-							esc_html__( 'Unknown', 'acf-form-blocks' )
+				if ( '_acffb_form_id' === $column_name ) {
+					$form_id = get_post_meta( $post_id, '_acffb_form_id', true );
+					if ( ! $form_id ) {
+						printf( '<em>%s</em>',
+							esc_html__(  'Any Form', 'acf-form-blocks' )
 						);
+						return;
+					}
+
+					$form = Form::get_instance( $form_id );
+
+					if ( ! $form ) {
+						esc_html_e( __( 'Unknown Form', 'acf-form-blocks' ) );
 						return;
 					}
 
@@ -217,6 +239,7 @@ class Integration {
 						esc_attr( $form->get_form_object()->get_id() ),
 						esc_html( $form->get_form_object()->get_name() )
 					);
+
 					return;
 				}
 

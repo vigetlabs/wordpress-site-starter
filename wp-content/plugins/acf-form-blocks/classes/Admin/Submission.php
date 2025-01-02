@@ -10,6 +10,7 @@ namespace ACFFormBlocks\Admin;
 use ACFFormBlocks\Form;
 use ACFFormBlocks\Views;
 use ACFFormBlocks\Traits\AdminPostType;
+use WP_Query;
 
 /**
  * Submission Admin Class
@@ -138,9 +139,11 @@ class Submission {
 			function( $column_name, $post_id ) {
 				if ( 'form' === $column_name ) {
 					$form = $this->get_form( $post_id );
+
 					if ( ! $form ) {
 						printf(
-							'<span>%s</span>',
+							'<span title="%s">%s</span>',
+							esc_attr( $this->get_form_id( $post_id ) ),
 							esc_html__( 'Unknown', 'acf-form-blocks' )
 						);
 						return;
@@ -151,6 +154,7 @@ class Submission {
 						esc_attr( $form->get_form_object()->get_id() ),
 						esc_html( $form->get_form_object()->get_name() )
 					);
+
 					return;
 				}
 
@@ -169,6 +173,106 @@ class Submission {
 			10,
 			2
 		);
+	}
+
+	/**
+	 * Get the forms list with Submissions.
+	 *
+	 * @return array
+	 */
+	private function get_forms_list(): array {
+		$forms = [];
+
+		$post_status = ! empty( $_GET['post_status'] ) ? sanitize_text_field( $_GET['post_status'] ) : 'publish';
+
+		$this->disable_admin_filters();
+		$submissions = new WP_Query(
+			[
+				'post_type'      => self::POST_TYPE,
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+				'post_status'    => $post_status,
+			]
+		);
+		$this->apply_admin_filters();
+
+		foreach ( $submissions->posts as $post_id ) {
+			$form = $this->get_form( $post_id );
+			if ( ! $form ) {
+				continue;
+			}
+
+			$form_id   = $form->get_form_object()->get_id();
+			$form_name = $form->get_form_object()->get_name();
+
+			if ( empty( $forms[ $form_id ] ) ) {
+				$forms[ $form_id ] = $form_name . ' (...' . substr( $form_id, -5 ) . ')';
+			} else {
+				if ( ! str_contains( $forms[ $form_id ], $form_name ) ) {
+					$forms[ $form_id ] .= ' ' . __( 'aka', 'acf-form-blocks' ) . ' ' . $form_name;
+				}
+			}
+		}
+
+		return $forms;
+	}
+
+	/**
+	 * Get the form instance.
+	 *
+	 * @param ?int $post_id The post ID.
+	 *
+	 * @return ?Form
+	 */
+	private function get_form( ?int $post_id = null ): ?Form {
+		if ( ! $post_id ) {
+			$post_id = get_the_ID();
+		}
+
+		$form_meta = get_post_meta( $post_id, '_form', true );
+
+		if ( ! $form_meta ) {
+			return null;
+		}
+
+		$markup  = $form_meta['markup'] ?? '';
+		$context = $form_meta['context'] ?? [];
+		$form_id = $this->get_form_id( $post_id );
+		$form    = Form::get_instance( $form_id, $markup, $context );
+
+		$form_name = get_post_meta( $post_id, '_form_name', true );
+		if ( $form_name ) {
+			$form->get_form_object()->set_name( $form_name );
+		}
+
+		$form->preload_meta();
+		$form->get_form_object()->update_field_context();
+		$form->update_cache();
+
+		return $form;
+	}
+
+	/**
+	 * Get the form ID.
+	 *
+	 * @param ?int $post_id The post ID.
+	 *
+	 * @return ?string
+	 */
+	private function get_form_id( ?int $post_id = null ): ?string {
+		if ( ! $post_id ) {
+			$post_id = get_the_ID();
+		}
+
+		$form_id = get_post_meta( $post_id, '_form_id', true );
+
+		if ( $form_id ) {
+			return $form_id;
+		}
+
+		$form_meta = get_post_meta( $post_id, '_form', true );
+
+		return ! empty( $form_meta['id'] ) ? $form_meta['id'] : null;
 	}
 
 	/**
