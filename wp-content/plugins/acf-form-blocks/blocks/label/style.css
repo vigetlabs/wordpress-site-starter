@@ -2,6 +2,12 @@
 	margin-top: 0;
 }
 
-.acf-block-label > * {
+.acf-block-label > *:not(.acf-innerblocks-container),
+.acf-block-label > .acf-innerblocks-container > * {
 	display: inline-block;
+}
+
+.acf-block-label > *:not(.acf-innerblocks-container):not(:first-child),
+.acf-block-label > .acf-innerblocks-container > *:not(:first-child) {
+	margin-left: 0.25rem;
 }

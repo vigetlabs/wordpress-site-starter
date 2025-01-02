@@ -5,7 +5,7 @@
   "icon": "edit",
   "category": "forms",
   "textdomain": "acf-form-blocks",
-  "keywords": ["input", "contact", "feedback", "input", "text", "phone", "email", "url", "number", "hidden", "date", "time", "color"],
+  "keywords": ["input", "contact", "feedback", "input", "text", "phone", "email", "url", "number", "hidden", "date", "time", "color", "upload", "file"],
   "ancestor": ["acf/form"],
   "supports": {
     "jsx": true,
@@ -29,7 +29,7 @@
       "icon": "email",
       "title": "Email Address",
       "scope": ["inserter", "transform"],
-      "innerBlocks": [ [ "core/paragraph", { "content": "Email Address" } ] ],
+      "innerBlocks": [ [ "acf/label", {}, [ [ "core/paragraph", { "content": "Email Address" } ] ] ] ],
       "attributes": {
         "data": {
           "type": "email"
@@ -42,7 +42,7 @@
       "icon": "admin-links",
       "title": "Website Field",
       "scope": ["inserter", "transform"],
-      "innerBlocks": [ [ "core/paragraph", { "content": "Website" } ] ],
+      "innerBlocks": [ [ "acf/label", {}, [ [ "core/paragraph", { "content": "Website" } ] ] ] ],
       "attributes": {
         "data": {
           "type": "url"
@@ -55,7 +55,7 @@
       "icon": "smartphone",
       "title": "Phone Number",
       "scope": ["inserter", "transform"],
-      "innerBlocks": [ [ "core/paragraph", { "content": "Phone Number" } ] ],
+      "innerBlocks": [ [ "acf/label", {}, [ [ "core/paragraph", { "content": "Phone Number" } ] ] ] ],
       "attributes": {
         "data": {
           "type": "tel"
@@ -65,13 +65,26 @@
     },
     {
       "name": "input-number",
-      "icon": "edit",
+      "icon": "calculator",
       "title": "Number Field",
       "scope": ["inserter", "transform"],
-      "innerBlocks": [ [ "core/paragraph", { "content": "Number" } ] ],
+      "innerBlocks": [ [ "acf/label", {}, [ [ "core/paragraph", { "content": "Number" } ] ] ] ],
       "attributes": {
         "data": {
           "type": "number"
+        }
+      },
+      "isActive": ["data"]
+    },
+    {
+      "name": "input-file",
+      "icon": "cloud-upload",
+      "title": "File/Upload Field",
+      "scope": ["inserter", "transform"],
+      "innerBlocks": [ [ "acf/label", {}, [ [ "core/paragraph", { "content": "Upload File" } ] ] ] ],
+      "attributes": {
+        "data": {
+          "type": "file"
         }
       },
       "isActive": ["data"]
@@ -81,7 +94,7 @@
       "icon": "hidden",
       "title": "Hidden Field",
       "scope": ["inserter", "transform"],
-      "innerBlocks": [ [ "core/paragraph", { "content": "Hidden" } ] ],
+      "innerBlocks": [ [ "acf/label", {}, [ [ "core/paragraph", { "content": "Hidden" } ] ] ] ],
       "attributes": {
         "data": {
           "type": "hidden"
@@ -94,7 +107,7 @@
       "icon": "calendar-alt",
       "title": "Date Field",
       "scope": ["inserter", "transform"],
-      "innerBlocks": [ [ "core/paragraph", { "content": "Date" } ] ],
+      "innerBlocks": [ [ "acf/label", {}, [ [ "core/paragraph", { "content": "Date" } ] ] ] ],
       "attributes": {
         "data": {
           "type": "date"
@@ -107,7 +120,7 @@
       "icon": "clock",
       "title": "Time Field",
       "scope": ["inserter", "transform"],
-      "innerBlocks": [ [ "core/paragraph", { "content": "Time" } ] ],
+      "innerBlocks": [ [ "acf/label", {}, [ [ "core/paragraph", { "content": "Time" } ] ] ] ],
       "attributes": {
         "data": {
           "type": "time"
@@ -120,7 +133,7 @@
       "icon": "color-picker",
       "title": "Color Picker",
       "scope": ["inserter", "transform"],
-      "innerBlocks": [ [ "core/paragraph", { "content": "Pick a color" } ] ],
+      "innerBlocks": [ [ "acf/label", {}, [ [ "core/paragraph", { "content": "Pick a Color" } ] ] ] ],
       "attributes": {
         "data": {
           "type": "color"
