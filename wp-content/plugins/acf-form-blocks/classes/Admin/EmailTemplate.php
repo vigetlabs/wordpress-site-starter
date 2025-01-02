@@ -8,11 +8,13 @@
 namespace ACFFormBlocks\Admin;
 
 use ACFFormBlocks\Form;
+use ACFFormBlocks\Traits\AdminPostType;
 
 /**
  * Email Template Admin Class
  */
 class EmailTemplate {
+	use AdminPostType;
 
 	/**
 	 * The Email Template post type.
@@ -270,33 +272,6 @@ class EmailTemplate {
 			},
 			10,
 			2
-		);
-	}
-
-	/**
-	 * Populate the Forms select field with available forms.
-	 *
-	 * @return void
-	 */
-	private function populate_forms_select(): void {
-		add_filter(
-			'acf/prepare_field/key=field_669aadf8d2686',
-			function ( array $field ): array {
-				$forms = Form::get_all_forms();
-
-				if ( ! $forms ) {
-					return $field;
-				}
-
-				foreach ( $forms as $form ) {
-					$form_name  = $form->get_form_object()->get_name();
-					$short_id   = substr( $form->get_form_object()->get_id(), -5 );
-					$form_name .= ' (...' . $short_id . ')';
-					$field['choices'][ $form->get_form_object()->get_id() ] = $form_name;
-				}
-
-				return $field;
-			}
 		);
 	}
 
