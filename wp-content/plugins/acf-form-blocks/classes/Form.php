@@ -8,6 +8,7 @@
 namespace ACFFormBlocks;
 
 use ACFFormBlocks\Admin\EmailTemplate;
+use ACFFormBlocks\Admin\Integration;
 use ACFFormBlocks\Elements\Form as FormElement;
 use ACFFormBlocks\Meta\Confirmation as ConfirmationMeta;
 use ACFFormBlocks\Meta\Form as FormMeta;
@@ -119,6 +120,13 @@ class Form {
 	protected array $registered_meta = [];
 
 	/**
+	 * Has the form been initialized.
+	 *
+	 * @var bool
+	 */
+	private bool $initialized = false;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param bool $preload_meta Preload meta.
@@ -132,6 +140,14 @@ class Form {
 		if ( $preload_meta ) {
 			$this->preload_meta();
 		}
+
+		if ( $this->initialized ) {
+			return;
+		}
+
+		$this->init_integrations();
+
+		$this->initialized = true;
 	}
 
 	/**
@@ -545,6 +561,15 @@ class Form {
 		}
 
 		return $this->notification;
+	}
+
+	/**
+	 * Init the form integrations.
+	 *
+	 * @return void
+	 */
+	public function init_integrations(): void {
+		Integration::get_integrations( $this->get_form_object()->get_form_id() );
 	}
 
 	/**

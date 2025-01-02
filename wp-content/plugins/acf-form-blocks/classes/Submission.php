@@ -17,7 +17,7 @@ class Submission {
 	 *
 	 * @var Form
 	 */
-	protected Form $form;
+	public Form $form;
 
 	/**
 	 * The form data.

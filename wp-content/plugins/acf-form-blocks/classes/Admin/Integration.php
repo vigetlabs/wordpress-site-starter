@@ -8,7 +8,10 @@
 namespace ACFFormBlocks\Admin;
 
 use ACFFormBlocks\Form;
+use ACFFormBlocks\Integrations\Request;
+use ACFFormBlocks\Submission;
 use ACFFormBlocks\Traits\AdminPostType;
+use WP_Query;
 
 /**
  * Integration Admin Class
@@ -563,5 +566,81 @@ class Integration {
 		}
 
 		return get_field( '_acffb_form_id', $post_id ) ?: null;
+	}
+
+	/**
+	 * Get the integrations for the form.
+	 *
+	 * @param string $form_id The Form ID.
+	 *
+	 * @return array
+	 */
+	public static function get_integrations( string $form_id ): array {
+		$query = new WP_Query(
+			[
+				'post_type'      => self::POST_TYPE,
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'meta_query'     => [
+					[
+						'key'   => '_acffb_form_id',
+						'value' => $form_id,
+					],
+				],
+			]
+		);
+
+		if ( ! $query->have_posts() ) {
+			return [];
+		}
+
+		$integrations = [];
+
+		while ( $query->have_posts() ) {
+			$query->the_post();
+			$integrations[] = self::factory( self::get_type() );
+		}
+		wp_reset_postdata();
+
+		return $integrations;
+	}
+
+	/**
+	 * Get the Integration Type
+	 *
+	 * @param ?int $post_id
+	 *
+	 * @return string
+	 */
+	public static function get_type( ?int $post_id = null ): string {
+		if ( ! $post_id ) {
+			$post_id = get_the_ID();
+		}
+
+		$type = get_post_meta( $post_id, '_acffb_type', true );
+
+		if ( ! $type ) {
+			return 'request';
+		}
+
+		return $type;
+	}
+
+	/**
+	 * Get the Integration instance by type
+	 *
+	 * @param string $type The Integration type.
+	 * @param array  $config The Integration config.
+	 *
+	 * @return Request
+	 */
+	public static function factory( string $type, array $config = [] ): Request {
+		$class = __NAMESPACE__ . '\\' . ucfirst( $type );
+
+		if ( class_exists( $class ) ) {
+			return new $class( $config );
+		}
+
+		return new Request( $config );
 	}
 }
