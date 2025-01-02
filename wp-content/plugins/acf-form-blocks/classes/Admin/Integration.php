@@ -35,6 +35,12 @@ class Integration {
 		// Populate the forms select.
 		$this->populate_forms_select();
 
+		// Populate the Form Fields meta select field.
+		$this->populate_fields_select();
+
+		// Show the form name admin column.
+		$this->form_admin_column();
+
 		// Customize admin columns
 		$this->admin_columns();
 
@@ -154,15 +160,258 @@ class Integration {
 							'id' => '',
 						),
 						'choices' => array(
-							'0' => 'Select Form',
+							0 => 'Select a Form',
 						),
-						'default_value' => '0',
+						'default_value' => 0,
 						'return_format' => 'value',
 						'multiple' => 0,
 						'allow_null' => 0,
+						'allow_in_bindings' => 1,
 						'ui' => 1,
 						'ajax' => 0,
 						'placeholder' => '',
+					),
+					array(
+						'key' => 'field_6776f6421ad24',
+						'label' => 'Request Details',
+						'name' => 'request',
+						'aria-label' => '',
+						'type' => 'group',
+						'instructions' => '',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '',
+							'class' => '',
+							'id' => '',
+						),
+						'layout' => 'block',
+						'sub_fields' => array(
+							array(
+								'key' => 'field_6776f6611ad25',
+								'label' => 'Request URL',
+								'name' => 'url',
+								'aria-label' => '',
+								'type' => 'url',
+								'instructions' => '',
+								'required' => 1,
+								'conditional_logic' => 0,
+								'wrapper' => array(
+									'width' => '',
+									'class' => '',
+									'id' => '',
+								),
+								'default_value' => '',
+								'allow_in_bindings' => 0,
+								'placeholder' => 'https://',
+							),
+							array(
+								'key' => 'field_6776f67a1ad26',
+								'label' => 'Request Method',
+								'name' => 'method',
+								'aria-label' => '',
+								'type' => 'select',
+								'instructions' => '',
+								'required' => 1,
+								'conditional_logic' => 0,
+								'wrapper' => array(
+									'width' => '',
+									'class' => '',
+									'id' => '',
+								),
+								'choices' => array(
+									'GET' => 'GET',
+									'POST' => 'POST',
+									'PUT' => 'PUT',
+									'PATCH' => 'PATCH',
+									'DELETE' => 'DELETE',
+								),
+								'default_value' => 'POST',
+								'return_format' => 'value',
+								'multiple' => 0,
+								'allow_null' => 0,
+								'allow_in_bindings' => 0,
+								'ui' => 0,
+								'ajax' => 0,
+								'placeholder' => '',
+							),
+							array(
+								'key' => 'field_6776f6aa1ad27',
+								'label' => 'Request Format',
+								'name' => 'format',
+								'aria-label' => '',
+								'type' => 'select',
+								'instructions' => '',
+								'required' => 1,
+								'conditional_logic' => 0,
+								'wrapper' => array(
+									'width' => '',
+									'class' => '',
+									'id' => '',
+								),
+								'choices' => array(
+									'JSON' => 'JSON',
+									'Raw' => 'Raw',
+								),
+								'default_value' => 'JSON',
+								'return_format' => 'value',
+								'multiple' => 0,
+								'allow_null' => 0,
+								'allow_in_bindings' => 0,
+								'ui' => 0,
+								'ajax' => 0,
+								'placeholder' => '',
+							),
+						),
+					),
+					array(
+						'key' => 'field_6776f7bf1ad28',
+						'label' => 'Request Headers',
+						'name' => 'headers',
+						'aria-label' => '',
+						'type' => 'repeater',
+						'instructions' => 'Optional',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '',
+							'class' => '',
+							'id' => '',
+						),
+						'layout' => 'block',
+						'pagination' => 0,
+						'min' => 0,
+						'max' => 0,
+						'collapsed' => '',
+						'button_label' => 'Add Header',
+						'rows_per_page' => 20,
+						'sub_fields' => array(
+							array(
+								'key' => 'field_6776f7d41ad29',
+								'label' => 'Header Name',
+								'name' => 'name',
+								'aria-label' => '',
+								'type' => 'text',
+								'instructions' => '',
+								'required' => 0,
+								'conditional_logic' => 0,
+								'wrapper' => array(
+									'width' => '50',
+									'class' => '',
+									'id' => '',
+								),
+								'default_value' => '',
+								'maxlength' => '',
+								'allow_in_bindings' => 0,
+								'placeholder' => '',
+								'prepend' => '',
+								'append' => '',
+								'parent_repeater' => 'field_6776f7bf1ad28',
+							),
+							array(
+								'key' => 'field_6776f7f21ad2a',
+								'label' => 'Header Value',
+								'name' => 'value',
+								'aria-label' => '',
+								'type' => 'text',
+								'instructions' => '',
+								'required' => 0,
+								'conditional_logic' => 0,
+								'wrapper' => array(
+									'width' => '50',
+									'class' => '',
+									'id' => '',
+								),
+								'default_value' => '',
+								'maxlength' => '',
+								'allow_in_bindings' => 0,
+								'placeholder' => '',
+								'prepend' => '',
+								'append' => '',
+								'parent_repeater' => 'field_6776f7bf1ad28',
+							),
+						),
+					),
+					array(
+						'key' => 'field_6776f8361ad2b',
+						'label' => 'Field Mapping',
+						'name' => 'mapping',
+						'aria-label' => '',
+						'type' => 'repeater',
+						'instructions' => 'Leave empty to send all field data.',
+						'required' => 0,
+						'conditional_logic' => array(
+							array(
+								array(
+									'field' => 'field_6776d358e5c47',
+									'operator' => '!=',
+									'value' => '0',
+								),
+							),
+						),
+						'wrapper' => array(
+							'width' => '',
+							'class' => '',
+							'id' => '',
+						),
+						'layout' => 'block',
+						'pagination' => 0,
+						'min' => 0,
+						'max' => 0,
+						'collapsed' => '',
+						'button_label' => 'Add Field',
+						'rows_per_page' => 20,
+						'sub_fields' => array(
+							array(
+								'key' => 'field_6776f8701ad2c',
+								'label' => 'Form Field',
+								'name' => 'field',
+								'aria-label' => '',
+								'type' => 'select',
+								'instructions' => '',
+								'required' => 0,
+								'conditional_logic' => 0,
+								'wrapper' => array(
+									'width' => '50',
+									'class' => '',
+									'id' => '',
+								),
+								'choices' => array(
+									'' => 'Select a Field',
+								),
+								'default_value' => false,
+								'return_format' => 'value',
+								'multiple' => 0,
+								'allow_null' => 0,
+								'allow_in_bindings' => 0,
+								'ui' => 0,
+								'ajax' => 0,
+								'placeholder' => '',
+								'parent_repeater' => 'field_6776f8361ad2b',
+							),
+							array(
+								'key' => 'field_6776f8d51ad2d',
+								'label' => 'Key',
+								'name' => 'key',
+								'aria-label' => '',
+								'type' => 'text',
+								'instructions' => '',
+								'required' => 0,
+								'conditional_logic' => 0,
+								'wrapper' => array(
+									'width' => '50',
+									'class' => '',
+									'id' => '',
+								),
+								'default_value' => '',
+								'maxlength' => '',
+								'allow_in_bindings' => 0,
+								'placeholder' => '',
+								'prepend' => '',
+								'append' => '',
+								'parent_repeater' => 'field_6776f8361ad2b',
+							),
+						),
 					),
 				),
 				'location' => array(
@@ -175,7 +424,7 @@ class Integration {
 					),
 				),
 				'menu_order' => 0,
-				'position' => 'side',
+				'position' => 'normal',
 				'style' => 'default',
 				'label_placement' => 'top',
 				'instruction_placement' => 'label',
@@ -185,7 +434,6 @@ class Integration {
 				'show_in_rest' => 1,
 			) );
 		} );
-
 	}
 
 	/**
@@ -218,31 +466,6 @@ class Integration {
 		add_action(
 			'manage_' . self::POST_TYPE . '_posts_custom_column',
 			function( $column_name, $post_id ) {
-				if ( '_acffb_form_id' === $column_name ) {
-					$form_id = get_post_meta( $post_id, '_acffb_form_id', true );
-					if ( ! $form_id ) {
-						printf( '<em>%s</em>',
-							esc_html__(  'Any Form', 'acf-form-blocks' )
-						);
-						return;
-					}
-
-					$form = Form::get_instance( $form_id );
-
-					if ( ! $form ) {
-						esc_html_e( __( 'Unknown Form', 'acf-form-blocks' ) );
-						return;
-					}
-
-					printf(
-						'<span title="%s">%s</span>',
-						esc_attr( $form->get_form_object()->get_id() ),
-						esc_html( $form->get_form_object()->get_name() )
-					);
-
-					return;
-				}
-
 				if ( 'third-party' === $column_name ) {
 					$third_party = get_post_meta( $post_id, '_third_party', true );
 					echo $third_party ? esc_html( $third_party ) : '&mdash;';
@@ -263,16 +486,16 @@ class Integration {
 		add_action(
 			'add_meta_boxes',
 			function() {
-				add_meta_box(
-					'acffb_integration_settings',
-					__( 'Integration Settings', 'acf-form-blocks' ),
-					function( \WP_Post $post ): void {
-						echo 'Integration settings...';
-					},
-					self::POST_TYPE,
-					'normal',
-					'high'
-				);
+//				add_meta_box(
+//					'acffb_integration_settings',
+//					__( 'Integration Settings', 'acf-form-blocks' ),
+//					function( \WP_Post $post ): void {
+//						echo 'Integration settings...';
+//					},
+//					self::POST_TYPE,
+//					'normal',
+//					'high'
+//				);
 
 				add_meta_box(
 					'acffb_integration_stats',
@@ -298,5 +521,47 @@ class Integration {
 	 */
 	private function render_integration_stats( int $post_id ): void {
 		echo 'Stats...';
+	}
+
+	/**
+	 * Populate the Form Field select with available fields.
+	 *
+	 * @return void
+	 */
+	private function populate_fields_select(): void {
+		add_filter(
+			'acf/prepare_field/key=field_6776f8701ad2c',
+			function ( array $field ): array {
+				$form_id = $this->get_current_form();
+				$form    = Form::get_instance( $form_id );
+
+				if ( ! $form ) {
+					$field['choices'] = [
+						'' => __( 'Select a form and update to see fields.', 'acf-form-blocks' ),
+					];
+					return $field;
+				}
+
+				foreach ( $form->get_form_object()->get_all_fields() as $form_field ) {
+					$field['choices'][ $form_field->get_id() ] = $form_field->get_label();
+				}
+
+				return $field;
+			}
+		);
+	}
+
+	/**
+	 * Get the current Integration Form ID
+	 *
+	 * @return ?string
+	 */
+	private function get_current_form(): ?string {
+		$post_id = ! empty( $_GET['post'] ) ? (int) $_GET['post'] : null;
+		if ( ! $post_id ) {
+			return null;
+		}
+
+		return get_field( '_acffb_form_id', $post_id ) ?: null;
 	}
 }

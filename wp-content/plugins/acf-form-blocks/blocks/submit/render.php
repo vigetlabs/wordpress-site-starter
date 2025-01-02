@@ -19,7 +19,9 @@ $buttons = ( new Block( 'core/buttons', [ 'lock' => [ 'move' => false, 'remove' 
 $inner = [
 	'template' => ( new Template( $buttons ) )->get(),
 ];
+
+// TODO: Set up form footer as separate component.
 ?>
-<footer class="form-submit">
+<footer <?php block_attrs( $block, 'form-submit' ); ?>>
 	<?php inner_blocks( $inner ); ?>
 </footer>

@@ -62,6 +62,9 @@ class EmailTemplate {
 		// Filter the Template selects by form ID.
 		$this->filter_template_selects();
 
+		// Show the form name admin column.
+		$this->form_admin_column();
+
 		// Customize admin columns
 		$this->admin_columns();
 
@@ -243,38 +246,6 @@ class EmailTemplate {
 
 				return $new_columns;
 			}
-		);
-
-		add_action(
-			'manage_' . self::POST_TYPE . '_posts_custom_column',
-			function( $column_name, $post_id ) {
-				if ( '_acffb_form_id' === $column_name ) {
-					$form_id = get_post_meta( $post_id, '_acffb_form_id', true );
-					if ( ! $form_id ) {
-						printf( '<em>%s</em>',
-							esc_html__(  'Any Form', 'acf-form-blocks' )
-						);
-						return;
-					}
-
-					$form = Form::get_instance( $form_id );
-
-					if ( ! $form ) {
-						esc_html_e( __( 'Unknown Form', 'acf-form-blocks' ) );
-						return;
-					}
-
-					printf(
-						'<span title="%s">%s</span>',
-						esc_attr( $form->get_form_object()->get_id() ),
-						esc_html( $form->get_form_object()->get_name() )
-					);
-
-					return;
-				}
-			},
-			10,
-			2
 		);
 	}
 

@@ -402,21 +402,29 @@ class Field {
 				break;
 			}
 
+			if ( 'submit' === $this->get_block_name() && 'core/button' === $inner_block['blockName'] ) {
+				$label = wp_strip_all_tags( $inner_block['innerHTML'] );
+				break;
+			}
+
 			$label = wp_strip_all_tags( $inner_block['innerHTML'] );
 
 			if ( $label ) {
 				break;
 			}
 
-			if ( 'acf/label' === $inner_block['blockName'] && ! empty( $inner_block['innerBlocks'] ) ) {
-				$label = $this->find_label( $inner_block['innerBlocks'] );
-
-				if ( $label ) {
-					break;
-				}
+			if ( empty( $inner_block['innerBlocks'] ) ) {
+				continue;
 			}
 
-			if ( 'acf/legend' === $inner_block['blockName'] && ! empty( $inner_block['innerBlocks'] ) ) {
+			$nested_blocks = [
+				'acf/legend',
+				'acf/label',
+				'core/buttons',
+				'core/group',
+			];
+
+			if ( in_array( $inner_block['blockName'], $nested_blocks, true ) ) {
 				$label = $this->find_label( $inner_block['innerBlocks'] );
 
 				if ( $label ) {
