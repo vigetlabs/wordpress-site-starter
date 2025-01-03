@@ -7,21 +7,21 @@
         [
           "core/paragraph",
           {
-            "className":"is-style-eyebrow",
-            "placeholder":"test Text"
+            "className": "is-style-eyebrow",
+            "placeholder": "Eyebrow Text"
           }
         ],
         [
           "core/heading",
           {
-            "level":3,
-            "placeholder":"Headline Text"
+            "level": 3,
+            "placeholder": "Headline Text"
           }
         ],
         [
           "core/paragraph",
           {
-            "placeholder":"Body Text"
+            "placeholder": "Body Text"
           }
         ],
         [

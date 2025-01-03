@@ -7,7 +7,7 @@
  * @package ACFBlocksToolkit
  */
 
-if ( ! isset( $block_template ) ) {
+if ( ! isset( $block_template ) && empty( $block['template'] ) ) {
 	$block_template = [
 		[
 			'core/paragraph',
@@ -18,8 +18,21 @@ if ( ! isset( $block_template ) ) {
 	];
 }
 
+$tag   = $block['tag'] ?? 'section';
 $inner = [
-	'template' => $block_template,
+	'template' => $block['template'] ?? $block_template ?? [],
 ];
 
-inner_blocks( $inner );
+$has_container = ! isset( $block['supports']['innerContainer'] ) || true === $block['supports']['innerContainer'];
+?>
+<<?php echo $tag; ?> <?php block_attrs( $block ); ?>>
+	<?php if ( $has_container ) : ?>
+	<div class="acf-block-inner__container">
+		<?php endif; ?>
+
+		<?php inner_blocks( $inner ); ?>
+
+		<?php if ( $has_container ) : ?>
+	</div>
+	<?php endif; ?>
+</<?php echo $tag; ?>>

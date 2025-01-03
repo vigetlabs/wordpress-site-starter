@@ -35,3 +35,7 @@
   padding: 5px 20px;
   text-decoration: none;
 }
+
+.acf-block > .acf-innerblocks-container:first-child {
+  display: contents;
+}
