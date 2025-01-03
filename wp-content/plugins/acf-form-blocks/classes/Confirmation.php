@@ -47,7 +47,7 @@ class Confirmation {
 	 * @return ?Form
 	 */
 	public function get_form(): ?Form {
-		return Form::get_instance( $this->form_id );
+		return Form::find_form( $this->form_id );
 	}
 
 	/**

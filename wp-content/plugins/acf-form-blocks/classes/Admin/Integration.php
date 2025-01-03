@@ -8,8 +8,7 @@
 namespace ACFFormBlocks\Admin;
 
 use ACFFormBlocks\Form;
-use ACFFormBlocks\Integrations\Request;
-use ACFFormBlocks\Submission;
+use ACFFormBlocks\Integrations\Integration as BaseIntegration;
 use ACFFormBlocks\Traits\AdminPostType;
 use WP_Query;
 
@@ -52,6 +51,9 @@ class Integration {
 
 		// Register the meta boxes.
 		$this->meta_boxes();
+
+		// Watch for the integration.
+		$this->handle_integration_test();
 
 		// Temp Fix the post name. TODO: Debug why post slug is being set to the form name.
 		add_filter(
@@ -218,7 +220,7 @@ class Integration {
 								'required' => 1,
 								'conditional_logic' => 0,
 								'wrapper' => array(
-									'width' => '',
+									'width' => '50',
 									'class' => '',
 									'id' => '',
 								),
@@ -248,7 +250,7 @@ class Integration {
 								'required' => 1,
 								'conditional_logic' => 0,
 								'wrapper' => array(
-									'width' => '',
+									'width' => '50',
 									'class' => '',
 									'id' => '',
 								),
@@ -380,9 +382,9 @@ class Integration {
 									'id' => '',
 								),
 								'choices' => array(
-									'' => 'Select a Field',
+									'0' => 'Select a Field',
 								),
-								'default_value' => false,
+								'default_value' => '0',
 								'return_format' => 'value',
 								'multiple' => 0,
 								'allow_null' => 0,
@@ -394,7 +396,7 @@ class Integration {
 							),
 							array(
 								'key' => 'field_6776f8d51ad2d',
-								'label' => 'Key',
+								'label' => 'Map Name',
 								'name' => 'key',
 								'aria-label' => '',
 								'type' => 'text',
@@ -523,7 +525,51 @@ class Integration {
 	 * @return void
 	 */
 	private function render_integration_stats( int $post_id ): void {
-		echo 'Stats...';
+		printf(
+			'<p>
+				<button class="button button-secondary" id="acffb-integration-test" data-integration-id="%s">%s</button> &nbsp;
+				<span id="acffb-integration-test-response"></span>
+			</p>',
+			esc_attr( $post_id ),
+			esc_html__( 'Send Test Request', 'acf-form-blocks' )
+		);
+	}
+
+	/**
+	 * Handle the integration test request.
+	 *
+	 * @return void
+	 */
+	private function handle_integration_test(): void {
+		add_action(
+			'wp_ajax_acffb_integration_test',
+			function() {
+				if ( ! current_user_can( 'edit_posts' ) ) {
+					wp_send_json_error( [ 'message' => __( 'Unauthorized.', 'acf-form-blocks' ) ] );
+				}
+
+				if ( ! check_ajax_referer( 'acffb', 'nonce', false ) ) {
+					wp_send_json_error( [ 'message' => __( 'Invalid nonce.', 'acf-form-blocks' ) ] );
+				}
+
+				$integration_id = ! empty( $_POST['integrationId'] ) ? intval( sanitize_text_field( $_POST['integrationId'] ) ) : 0;
+
+				if ( ! $integration_id ) {
+					wp_send_json_error( [ 'message' => __( 'Integration not found.', 'acf-form-blocks' ) ] );
+				}
+
+				$integration = self::factory( $integration_id );
+				$response    = $integration->test();
+
+				if ( is_wp_error( $response ) ) {
+					wp_send_json_error( [ 'message' => $response->get_error_message() ] );
+				}
+
+				$status = wp_remote_retrieve_response_code( $response );
+
+				wp_send_json_success( [ 'message' => $status ] );
+			}
+		);
 	}
 
 	/**
@@ -536,7 +582,7 @@ class Integration {
 			'acf/prepare_field/key=field_6776f8701ad2c',
 			function ( array $field ): array {
 				$form_id = $this->get_current_form();
-				$form    = Form::get_instance( $form_id );
+				$form    = Form::find_form( $form_id );
 
 				if ( ! $form ) {
 					$field['choices'] = [
@@ -598,7 +644,7 @@ class Integration {
 
 		while ( $query->have_posts() ) {
 			$query->the_post();
-			$integrations[] = self::factory( self::get_type() );
+			$integrations[] = self::factory( get_the_ID() );
 		}
 		wp_reset_postdata();
 
@@ -629,18 +675,23 @@ class Integration {
 	/**
 	 * Get the Integration instance by type
 	 *
-	 * @param string $type The Integration type.
-	 * @param array  $config The Integration config.
+	 * @param int $id The Integration ID.
 	 *
-	 * @return Request
+	 * @return BaseIntegration
 	 */
-	public static function factory( string $type, array $config = [] ): Request {
-		$class = __NAMESPACE__ . '\\' . ucfirst( $type );
+	public static function factory( int $id ): BaseIntegration {
+		$type = self::get_type( $id );
 
-		if ( class_exists( $class ) ) {
-			return new $class( $config );
+		if ( str_contains( $type, '\\' ) ) {
+			$class = $type;
+		} else {
+			$class = 'ACFFormBlocks\\Integrations\\' . ucfirst( $type );
 		}
 
-		return new Request( $config );
+		if ( class_exists( $class ) ) {
+			return new $class( $id );
+		}
+
+		return new BaseIntegration( $id );
 	}
 }

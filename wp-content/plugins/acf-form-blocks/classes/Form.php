@@ -78,6 +78,7 @@ class Form {
 	const ALL_BLOCK_TYPES = [
 		'acf/form',
 		'acf/fieldset',
+		'acf/label',
 		'acf/legend',
 		'acf/input',
 		'acf/select',
@@ -186,7 +187,7 @@ class Form {
 				$template_form_id = get_field( '_acffb_form_id', $post_id );
 
 				if ( $template_form_id && $form_id !== $template_form_id ) {
-					return self::find_form($template_form_id);
+					return self::find_form( $template_form_id );
 				}
 
 				if ( $form_id ) {
@@ -419,11 +420,15 @@ class Form {
 	/**
 	 * Find a Form by ID
 	 *
-	 * @param string $form_id
+	 * @param ?string $form_id
 	 *
 	 * @return ?Form
 	 */
-	private static function find_form( string $form_id ): ?Form {
+	public static function find_form( ?string $form_id = null ): ?Form {
+		if ( is_null( $form_id ) ) {
+			return self::get_instance( $form_id );
+		}
+
 		foreach ( self::get_all_forms() as $form ) {
 			if ( $form_id === $form->get_form_object()->get_id() ) {
 				return $form;

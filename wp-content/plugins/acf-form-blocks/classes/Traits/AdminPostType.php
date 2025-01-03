@@ -183,7 +183,7 @@ trait AdminPostType {
 						return;
 					}
 
-					$form = Form::get_instance( $form_id );
+					$form = Form::find_form( $form_id );
 
 					if ( ! $form ) {
 						esc_html_e( __( 'Unknown Form', 'acf-form-blocks' ) );

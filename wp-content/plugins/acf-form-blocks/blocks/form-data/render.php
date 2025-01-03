@@ -23,7 +23,7 @@ if ( ! $form_id || ! $form_field ) {
 	return;
 }
 
-$form  = Form::get_instance( $form_id );
+$form  = Form::find_form( $form_id );
 $field = $form?->get_form_object()->get_field_by_id( $form_field );
 
 $show_label = get_field( 'show_label' );

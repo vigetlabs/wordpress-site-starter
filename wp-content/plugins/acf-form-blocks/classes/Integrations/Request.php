@@ -7,8 +7,8 @@
 
 namespace ACFFormBlocks\Integrations;
 
-use ACFFormBlocks\Elements\Field;
 use ACFFormBlocks\Submission;
+use WP_Error;
 
 /**
  * Request Integration Class
@@ -44,6 +44,13 @@ class Request extends Integration {
 	protected array $headers = [];
 
 	/**
+	 * The request body
+	 *
+	 * @var array
+	 */
+	protected array $body = [];
+
+	/**
 	 * The request mapping
 	 *
 	 * @var array
@@ -51,19 +58,34 @@ class Request extends Integration {
 	protected array $mapping = [];
 
 	/**
-	 * Request constructor.
+	 * Init
 	 *
-	 * @param array $config
+	 * @return void
 	 */
-	public function __construct( array $config = [] ) {
-		parent::__construct( $config );
+	public function init(): void {
+		parent::init();
 
-		$this->url    = $config['url'] ?? '';
-		$this->method = $config['method'] ?? 'POST';
-		$this->format = $config['format'] ?? 'json';
+		$settings = get_field( 'request', $this->id );
+		$headers  = get_field( 'headers', $this->id );
+		$mapping  = get_field( 'mapping', $this->id );
 
-		$this->headers = $config['headers'] ?? [];
-		$this->mapping = $config['mapping'] ?? [];
+		$this->config = apply_filters(
+			'acffb_integration_request_config',
+			[
+				'url'     => $settings['url'] ?: '',
+				'method'  => $settings['method'] ?: 'POST',
+				'format'  => $settings['format'] ?: 'json',
+				'headers' => $headers ?: [],
+				'mapping' => $mapping ?: [],
+			]
+		);
+
+		$this->url    = $this->config['url'];
+		$this->method = $this->config['method'];
+		$this->format = $this->config['format'];
+
+		$this->headers = $this->config['headers'];
+		$this->mapping = $this->config['mapping'];
 
 		if ( 'json' === $this->format ) {
 			$this->headers['Content-Type'] = 'application/json';
@@ -86,18 +108,59 @@ class Request extends Integration {
 			throw new \Exception( 'Request URL is required.' );
 		}
 
-		$request_args = [
-			'method'  => $this->method,
-			'headers' => $this->headers,
-		];
+		if ( empty( $this->mapping ) ) {
+			foreach ( $this->submission->get_data()['content'] as $key => $value ) {
+				$this->body[ $key ] = $value;
+			}
+		} else {
+			foreach ( $this->mapping as $map ) {
+				$value = $this->submission->get_field_data( $map['field'] );
+				$this->body[ $map['key'] ] = $value;
+			}
+		}
 
-		$request_args['body'] = $this->format_request_body();
+		$response = $this->send();
 
-		$request_args = apply_filters( 'acffb_integration_request_args', $request_args, $this );
+		$submission->add_meta(
+			'request_response',
+			[
+				'body'    => wp_remote_retrieve_body( $response ),
+				'headers' => wp_remote_retrieve_headers( $response ),
+				'code'    => wp_remote_retrieve_response_code( $response ),
+			]
+		);
+	}
 
-		$response = wp_remote_request( $this->url, $request_args );
+	/**
+	 * Send the request
+	 *
+	 * @return array|WP_Error
+	 */
+	private function send(): array|WP_Error {
+		$request_args = apply_filters(
+			'acffb_integration_request_args',
+			[
+				'method'  => $this->method,
+				'headers' => $this->headers,
+				'body'    => $this->format_request_body(),
+			],
+			$this
+		);
 
-		// TODO: Something with the response
+		return wp_remote_request( $this->url, $request_args );
+	}
+
+	/**
+	 * Perform Test
+	 *
+	 * @return array|WP_Error
+	 */
+	public function test(): array|WP_Error {
+		foreach ( $this->form->get_form_object()->get_fields() as $field ) {
+			$this->body[ $field->get_name() ] = $field->get_dummy_value();
+		}
+
+		return $this->send();
 	}
 
 	/**
@@ -106,18 +169,10 @@ class Request extends Integration {
 	 * @return string
 	 */
 	private function format_request_body(): string {
-		// TODO: WIP - Implement mapping and field values
-		$body = array_map(
-			function ( Field $field ) {
-				return $field->get_value();
-			},
-			$this->mapping
-		);
-
 		if ( 'json' === $this->format ) {
-			return json_encode( $body );
+			return json_encode( $this->body );
 		}
 
-		return http_build_query( $body );
+		return http_build_query( $this->body );
 	}
 }

@@ -205,7 +205,7 @@ class Field {
 	 * @return ?Form
 	 */
 	public function get_form(): ?Form {
-		return Form::get_instance( $this->get_context( 'acffb/formId' ) );
+		return Form::find_form( $this->get_context( 'acffb/formId' ) );
 	}
 
 	/**
@@ -344,8 +344,21 @@ class Field {
 	 * @return mixed
 	 */
 	public function get_value(): mixed {
-		$value = $this->get_form()->get_submission()->get_field_data( $this->get_name() );
+		$value = $this->get_form()?->get_submission()->get_field_data( $this->get_name() );
 		return $value ?: $this->get_default_value();
+	}
+
+	/**
+	 * Get the dummy value.
+	 *
+	 * @return mixed
+	 */
+	public function get_dummy_value(): mixed {
+		if ( $this->get_value() ) {
+			return $this->get_value();
+		}
+
+		return 'Abc123';
 	}
 
 	/**

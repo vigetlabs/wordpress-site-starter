@@ -7,13 +7,35 @@
 
 namespace ACFFormBlocks\Integrations;
 
-use ACFFormBlocks\Elements\Form;
+use ACFFormBlocks\Form;
 use ACFFormBlocks\Submission;
+use WP_Error;
 
 /**
  * Base Integration Class
  */
 class Integration {
+
+	/**
+	 * The Integration ID
+	 *
+	 * @var int
+	 */
+	protected int $id;
+
+	/**
+	 * The Form ID
+	 *
+	 * @var string
+	 */
+	protected string $form_id;
+
+	/**
+	 * The config array
+	 *
+	 * @var array
+	 */
+	protected array $config = [];
 
 	/**
 	 * The Submission object
@@ -32,9 +54,13 @@ class Integration {
 	/**
 	 * Integration constructor.
 	 *
-	 * @param array $config
+	 * @param int $integration_id
 	 */
-	public function __construct( array $config = [] ) { }
+	public function __construct( int $integration_id ) {
+		$this->id = $integration_id;
+
+		$this->init();
+	}
 
 	/**
 	 * Init
@@ -42,6 +68,9 @@ class Integration {
 	 * @return void
 	 */
 	public function init(): void {
+		$this->form_id = get_field( '_acffb_form_id', $this->id );
+		$this->form    = Form::find_form( $this->form_id );
+
 		add_action(
 			'acffb_handle_validation',
 			[ $this, 'validate' ]
@@ -71,6 +100,21 @@ class Integration {
 	 */
 	public function process( Submission $submission ): void {
 		$this->submission = $submission;
-		$this->form       = $submission->form->get_form_object();
+		$this->form       = $submission->form;
+	}
+
+	/**
+	 * Perform Test
+	 *
+	 * @return array|WP_Error
+	 */
+	public function test(): array|WP_Error {
+		return [
+			'response' => [
+				'code'    => 200,
+				'message' => 'OK',
+				'form_id' => $this->form_id
+			],
+		];
 	}
 }

@@ -241,6 +241,18 @@ class Submission {
 	}
 
 	/**
+	 * Add meta data to the form submission.
+	 *
+	 * @param string $key The key.
+	 * @param mixed  $value The value.
+	 *
+	 * @return void
+	 */
+	public function add_meta( string $key, mixed $value ): void {
+		$this->data['meta'][ $key ] = $value;
+	}
+
+	/**
 	 * Save the form data.
 	 *
 	 * @return void

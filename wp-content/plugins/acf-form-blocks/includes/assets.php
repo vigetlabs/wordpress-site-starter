@@ -41,5 +41,21 @@ add_action(
 			[],
 			ACFFB_VERSION
 		);
+
+		wp_enqueue_script(
+			'acfformblocks-admin',
+			ACFFB_PLUGIN_URL . 'assets/js/admin.js',
+			[],
+			ACFFB_VERSION
+		);
+
+		wp_localize_script(
+			'acfformblocks-admin',
+			'acffbAdmin',
+			[
+				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+				'nonce'   => wp_create_nonce( 'acffb' ),
+			]
+		);
 	}
 );
