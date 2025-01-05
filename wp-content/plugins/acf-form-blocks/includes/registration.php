@@ -32,23 +32,23 @@ add_action(
 	'acf/init',
 	function() {
 		acf_add_options_page(
-		[
-			'page_title'      => __( 'Form Blocks Settings', 'acf-form-blocks' ),
-			'menu_slug'       => 'acffb-forms',
-			'menu_title'      => __( 'ACF Forms', 'acf-form-blocks' ),
-			'position'        => 20,
-			'redirect'        => false,
-			'description'     => __( 'Settings for ACF Form Blocks', 'acf-form-blocks' ),
-			'menu_icon'       => [
-				'type'  => 'dashicons',
-				'value' => 'dashicons-feedback',
-			],
-			'updated_message' => __( 'Settings Updated', 'acf-form-blocks' ),
-			'capability'      => 'manage_options',
-			'autoload'        => true,
-			'icon_url'       => 'dashicons-feedback',
-		]
-	);
+			[
+				'page_title'      => __( 'Form Blocks Admin', 'acf-form-blocks' ),
+				'menu_slug'       => 'acffb-forms',
+				'menu_title'      => __( 'Form Blocks', 'acf-form-blocks' ),
+				'position'        => 20,
+				'redirect'        => false,
+				'description'     => __( 'Admin for Form Blocks', 'acf-form-blocks' ),
+				'menu_icon'       => [
+					'type'  => 'dashicons',
+					'value' => 'dashicons-feedback',
+				],
+				'updated_message' => __( 'Settings Updated', 'acf-form-blocks' ),
+				'capability'      => 'manage_options',
+				'autoload'        => true,
+				'icon_url'       => 'dashicons-feedback',
+			]
+		);
 	}
 );
 

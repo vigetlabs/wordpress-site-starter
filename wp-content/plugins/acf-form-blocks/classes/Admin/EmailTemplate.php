@@ -115,7 +115,7 @@ class EmailTemplate {
 				];
 				$args = [
 					'label'               => __( 'Email Template', 'acf-form-blocks' ),
-					'description'         => __( 'ACF Form Block Email Templates', 'acf-form-blocks' ),
+					'description'         => __( 'Form Block Email Templates', 'acf-form-blocks' ),
 					'labels'              => $labels,
 					'supports'            => [ 'title', 'editor', 'thumbnail', 'revisions' ],
 					'hierarchical'        => false,

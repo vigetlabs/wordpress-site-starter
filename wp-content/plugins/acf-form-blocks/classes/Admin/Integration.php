@@ -111,7 +111,7 @@ class Integration {
 				];
 				$args = [
 					'label'               => __( 'Integration', 'acf-form-blocks' ),
-					'description'         => __( 'ACF Form Block Integrations', 'acf-form-blocks' ),
+					'description'         => __( 'Form Block Integrations', 'acf-form-blocks' ),
 					'labels'              => $labels,
 					'supports'            => [ 'title' ],
 					'hierarchical'        => false,

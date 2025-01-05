@@ -88,7 +88,7 @@ class Submission {
 				];
 				$args = [
 					'label'               => __( 'Submission', 'acf-form-blocks' ),
-					'description'         => __( 'ACF Form Block Submissions', 'acf-form-blocks' ),
+					'description'         => __( 'Form Block Submissions', 'acf-form-blocks' ),
 					'labels'              => $labels,
 					'supports'            => [ 'title' ],
 					'hierarchical'        => false,

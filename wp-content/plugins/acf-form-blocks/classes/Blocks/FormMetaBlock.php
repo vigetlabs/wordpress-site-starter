@@ -10,7 +10,7 @@ namespace ACFFormBlocks\Blocks;
 use ACFFormBlocks\Views;
 
 /**
- * Submit Block Class
+ * Form Meta Block Class
  */
 class FormMetaBlock extends Block {
 
