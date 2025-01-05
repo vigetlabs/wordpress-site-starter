@@ -126,6 +126,24 @@ class Fieldset extends Field {
 	 * @return bool
 	 */
 	public function is_checkbox_group(): bool {
-		return ! empty( $this->block['isCheckboxGroup'] );
+		return 'checkbox' === $this->get_group_type();
+	}
+
+	/**
+	 * Whether the fieldset is a address group.
+	 *
+	 * @return bool
+	 */
+	public function is_address_group(): bool {
+		return 'address' === $this->get_group_type();
+	}
+
+	/**
+	 * Get the group type.
+	 *
+	 * @return string
+	 */
+	public function get_group_type(): string {
+		return $this->block['groupType'] ?? 'default';
 	}
 }

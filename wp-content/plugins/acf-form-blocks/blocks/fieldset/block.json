@@ -18,9 +18,9 @@
       "type": "string",
       "default": ""
     },
-    "isCheckboxGroup": {
-      "type": "boolean",
-      "default": false
+    "groupType": {
+      "type": "string",
+      "default": "default"
     }
   },
   "providesContext": {
@@ -28,7 +28,7 @@
   },
   "usesContext": ["acffb/formId"],
   "styles": [
-    { "name": "default", "label": "Default", "isDefault": true },
+    { "name": "default", "label": "List", "isDefault": true },
     { "name": "inline", "label": "Inline" },
     { "name": "columns", "label": "Columns" }
   ],
@@ -40,9 +40,171 @@
       "scope": ["inserter", "transform"],
       "innerBlocks": [ ["acf/legend"], ["acf/checkbox"], ["acf/checkbox"], ["acf/checkbox"] ],
       "attributes": {
-        "isCheckboxGroup": true
+        "groupType": "checkbox"
       },
-      "isActive": ["isCheckboxGroup"]
+      "isActive": ["groupType"]
+    },
+    {
+      "name": "address",
+      "icon": "location-alt",
+      "title": "Address",
+      "scope": ["inserter"],
+      "innerBlocks": [
+        [
+          "acf/legend",
+          {},
+          [
+            [
+              "core/paragraph",
+              {
+                "content": "Address"
+              }
+            ]
+          ]
+        ],
+        [
+          "acf/input",
+          {},
+          [
+            [
+              "acf/label",
+              {},
+              [
+                [
+                  "core/paragraph",
+                  {
+                    "content": "Address Line 1"
+                  }
+                ]
+              ]
+            ]
+          ]
+        ],
+        [
+          "acf/input",
+          {},
+          [
+            [
+              "acf/label",
+              {},
+              [
+                [
+                  "core/paragraph",
+                  {
+                    "content": "Address Line 2"
+                  }
+                ],
+                [
+                  "core/paragraph",
+                  {
+                    "content": "(optional)",
+                    "style": {
+                      "elements": {
+                        "link": {
+                          "color": {
+                            "text": "#646464"
+                          }
+                        }
+                      },
+                      "color": {
+                        "text": "#646464"
+                      }
+                    }
+                  }
+                ]
+              ]
+            ]
+          ]
+        ],
+        [
+          "core/columns",
+          {},
+          [
+            [
+              "core/column",
+              {
+                "width": 45
+              },
+              [
+                [
+                  "acf/input",
+                  {},
+                  [
+                    [
+                      "acf/label",
+                      {},
+                      [
+                        [
+                          "core/paragraph",
+                          {
+                            "content": "City"
+                          }
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ],
+            [
+              "core/column",
+              {
+                "width": 20
+              },
+              [
+                [
+                  "acf/input",
+                  {},
+                  [
+                    [
+                      "acf/label",
+                      {},
+                      [
+                        [
+                          "core/paragraph",
+                          {
+                            "content": "State"
+                          }
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ],
+            [
+              "core/column",
+              {
+                "width": 35
+              },
+              [
+                [
+                  "acf/input",
+                  {},
+                  [
+                    [
+                      "acf/label",
+                      {},
+                      [
+                        [
+                          "core/paragraph",
+                          {
+                            "content": "Zip"
+                          }
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "attributes": {
+        "groupType": "address"
+      },
+      "isActive": ["groupType"]
     }
   ],
   "style": "file:./style.css",

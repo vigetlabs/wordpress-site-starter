@@ -48,6 +48,9 @@ class Core {
 	 */
 	public static function instance(): Core {
 		if ( null === self::$instance ) {
+			require_once ACFBT_PLUGIN_PATH . 'src/classes/BlockTemplate/Template.php';
+			require_once ACFBT_PLUGIN_PATH . 'src/classes/BlockTemplate/Block.php';
+
 			self::$instance = new self();
 
 			BlockRegistration::init();
