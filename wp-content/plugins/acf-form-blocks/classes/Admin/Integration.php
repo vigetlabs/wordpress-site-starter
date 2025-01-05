@@ -148,7 +148,7 @@ class Integration {
 
 			acf_add_local_field_group( array(
 				'key' => 'group_6776d358e0939',
-				'title' => 'Integration Settings',
+				'title' => 'Integration Configuration',
 				'fields' => array(
 					array(
 						'key' => 'field_6776d358e5c47',
@@ -160,7 +160,7 @@ class Integration {
 						'required' => 1,
 						'conditional_logic' => 0,
 						'wrapper' => array(
-							'width' => '',
+							'width' => '50',
 							'class' => '',
 							'id' => '',
 						),
@@ -173,6 +173,32 @@ class Integration {
 						'allow_null' => 0,
 						'allow_in_bindings' => 1,
 						'ui' => 1,
+						'ajax' => 0,
+						'placeholder' => '',
+					),
+					array(
+						'key' => 'field_677ad41d06a48',
+						'label' => 'Type',
+						'name' => 'type',
+						'aria-label' => '',
+						'type' => 'select',
+						'instructions' => '',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '50',
+							'class' => '',
+							'id' => '',
+						),
+						'choices' => array(
+							'request' => 'Default',
+						),
+						'default_value' => 'request',
+						'return_format' => 'value',
+						'multiple' => 0,
+						'allow_null' => 0,
+						'allow_in_bindings' => 1,
+						'ui' => 0,
 						'ajax' => 0,
 						'placeholder' => '',
 					),
@@ -382,9 +408,9 @@ class Integration {
 									'id' => '',
 								),
 								'choices' => array(
-									'0' => 'Select a Field',
+									0 => 'Select a Field',
 								),
-								'default_value' => '0',
+								'default_value' => 0,
 								'return_format' => 'value',
 								'multiple' => 0,
 								'allow_null' => 0,
