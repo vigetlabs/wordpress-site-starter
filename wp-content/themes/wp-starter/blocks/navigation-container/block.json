@@ -3,6 +3,7 @@
   "title": "Navigation Container",
   "description": "Wrap navigation items in a container with built in toggle.",
   "icon": "menu-alt3",
+  "category": "components",
   "textdomain": "wp-starter",
   "keywords": [
     "menu",
