@@ -35,7 +35,6 @@ add_filter(
 			'core/audio',
 			'core/calendar',
 			'core/html',
-			'core/latest-comments',
 			'core/latest-posts',
 			'core/more',
 			'core/nextpage',

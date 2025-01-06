@@ -27,6 +27,9 @@ class DisableComments {
 
 		// Remove REST API comments.
 		$this->disable_rest_api_comments();
+
+		// Remove comment blocks.
+		$this->remove_comment_blocks();
 	}
 
 	/**
@@ -132,6 +135,47 @@ class DisableComments {
 				unset( $endpoints['comments'] );
 				return $endpoints;
 			}
+		);
+	}
+
+	/**
+	 * Remove comment blocks.
+	 *
+	 * @return void
+	 */
+	private function remove_comment_blocks(): void {
+		add_filter(
+			'allowed_block_types_all',
+			function ( array|bool $allowed_block_types, \WP_Block_Editor_Context $context ): array|bool {
+				if ( ! is_array( $allowed_block_types ) ) {
+					$allowed_block_types = array_keys( \WP_Block_Type_Registry::get_instance()->get_all_registered() );
+				}
+
+				$removed_blocks = [
+					'core/comment-template',
+					'core/post-comment',
+					'core/post-comments-count',
+					'core/post-comments-form',
+					'core/post-comments-link',
+					'core/latest-comments',
+					'core/comments',
+					'core/comments-title',
+					'core/comments-pagination',
+					'core/comments-pagination-next',
+					'core/comments-pagination-previous',
+					'core/comments-pagination-numbers',
+					'core/comment-author-name',
+					'core/comment-author-avatar',
+					'core/comment-content',
+					'core/comment-date',
+					'core/comment-edit-link',
+					'core/comment-reply-link',
+				];
+
+				return array_values( array_diff( $allowed_block_types, $removed_blocks ) );
+			},
+			10,
+			2
 		);
 	}
 }
