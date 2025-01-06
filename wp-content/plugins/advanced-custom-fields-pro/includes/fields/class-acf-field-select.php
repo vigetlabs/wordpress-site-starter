@@ -56,7 +56,7 @@ if ( ! class_exists( 'acf_field_select' ) ) :
 
 			global $wp_scripts;
 
-			$min   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+			$min   = defined( 'ACF_DEVELOPMENT_MODE' ) && ACF_DEVELOPMENT_MODE ? '' : '.min';
 			$major = acf_get_setting( 'select2_version' );
 
 			// attempt to find 3rd party Select2 version
@@ -115,13 +115,19 @@ if ( ! class_exists( 'acf_field_select' ) ) :
 			$nonce = acf_request_arg( 'nonce', '' );
 			$key   = acf_request_arg( 'field_key', '' );
 
+			$is_field_key = acf_is_field_key( $key );
+
 			// Back-compat for field settings.
-			if ( ! acf_is_field_key( $key ) ) {
+			if ( ! $is_field_key ) {
+				if ( ! acf_current_user_can_admin() ) {
+					die();
+				}
+
 				$nonce = '';
 				$key   = '';
 			}
 
-			if ( ! acf_verify_ajax( $nonce, $key ) ) {
+			if ( ! acf_verify_ajax( $nonce, $key, $is_field_key ) ) {
 				die();
 			}
 
@@ -286,7 +292,7 @@ if ( ! class_exists( 'acf_field_select' ) ) :
 				$select['data-nonce'] = $field['nonce'];
 			}
 			if ( $field['ajax'] && empty( $field['nonce'] ) && acf_is_field_key( $field['key'] ) ) {
-				$select['data-nonce'] = wp_create_nonce( $field['key'] );
+				$select['data-nonce'] = wp_create_nonce( 'acf_field_' . $this->name . '_' . $field['key'] );
 			}
 			if ( ! empty( $field['hide_search'] ) ) {
 				$select['data-minimum-results-for-search'] = '-1';

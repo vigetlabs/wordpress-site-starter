@@ -648,13 +648,27 @@ if ( ! class_exists( 'ACF_Post_Type' ) ) {
 				return;
 			}
 
-			$original_post = $_POST; //phpcs:ignore -- Only used as temporary storage to prevent CSRFs in callbacks.
-			$_POST         = array();
-			$return        = false;
+			$unset     = array( '_POST', '_GET', '_REQUEST', '_COOKIE', '_SESSION', '_FILES', '_ENV', '_SERVER' );
+			$originals = array();
+
+			foreach ( $unset as $var ) {
+				if ( isset( $GLOBALS[ $var ] ) ) {
+					$originals[ $var ] = $GLOBALS[ $var ];
+					$GLOBALS[ $var ]   = array(); //phpcs:ignore -- used for building a safe context
+				}
+			}
+
+			$return = false;
 			if ( is_callable( $original_cb ) ) {
 				$return = call_user_func( $original_cb, $post );
 			}
-			$_POST = $original_post;
+
+			foreach ( $unset as $var ) {
+				if ( isset( $originals[ $var ] ) ) {
+					$GLOBALS[ $var ] = $originals[ $var ]; //phpcs:ignore -- used for restoring the original context
+				}
+			}
+
 			return $return;
 		}
 
@@ -677,6 +691,12 @@ if ( ! class_exists( 'ACF_Post_Type' ) ) {
 			// Validate and prepare the post for export.
 			$post = $this->validate_post( $post );
 			$args = $this->get_post_type_args( $post, false );
+
+			// Restore original metabox callback.
+			if ( ! empty( $args['register_meta_box_cb'] ) && ! empty( $post['register_meta_box_cb'] ) ) {
+				$args['register_meta_box_cb'] = (string) $post['register_meta_box_cb'];
+			}
+
 			$code = var_export( $args, true ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions -- Used for PHP export.
 
 			if ( ! $code ) {
@@ -751,6 +771,30 @@ if ( ! class_exists( 'ACF_Post_Type' ) ) {
 			}
 
 			return $post;
+		}
+
+		/**
+		 * Prepares an ACF post type for import.
+		 *
+		 * @since 6.3.10
+		 *
+		 * @param array $post The ACF post array.
+		 * @return array
+		 */
+		public function prepare_post_for_import( $post ) {
+			if ( ! acf_get_setting( 'enable_meta_box_cb_edit' ) && ! empty( $post['register_meta_box_cb'] ) ) {
+				$post['register_meta_box_cb'] = '';
+
+				if ( ! empty( $post['ID'] ) ) {
+					$existing_post = $this->get_post( $post['ID'] );
+
+					if ( is_array( $existing_post ) ) {
+						$post['register_meta_box_cb'] = ! empty( $existing_post['register_meta_box_cb'] ) ? (string) $existing_post['register_meta_box_cb'] : '';
+					}
+				}
+			}
+
+			return parent::prepare_post_for_import( $post );
 		}
 
 		/**
