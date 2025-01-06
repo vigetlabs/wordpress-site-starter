@@ -1,0 +1,29 @@
+{
+  "name": "checkbox",
+  "title": "Checkbox",
+  "description": "Form checkbox field",
+  "icon": "forms",
+  "category": "forms",
+  "textdomain": "viget-form-blocks",
+  "keywords": ["input", "contact", "feedback", "input", "option", "options", "true", "false"],
+  "ancestor": ["acf/form"],
+  "supports": {
+    "jsx": true,
+    "alignWide": true,
+    "anchor": true
+  },
+  "attributes": {
+    "blockId": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "style": "file:./style.css",
+  "providesContext": {
+    "acffb/fieldId": "blockId"
+  },
+  "usesContext": ["acffb/formId", "acffb/fieldsetId"],
+  "acf": {
+    "mode": "preview"
+  }
+}

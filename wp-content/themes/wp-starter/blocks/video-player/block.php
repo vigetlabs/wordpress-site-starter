@@ -25,7 +25,7 @@ add_filter(
 );
 
 add_filter(
-	'acfbt_button_icons',
+	'vgtbt_button_icons',
 	function ( array $icons ): array {
 		$block_dir       = dirname( __FILE__ );
 		$play_icon_path = $block_dir . '/images/video-play-button.svg';

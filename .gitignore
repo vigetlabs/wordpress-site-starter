@@ -233,8 +233,8 @@ wp-config.php
 
 # Explicitly Allowed Themes and Plugins
 !/wp-content/themes/wp-starter
-!/wp-content/plugins/acf-blocks-toolkit
-!/wp-content/plugins/acf-form-blocks
+!/wp-content/plugins/viget-blocks-toolkit
+!/wp-content/plugins/viget-form-blocks
 !/wp-content/plugins/viget-parts-kit
 !/wp-content/plugins/advanced-custom-fields-pro
 
