@@ -1,19 +1,19 @@
 <?php
 /**
- * ACF Block Helpers
+ * Helper functions
  *
  * @package VigetBlocksToolkit
  */
 
 use Viget\VigetBlocksToolkit\Core;
 
-if ( ! function_exists( 'acfbt' ) ) {
+if ( ! function_exists( 'vgtbt' ) ) {
 	/**
-	 * ACF Blocks Toolkit Core API instance.
+	 * Viget Blocks Toolkit Core API instance.
 	 *
 	 * @return Core
 	 */
-	function acfbt(): Core {
+	function vgtbt(): Core {
 		return Core::instance();
 	}
 }
@@ -157,7 +157,7 @@ if ( ! function_exists( 'get_block_class' ) ) {
 		}
 
 		if ( ! empty( $block['data']['limit_visibility'] ) ) {
-			$classes[] = 'acfbt-limit-visibility';
+			$classes[] = 'vgtbt-limit-visibility';
 		}
 
 		return apply_filters( 'vgtbt_block_class', implode( ' ', $classes ), $block );
@@ -346,7 +346,7 @@ if ( ! function_exists( 'print_admin_message' ) ) {
 	 *
 	 * @return void
 	 */
-	function print_admin_message( string $notice = '', string $class = 'acfbt-admin-message' ): void {
+	function print_admin_message( string $notice = '', string $class = 'vgtbt-admin-message' ): void {
 		if ( ! is_admin() || ! $notice ) {
 			return;
 		}

@@ -51,4 +51,4 @@ require_once 'src/classes/BlockIcons.php';
 require_once 'src/classes/BreakpointVisibility.php';
 
 // Initialize the plugin.
-acfbt();
+vgtbt();

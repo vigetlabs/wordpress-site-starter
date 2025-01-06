@@ -562,8 +562,8 @@ class BlockRegistration {
 				$unregister_styles = apply_filters( 'vgtbt_unregister_block_styles', [] );
 
 				wp_localize_script(
-					'acfbt-editor-scripts',
-					'acfbtStyles',
+					'vgtbt-editor-scripts',
+					'vgtbtStyles',
 					[
 						'unregister' => $unregister_styles,
 					]

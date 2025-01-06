@@ -1,6 +1,6 @@
-/** global acfbtStyles */
+/** global vgtbtStyles */
 
-const unregisterStyles = acfbtStyles.unregister;
+const unregisterStyles = vgtbtStyles.unregister;
 
 /**
  * WordPress Dependencies

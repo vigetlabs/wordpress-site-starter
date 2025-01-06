@@ -282,8 +282,8 @@ class BlockIcons {
 			'enqueue_block_editor_assets',
 			function () {
 				wp_localize_script(
-					'acfbt-editor-scripts',
-					'acfbtIcons',
+					'vgtbt-editor-scripts',
+					'vgtbtIcons',
 					[
 						'json'            => $this->get_icons(),
 						'supportedBlocks' => $this->get_supported_blocks(),
@@ -291,7 +291,7 @@ class BlockIcons {
 				);
 
 				wp_add_inline_style(
-					'acfbt-editor-styles',
+					'vgtbt-editor-styles',
 					$this->editor_css()
 				);
 			},
@@ -311,7 +311,7 @@ class BlockIcons {
 					wp_enqueue_block_style(
 						$block_name,
 						[
-							'handle' => 'acfbt-block-styles',
+							'handle' => 'vgtbt-block-styles',
 							'src'    => VGTBT_PLUGIN_URL . 'build/style.css',
 							'ver'    => VGTBT_VERSION,
 							'path'   => VGTBT_PLUGIN_PATH . 'build/style.css',
