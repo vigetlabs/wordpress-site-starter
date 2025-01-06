@@ -48,6 +48,9 @@ class BlockRegistration {
 		// Allow for core block style de-registration.
 		self::unregister_block_styles();
 
+		// Allow for core block variation de-registration.
+		self::unregister_block_variations();
+
 		// Register block patterns within block folders
 		self::register_block_patterns();
 
@@ -566,6 +569,29 @@ class BlockRegistration {
 					'vgtbtStyles',
 					[
 						'unregister' => $unregister_styles,
+					]
+				);
+			},
+			20
+		);
+	}
+
+	/**
+	 * Allow for core block variation de-registration.
+	 *
+	 * @return void
+	 */
+	private static function unregister_block_variations(): void {
+		add_action(
+			'enqueue_block_assets',
+			function () {
+				$unregister_variations = apply_filters( 'vgtbt_unregister_block_variations', [] );
+
+				wp_localize_script(
+					'vgtbt-editor-scripts',
+					'vgtbtVariations',
+					[
+						'unregister' => $unregister_variations,
 					]
 				);
 			},

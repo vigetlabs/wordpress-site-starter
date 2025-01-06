@@ -72,3 +72,38 @@ add_filter(
 	}
 );
 ```
+
+### `vgtbt_unregister_block_styles` (Filter)
+
+Unregister block styles from core blocks.
+
+```php
+add_filter(
+	'vgtbt_unregister_block_styles',
+	function ( array $styles ): array {
+		$styles[] = [
+			'core/separator',
+			'dots',
+		];
+
+		return $styles;
+	}
+);
+
+```
+### `vgtbt_unregister_block_variations` (Filter)
+
+Unregister block variations from core blocks.
+
+```php
+add_filter(
+	'vgtbt_unregister_block_variations',
+	function ( array $variations ): array {
+		$variations[] = [
+			'core/social-link',
+			'bluesky',
+		];
+		return $variations;
+	}
+);
+```
