@@ -56,8 +56,8 @@ class PostInstallScript extends ComposerScript {
 	 */
 	private static array $activatePlugins = [
 		'accessibility-checker' => 'Accessibility Checker',
-		'acf-blocks-toolkit' => [
-			'name' => 'ACF Blocks Toolkit',
+		'viget-blocks-toolkit' => [
+			'name' => 'Viget Blocks Toolkit',
 			'dependencies' => [
 				'advanced-custom-fields-pro' => 'Advanced Custom Fields Pro',
 			],

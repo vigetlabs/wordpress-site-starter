@@ -1,0 +1,104 @@
+a.page-title-action:empty {
+	display: none;
+}
+
+.acffb-submission th {
+	padding-bottom: 5px;
+	padding-top: 10px;
+	padding-right: 0.5rem;
+	text-align: left;
+	width: 35%;
+	vertical-align: top;
+}
+.acffb-submission td {
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+.acffb-submission .text-input {
+	border: 1px solid #ddd;
+	padding: 0.25rem 0.5rem;
+	background-color: #F8F8F8;
+}
+.acffb-submission pre.text-input {
+	overflow: auto;
+	white-space: pre-wrap;
+	font-size: 12px;
+}
+
+.acffb-checkbox-list {
+	columns: 2;
+	overflow-wrap: break-word;
+	margin-block-end: 0.15rem;
+	margin-block-start: 0.25rem;
+	padding-inline-start: 0;
+}
+.acffb-checkbox-list li,
+.acffb-radio-list li {
+	display: flex;
+	gap: 0.2rem;
+}
+.acffb-checkbox-list li .checkbox,
+.acffb-radio-list li .radio {
+	align-items: center;
+	aspect-ratio: 1/1;
+	border: 1px dotted #333;
+	break-inside: avoid;
+	display: inline-flex;
+	height: 16px;
+	justify-content: center;
+	margin: 1px;
+	width: 16px;
+}
+.acffb-checkbox-list li.checked,
+.acffb-radio-list li.checked {
+	font-weight: bold;
+}
+.acffb-checkbox-list li.checked .checkbox,
+.acffb-radio-list li.checked .radio {
+	border: 2px solid #000;
+	margin: 0;
+}
+.acffb-checkbox-list .cbx-label {
+	opacity: 0.75;
+}
+
+.acffb-radio-list {
+	display: flex;
+	gap: 1rem;
+	margin-block-end: 0;
+	margin-block-start: 0.5rem;
+	padding-inline-start: 0;
+}
+.acffb-radio-list li .radio {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 100%;
+}
+.acffb-radio-list li .radio:before {
+	content: '';
+	line-height: 0;
+	position: relative;
+	top: 0;
+}
+body.wp-admin .acffb-radio-list li .radio:before {
+	top: -0.15rem;
+}
+.acffb-radio-list li.checked .radio:before {
+	content: '\2022';
+	font-size: 32px;
+}
+
+.acffb-sub-field,
+.acffb-form-data-block,
+.acffb-form-meta-block {
+	display: flex;
+	gap: 0.5rem;
+	margin-bottom: 0.15rem;
+}
+.acffb-sub-field .sub-field-label {
+	flex-basis: 120px;
+}
+.acffb-sub-field .text-input {
+	flex-grow: 1;
+}

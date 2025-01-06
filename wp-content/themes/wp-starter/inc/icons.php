@@ -12,7 +12,7 @@
  */
 
 add_filter(
-	'acfbt_button_icons',
+	'vgtbt_button_icons',
 	function ( array $icons ): array {
 		$icon_path = get_stylesheet_directory() . '/src/images/icons/';
 

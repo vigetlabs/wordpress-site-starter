@@ -1,0 +1,32 @@
+{
+  "name": "textarea",
+  "title": "Textarea",
+  "description": "Form textarea field",
+  "icon": "edit",
+  "category": "forms",
+  "textdomain": "viget-form-blocks",
+  "keywords": ["input", "contact", "feedback", "input"],
+  "ancestor": ["acf/form"],
+  "supports": {
+    "jsx": true,
+    "mode": false,
+    "alignWide": true,
+    "anchor": true,
+    "dimensions": {
+      "minHeight": true
+    }
+  },
+  "attributes": {
+    "blockId": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "usesContext": ["acffb/formId", "acffb/fieldsetId"],
+  "providesContext": {
+    "acffb/fieldId": "blockId"
+  },
+  "acf": {
+    "mode": "preview"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "radios",
+  "title": "Radios",
+  "description": "Form radio button field",
+  "icon": "edit",
+  "category": "forms",
+  "textdomain": "viget-form-blocks",
+  "keywords": ["input", "contact", "feedback", "input", "choose", "option", "options"],
+  "ancestor": ["acf/form"],
+  "styles": [
+    { "name": "default", "label": "Default", "isDefault": true },
+    { "name": "inline", "label": "Inline" }
+  ],
+  "style": "file:./style.css",
+  "supports": {
+    "jsx": true,
+    "alignWide": true,
+    "anchor": true
+  },
+  "attributes": {
+    "blockId": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "providesContext": {
+    "acffb/fieldId": "blockId"
+  },
+  "usesContext": ["acffb/formId", "acffb/fieldsetId"],
+  "acf": {
+    "mode": "preview"
+  }
+}

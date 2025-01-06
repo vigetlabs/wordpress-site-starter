@@ -1,0 +1,52 @@
+div[data-type="acf/select"] .acf-field-repeater[data-name="options"] .acf-fields {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+div[data-type="acf/select"] .acf-field-repeater[data-name="options"] .acf-field-true-false {
+	width: 90px;
+	text-align: center;
+	order: 2;
+}
+
+div[data-type="acf/select"] .acf-field-repeater[data-name="options"] .acf-field-text[data-name="label"] {
+	width: calc(100% - 180px);
+	order: 1;
+}
+div[data-type="acf/select"] .acf-field-repeater[data-name="options"] .acf-field-text[data-name="value"] {
+	width: 100%;
+	order: 3;
+}
+
+div[data-type="acf/select"] .acf-field-repeater[data-name="options"] .acf-field-true-false,
+.acf-block-panel .acf-field-repeater[data-name="options"] .acf-fields .acf-field-true-false {
+	background-color: #f4f4f4;
+}
+
+.acf-block-panel .acf-field-repeater[data-name="options"] .acf-fields .acf-field-true-false {
+	border-bottom: 1px solid #e2e4e7;
+	clear: none;
+	cursor: pointer;
+	display: flex;
+	float: left !important;
+	gap: 0.25rem;
+	justify-content: center;
+	padding-bottom: 0;
+	padding-left: 0;
+	padding-right: 0;
+	text-align: center;
+	width: 50% !important;
+}
+.acf-block-panel .acf-field-repeater[data-name="options"] .acf-fields .acf-field-true-false:first-child {
+	border-right: 1px solid #e2e4e7;
+	width: calc( 50% - 1px ) !important;
+}
+
+div[data-type="acf/select"] .acf-field-repeater[data-name="options"] .acf-field-true-false {
+	border-left: 1px solid #e2e4e7;
+}
+
+
+.acf-block-panel .acf-field-repeater[data-name="options"] .acf-fields .acf-field-true-false .acf-label {
+	order: 2;
+}

@@ -1,0 +1,28 @@
+{
+  "name": "label",
+  "title": "Label",
+  "description": "Form field label",
+  "icon": "tag",
+  "category": "forms",
+  "textdomain": "viget-form-blocks",
+  "keywords": ["input", "description", "text", "name", "field"],
+  "ancestor": ["acf/form"],
+  "parent": ["acf/input", "acf/select", "acf/textarea", "acf/radios", "acf/checkbox"],
+  "supports": {
+    "jsx": true,
+    "mode": false,
+    "alignWide": false,
+    "anchor": true
+  },
+  "attributes": {
+    "blockId": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "style": "file:./style.css",
+  "usesContext": ["acffb/formId", "acffb/fieldId"],
+  "acf": {
+    "mode": "preview"
+  }
+}
