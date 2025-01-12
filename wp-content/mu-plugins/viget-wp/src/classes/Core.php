@@ -8,20 +8,21 @@
 
 namespace VigetWP;
 
+use VigetWP\Admin\AdminBar;
 use VigetWP\Admin\Assets;
 use VigetWP\Admin\Blocks;
+use VigetWP\Admin\ColorScheme;
 use VigetWP\Admin\DashboardWidgets;
 use VigetWP\Admin\FileEditors;
+use VigetWP\Admin\Footer;
+use VigetWP\Admin\CustomScripts;
 use VigetWP\Admin\LoginScreen;
+use VigetWP\Admin\Menu;
 use VigetWP\Admin\TinyMCE;
 use VigetWP\Features\DisableComments;
 use VigetWP\Features\Gravatar;
 use VigetWP\Plugins\ACF\GravityForms;
 use VigetWP\Plugins\ACF\Toolbars;
-use VigetWP\Admin\AdminBar;
-use VigetWP\Admin\ColorScheme;
-use VigetWP\Admin\Footer;
-use VigetWP\Admin\Menu;
 
 /**
  * Core Class
@@ -152,6 +153,7 @@ class Core {
 		// Features
 		new DisableComments();
 		new Gravatar();
+		new CustomScripts();
 
 		// Admin
 		new Assets();

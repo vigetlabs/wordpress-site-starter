@@ -3,13 +3,15 @@
  * Plugin Name: Viget WP
  * Plugin URI: https://github.com/vigetlabs/viget-wp
  * Description: WordPress Customization from Viget
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Viget
  * Author URI: https://www.viget.com/
  * Text Domain: viget-wp
  *
  * @package VigetWP
  */
+
+const VIGETWP_VERSION = '1.0.1';
 
 defined( 'VIGETWP_PLUGIN_FILE' ) || define( 'VIGETWP_PLUGIN_FILE', __FILE__ );
 defined( 'VIGETWP_PLUGIN_PATH' ) || define( 'VIGETWP_PLUGIN_PATH', plugin_dir_path( VIGETWP_PLUGIN_FILE ) );

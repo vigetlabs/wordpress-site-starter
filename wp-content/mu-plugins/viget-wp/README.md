@@ -5,6 +5,7 @@ This plugin is a collection of custom functionality for WordPress sites. It is i
 ## Features
 
 * **`dd()` Debug Function**: A helper function to dump and (optionally) die.
+* **Custom Scripts**: Add custom scripts to the WordPress Admin that will output in the `<head>` and `<body>`.
 * **Disable Comments**: Disable comments on all post types and any comment-related blocks.
 * **Gravatar support for `+` email addresses**: Allow Gravatar to work with email addresses that contain a `+` symbol.
 * **ACF + Gravity Forms Integration**: Automatically populate fields named `gravity_form` with available forms.
