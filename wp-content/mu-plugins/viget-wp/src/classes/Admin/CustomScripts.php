@@ -190,26 +190,36 @@ class CustomScripts {
 
 				$scripts = ! empty( $_POST[ self::OPTION_NAME ] ) ? $_POST[ self::OPTION_NAME ] : $this->scripts;
 				$allowed = [
-					'script' => [
-						'type' => [],
-						'src' => [],
+					'script'   => [
+						'type'  => [],
+						'src'   => [],
 						'async' => [],
 						'defer' => [],
 					],
 					'noscript' => [],
-					'iframe' => [
-						'src' => [],
-						'width' => [],
+					'iframe'   => [
+						'src'    => [],
+						'width'  => [],
 						'height' => [],
-						'style' => [],
+						'style'  => [],
 					],
-					'#text' => [], // Allow inline script content
+					'#text'    => [], // Allow inline script content
 				];
+
+				$style_filter = function( array $styles ): array {
+					$styles[] = 'display';
+					$styles[] = 'visibility';
+					return $styles;
+				};
+
+				add_filter( 'safe_style_css', $style_filter );
 
 				foreach ( $scripts as $key => $script ) {
 					$script = wp_kses( wp_unslash( $script ), $allowed );
 					$scripts[ $key ] = html_entity_decode( $script, ENT_QUOTES | ENT_HTML5 );
 				}
+
+				remove_filter( 'safe_style_css', $style_filter );
 
 				update_option( self::OPTION_NAME, $scripts );
 
