@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
         wp.CodeMirror.fromTextArea(textarea, {
             lineNumbers: true,
             mode: 'htmlmixed',
-            theme: 'tomorrow-night-eighties',
+            theme: 'oceanic-next',
             lineWrapping: true
         });
     });

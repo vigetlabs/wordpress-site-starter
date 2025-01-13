@@ -10,3 +10,11 @@
 body.options-discussion-php form table:first-of-type {
 	display: none;
 }
+
+/* Custom CodeMirror Theme */
+.cm-s-oceanic-next.CodeMirror {
+	background-color: #122c3a;
+}
+.cm-s-oceanic-next .CodeMirror-gutters {
+	background-color: #1a4155;
+}

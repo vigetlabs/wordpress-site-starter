@@ -275,8 +275,8 @@ class CustomScripts {
 
 				// Enqueue custom style
 				wp_enqueue_style(
-					'wp-codemirror-tomorrow-night-eighties',
-					'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.59.2/theme/tomorrow-night-eighties.min.css',
+					'wp-codemirror-oceanic-next',
+					'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.59.2/theme/oceanic-next.min.css',
 					[ 'wp-codemirror' ],
 					'5.59.2'
 				);
