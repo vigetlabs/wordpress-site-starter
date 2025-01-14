@@ -34,15 +34,15 @@
     "wpackagist-plugin/wordfence": "^8.0"
   },
   "require-dev": {
-      "phpcompatibility/phpcompatibility-wp": "^2",
-      "wp-coding-standards/wpcs": "^3.1"
+    "phpcompatibility/phpcompatibility-wp": "^2",
+    "wp-coding-standards/wpcs": "^3.1"
   },
   "config": {
-      "sort-packages": true,
-      "allow-plugins": {
-          "composer/installers": true,
-          "dealerdirect/phpcodesniffer-composer-installer": true
-      }
+    "sort-packages": true,
+    "allow-plugins": {
+      "composer/installers": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
   },
   "repositories": [
     {
@@ -50,8 +50,20 @@
       "url": "https://wpackagist.org"
     },
     {
-      "type":"composer",
-      "url":"https://connect.advancedcustomfields.com"
+      "type": "composer",
+      "url": "https://connect.advancedcustomfields.com"
+    },
+    {
+      "type": "path",
+      "url": "../../plugins/viget-blocks-toolkit"
+    },
+    {
+      "type": "path",
+      "url": "../../plugins/viget-form-blocks"
+    },
+    {
+      "type": "path",
+      "url": "../../plugins/viget-parts-kit"
     }
   ],
   "scripts": {
