@@ -71,6 +71,13 @@ ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.12
+* Removed `viget-blocks-toolkit` from repo, moved to separate repo.
+* Removed `viget-form-blocks` from repo, moved to separate repo.
+* Removed `viget-parts-kit` from repo, moved to separate repo.
+* Removed unnecessary `package.json` from project root.
+* Other various improvements to `wp-starter` and `viget-wp`.
+
 ### v1.0.11
 * Fixed command for checking if WordPress database is installed.
 
