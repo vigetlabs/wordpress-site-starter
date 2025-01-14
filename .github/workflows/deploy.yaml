@@ -63,13 +63,6 @@ jobs:
           args: '--optimize-autoloader'
           working_dir: wp-content/mu-plugins/viget-wp
 
-      # Build ACF plugin
-      - name: Build ACF plugin
-        run: |
-          npm ci
-          npm run build
-        working-directory: wp-content/plugins/viget-blocks-toolkit
-
       # Deploy code
       - name: Deploy Starter
         run: |
@@ -79,7 +72,6 @@ jobs:
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/themes/wp-starter &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp.php &&\
-            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/viget-blocks-toolkit &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/safe-svg &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/advanced-custom-fields-pro"
           rsync -rlptzv --exclude="node_modules" ./wp-content/ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_TARGET }}:${{ secrets.APP_PATH }}/wp-content/
@@ -95,7 +87,6 @@ jobs:
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/themes/wp-starter &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp.php &&\
-            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/viget-blocks-toolkit &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/safe-svg &&\
             sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/advanced-custom-fields-pro"
           rsync -rlptzv --exclude="node_modules" ./wp-content/ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_KIT_TARGET }}:${{ secrets.APP_PATH }}/wp-content/
