@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6d6e6037b34aac1756b0c92990b61976",
+    "content-hash": "87c8541027cb975d50ccb30daaa5a567",
     "packages": [
         {
             "name": "composer/installers",
@@ -1143,6 +1143,51 @@
                 }
             ],
             "time": "2024-12-29T10:51:50+00:00"
+        },
+        {
+            "name": "viget/viget-blocks-toolkit",
+            "version": "v1.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vigetlabs/viget-blocks-toolkit.git",
+                "reference": "228e5664d4e4f10d5c7723280ce73e104b9120cc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vigetlabs/viget-blocks-toolkit/zipball/228e5664d4e4f10d5c7723280ce73e104b9120cc",
+                "reference": "228e5664d4e4f10d5c7723280ce73e104b9120cc",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "*"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Viget",
+                    "homepage": "https://viget.com/"
+                }
+            ],
+            "description": "Simplifying Block Registration and other additional features.",
+            "homepage": "https://github.com/vigetlabs/viget-blocks-toolkit",
+            "keywords": [
+                "acf",
+                "blocks",
+                "components",
+                "editor",
+                "gutenberg",
+                "toolkit",
+                "wordpress"
+            ],
+            "support": {
+                "issues": "https://github.com/vigetlabs/viget-blocks-toolkit/issues",
+                "source": "https://github.com/vigetlabs/viget-blocks-toolkit/tree/v1.0.6"
+            },
+            "time": "2025-01-15T00:25:05+00:00"
         },
         {
             "name": "wpackagist-plugin/accessibility-checker",
