@@ -52,21 +52,15 @@
     {
       "type": "composer",
       "url": "https://connect.advancedcustomfields.com"
-    },
-    {
-      "type": "path",
-      "url": "../../plugins/viget-blocks-toolkit"
-    },
-    {
-      "type": "path",
-      "url": "../../plugins/viget-form-blocks"
-    },
-    {
-      "type": "path",
-      "url": "../../plugins/viget-parts-kit"
     }
   ],
   "scripts": {
+    "pre-install-cmd": [
+      "Viget\\ComposerScripts\\ProjectEventHandler::preInstall"
+    ],
+    "pre-update-cmd": [
+      "Viget\\ComposerScripts\\ProjectEventHandler::preUpdate"
+    ],
     "post-install-cmd": [
       "Viget\\ComposerScripts\\ProjectEventHandler::postInstall"
     ],
