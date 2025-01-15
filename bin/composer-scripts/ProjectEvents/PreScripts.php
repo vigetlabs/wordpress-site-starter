@@ -17,9 +17,9 @@ class PreScripts extends ComposerScript {
 	 * @var array
 	 */
 	private static array $repoPlugins = [
-		'viget-blocks-toolkit',
-		'viget-form-blocks',
-		'viget-parts-kit',
+		'viget/viget-blocks-toolkit' => 'viget-blocks-toolkit',
+		'viget/viget-form-blocks' => 'viget-form-blocks',
+		'viget/viget-parts-kit' => 'viget-parts-kit',
 	];
 
 	/**
@@ -66,16 +66,16 @@ class PreScripts extends ComposerScript {
 	 * @return void
 	 */
 	private static function checkRepoPlugins(): void {
-		foreach ( self::$repoPlugins as $pluginName ) {
-			$pluginGitDir = self::translatePath( 'wp-content/plugins/' . $pluginName . '/.git' );
+		foreach ( self::$repoPlugins as $packageName => $pluginDir ) {
+			$pluginGitDir = self::translatePath( 'wp-content/plugins/' . $pluginDir . '/.git' );
 			if ( is_dir( $pluginGitDir ) ) {
-				self::writeInfo( sprintf( 'Skipping installation of %s: directory containing repository exists.', $pluginName ) );
+				self::writeInfo( sprintf( 'Skipping installation of %s: directory containing repository exists.', $packageName ) );
 
 				// Ensure the package is marked as "installed".
 				self::$event->getComposer()->getPackage()->setReplaces( array_merge(
 					self::$event->getComposer()->getPackage()->getReplaces(),
 					[
-						$pluginName => '*',
+						$packageName => '*',
 					]
 				) );
 			}
