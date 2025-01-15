@@ -71,6 +71,10 @@ ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.13
+* Added `viget-blocks-toolkit` via Composer
+* Some bug fixes.
+
 ### v1.0.12
 * Removed `viget-blocks-toolkit` from repo, moved to separate repo.
 * Removed `viget-form-blocks` from repo, moved to separate repo.
