@@ -543,7 +543,7 @@ class PostCreateProjectScript extends ComposerScript {
 		$deployFile = self::translatePath( '.github/workflows/deploy.yaml', true );
 
 		if ( ! file_exists( $deployFile ) ) {
-			self::writeWarning( 'Deployment script not found. Skipping removal.' );
+			self::writeWarning( sprintf( 'Deployment script not found (%s). Skipping removal.', $deployFile ) );
 		} else {
 			unlink( $deployFile );
 			self::writeInfo( 'Deployment script removed.' );
@@ -552,12 +552,19 @@ class PostCreateProjectScript extends ComposerScript {
 		$componentTemplate = self::translatePath( '.github/ISSUE_TEMPLATE/new-component-ticket.md', true );
 
 		if ( ! file_exists( $componentTemplate ) ) {
-			self::writeWarning( 'Component Issue template not found. Skipping removal.' );
+			self::writeWarning( sprintf( 'Component Issue template not found (%s). Skipping removal.', $componentTemplate ) );
 		} else {
 			unlink( $componentTemplate );
 			self::writeInfo( 'Component Issue template removed.' );
 		}
 
+		$releaseFile = self::translatePath( '.github/workflows/release.yaml', true );
 
+		if ( ! file_exists( $releaseFile ) ) {
+			self::writeWarning( sprintf( 'Release script not found (%s). Skipping removal.', $releaseFile ) );
+		} else {
+			unlink( $releaseFile );
+			self::writeInfo( 'Release script removed.' );
+		}
 	}
 }
