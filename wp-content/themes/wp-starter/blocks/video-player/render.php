@@ -9,7 +9,11 @@
 
 $attrs = [];
 $inner = [
-	'template' => $block['template'] ?? [],
+	'template'      => $block['template'] ?? [],
+	'allowedBlocks' => [
+		'core/cover',
+		'core/embed',
+	],
 ];
 
 if ( ! is_admin() )  {
