@@ -335,6 +335,16 @@ class PostCreateProjectScript extends ComposerScript {
 			}
 		}
 
+		$defaultWorkspace = self::translatePath( '.vscode/' . self::$defaults['theme-slug'] . '.code-workspace' );
+		$projectWorkspace = self::translatePath( '.vscode/' . self::$info['slug'] . '.code-workspace' );
+
+		// Change the project workspace name.
+		if ( ! rename( $defaultWorkspace, $projectWorkspace ) ) {
+			self::writeError( 'Failed to rename project workspace.' );
+		} else {
+			self::writeInfo( 'Project workspace name changed.' );
+		}
+
 		self::writeInfo( 'Project files updated!' );
 	}
 
