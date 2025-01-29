@@ -7,7 +7,7 @@
  * @package WPStarter
  */
 
-$inner = [
+$inner = [ // phpcs:ignore
 	'template'     => $block['template'] ?? [],
 	'templateLock' => 'all',
 ];

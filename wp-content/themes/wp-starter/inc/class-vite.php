@@ -1,10 +1,12 @@
 <?php
 /**
- *
  * Inspired from:
  *
  * @source https://github.com/andrefelipe/vite-php-setup
+ * @package WPStarter
  */
+
+namespace WPStarter;
 
 /**
  * This class handles loading Vite assets.
@@ -12,52 +14,70 @@
 class Vite {
 
 	/**
+	 * Storage of environment variables.
+	 *
 	 * @var string
 	 */
 	private string $env;
 
 	/**
+	 * The site URL.
+	 *
 	 * @var string
 	 */
 	private string $site_url;
 
 	/**
+	 * The port to be used.
+	 *
 	 * @var int
 	 */
 	private string $port;
 
 	/**
+	 * The dev server.
+	 *
 	 * @var string
 	 */
 	private string $dev_server;
 
 	/**
+	 * The URL to the dist folder.
+	 *
 	 * @var string
 	 */
 	private string $dist_url;
 
 	/**
+	 * The path to the dist folder.
+	 *
 	 * @var string
 	 */
 	private string $dist_path;
 
 	/**
+	 * The entry files.
+	 *
 	 * @var array
 	 */
 	private array $entries = [];
 
 	/**
+	 * Whether this class has been initialized.
+	 *
 	 * @var bool
 	 */
 	private bool $initialized = false;
 
 	/**
+	 * If admin notice has been printed.
+	 *
 	 * @var bool
 	 */
 	private bool $did_admin_notice = false;
 
 	/**
-	 * Set up vars and hooks
+	 * Set up vars and hooks.
 	 */
 	public function __construct() {
 		$this->site_url   = get_site_url();
@@ -69,10 +89,10 @@ class Vite {
 
 		$this->env = getenv( 'ENVIRONMENT' );
 
-		// set frontend css/js
+		// Set front-end CSS/JS.
 		$this->entries['default'] = 'main.js';
 
-		// set editor css/js
+		// Set editor CSS/JS.
 		$this->entries['editor'] = 'main.js';
 
 		add_action( 'wp_head', [ $this, 'init' ], 100 );
@@ -82,7 +102,6 @@ class Vite {
 			function () {
 				$screen = get_current_screen();
 				if ( $screen->is_block_editor ) {
-					// $this->init(); // This breaks the block editor styles.
 					$this->init( 'editor' );
 				}
 			}
@@ -110,7 +129,7 @@ class Vite {
 		$this->initialized = true;
 
 		/* Print Vite HTML tags */
-		echo $this->vite( $this->get_entry( $entry ) );
+		echo $this->vite( $this->get_entry( $entry ) ); // phpcs:ignore
 	}
 
 	/**
@@ -165,10 +184,10 @@ class Vite {
 			$scripts = [];
 
 			if ( ! $this->initialized ) {
-				$scripts[] = "<script type=\"module\" src=\"{$this->dev_server}/@vite/client\"></script>";
+				$scripts[] = "<script type=\"module\" src=\"{$this->dev_server}/@vite/client\"></script>"; // phpcs:ignore
 			}
 
-			$scripts[] = "<script type=\"module\" src=\"{$this->dev_server}/{$entry}\"></script>";
+			$scripts[] = "<script type=\"module\" src=\"{$this->dev_server}/{$entry}\"></script>"; // phpcs:ignore
 
 			return implode( PHP_EOL, $scripts );
 		}
@@ -198,7 +217,7 @@ class Vite {
 			return '';
 		}
 
-		return sprintf( '<script type="module" crossorigin src="%s"></script>', esc_url( $url ) );
+		return sprintf( '<script type="module" crossorigin src="%s"></script>', esc_url( $url ) ); // phpcs:ignore
 	}
 
 	/**
@@ -229,7 +248,7 @@ class Vite {
 		$tags = '';
 
 		foreach ( $this->get_css( $entry ) as $url ) {
-			$tags .= sprintf( '<link rel="stylesheet" href="%s">', esc_url( $url ) );
+			$tags .= sprintf( '<link rel="stylesheet" href="%s">', esc_url( $url ) ); // phpcs:ignore
 		}
 
 		return $tags;
@@ -265,13 +284,13 @@ class Vite {
 			return [];
 		}
 
-		$content = file_get_contents( $manifest );
+		$contents = file_get_contents( $manifest );
 
-		if ( ! $content ) {
-			die( 'Error: The manifest.json file is empty.' );
+		if ( ! $contents ) {
+			die( esc_html__( 'Error: The manifest.json file is empty or doesn\'t exist.', 'wp-starter' ) );
 		}
 
-		return json_decode( $content, true );
+		return json_decode( $contents, true );
 	}
 
 	/**
@@ -285,7 +304,7 @@ class Vite {
 		$manifest = $this->get_manifest();
 
 		if ( ! isset( $manifest[ $entry ] ) ) {
-			die( "Could not find entry in manifest for $entry" );
+			die( esc_html__( 'Could not find entry in manifest for', 'wp-starter' ) . ' ' . esc_html( $entry ) );
 		}
 
 		return $this->dist_url . $manifest[ $entry ]['file'];
@@ -345,7 +364,7 @@ class Vite {
 			return $tag;
 		}
 
-		return sprintf( '<script type="module" crossorigin src="%s"></script>', esc_url( $src ) );
+		return sprintf( '<script type="module" crossorigin src="%s"></script>', esc_url( $src ) ); // phpcs:ignore
 	}
 
 	/**

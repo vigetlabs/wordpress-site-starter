@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "87c8541027cb975d50ccb30daaa5a567",
+    "content-hash": "9cb1de6d0a61c67a963d39be6fce9509",
     "packages": [
         {
             "name": "composer/installers",
@@ -1188,6 +1188,99 @@
                 "source": "https://github.com/vigetlabs/viget-blocks-toolkit/tree/v1.0.6"
             },
             "time": "2025-01-15T00:25:05+00:00"
+        },
+        {
+            "name": "viget/viget-form-blocks",
+            "version": "0.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vigetlabs/viget-form-blocks.git",
+                "reference": "318220f4d366a029aacdf0c259f19bbac310d8f3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vigetlabs/viget-form-blocks/zipball/318220f4d366a029aacdf0c259f19bbac310d8f3",
+                "reference": "318220f4d366a029aacdf0c259f19bbac310d8f3",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "*"
+            },
+            "type": "wordpress-plugin",
+            "autoload": {
+                "psr-4": {
+                    "VigetFormBlocks\\": "classes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Viget",
+                    "homepage": "https://viget.com/"
+                }
+            ],
+            "description": "Create forms in Gutenberg with ACF Blocks by Viget.",
+            "homepage": "https://github.com/vigetlabs/viget-form-blocks",
+            "keywords": [
+                "Forms",
+                "editor",
+                "gutenberg",
+                "plugin",
+                "wordpress"
+            ],
+            "support": {
+                "issues": "https://github.com/vigetlabs/viget-form-blocks/issues",
+                "source": "https://github.com/vigetlabs/viget-form-blocks/tree/v0.0.1"
+            },
+            "time": "2025-01-22T23:15:04+00:00"
+        },
+        {
+            "name": "viget/viget-parts-kit",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vigetlabs/viget-parts-kit.git",
+                "reference": "0a556f1952c121dcf5756ad80debb1490ce1768c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vigetlabs/viget-parts-kit/zipball/0a556f1952c121dcf5756ad80debb1490ce1768c",
+                "reference": "0a556f1952c121dcf5756ad80debb1490ce1768c",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "*"
+            },
+            "type": "wordpress-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Viget",
+                    "homepage": "https://viget.com/"
+                }
+            ],
+            "description": "Component Parts Kit integration for WordPress made by Viget.",
+            "homepage": "https://github.com/vigetlabs/viget-parts-kit",
+            "keywords": [
+                "blocks",
+                "components",
+                "directory",
+                "editor",
+                "gutenberg",
+                "index",
+                "wordpress"
+            ],
+            "support": {
+                "issues": "https://github.com/vigetlabs/viget-parts-kit/issues",
+                "source": "https://github.com/vigetlabs/viget-parts-kit/tree/v1.0.1"
+            },
+            "time": "2025-01-22T23:17:36+00:00"
         },
         {
             "name": "wpackagist-plugin/accessibility-checker",

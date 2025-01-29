@@ -55,14 +55,12 @@ class PostInstallScript extends ComposerScript {
 	 * @var array
 	 */
 	private static array $activatePlugins = [
-		'accessibility-checker' => 'Accessibility Checker',
 		'viget-blocks-toolkit' => [
 			'name' => 'Viget Blocks Toolkit',
 			'dependencies' => [
 				'advanced-custom-fields-pro' => 'Advanced Custom Fields Pro',
 			],
 		],
-		'seo-by-rank-math' => 'Rank Math SEO',
 		'safe-svg' => 'Safe SVG',
 	];
 

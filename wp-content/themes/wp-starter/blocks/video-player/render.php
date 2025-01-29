@@ -7,13 +7,17 @@
  * @package WPStarter
  */
 
-$attrs = [];
-$inner = [
-	'template' => $block['template'] ?? [],
+$attrs = []; // phpcs:ignore
+$inner = [ // phpcs:ignore
+	'template'      => $block['template'] ?? [],
+	'allowedBlocks' => [
+		'core/cover',
+		'core/embed',
+	],
 ];
 
-if ( ! is_admin() )  {
-	$attrs['x-data'] = 'playvideo';
+if ( ! is_admin() ) {
+	$attrs['x-data'] = 'playvideo'; // phpcs:ignore
 }
 ?>
 <section <?php block_attrs( $block, '', $attrs ); ?>>
