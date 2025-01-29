@@ -2,6 +2,7 @@
   Block: Breadcrumbs
 #}
 
+{% set template = block.template ?? [] }
 <section {{ block_attrs( block ) }}>
-  {{ function( 'wpstarter_breadcrumbs', block.template ) }}
+  {{ function( 'wpstarter_breadcrumbs', template ) }}
 </section>

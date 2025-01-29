@@ -5,6 +5,9 @@
 		}
 	],
 	"settings": {
-		"files.trimTrailingWhitespace": true
+		"files.trimTrailingWhitespace": true,
+		"files.associations": {
+			"*.css": "tailwindcss"
+		}
 	}
 }

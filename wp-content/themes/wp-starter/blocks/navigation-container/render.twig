@@ -1,11 +1,7 @@
 {#
 	Block: Navigation Container
 #}
-{% set template = [
-	[
-		'core/navigation'
-	]
-] %}
+
 {% set allowed = [
 	'core/group',
 	'core/paragraph',
@@ -18,10 +14,9 @@
 	'core/separator'
 ] %}
 {% set inner = {
-	template: template,
+	template: block.template ?? [],
 	allowedBlocks: allowed
 } %}
-
 {% set attrs = {} %}
 
 {% if function('is_admin') == false %}

@@ -7,7 +7,8 @@
  * @package WPStarter
  */
 
+$template = $block['template'] ?? []; // phpcs:ignore
 ?>
 <section <?php block_attrs( $block ); ?>>
-	<?php wpstarter_breadcrumbs( $block['template'] ); ?>
+	<?php wpstarter_breadcrumbs( $template ); ?>
 </section>

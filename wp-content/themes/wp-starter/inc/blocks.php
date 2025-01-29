@@ -5,6 +5,8 @@
  * @package WPStarter
  */
 
+namespace WPStarter;
+
 // Add Components block Category.
 add_filter(
 	'block_categories_all',
@@ -23,11 +25,11 @@ add_filter(
 // Disable some of the default core blocks.
 add_filter(
 	'allowed_block_types_all',
-	function ( array|bool $allowed_block_types, WP_Block_Editor_Context $context ): array|bool {
+	function ( array|bool $allowed_block_types, \WP_Block_Editor_Context $context ): array|bool {
 		// TODO: Maybe filter by $context.
 
 		if ( ! is_array( $allowed_block_types ) ) {
-			$allowed_block_types = array_keys( WP_Block_Type_Registry::get_instance()->get_all_registered() );
+			$allowed_block_types = array_keys( \WP_Block_Type_Registry::get_instance()->get_all_registered() );
 		}
 
 		$removed_blocks = [

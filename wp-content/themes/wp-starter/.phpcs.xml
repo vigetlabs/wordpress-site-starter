@@ -96,7 +96,6 @@
         <properties>
             <property name="text_domain" type="array">
                 <element value="wp-starter"/>
-                <element value="library-wp-starter"/>
             </property>
         </properties>
     </rule>
@@ -105,6 +104,7 @@
         <properties>
             <property name="prefixes" type="array">
                 <element value="wpstarter_"/>
+                <element value="WPStarter"/>
             </property>
         </properties>
     </rule>

@@ -7,8 +7,8 @@
  * @package WPStarter
  */
 
-$attrs = [];
-$inner = [
+$attrs = []; // phpcs:ignore
+$inner = [ // phpcs:ignore
 	'template'      => $block['template'] ?? [],
 	'allowedBlocks' => [
 		'core/cover',
@@ -16,8 +16,8 @@ $inner = [
 	],
 ];
 
-if ( ! is_admin() )  {
-	$attrs['x-data'] = 'playvideo';
+if ( ! is_admin() ) {
+	$attrs['x-data'] = 'playvideo'; // phpcs:ignore
 }
 ?>
 <section <?php block_attrs( $block, '', $attrs ); ?>>
