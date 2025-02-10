@@ -51,6 +51,7 @@ git push -u origin main
 ```
 
 Be sure to update the origin with the correct remote repository URL (and remove the `<>` brackets).
+Information on developing the theme, styling, and building blocks can be found in the theme [README](wp-content/themes/wp-starter/README.md).
 
 # Development
 
