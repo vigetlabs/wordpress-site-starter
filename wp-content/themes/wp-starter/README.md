@@ -72,22 +72,55 @@ To adjust the spacing you can edit them in `tailwind.config.js` under `spacing >
 ### Buttons
 WordPress button styles are normally built in the `theme.json` but because there is a limitations on hover/focus for button variants all the buttons style are build in Tailwind.
 
-The Tailwind button plugin is in `plugins-tailwind/buttons.js` and has `default`, `outline`, and both light and dark version. In that file (`buttons.js`) is where you will update and style all of the buttons on the site. Those button styles are getting applied to the HTML in `/src/styles/core-blocks/buttons.css`. 
-If you have need to apply the buttons style to the mark up you can add one of these button classes.
+The button styles are getting applied to the HTML in `/src/styles/core-blocks/buttons.css`. 
+If you have need to apply the buttons style to the mark up you can add one of two button classes.
 
 | Button Classes       |
 |----------------------|
 | `.btn-default`       |
-| `.btn-default-light` |
 | `.btn-outline`       |
-| `.btn-outline-light` |
-| `.btn-text`          |
 
 #### Adding more Buttons Styles
-If you need to add more button styles you can [register](https://developer.wordpress.org/reference/functions/register_block_style/) a new block style on the `core/button`. Once you have the new button style registered you add the Tailwind style in `plugins-tailwind/buttons.js` and assign the class to the button in `/src/styles/core-blocks/buttons.css`. It is recommended that you create descriptive button styles and not generic styles like "primary" or "secondary". 
+If you need to add more button styles you can [register](https://developer.wordpress.org/reference/functions/register_block_style/) a new block style on the `core/button`. 
+
+```
+register_block_style(
+	'core/button',
+	[
+		'name'  => 'icon-only',
+		'label' => __( 'Icon Only', 'theme-slug' ),
+	]
+);
+```
+This will attach a class to the block in the pattern of `is-style-[name]`. Once you have the new button style registered you add the Tailwind style in `/src/styles/core-blocks/buttons.css`. It is recommended that you create descriptive button styles and not generic styles like "primary" or "secondary". 
 
 #### Custom Button Icons
 The theme has a custom filter to add in custom icons for buttons. You can your custom SVG icons into `/src/images/icons/` and then pull in that SVG icon in `inc/icons.php`. In order for your SVG icon to update with the text you need to set `fill` or `stroke` (depending on your icon) to `currentColor`. 
 
 ### Navigation
 The navigation has been set up to be fully accessible and is built using [Alpine](https://alpinejs.dev/) and the styles are set in CSS. You can edit the JS in `/src/components/dropdown.js` and the CSS in `/src/styles/core-blocks/navigation.css` if you need to customize the navigation. 
+
+
+## Troubleshooting
+
+### Editor Fonts
+
+The WP Editor requires WOFF2 fonts. TTF/OTF fonts will load on render for templates/pages, but will not display correctly in the Editor view unless they’re in WOFF2 format.
+
+### Editor Styles
+
+The Editor loads the generated Tailwind output, which means you need to run `ddev npm run build` to generate CSS the Editor will import.
+
+### Disconnected Template Parts
+
+If you edit a template part in the CMS (like the Header), WP will use the database version. To reset to the Code version:
+
+1. Open the template part in the Editor
+2. Click the part name in the top middle to bring up the Command Palette
+3. Type ‘Reset’ and select the command. This will remove DB modifications and reset to the code version.
+
+### Trying to find a value in `block.json`
+
+Not all the properties are completely documented, if you’re having trouble try:
+
+- The block schema at the main WP repo: https://github.com/WordPress/gutenberg/blob/trunk/schemas/json/block.json

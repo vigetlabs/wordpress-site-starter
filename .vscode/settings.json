@@ -1,3 +1,5 @@
 {
-	"twiggy.framework": "ignore"
+	"twiggy.framework": "ignore",
+	"php.version": "8.2",
+	"intelephense.environment.phpVersion": "8.2"
 }
