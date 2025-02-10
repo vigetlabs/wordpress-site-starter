@@ -2,29 +2,27 @@
 Block: Alert Banner
 #}
 
-{% set id = 'alert' ~ block.id %}
-
-{% if block.block_id is not empty %}
-    {% set id = 'alert' ~ block.block_id %}
-{% endif %}
+{% set id = wpstarter_alertbanner_get_id(block) %}
 
 {% set inner = {
 	template: block.template ?? [],
 } %}
 
-{% set attrs = {} %}
+{% set attrs = {
+	'id': id
+} %}
 
 {% if function('is_admin') == false %}
-	{% set attrs = {
+	{% set attrs = attrs|merge({
 		'x-data': '{ ' ~ id ~ ': $persist(true) }',
-		'x-show': id
-	} %}
+		'x-show': '"' ~ id ~ '"'
+	}) %}
 {% endif %}
 
-<section {{ block_attrs( block, '', attrs ) }} >
+<section {{ block_attrs( block, '', attrs ) }}>
 	<div class="acf-block-inner__container">
 		{{ inner_blocks( inner ) }}
 	</div>
-	{{ function( 'alert_banner_dismiss_button', id ) }}
+	{{ wpstarter_alertbanner_dismiss_button(id) }}
 </section>
 

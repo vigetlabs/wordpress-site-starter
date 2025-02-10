@@ -67,7 +67,7 @@ class PreScripts extends ComposerScript {
 	 */
 	private static function checkRepoPlugins(): void {
 		foreach ( self::$repoPlugins as $packageName => $pluginDir ) {
-			$pluginGitDir = self::translatePath( 'wp-content/plugins/' . $pluginDir . '/.git' );
+			$pluginGitDir = self::translatePath( 'wp-content/plugins/' . $pluginDir . '/.git', true );
 			if ( is_dir( $pluginGitDir ) ) {
 				self::writeInfo( sprintf( 'Skipping installation of %s: directory containing repository exists.', $packageName ) );
 

@@ -44,32 +44,16 @@
     #############################################################################
     -->
 
-    <!-- Include the WordPress-Extra standard. -->
-    <rule ref="WordPress-Extra">
-        <!--
-        We may want a middle ground though. The best way to do this is add the
-        entire ruleset, then rule by rule, remove ones that don't suit a project.
-        We can do this by running `phpcs` with the '-s' flag, which allows us to
-        see the names of the sniffs reporting errors.
-        Once we know the sniff names, we can opt to exclude sniffs which don't
-        suit our project like so.
-
-        The below two examples just show how you can exclude rules/error codes.
-        They are not intended as advice about which sniffs to exclude.
-        -->
-
-        <!--
-        <exclude name="WordPress.WhiteSpace.ControlStructureSpacing"/>
-        <exclude name="Modernize.FunctionCalls.Dirname.Nested"/>
-        -->
-    </rule>
-
-    <!-- Let's also check that everything is properly documented. -->
-    <rule ref="WordPress-Docs">
+    <rule ref="WordPress">
         <exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
         <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
     </rule>
 
+    <!-- Include the WordPress-Extra standard. -->
+    <rule ref="WordPress-Extra">
+        <exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+        <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+    </rule>
 
     <!-- Add in some extra rules from other standards. -->
     <rule ref="Generic.Commenting.Todo"/>
@@ -112,7 +96,6 @@
         <properties>
             <property name="text_domain" type="array">
                 <element value="wp-starter"/>
-                <element value="library-wp-starter"/>
             </property>
         </properties>
     </rule>
@@ -121,6 +104,7 @@
         <properties>
             <property name="prefixes" type="array">
                 <element value="wpstarter_"/>
+                <element value="WPStarter"/>
             </property>
         </properties>
     </rule>

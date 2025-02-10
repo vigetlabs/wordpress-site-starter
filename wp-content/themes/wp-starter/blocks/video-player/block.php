@@ -12,7 +12,7 @@ add_action(
 	}
 );
 
-// Enable the YT JSON API
+// Enable the YT JSON API.
 add_filter(
 	'embed_oembed_html',
 	function ( string $code ): string {
@@ -25,18 +25,20 @@ add_filter(
 );
 
 add_filter(
-	'vgtbt_button_icons',
+	'vgtbt_block_icons',
 	function ( array $icons ): array {
-		$block_dir       = dirname( __FILE__ );
-		$play_icon_path = $block_dir . '/images/video-play-button.svg';
+		$play_icon_path = __DIR__ . '/images/video-play-button.svg';
 
-		return array_merge([
-			'video-play-button' => [
-				'label'       => __( 'Video Play Button', 'wp-starter' ),
-				'icon'        => file_get_contents( $play_icon_path ),
-				'defaultLeft' => false,
+		return array_merge(
+			[
+				'video-play-button' => [
+					'label'       => __( 'Video Play Button', 'wp-starter' ),
+					'icon'        => file_get_contents( $play_icon_path ),
+					'defaultLeft' => false,
+				],
 			],
-		], $icons );
+			$icons
+		);
 	},
 	9
 );

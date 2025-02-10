@@ -5,6 +5,8 @@
  * @package WPStarter
  */
 
+namespace WPStarter;
+
 // Maybe Load Composer dependencies.
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require_once __DIR__ . '/vendor/autoload.php';
@@ -12,13 +14,13 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 
 // Init Vite.
 require_once get_stylesheet_directory() . '/inc/class-vite.php';
-if ( class_exists( 'Vite' ) ) {
+if ( class_exists( __NAMESPACE__ . '\Vite' ) ) {
 	new Vite();
 }
 
 // Maybe Initialize Timber.
-if ( class_exists( 'Timber\Timber' ) ) {
-	Timber\Timber::init();
+if ( class_exists( '\Timber\Timber' ) ) {
+	\Timber\Timber::init();
 }
 
 // Block Functions.
