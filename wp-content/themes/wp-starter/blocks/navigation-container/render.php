@@ -7,12 +7,7 @@
  * @package WPStarter
  */
 
-$attrs = [
-	'x-data="{menuIsOpen : false}"',
-	'x-trap="menuIsOpen"',
-];
-
-$allowed = [
+$allowed = [ // phpcs:ignore
 	'core/group',
 	'core/paragraph',
 	'core/site-logo',
@@ -23,16 +18,16 @@ $allowed = [
 	'core/spacer',
 	'core/separator',
 ];
-
-$block_template = [
-	[
-		'core/navigation',
-	],
-];
-$inner          = [
-	'template'      => $block_template,
+$inner   = [ // phpcs:ignore
+	'template'      => $block['template'] ?? [],
 	'allowedBlocks' => $allowed,
 ];
+$attrs   = []; // phpcs:ignore
+
+if ( ! is_admin() ) {
+	$attrs['x-data'] = '{menuIsOpen : false}'; // phpcs:ignore
+	$attrs['x-trap'] = 'menuIsOpen'; // phpcs:ignore
+}
 
 ?>
 <div <?php block_attrs( $block, '', $attrs ); ?>>

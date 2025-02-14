@@ -31,10 +31,11 @@ add_action(
 /**
  * Breadcrumbs Output
  *
- * @param array $block_template
+ * @param ?array $block_template The block template array.
+ *
  * @return void
  */
-function wpstarter_breadcrumbs( array|null $block_template = [] ): void {
+function wpstarter_breadcrumbs( ?array $block_template = [] ): void {
 	if ( function_exists( 'rank_math_the_breadcrumbs' ) ) {
 		rank_math_the_breadcrumbs();
 		return;
