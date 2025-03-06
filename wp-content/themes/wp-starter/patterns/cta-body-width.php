@@ -4,6 +4,8 @@
  * Slug: wp-starter/cta-body-width
  * Categories: cta
  * Viewport width: 1400
+ *
+ * @package WPStarter
  */
 
 ?>

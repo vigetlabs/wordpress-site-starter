@@ -4,6 +4,8 @@
  * Slug: wp-starter/cta-default
  * Categories: cta
  * Viewport width: 1400
+ *
+ * @package WPStarter
  */
 
 ?>
