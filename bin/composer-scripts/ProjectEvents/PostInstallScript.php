@@ -148,7 +148,7 @@ class PostInstallScript extends ComposerScript {
 	 * @return bool
 	 */
 	private static function needsSetup(): bool {
-		if ( file_exists( self::translatePath( './wp-load.php', true ) ) ) {
+		if ( file_exists( self::translatePath( './wp-load.php' ) ) ) {
 			return false;
 		}
 
@@ -161,7 +161,7 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function loadDDEVEnvironmentVars(): void {
-		$envPath = self::translatePath( './.ddev/.env', true );
+		$envPath = self::translatePath( './.ddev/.env' );
 
 		if ( ! file_exists( $envPath ) ) {
 			self::writeError( 'DDEV .env file not found (' . $envPath . ')' );
@@ -181,7 +181,7 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	public static function downloadWordPress(): void {
-		$wordpress_dir = self::translatePath( './', true );
+		$wordpress_dir = self::translatePath( './' );
 
 		self::writeInfo( 'Downloading the latest version of WordPress...' );
 
@@ -449,7 +449,7 @@ class PostInstallScript extends ComposerScript {
 			return;
 		}
 
-		$dbFilePath = self::translatePath( $databaseFile, true );
+		$dbFilePath = self::translatePath( $databaseFile );
 
 		if ( ! file_exists( $dbFilePath ) ) {
 			self::writeError( 'Could not locate database file: ' . $dbFilePath );
