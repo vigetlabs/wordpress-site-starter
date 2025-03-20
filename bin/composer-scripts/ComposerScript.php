@@ -15,8 +15,8 @@
 
 namespace Viget\ComposerScripts;
 
-use Composer\Script\Event;
 use Composer\Composer;
+use Composer\Script\Event;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -51,9 +51,10 @@ class ComposerScript {
 	 */
 	protected static function setEvent( Event $event ): void
 	{
-		self::$event    = $event;
+		self::$event = $event;
 		self::$composer = self::$event->getComposer();
-		self::$output   = new ConsoleOutput();
+		self::$output = new ConsoleOutput();
+
 	}
 
 	/**
