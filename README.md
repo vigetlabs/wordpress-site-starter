@@ -72,6 +72,20 @@ ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.14
+* Fixed a bug with the Video Player Component.
+* Update to latest version of ACF Pro.
+* Move Theme block patterns out of block folders due to change in Blocks Toolkit plugin.
+* Added `.vscode` Project Workspace file.
+* Vite port config changes.
+* No longer activate some plugins by default during setup.
+* Composer script bug fix to better detect working directory path.
+* Composer script bug fixes to prevent local repo overwrites.
+* PHPCS code cleanup.
+* Theme Composer dependency updates.
+* Updates to theme README.
+* Corrections to the project dist README.
+
 ### v1.0.13
 * Added `viget-blocks-toolkit` via Composer
 * Some bug fixes.
