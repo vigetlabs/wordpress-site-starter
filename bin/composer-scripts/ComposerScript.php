@@ -15,8 +15,8 @@
 
 namespace Viget\ComposerScripts;
 
-use Composer\Script\Event;
 use Composer\Composer;
+use Composer\Script\Event;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -51,22 +51,22 @@ class ComposerScript {
 	 */
 	protected static function setEvent( Event $event ): void
 	{
-		self::$event    = $event;
+		self::$event = $event;
 		self::$composer = self::$event->getComposer();
-		self::$output   = new ConsoleOutput();
+		self::$output = new ConsoleOutput();
+
 	}
 
 	/**
 	 * Translate a relative path to an absolute path.
 	 *
 	 * @param string $path
-	 * @param bool   $in_docker
 	 *
 	 * @return string
 	 */
-	protected static function translatePath( string $path, bool $in_docker = false ): string
+	protected static function translatePath( string $path ): string
 	{
-		$base = $in_docker ? '/var/www/html' : getcwd();
+		$base = self::findProjectRoot();
 
 		// Support relative paths.
 		if ( in_array( $path, [ './', '.' ] ) ) {
@@ -521,5 +521,23 @@ VIGET;
 		}
 
 		return $pass;
+	}
+
+	/**
+	 * Find the project root.
+	 *
+	 * @return string
+	 */
+	protected static function findProjectRoot(): string {
+		$dir = getcwd();
+
+		// Find wp-content in the path
+		if (strpos($dir, '/wp-content/') !== false) {
+			$parts = explode('/wp-content/', $dir);
+			return $parts[0];
+		}
+
+		// Fallback to current directory if wp-content is not found
+		return $dir;
 	}
 }

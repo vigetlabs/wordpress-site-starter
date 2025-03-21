@@ -1,6 +1,5 @@
 {
   "name": "viget/wordpress-site-starter",
-  "version": "0.1.0",
   "description": "A custom WordPress Site Starter Kit by Viget.",
   "keywords": [
     "wordpress",
@@ -26,18 +25,18 @@
     "php": ">=8.2.0",
     "ext-json": "*",
     "idleberg/wordpress-vite-assets": "^1.2",
-    "squizlabs/php_codesniffer": "^3.11",
     "timber/timber": "^2.3",
-    "viget/viget-blocks-toolkit": "^1.0",
+    "viget/viget-blocks-toolkit": "^1.1",
     "viget/viget-form-blocks": "^0.0.1",
     "viget/viget-parts-kit": "^1.0",
-    "wpackagist-plugin/accessibility-checker": "^1.17",
+    "wpackagist-plugin/accessibility-checker": "^1.21",
     "wpackagist-plugin/safe-svg": "^2.3",
     "wpackagist-plugin/seo-by-rank-math": "^1.0",
     "wpackagist-plugin/wordfence": "^8.0"
   },
   "require-dev": {
     "phpcompatibility/phpcompatibility-wp": "^2",
+    "squizlabs/php_codesniffer": "^3.11",
     "wp-coding-standards/wpcs": "^3.1"
   },
   "config": {
