@@ -31,6 +31,7 @@ class PostCreateProjectScript extends ComposerScript {
 		'package-name'     => 'WPStarter',
 		'function-prefix'  => 'wpstarter_',
 		'text-domain'      => 'wp-starter',
+		'proxy-domain'     => '',
 	];
 
 	/**
@@ -62,6 +63,9 @@ class PostCreateProjectScript extends ComposerScript {
 
 		// Save some of the vars to the .ddev/.env file
 		self::storeProjectInfo();
+
+		// Update the media proxy with the provided domain.
+		self::updateMediaProxy();
 
 		// Swap README files
 		self::swapReadmeFiles();
@@ -145,12 +149,27 @@ class PostCreateProjectScript extends ComposerScript {
 		self::$info['function'] = str_replace( '-', '_', self::$info['slug'] ) . '_';
 		self::$info['function'] = self::ask( 'Do you want to customize the function prefix?', self::$info['function'] );
 
+		// Proxy Domain.
+		self::$info['proxy-domain'] = self::ask( 'Would you like to proxy media (uploads) from another domain? (leave blank to skip)', self::$info['proxy-domain'] );
+
+		self::$info['proxy-domain'] = preg_replace( '#^https?://#', '', self::$info['proxy-domain'] );
+		self::$info['proxy-domain'] = rtrim( self::$info['proxy-domain'], '/' );
+
+		// Make sure the proxy domain is a valid domain.
+		if ( ! filter_var( self::$info['proxy-domain'], FILTER_VALIDATE_DOMAIN ) ) {
+			self::writeWarning( 'Invalid proxy domain name. Ignoring...' );
+			self::$info['proxy-domain'] = '';
+		}
+
 		// Summary
 		$summary  = PHP_EOL . ' - Name: ' . self::$info['name'];
 		$summary .= PHP_EOL . ' - Slug: ' . self::$info['slug'];
 		$summary .= PHP_EOL . ' - Text Domain: ' . self::$info['text-domain'];
 		$summary .= PHP_EOL . ' - Package: ' . self::$info['package'];
 		$summary .= PHP_EOL . ' - Function Prefix: ' . self::$info['function'];
+		if ( ! empty( self::$info['proxy-domain'] ) ) {
+			$summary .= PHP_EOL . ' - Proxy Domain: ' . self::$info['proxy-domain'];
+		}
 
 		self::writeOutput( '<info>Summary:</info>' . $summary );
 
@@ -576,5 +595,33 @@ class PostCreateProjectScript extends ComposerScript {
 			unlink( $releaseFile );
 			self::writeInfo( 'Release script removed.' );
 		}
+	}
+
+	/**
+	 * Update the media proxy with the provided domain.
+	 *
+	 * @return void
+	 */
+	private static function updateMediaProxy(): void {
+		if ( empty( self::$info['proxy-domain'] ) ) {
+			return;
+		}
+
+		self::writeLine( 'Updating media proxy...' );
+
+		$mediaProxy = self::translatePath( '.ddev/nginx/media-proxy.conf.dist' );
+
+		if ( ! file_exists( $mediaProxy ) ) {
+			self::writeError( 'media-proxy.conf.dist file not found. Skipping media proxy update.' );
+			return;
+		}
+
+		// Enable the media proxy.
+		rename( $mediaProxy, self::translatePath( '.ddev/nginx/media-proxy.conf' ) );
+
+		// Set the proxy domain in the media proxy file.
+		self::searchReplaceFile( 'set $upstream_host ""', 'set $upstream_host ' . self::$info['proxy-domain'], $mediaProxy );
+
+		self::writeInfo( 'Media proxy updated.' );
 	}
 }
