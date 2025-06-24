@@ -609,15 +609,21 @@ class PostCreateProjectScript extends ComposerScript {
 
 		self::writeLine( 'Updating media proxy...' );
 
-		$mediaProxy = self::translatePath( '.ddev/nginx/media-proxy.conf.dist' );
+		$mediaProxyDist = self::translatePath( '.ddev/nginx/media-proxy.conf.dist' );
+		$mediaProxy     = self::translatePath( '.ddev/nginx/media-proxy.conf' );
 
-		if ( ! file_exists( $mediaProxy ) ) {
+		if ( ! file_exists( $mediaProxyDist ) ) {
 			self::writeError( 'media-proxy.conf.dist file not found. Skipping media proxy update.' );
 			return;
 		}
 
 		// Enable the media proxy.
-		rename( $mediaProxy, self::translatePath( '.ddev/nginx/media-proxy.conf' ) );
+		if ( ! rename( $mediaProxyDist, $mediaProxy ) ) {
+			self::writeError( 'Failed to rename media proxy file.' );
+			return;
+		} else {
+			self::writeInfo( 'Media proxy file updated.' );
+		}
 
 		// Set the proxy domain in the media proxy file.
 		self::searchReplaceFile( 'set $upstream_host ""', 'set $upstream_host ' . self::$info['proxy-domain'], $mediaProxy );
