@@ -3,8 +3,8 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 const { remPair, rem } = require('@viget/tailwindcss-plugins/utilities/fns')
 
 // Breakpoints and content widths for the site
-const minBreakpoint = 640;
-const maxBreakpoint = 1200;
+const minBreakpoint = 640; // Narrow site width, used with "wide" width alignment.
+const maxBreakpoint = 1200; // Default site width.
 
 const fluidSize = (
 	minSize,
@@ -49,10 +49,11 @@ module.exports = {
 			},
 			fontFamily: {
 				'sans': 'var(--wp--preset--font-family--body)',
+				'heading': 'var(--wp--preset--font-family--heading)',
 			},
 			fontSize: {
 				// If you update the names or add more fonts sizes you will need to update the file in theme-json/settings/typography.js
-				"2xl": [["32px", fluidSize(32, 60)],"1.1",],
+				"2xl": [["32px", fluidSize(32, 60)], "1.1"],
 				"xl": [["24px", fluidSize(24, 44)], "1.1"],
 				"lg": [["20px", fluidSize(20, 34)], "1.1"],
 				"base": [["16px", fluidSize(16, 18)], "1.1"],

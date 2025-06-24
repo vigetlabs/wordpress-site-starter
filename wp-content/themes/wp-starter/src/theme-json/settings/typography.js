@@ -5,6 +5,8 @@ export default {
 	letterSpacing: false,
 	lineHeight: false,
 	writingMode: false,
+	defaultFontSizes: false,
+	customFontSize: true,
 	fontFamilies: [
 		// For more info about loading fonts see https://fullsiteediting.com/lessons/theme-json-typography-options/
 		{
