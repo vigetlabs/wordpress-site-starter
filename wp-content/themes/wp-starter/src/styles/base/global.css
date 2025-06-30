@@ -24,7 +24,7 @@
 	}
 
 	p:not(:empty):not(:last-child) {
-		@apply mt-24;
+		@apply mb-24;
 	}
 }
 
@@ -33,8 +33,8 @@
 		Adjust this to add space between blocks on a page.
 		Should be adjusted or removed as needed per project.
 	*/
-	.entry-content > *:not(:first-child) {
-		@apply mt-0;
+	.entry-content > *:not(:last-child) {
+		@apply mb-0;
 	}
 
 	.entry-content > *:not(.alignfull),

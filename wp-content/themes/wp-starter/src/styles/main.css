@@ -1,4 +1,6 @@
 @import-glob './tailwind.css';
 @import-glob './base/*.css';
+@import-glob './layout/*.css';
 @import-glob './core-blocks/*.css';
 @import-glob './../../blocks/**/*.css';
+@import-glob './pages/*.css';

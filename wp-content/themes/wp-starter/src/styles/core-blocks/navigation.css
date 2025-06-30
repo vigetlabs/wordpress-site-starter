@@ -21,20 +21,20 @@
 				@apply relative block;
 			}
 
+			/* Menu Links */
+			.wp-block-navigation-item__content,
+			.wp-block-pages-list__item__link {
+				@apply mx-2 my-4 text-black dark:text-white;
+
+				&:hover,
+				&:focus {
+					@apply text-black underline decoration-2 underline-offset-8 dark:text-white;
+				}
+			}
+
 			.wp-block-pages-list__item,
 			.wp-block-navigation-submenu {
 				@apply flex flex-col mobile-menu:flex-row;
-
-				/* Menu Links */
-				.wp-block-navigation-item__content,
-				.wp-block-pages-list__item__link {
-					@apply mx-2 my-4 text-black dark:text-white;
-
-					&:hover,
-					&:focus {
-						@apply text-black underline decoration-2 underline-offset-8 dark:text-white;
-					}
-				}
 
 				.wp-block-navigation-submenu__toggle {
 					@apply relative;

@@ -4,6 +4,7 @@ export default {
 	spacingScale: {
 		steps: 0,
 	},
+	defaultSpacingSizes: false,
 	spacingSizes: [
 		{
 			name: '1',

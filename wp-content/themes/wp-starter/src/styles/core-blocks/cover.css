@@ -1,0 +1,5 @@
+@layer components {
+	.wp-block-cover {
+		@apply p-0;
+	}
+}
