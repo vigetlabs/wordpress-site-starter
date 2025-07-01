@@ -1,7 +1,7 @@
 /** Navigation colors need to be updated to match your theme colors */
 @layer components {
 	.header-navigation {
-		@apply bg-white dark:bg-black;
+		@apply hidden bg-white dark:bg-black;
 
 		.wp-block-page-list {
 			@apply flex flex-col mobile-menu:flex-row;
