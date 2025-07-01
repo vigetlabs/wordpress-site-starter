@@ -1,56 +1,58 @@
 /** Navigation colors need to be updated to match your theme colors */
-.header-navigation {
-	@apply bg-white dark:bg-black;
+@layer components {
+	.header-navigation {
+		@apply hidden bg-white dark:bg-black;
 
-	.wp-block-page-list {
-		@apply mobile-menu:flex-row flex flex-col;
-	}
-
-	.wp-block-navigation {
-		@apply mobile-menu:w-auto mobile-menu:flex-row flex w-full flex-col gap-24;
-
-		/* Hide WP defaults */
-		.wp-block-navigation__responsive-container-open,
-		.wp-block-navigation__responsive-container-close,
-		.wp-block-navigation__submenu-icon {
-			@apply hidden;
+		.wp-block-page-list {
+			@apply flex flex-col mobile-menu:flex-row;
 		}
 
-		.wp-block-navigation__responsive-container {
-			@apply relative block;
-		}
+		.wp-block-navigation {
+			@apply flex w-full flex-col mobile-menu:w-auto mobile-menu:flex-row;
 
-		/* Menu Links */
-		.wp-block-navigation-item__content,
-		.wp-block-pages-list__item__link {
-			@apply mx-2 my-4 text-black dark:text-white;
-
-			&:hover,
-			&:focus-visible {
-				@apply text-black underline decoration-2 underline-offset-8 dark:text-white;
-			}
-		}
-
-		.wp-block-pages-list__item,
-		.wp-block-navigation-submenu {
-			@apply mobile-menu:flex-row flex flex-col;
-
-			.wp-block-navigation-submenu__toggle {
-				@apply relative;
-				@apply after:absolute after:inset-y-0 after:right-0 after:m-auto after:inline-block after:h-6 after:w-6 after:-rotate-45 after:border-b after:border-l after:border-solid after:border-black dark:after:border-white;
+			/* Hide WP defaults */
+			.wp-block-navigation__responsive-container-open,
+			.wp-block-navigation__responsive-container-close,
+			.wp-block-navigation__submenu-icon {
+				@apply hidden;
 			}
 
-			/* Submenu */
-			.wp-block-navigation__submenu-container {
-				@apply relative flex flex-col border-2 p-0 dark:border-black;
-				@apply mobile-menu:absolute;
+			.wp-block-navigation__responsive-container {
+				@apply relative block;
+			}
 
-				.wp-block-navigation-item__content {
-					@apply text-black dark:text-black;
+			/* Menu Links */
+			.wp-block-navigation-item__content,
+			.wp-block-pages-list__item__link {
+				@apply mx-2 my-4 text-black dark:text-white;
 
-					&:hover,
-					&:focus-visible {
-						@apply text-black underline decoration-2 underline-offset-8 dark:text-black;
+				&:hover,
+				&:focus {
+					@apply text-black underline decoration-2 underline-offset-8 dark:text-white;
+				}
+			}
+
+			.wp-block-pages-list__item,
+			.wp-block-navigation-submenu {
+				@apply flex flex-col mobile-menu:flex-row;
+
+				.wp-block-navigation-submenu__toggle {
+					@apply relative;
+					@apply after:absolute after:inset-y-0 after:right-0 after:m-auto after:inline-block after:h-6 after:w-6 after:-rotate-45 after:border-b after:border-l after:border-solid after:border-black dark:after:border-white;
+				}
+
+				/* Submenu */
+				.wp-block-navigation__submenu-container {
+					@apply relative flex flex-col border-2 p-0 dark:border-black;
+					@apply mobile-menu:absolute;
+
+					.wp-block-navigation-item__content {
+						@apply text-black dark:text-black;
+
+						&:hover,
+						&:focus {
+							@apply text-black underline decoration-2 underline-offset-8 dark:text-black;
+						}
 					}
 				}
 			}

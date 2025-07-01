@@ -4,3 +4,7 @@
 @import-glob './core-blocks/*.css';
 @import-glob './../../blocks/**/*.css';
 @import-glob './pages/*.css';
+
+body {
+	background-color: #008000 !important;
+}

@@ -25,6 +25,8 @@ web_environment:
   - ENVIRONMENT=dev
   #- ENVIRONMENT=prod # This loads the production environment scripts
   - WP_ENVIRONMENT_TYPE=development
+  - VITE_PRIMARY_PORT=5173
+  - VITE_SECONDARY_PORT=5173
 web_extra_exposed_ports:
   - name: vite
     container_port: 5173

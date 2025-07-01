@@ -30,9 +30,9 @@ export default defineConfig(({ command }) => ({
 	},
 	server: {
 		host: "0.0.0.0",
-		origin: "https://wpstarter.ddev.site:5273",
+		origin: "https://wpstarter.ddev.site:5173",
 		strictPort: true,
-		port: parseInt(process.env.VITE_PRIMARY_PORT ?? '5273'),
+		port: parseInt(process.env.VITE_PRIMARY_PORT ?? '5173'),
 		watch: {
 			usePolling: true,
 			interval: 1000,
