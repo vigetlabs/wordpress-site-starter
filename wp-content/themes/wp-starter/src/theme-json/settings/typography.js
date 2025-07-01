@@ -5,10 +5,12 @@ export default {
 	letterSpacing: false,
 	lineHeight: false,
 	writingMode: false,
+	defaultFontSizes: false,
+	customFontSize: true,
 	fontFamilies: [
 		// For more info about loading fonts see https://fullsiteediting.com/lessons/theme-json-typography-options/
 		{
-			//Set this to be your body font family
+			// Set this to be your body font family.
 			fontFamily: 'Roboto Condensed',
 			name: 'Roboto Condensed',
 			slug: 'body',
@@ -34,7 +36,7 @@ export default {
 			],
 		},
 		{
-			//Set this to be your heading font family
+			// Set this to be your heading font family.
 			fontFamily: 'Roboto Condensed',
 			name: 'Roboto Condensed',
 			slug: 'heading',
@@ -80,23 +82,26 @@ export default {
 		{
 			fluid: false,
 			name: 'Medium',
-			size: theme.fontSize['base'][0][1],
+			size: theme.fontSize['md'][0][1],
 			slug: 'medium',
 		},
 		{
+			fluid: false,
 			name: 'Large',
 			size: theme.fontSize['lg'][0][1],
 			slug: 'large',
 		},
 		{
+			fluid: false,
 			name: 'Extra Large',
 			size: theme.fontSize['xl'][0][1],
 			slug: 'x-large',
 		},
 		{
-			name: 'Extra Extra Large',
+			fluid: false,
+			name: '2X Large',
 			size: theme.fontSize['2xl'][0][1],
-			slug: 'xx-large',
+			slug: '2x-large',
 		},
 	],
 };

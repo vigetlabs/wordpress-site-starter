@@ -23,7 +23,7 @@
 
         wp.media.view.Button = originalButton.extend({
             click: function( e ) {
-                if (!this.options.classes.includes('media-button-skip')) {
+                if (!Array.isArray(this.options.classes) || !this.options.classes.includes('media-button-skip')) {
                     originalButton.prototype.click.apply(this, arguments);
                     return;
                 }

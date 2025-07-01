@@ -1,4 +1,9 @@
 @layer base {
+	body {
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
 	h1 {
 		@apply text-2xl;
 	}
@@ -9,7 +14,7 @@
 		@apply text-lg;
 	}
 	h4 {
-		@apply text-base;
+		@apply text-md;
 	}
 	h5 {
 		@apply text-sm;

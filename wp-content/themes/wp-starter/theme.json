@@ -17,16 +17,18 @@
           "name": "Black",
           "slug": "dark-black"
         }
-      ]
+      ],
+      "gradients": []
     },
     "layout": {
       "contentSize": "1200px",
-      "wideSize": "640px"
+      "wideSize": "900px"
     },
     "spacing": {
       "spacingScale": {
         "steps": 0
       },
+      "defaultSpacingSizes": false,
       "spacingSizes": [
         {
           "name": "1",
@@ -72,6 +74,8 @@
       "letterSpacing": false,
       "lineHeight": false,
       "writingMode": false,
+      "defaultFontSizes": false,
+      "customFontSize": true,
       "fontFamilies": [
         {
           "fontFamily": "Roboto Condensed",
@@ -118,35 +122,38 @@
         {
           "fluid": false,
           "name": "Extra Small",
-          "size": "clamp(0.5rem, 0.36vw + 0.356875rem, 0.625rem)",
+          "size": "clamp(0.625rem, 0.00vw + 0.625rem, 0.625rem)",
           "slug": "x-small"
         },
         {
           "fluid": false,
           "name": "Small",
-          "size": "clamp(0.75rem, 0.71vw + 0.464375rem, 1rem)",
+          "size": "clamp(0.75rem, 0.36vw + 0.606875rem, 0.875rem)",
           "slug": "small"
         },
         {
           "fluid": false,
           "name": "Medium",
-          "size": "clamp(1rem, 0.36vw + 0.856875rem, 1.125rem)",
+          "size": "clamp(1.125rem, 1.07vw + 0.69625rem, 1.5rem)",
           "slug": "medium"
         },
         {
+          "fluid": false,
           "name": "Large",
-          "size": "clamp(1.25rem, 2.50vw + 0.25rem, 2.125rem)",
+          "size": "clamp(1.625rem, 1.79vw + 0.910625rem, 2.25rem)",
           "slug": "large"
         },
         {
+          "fluid": false,
           "name": "Extra Large",
-          "size": "clamp(1.5rem, 3.57vw + 0.07125rem, 2.75rem)",
+          "size": "clamp(2.25rem, 2.14vw + 1.393125rem, 3rem)",
           "slug": "x-large"
         },
         {
-          "name": "Extra Extra Large",
-          "size": "clamp(2rem, 5.00vw + 0rem, 3.75rem)",
-          "slug": "xx-large"
+          "fluid": false,
+          "name": "2X Large",
+          "size": "clamp(2.625rem, 3.21vw + 1.339375rem, 3.75rem)",
+          "slug": "2x-large"
         }
       ]
     },
@@ -673,7 +680,7 @@
       }
     },
     "spacing": {
-      "blockGap": "1.5rem",
+      "blockGap": 0,
       "padding": {
         "left": "var(--wp--preset--spacing--20)",
         "right": "var(--wp--preset--spacing--20)"
@@ -686,15 +693,9 @@
       "fontWeight": "400",
       "lineHeight": "1.55"
     },
-    "css": ":where(.wp-site-blocks *:focus){outline-width:2px;outline-style:solid}.has-dark-black-background-color:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) .wp-block-button .wp-block-button__link:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) .wp-block-button.is-style-outline .wp-block-button__link:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) *:not(.has-text-color) {color:var(--wp--preset--color--white) !important;}"
+    "css": ":where(.wp-site-blocks *:focus-visible){outline-width:2px;outline-style:solid}.has-dark-black-background-color:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) .wp-block-button .wp-block-button__link:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) .wp-block-button.is-style-outline .wp-block-button__link:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) *:not(.has-text-color,.has-inline-color):not(.wp-block-button__link-icon):not(svg, polygon) {color:var(--wp--preset--color--white) !important;}"
   },
-  "templateParts": [
-    {
-      "name": "footer-stacked-navigation",
-      "title": "Footer Stacked Navigation",
-      "area": "uncategorized"
-    }
-  ],
+  "templateParts": [],
   "version": 3,
-  "$schema": "https://schemas.wp.org/wp/6.7/theme.json"
+  "$schema": "https://schemas.wp.org/wp/6.8/theme.json"
 }

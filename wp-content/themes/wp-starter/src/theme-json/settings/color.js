@@ -108,10 +108,38 @@ function getPalette() {
 	return palette;
 }
 
+/**
+ * Get the gradients from the theme.
+ *
+ * @returns {*[]}
+ */
+function getGradients() {
+	const gradients = [];
+
+	if ( ! currentTheme.extend.backgroundImage ) {
+		return gradients;
+	}
+
+	for ( const bgImage in currentTheme.extend.backgroundImage ) {
+		if ( ! currentTheme.extend.backgroundImage[bgImage].toLowerCase().includes( 'gradient' ) ) {
+			continue;
+		}
+
+		gradients.push( {
+			name: bgImage.replace( 'gradient-', '' ).replace( '-', ' ' ).replace( /\b\w/g, char => char.toUpperCase() ),
+			slug: bgImage.replace( 'gradient-', '' ),
+			gradient: currentTheme.extend.backgroundImage[bgImage],
+		} );
+	}
+
+	return gradients;
+}
+
 export default {
 	defaultDuotone: false,
 	defaultPalette: false,
 	defaultGradients: false,
 
 	palette: getPalette(),
+	gradients: getGradients(),
 };

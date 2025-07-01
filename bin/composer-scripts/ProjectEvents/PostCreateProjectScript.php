@@ -31,6 +31,7 @@ class PostCreateProjectScript extends ComposerScript {
 		'package-name'     => 'WPStarter',
 		'function-prefix'  => 'wpstarter_',
 		'text-domain'      => 'wp-starter',
+		'proxy-domain'     => '',
 	];
 
 	/**
@@ -62,6 +63,12 @@ class PostCreateProjectScript extends ComposerScript {
 
 		// Save some of the vars to the .ddev/.env file
 		self::storeProjectInfo();
+
+		// Update the media proxy with the provided domain.
+		self::updateMediaProxy();
+
+		// Update the branding.
+		self::updateBranding();
 
 		// Swap README files
 		self::swapReadmeFiles();
@@ -145,12 +152,63 @@ class PostCreateProjectScript extends ComposerScript {
 		self::$info['function'] = str_replace( '-', '_', self::$info['slug'] ) . '_';
 		self::$info['function'] = self::ask( 'Do you want to customize the function prefix?', self::$info['function'] );
 
+		// Proxy Domain.
+		self::$info['proxy-domain'] = self::ask( 'Would you like to proxy media (uploads) from another domain? (leave blank to skip)', self::$info['proxy-domain'] );
+
+		self::$info['proxy-domain'] = preg_replace( '#^https?://#', '', self::$info['proxy-domain'] );
+		self::$info['proxy-domain'] = rtrim( self::$info['proxy-domain'], '/' );
+
+		// Make sure the proxy domain is a valid domain.
+		if ( ! filter_var( self::$info['proxy-domain'], FILTER_VALIDATE_DOMAIN ) ) {
+			self::writeWarning( 'Invalid proxy domain name. Ignoring...' );
+			self::$info['proxy-domain'] = '';
+		}
+
+		// Branding.
+		$branding = empty( self::$info['branding'] ) ? 'viget' : self::$info['branding'];
+		self::$info['branding'] = self::select( 'Agency Branding:', [
+			'viget' => 'Viget',
+			'custom' => 'Custom',
+			'none' => 'None',
+		], $branding );
+
+		if ( 'custom' === self::$info['branding'] ) {
+			$brandingName = empty( self::$info['branding-name'] ) ? 'My Agency' : self::$info['branding-name'];
+			self::$info['branding-name'] = self::ask( 'What is the name of your agency?', $brandingName );
+
+			if ( empty( self::$info['branding-name'] ) ) {
+				self::$info['branding'] = 'none';
+			} else {
+				$brandingWebsite = empty( self::$info['branding-website'] ) ? 'https://' : self::$info['branding-website'];
+				self::$info['branding-website'] = self::ask( 'What is the website for your agency?', $brandingWebsite );
+
+				if ( ! empty( self::$info['branding-website'] ) ) {
+					// Validate the website URL.
+					if ( ! filter_var( self::$info['branding-website'], FILTER_VALIDATE_URL ) ) {
+						self::writeWarning( 'Invalid website URL. Ignoring...' );
+						self::$info['branding-website'] = '';
+					}
+				}
+			}
+		}
+
 		// Summary
 		$summary  = PHP_EOL . ' - Name: ' . self::$info['name'];
 		$summary .= PHP_EOL . ' - Slug: ' . self::$info['slug'];
 		$summary .= PHP_EOL . ' - Text Domain: ' . self::$info['text-domain'];
 		$summary .= PHP_EOL . ' - Package: ' . self::$info['package'];
 		$summary .= PHP_EOL . ' - Function Prefix: ' . self::$info['function'];
+		if ( ! empty( self::$info['proxy-domain'] ) ) {
+			$summary .= PHP_EOL . ' - Proxy Domain: ' . self::$info['proxy-domain'];
+		}
+		$summary .= PHP_EOL . ' - Branding: ' . ucwords( self::$info['branding'] );
+		if ( 'custom' === self::$info['branding'] ) {
+			$summary .= ' (' . self::$info['branding-name'];
+			if ( ! empty( self::$info['branding-website'] ) ) {
+				$summary .= ' / ' . self::$info['branding-website'];
+			}
+			$summary .= ')';
+		}
 
 		self::writeOutput( '<info>Summary:</info>' . $summary );
 
@@ -550,7 +608,7 @@ class PostCreateProjectScript extends ComposerScript {
 	private static function removeGithubFiles(): void {
 		self::writeLine( 'Removing GitHub integration files...' );
 
-		$deployFile = self::translatePath( '.github/workflows/deploy.yaml', true );
+		$deployFile = self::translatePath( '.github/workflows/deploy.yaml' );
 
 		if ( ! file_exists( $deployFile ) ) {
 			self::writeWarning( sprintf( 'Deployment script not found (%s). Skipping removal.', $deployFile ) );
@@ -559,7 +617,7 @@ class PostCreateProjectScript extends ComposerScript {
 			self::writeInfo( 'Deployment script removed.' );
 		}
 
-		$componentTemplate = self::translatePath( '.github/ISSUE_TEMPLATE/new-component-ticket.md', true );
+		$componentTemplate = self::translatePath( '.github/ISSUE_TEMPLATE/new-component-ticket.md' );
 
 		if ( ! file_exists( $componentTemplate ) ) {
 			self::writeWarning( sprintf( 'Component Issue template not found (%s). Skipping removal.', $componentTemplate ) );
@@ -568,7 +626,7 @@ class PostCreateProjectScript extends ComposerScript {
 			self::writeInfo( 'Component Issue template removed.' );
 		}
 
-		$releaseFile = self::translatePath( '.github/workflows/release.yaml', true );
+		$releaseFile = self::translatePath( '.github/workflows/release.yaml' );
 
 		if ( ! file_exists( $releaseFile ) ) {
 			self::writeWarning( sprintf( 'Release script not found (%s). Skipping removal.', $releaseFile ) );
@@ -576,5 +634,71 @@ class PostCreateProjectScript extends ComposerScript {
 			unlink( $releaseFile );
 			self::writeInfo( 'Release script removed.' );
 		}
+	}
+
+	/**
+	 * Update the media proxy with the provided domain.
+	 *
+	 * @return void
+	 */
+	private static function updateMediaProxy(): void {
+		if ( empty( self::$info['proxy-domain'] ) ) {
+			return;
+		}
+
+		self::writeLine( 'Updating media proxy...' );
+
+		$mediaProxyDist = self::translatePath( '.ddev/nginx/media-proxy.conf.dist' );
+		$mediaProxy     = self::translatePath( '.ddev/nginx/media-proxy.conf' );
+
+		if ( ! file_exists( $mediaProxyDist ) ) {
+			self::writeError( 'media-proxy.conf.dist file not found. Skipping media proxy update.' );
+			return;
+		}
+
+		// Enable the media proxy.
+		if ( ! rename( $mediaProxyDist, $mediaProxy ) ) {
+			self::writeError( 'Failed to rename media proxy file.' );
+			return;
+		} else {
+			self::writeInfo( 'Media proxy file updated.' );
+		}
+
+		// Set the proxy domain in the media proxy file.
+		self::searchReplaceFile( 'set $upstream_host ""', 'set $upstream_host ' . self::$info['proxy-domain'], $mediaProxy );
+
+		self::writeInfo( 'Media proxy updated.' );
+	}
+
+	/**
+	 * Update the branding.
+	 *
+	 * @return void
+	 */
+	private static function updateBranding(): void {
+		if ( empty( self::$info['branding'] ) || 'viget' === self::$info['branding'] ) {
+			return;
+		}
+
+		self::writeLine( 'Updating branding...' );
+
+		$footerFile = self::translatePath( 'wp-content/mu-plugins/viget-wp/src/classes/Admin/Footer.php' );
+
+		if ( ! file_exists( $footerFile ) ) {
+			self::writeWarning( 'Admin Footer file not found in MU Plugin. Skipping branding update.' );
+			return;
+		}
+
+		if ( 'none' === self::$info['branding'] ) {
+			self::searchReplaceFile( '$this->modify_footer_text();', '// $this->modify_footer_text();', $footerFile );
+
+			self::writeInfo( 'Branding removed.' );
+			return;
+		}
+
+		self::searchReplaceFile( 'https://www.viget.com/', self::$info['branding-website'], $footerFile );
+		self::searchReplaceFile( 'Viget', self::$info['branding-name'], $footerFile );
+
+		self::writeInfo( 'Branding updated.' );
 	}
 }

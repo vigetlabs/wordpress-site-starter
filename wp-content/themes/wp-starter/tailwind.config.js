@@ -2,9 +2,11 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 const { remPair, rem } = require('@viget/tailwindcss-plugins/utilities/fns')
 
-// Breakpoints and content widths for the site
-const minBreakpoint = 640;
-const maxBreakpoint = 1200;
+// Content widths and Breakpoints for the site.
+const maxContentWidth = 1200; // Default site width.
+const maxWideContentWidth = 900; // Used for "wide" content alignment.
+const minBreakpoint = 640; // Smallest breakpoint.
+const maxBreakpoint = maxContentWidth; // Largest breakpoint.
 
 const fluidSize = (
 	minSize,
@@ -29,8 +31,8 @@ module.exports = {
 	],
 	darkMode: 'selector',
 	theme: {
-		contentSmall: minBreakpoint.toString()+'px',
-		contentBase: maxBreakpoint.toString()+'px',
+		contentSmall: maxWideContentWidth.toString()+'px',
+		contentBase: maxContentWidth.toString()+'px',
 		colors: {
 			transparent: 'transparent',
 			current: 'currentColor',
@@ -49,15 +51,18 @@ module.exports = {
 			},
 			fontFamily: {
 				'sans': 'var(--wp--preset--font-family--body)',
+				'body': 'var(--wp--preset--font-family--body)',
+				'heading': 'var(--wp--preset--font-family--heading)',
 			},
 			fontSize: {
 				// If you update the names or add more fonts sizes you will need to update the file in theme-json/settings/typography.js
-				"2xl": [["32px", fluidSize(32, 60)],"1.1",],
-				"xl": [["24px", fluidSize(24, 44)], "1.1"],
-				"lg": [["20px", fluidSize(20, 34)], "1.1"],
-				"base": [["16px", fluidSize(16, 18)], "1.1"],
-				"sm": [["12px", fluidSize(12, 16)], "1.1"],
-				"xs": [["8px", fluidSize(8, 10)], "1.1"],
+				"2xl": [["60px", fluidSize(42, 60)], "1.1"],
+				"xl": [["48px", fluidSize(36, 48)], "1.1"],
+				"lg": [["36px", fluidSize(26, 36)], "1.1"],
+				"md": [["24px", fluidSize(18, 24)], "1.1"],
+				"base": [["16px", fluidSize(16, 16)], "1.1"],
+				"sm": [["14px", fluidSize(12, 14)], "1.1"],
+				"xs": [["10px", fluidSize(10, 10)], "1.1"],
 				"zero": ["0px", "1.1"],
 			},
 			spacing: {

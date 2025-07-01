@@ -11,12 +11,12 @@ export default defineConfig(({ command }) => ({
 	plugins: [
 		generateThemeJSON,
 		//Turn on if you want Vite to update with php files
-		// liveReload([
-		// 	path.resolve(__dirname, './templates/**/*'),
-		// 	path.resolve(__dirname, './parts/**/*'),
-		// 	path.resolve(__dirname, './blocks/**/*'),
-		// 	path.resolve(__dirname, './**/*.php'),
-		// ]),
+		liveReload([
+			// path.resolve(__dirname, './templates/**/*'),
+			// path.resolve(__dirname, './parts/**/*'),
+			// path.resolve(__dirname, './blocks/**/*'),
+			path.resolve(__dirname, './**/*.php'),
+		]),
 	],
 	build: {
 		// output dir for production build
@@ -36,6 +36,10 @@ export default defineConfig(({ command }) => ({
 		origin: "https://wpstarter.ddev.site:5273",
 		strictPort: true,
 		port: parseInt(process.env.VITE_PRIMARY_PORT ?? '5273'),
+		watch: {
+			usePolling: true,
+			interval: 1000,
+		},
 	},
 }));
 
