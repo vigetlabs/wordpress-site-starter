@@ -1,7 +1,7 @@
-.acf-block-cta {
-	@apply mx-auto flex flex-col gap-24 p-24 lg:p-64;
+@utility acf-block-cta {
+  @apply mx-auto flex flex-col gap-24 p-24 lg:p-64;
 
-	.wp-block-heading {
-		@apply text-2xl font-bold;
-	}
+  .wp-block-heading {
+    @apply text-2xl font-bold;
+  }
 }
