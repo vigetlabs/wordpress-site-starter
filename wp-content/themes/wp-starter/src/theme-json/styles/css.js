@@ -1,6 +1,7 @@
 import color from '../settings/color.js';
 
-let css = ':where(.wp-site-blocks *:focus-visible){outline-width:2px;outline-style:solid}';
+let css =
+	':where(.wp-site-blocks *:focus-visible){outline-width:2px;outline-style:solid}';
 
 // loop through color.palette and add selectors for any colors that start with 'dark-'
 for (const item of color.palette) {
