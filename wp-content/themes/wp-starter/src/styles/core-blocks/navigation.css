@@ -1,5 +1,5 @@
 /** Navigation colors need to be updated to match your theme colors */
-@utility header-navigation {
+.header-navigation {
 	@apply bg-white dark:bg-black;
 
 	.wp-block-page-list {
@@ -26,7 +26,7 @@
 			@apply mx-2 my-4 text-black dark:text-white;
 
 			&:hover,
-			&:focus {
+			&:focus-visible {
 				@apply text-black underline decoration-2 underline-offset-8 dark:text-white;
 			}
 		}
@@ -49,7 +49,7 @@
 					@apply text-black dark:text-black;
 
 					&:hover,
-					&:focus {
+					&:focus-visible {
 						@apply text-black underline decoration-2 underline-offset-8 dark:text-black;
 					}
 				}

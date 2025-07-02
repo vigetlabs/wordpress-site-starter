@@ -1,4 +1,4 @@
-@utility entry-content {
+.entry-content {
 	/*
 		Adjust this to add space between blocks on a page.
 		Should be adjusted or removed as needed per project.
@@ -8,20 +8,17 @@
 	}
 
 	& > *:not(.alignfull) {
-		max-width: var(--screen-container);
-		@apply !mx-auto;
+		@apply max-w-screen-container !mx-auto;
 	}
 }
 
-@utility is-layout-constrained {
+.is-layout-constrained {
 	& > .acf-block-inner__container {
-		max-width: var(--screen-container);
-		@apply !mx-auto;
+		@apply max-w-screen-container !mx-auto;
 	}
 
 	.block-editor-block-list__block .acf-block-inner__container > & {
-		max-width: var(--screen-container);
-		@apply !mx-auto;
+		@apply max-w-screen-container !mx-auto;
 	}
 	&.is-content-justification-right > .acf-block-inner__container {
 		@apply justify-end text-right;
@@ -32,22 +29,19 @@
 	}
 }
 
-@utility acf-block-inner__container {
+.acf-block-inner__container {
 	.is-layout-constrained > & {
-		max-width: var(--screen-container);
-		@apply !mx-auto;
+		@apply max-w-screen-container !mx-auto;
 	}
 
 	.block-editor-block-list__block & > .is-layout-constrained {
-		max-width: var(--screen-container);
-		@apply !mx-auto;
+		@apply max-w-screen-container !mx-auto;
 	}
 }
 
-@utility block-editor-block-list__block {
+.block-editor-block-list__block {
 	& .acf-block-inner__container > .is-layout-constrained {
-		max-width: var(--screen-container);
-		@apply !mx-auto;
+		@apply max-w-screen-container !mx-auto;
 	}
 }
 

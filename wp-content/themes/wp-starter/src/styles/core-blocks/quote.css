@@ -1,4 +1,4 @@
-@utility wp-block-quote-is-layout-flow {
+.wp-block-quote-is-layout-flow {
 	&blockquote {
 		@apply border-l border-solid border-black;
 	}
