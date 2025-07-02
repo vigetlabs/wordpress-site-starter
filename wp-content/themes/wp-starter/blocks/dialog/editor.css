@@ -1,6 +1,11 @@
 @layer components {
 	.wp-block-acf-dialog {
 		@apply relative !border !border-black;
+
+		.acf-block-dialog {
+			@apply !relative;
+		}
+
 		.inner {
 			@apply !relative p-24;
 		}
