@@ -1,9 +1,9 @@
 module.exports = {
 	plugins: {
 		'postcss-import-ext-glob': {},
-		'@tailwindcss/postcss': {
-			config: './tailwind.config.js',
-		},
+		'postcss-import': {},
+		tailwindcss: {},
+		autoprefixer: {},
 		...(process.env.NODE_ENV === 'prod' ? { cssnano: {} } : {})
   },
 }
