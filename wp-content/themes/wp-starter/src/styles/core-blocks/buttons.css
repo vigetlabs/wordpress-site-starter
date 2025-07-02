@@ -1,6 +1,6 @@
 @utility btn-base {
 	@apply inline-flex items-center gap-12 rounded-none text-base transition;
-	@apply focus:outline-none focus-visible:ring-4;
+	@apply focus-visible:ring-4 focus-visible:outline-none;
 	@apply disabled:pointer-events-none disabled:opacity-20;
 	@apply min-h-40 px-20;
 
@@ -23,7 +23,7 @@
 	@apply focus-visible:bg-black/10 focus-visible:ring-black/15;
 }
 
-@utility wp-block-button {
+.wp-block-button {
 	.wp-block-button__link {
 		@apply btn-default;
 	}

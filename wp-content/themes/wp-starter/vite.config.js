@@ -9,13 +9,12 @@ export default defineConfig(({ command }) => ({
 	root: 'src',
 	base: command === 'serve' ? '' : THEME + '/dist/',
 	plugins: [
-		generateThemeJSON, // Temporarily disabled to fix theme config issues
+		generateThemeJSON,
 		//Turn on if you want Vite to update with php files
 		liveReload([
-			// path.resolve(__dirname, './templates/**/*'),
-			// path.resolve(__dirname, './parts/**/*'),
-			// path.resolve(__dirname, './blocks/**/*'),
-			//path.resolve(__dirname, './**/*.php'),
+			path.resolve(__dirname, './templates/**/*'),
+			path.resolve(__dirname, './parts/**/*'),
+			path.resolve(__dirname, './blocks/**/*'),
 		]),
 	],
 	build: {
@@ -43,3 +42,6 @@ export default defineConfig(({ command }) => ({
 		cors: true,
 	},
 }));
+
+// Call buildJSON to generate the file on build
+buildJSON()
