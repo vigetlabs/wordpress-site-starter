@@ -1,10 +1,10 @@
-@utility block-editor-rich-text__editable {
+.block-editor-rich-text__editable {
 	[data-type='core/list-item'] &.rich-text {
 		@apply inline-block;
 	}
 }
 
-@utility rich-text {
+.rich-text {
 	[data-type='core/list-item'] &.block-editor-rich-text__editable {
 		@apply inline-block;
 	}

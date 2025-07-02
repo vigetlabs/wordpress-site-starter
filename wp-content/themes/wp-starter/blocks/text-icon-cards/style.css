@@ -1,4 +1,4 @@
-@utility acf-block-text-icon-cards {
+.acf-block-text-icon-cards {
 	.acf-block-inner__container,
 	.acf-block-inner__container > .block-editor-block-list__layout {
 		@apply flex flex-wrap justify-start gap-x-24 gap-y-32;

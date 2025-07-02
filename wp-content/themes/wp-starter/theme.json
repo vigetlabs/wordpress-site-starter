@@ -21,8 +21,8 @@
       "gradients": []
     },
     "layout": {
-      "contentSize": "1200px",
-      "wideSize": "900px"
+      "contentSize": "var(--screen-container)",
+      "wideSize": "var(--screen-content-small)"
     },
     "spacing": {
       "spacingScale": {
@@ -32,32 +32,32 @@
       "spacingSizes": [
         {
           "name": "1",
-          "size": "clamp(0.125rem, 2.50vw + -0.875rem, 1rem)",
+          "size": "var(--spacing-fluid-xs)",
           "slug": "10"
         },
         {
           "name": "2",
-          "size": "clamp(1.25rem, 3.57vw + -0.17875rem, 2.5rem)",
+          "size": "var(--spacing-fluid-sm)",
           "slug": "20"
         },
         {
           "name": "3",
-          "size": "clamp(2rem, 5.71vw + -0.285625rem, 4rem)",
+          "size": "var(--spacing-fluid-md)",
           "slug": "30"
         },
         {
           "name": "4",
-          "size": "clamp(3.5rem, 10.00vw + -0.5rem, 7rem)",
+          "size": "var(--spacing-fluid-lg)",
           "slug": "40"
         },
         {
           "name": "5",
-          "size": "clamp(6rem, 11.43vw + 1.42875rem, 10rem)",
+          "size": "var(--spacing-fluid-xl)",
           "slug": "50"
         },
         {
           "name": "6",
-          "size": "clamp(9rem, 17.14vw + 2.143125rem, 15rem)",
+          "size": "var(--spacing-fluid-2xl)",
           "slug": "60"
         }
       ],
@@ -122,37 +122,37 @@
         {
           "fluid": false,
           "name": "Extra Small",
-          "size": "clamp(0.625rem, 0.00vw + 0.625rem, 0.625rem)",
+          "size": "var(--font-size-xs)",
           "slug": "x-small"
         },
         {
           "fluid": false,
           "name": "Small",
-          "size": "clamp(0.75rem, 0.36vw + 0.606875rem, 0.875rem)",
+          "size": "var(--font-size-sm)",
           "slug": "small"
         },
         {
           "fluid": false,
           "name": "Medium",
-          "size": "clamp(1.125rem, 1.07vw + 0.69625rem, 1.5rem)",
+          "size": "var(--font-size-md)",
           "slug": "medium"
         },
         {
           "fluid": false,
           "name": "Large",
-          "size": "clamp(1.625rem, 1.79vw + 0.910625rem, 2.25rem)",
+          "size": "var(--font-size-lg)",
           "slug": "large"
         },
         {
           "fluid": false,
           "name": "Extra Large",
-          "size": "clamp(2.25rem, 2.14vw + 1.393125rem, 3rem)",
+          "size": "var(--font-size-xl)",
           "slug": "x-large"
         },
         {
           "fluid": false,
           "name": "2X Large",
-          "size": "clamp(2.625rem, 3.21vw + 1.339375rem, 3.75rem)",
+          "size": "var(--font-size-2xl)",
           "slug": "2x-large"
         }
       ]
@@ -228,7 +228,7 @@
       },
       "core/buttons": {
         "spacing": {
-          "blockGap": "0.75rem"
+          "blockGap": "var(--spacing-12)"
         }
       },
       "core/categories": {
@@ -404,7 +404,7 @@
         "variations": {
           "rounded": {
             "border": {
-              "radius": "0.375rem"
+              "radius": "var(--radius-lg)"
             }
           }
         }

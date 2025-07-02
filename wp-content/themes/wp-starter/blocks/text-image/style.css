@@ -1,20 +1,20 @@
-@utility acf-block-text-image {
-  .wp-block-media-text {
-    @apply gap-fluid-sm;
-  }
-  .wp-block-media-text__media {
-    @apply w-full;
-  }
+.acf-block-text-image {
+	.wp-block-media-text {
+		@apply gap-fluid-sm;
+	}
+	.wp-block-media-text__media {
+		@apply w-full;
+	}
 
-  .wp-block-media-text__content {
-    @apply flex flex-col items-start gap-16 p-0;
+	.wp-block-media-text__content {
+		@apply flex flex-col items-start gap-16 p-0;
 
-    .is-style-eyebrow {
-      @apply m-0 text-sm font-bold uppercase tracking-tighter;
-    }
+		.is-style-eyebrow {
+			@apply m-0 text-sm font-bold tracking-tighter uppercase;
+		}
 
-    .wp-block-heading {
-      @apply m-0 text-lg font-bold leading-tight;
-    }
-  }
+		.wp-block-heading {
+			@apply m-0 text-lg leading-tight font-bold;
+		}
+	}
 }
