@@ -1,23 +1,21 @@
-@layer components {
-	.acf-block-navigation-container {
-		@apply flex flex-col items-end gap-5 mobile-menu:w-auto w-full;
+@utility acf-block-navigation-container {
+  @apply flex flex-col items-end gap-5 mobile-menu:w-auto w-full;
 
-		& > .acf-block-inner__container {
-			@apply mobile-menu:!flex;
-		}
-		&[x-data*="true"] > .acf-block-inner__container {
-			@apply max-mobile-menu:!flex;
-		}
+  & > .acf-block-inner__container {
+    @apply mobile-menu:!flex;
+  }
+  &[x-data*='true'] > .acf-block-inner__container {
+    @apply max-mobile-menu:!flex;
+  }
 
-		button.navigation-toggle[aria-rel="mobile-toggle"] {
-			@apply absolute inset-y-0 right-0 flex items-center justify-center w-32 h-32 text-black mobile-menu:hidden dark:text-white;
-		}
-		.acf-block-inner__container {
-			@apply pt-24 mobile-menu:pt-0 w-full mobile-menu:w-auto;
-		}
+  button.navigation-toggle[aria-rel='mobile-toggle'] {
+    @apply absolute inset-y-0 right-0 flex items-center justify-center w-32 h-32 text-black mobile-menu:hidden dark:text-white;
+  }
+  .acf-block-inner__container {
+    @apply pt-24 mobile-menu:pt-0 w-full mobile-menu:w-auto;
+  }
 
-		.navigation-content {
-			@apply flex flex-row;
-		}
-	}
+  .navigation-content {
+    @apply flex flex-row;
+  }
 }

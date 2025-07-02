@@ -1,27 +1,25 @@
-@layer components {
-	.acf-block-accordion {
-		& details.wp-block-details {
-			@apply border-t px-4 last-of-type:border-b;
+@utility acf-block-accordion {
+  & details.wp-block-details {
+    @apply border-t px-4 last-of-type:border-b;
 
-			> summary {
-				@apply relative my-12 flex cursor-pointer justify-between py-12 pr-24 text-base font-bold;
-				@apply marker:content-none focus:outline-none;
-				@apply after:absolute after:bottom-0 after:right-0 after:top-0 after:flex after:items-center after:font-mono after:text-lg after:content-['\002B'];
-				@apply hover:text-black hover:after:text-black;
-				@apply focus:text-black focus:outline-black focus:after:text-black;
+    > summary {
+      @apply relative my-12 flex cursor-pointer justify-between py-12 pr-24 text-base font-bold;
+      @apply marker:content-none focus:outline-none;
+      @apply after:absolute after:bottom-0 after:right-0 after:top-0 after:flex after:items-center after:font-mono after:text-lg after:content-['\002B'];
+      @apply hover:text-black hover:after:text-black;
+      @apply focus:text-black focus:outline-black focus:after:text-black;
 
-				&::-webkit-details-marker {
-					@apply hidden;
-				}
-			}
+      &::-webkit-details-marker {
+        @apply hidden;
+      }
+    }
 
-			&[open] {
-				@apply pb-24;
+    &[open] {
+      @apply pb-24;
 
-				> summary {
-					@apply after:text-black after:content-['\2212'];
-				}
-			}
-		}
-	}
+      > summary {
+        @apply after:text-black after:content-['\2212'];
+      }
+    }
+  }
 }

@@ -1,54 +1,42 @@
-@layer components {
-	div:not(.block-editor-block-list__block) {
-		> .acf-block-video-player {
-			@apply relative;
+@utility wp-embed-responsive {
+  & div.block-editor-block-list__block {
+    > .acf-block-video-player {
+      .wp-has-aspect-ratio iframe {
+        @apply relative bottom-auto left-auto right-auto top-auto;
+      }
+    }
+  }
+}
 
-			> .wp-block-cover {
-				@apply aspect-video h-full w-full p-fluid-sm;
-			}
+@utility block-editor-block-list__block {
+  .wp-embed-responsive &div {
+    > .acf-block-video-player {
+      .wp-has-aspect-ratio iframe {
+        @apply relative bottom-auto left-auto right-auto top-auto;
+      }
+    }
+  }
+}
 
-			.wp-block-embed__wrapper,
-			.wp-block-embed__wrapper > .bt-video-container {
-				@apply absolute inset-0 h-full w-full z-20;
-			}
+@utility acf-block-video-player {
+  p,
+  > .wp-block-group {
+    @apply mt-16 mx-auto max-w-[var(--wp--style--global--wide-size)];
+  }
 
-			.wp-block-embed:not(.block-editor-block-list__block) {
-				@apply absolute inset-0 h-full w-full z-10;
+  .wp-block-cover {
+    @apply relative !z-20 h-full mt-0;
+  }
 
-				iframe {
-					@apply h-full w-full;
-				}
-			}
-		}
-	}
+  > .wp-block-group {
+    @apply relative overflow-hidden aspect-video mx-auto;
+  }
 
-	.wp-embed-responsive div.block-editor-block-list__block {
-		> .acf-block-video-player {
-			.wp-has-aspect-ratio iframe {
-				@apply relative bottom-auto left-auto right-auto top-auto;
-			}
-		}
-	}
+  .wp-block-embed {
+    margin-block-start: 0;
+  }
 
-	.acf-block-video-player {
-		p, > .wp-block-group {
-			@apply mt-16 mx-auto max-w-[var(--wp--style--global--wide-size)];
-		}
-
-		.wp-block-cover {
-			@apply relative !z-20 h-full mt-0;
-		}
-
-		> .wp-block-group {
-			@apply relative overflow-hidden aspect-video mx-auto;
-		}
-
-		.wp-block-embed {
-			margin-block-start: 0;
-		}
-
-		.wp-embed-aspect-16-9 .wp-block-embed__wrapper:before {
-			@apply pt-0;
-		}
-	}
+  .wp-embed-aspect-16-9 .wp-block-embed__wrapper:before {
+    @apply pt-0;
+  }
 }

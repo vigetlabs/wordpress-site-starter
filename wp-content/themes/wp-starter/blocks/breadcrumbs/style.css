@@ -1,31 +1,29 @@
-@layer components {
-	/* Rank Math breadcrumb styles */
-	.rank-math-breadcrumb {
-		p {
-			@apply flex flex-wrap gap-8;
-		}
+@utility rank-math-breadcrumb {
+  /* Rank Math breadcrumb styles */
+  p {
+    @apply flex flex-wrap gap-8;
+  }
 
-		a {
-			@apply text-black underline hover:no-underline focus:no-underline;
-		}
-	}
+  a {
+    @apply text-black underline hover:no-underline focus:no-underline;
+  }
+}
 
-	/* WP breadcrumb styles */
-	.is-style-breadcrumbs {
-		@apply flex flex-wrap gap-8;
+@utility is-style-breadcrumbs {
+  /* WP breadcrumb styles */
+  @apply flex flex-wrap gap-8;
 
-		.wp-block-button {
-			@apply after:ml-10;
+  .wp-block-button {
+    @apply after:ml-10;
 
-			&:last-of-type {
-				@apply after:hidden;
-			}
+    &:last-of-type {
+      @apply after:hidden;
+    }
 
-			.wp-block-button__link.wp-element-button {
-				@apply !m-0 bg-transparent !p-0 text-black underline hover:bg-transparent hover:no-underline focus:bg-transparent focus:no-underline;
-			}
-		}
-	}
+    .wp-block-button__link.wp-element-button {
+      @apply !m-0 bg-transparent !p-0 text-black underline hover:bg-transparent hover:no-underline focus:bg-transparent focus:no-underline;
+    }
+  }
 }
 
 /** Breadcrumb Block Style */

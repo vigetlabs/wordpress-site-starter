@@ -1,5 +1,3 @@
-@layer components {
-	.wp-site-blocks > header {
-
-	}
-}
+/* Uncomment to add styles to the header
+@utility .wp-site-blocks > header {
+}*/

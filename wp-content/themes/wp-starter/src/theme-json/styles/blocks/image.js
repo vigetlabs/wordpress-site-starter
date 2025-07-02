@@ -5,7 +5,7 @@ export default {
 		variations: {
 			rounded: {
 				border: {
-					radius: theme.borderRadius.md,
+					radius: 'var(--radius-lg)',
 				},
 			},
 		},

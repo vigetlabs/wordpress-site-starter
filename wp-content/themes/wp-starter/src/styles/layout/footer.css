@@ -1,5 +1,3 @@
-@layer components {
-	.wp-site-blocks > footer {
-
-	}
-}
+/* Uncomment to add styles to the footer
+@utility .wp-site-blocks > footer {
+}*/

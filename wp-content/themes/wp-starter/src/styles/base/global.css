@@ -1,3 +1,56 @@
+@utility entry-content {
+  /*
+		Adjust this to add space between blocks on a page.
+		Should be adjusted or removed as needed per project.
+	*/
+  & > *:not(:last-child) {
+    @apply mb-0;
+  }
+
+  & > *:not(.alignfull) {
+    max-width: theme('contentBase');
+    @apply !mx-auto;
+  }
+}
+
+@utility is-layout-constrained {
+  & > .acf-block-inner__container {
+    max-width: theme('contentBase');
+    @apply !mx-auto;
+  }
+
+  .block-editor-block-list__block .acf-block-inner__container > & {
+    max-width: theme('contentBase');
+    @apply !mx-auto;
+  }
+  &.is-content-justification-right > .acf-block-inner__container {
+    @apply justify-end text-right;
+  }
+
+  &.is-content-justification-left > .acf-block-inner__container {
+    @apply justify-start text-left;
+  }
+}
+
+@utility acf-block-inner__container {
+  .is-layout-constrained > & {
+    max-width: theme('contentBase');
+    @apply !mx-auto;
+  }
+
+  .block-editor-block-list__block & > .is-layout-constrained {
+    max-width: theme('contentBase');
+    @apply !mx-auto;
+  }
+}
+
+@utility block-editor-block-list__block {
+  & .acf-block-inner__container > .is-layout-constrained {
+    max-width: theme('contentBase');
+    @apply !mx-auto;
+  }
+}
+
 @layer base {
 	[x-cloak] {
 		@apply !hidden;
@@ -25,34 +78,5 @@
 
 	p:not(:empty):not(:last-child) {
 		@apply mb-24;
-	}
-}
-
-@layer components {
-	/*
-		Adjust this to add space between blocks on a page.
-		Should be adjusted or removed as needed per project.
-	*/
-	.entry-content > *:not(:last-child) {
-		@apply mb-0;
-	}
-
-	.entry-content > *:not(.alignfull),
-	.is-layout-constrained > .acf-block-inner__container,
-	.block-editor-block-list__block
-		.acf-block-inner__container
-		> .is-layout-constrained {
-		max-width: theme('contentBase');
-		@apply !mx-auto;
-	}
-
-	.is-layout-constrained {
-		&.is-content-justification-right > .acf-block-inner__container {
-			@apply justify-end text-right;
-		}
-
-		&.is-content-justification-left > .acf-block-inner__container {
-			@apply justify-start text-left;
-		}
 	}
 }
