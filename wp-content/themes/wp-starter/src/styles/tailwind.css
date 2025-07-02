@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+/* Dark theme to be driven by a CSS selector instead of the prefers-color-scheme media query */
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
 	/* Colors */
@@ -66,19 +68,9 @@
 	--spacing-fluid-2xl: clamp(9rem, 9rem + 3.75vw, 15rem);
 
 	/* Screens */
-	--screen-container: 1200px;
-	--screen-content-small: 900px;
-	--screen-wp-cols: 781px;
-	--screen-mobile-menu: 600px;
-	--screen-xs: 480px;
-}
-
-@layer base {
-	*,
-	::after,
-	::before,
-	::backdrop,
-	::file-selector-button {
-		border-color: var(--color-gray-200, currentcolor);
-	}
+	--breakpoint-container: 1200px;
+	--breakpoint-content-small: 900px;
+	--breakpoint-wp-cols: 781px;
+	--breakpoint-mobile-menu: 600px;
+	--breakpoint-xs: 480px;
 }

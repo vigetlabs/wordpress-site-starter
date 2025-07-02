@@ -1,4 +1,3 @@
-import theme from '../import_tailwind.js';
 import blocks from './blocks.js';
 import elements from './elements.js';
 import css from './css.js';
