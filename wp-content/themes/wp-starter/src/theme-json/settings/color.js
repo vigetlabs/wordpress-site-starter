@@ -6,11 +6,11 @@ import path from 'path';
  * @param {string} str - The string to convert.
  * @returns {string} The title-cased string.
  */
-function toTitleCase(str) {
+function toTitleCase( str ) {
 	str = str.replace(/[_-]/g, ' ');
 	return str.replace(
 		/\w\S*/g,
-		(text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase(),
+		text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
 	);
 }
 
@@ -57,7 +57,7 @@ function relativeLuminance(r, g, b) {
  *
  * @returns {boolean}
  */
-function isDark(color) {
+function isDark( color ) {
 	// Convert hex to RGB
 	const { r, g, b } = hexToRgb(color);
 
@@ -74,7 +74,7 @@ function isDark(color) {
  * @returns {object} The color palette object
  */
 function parseColorsFromCSS() {
-	const cssPath = path.join(process.cwd(), 'src/styles/tailwind/colors.css');
+	const cssPath = path.join(process.cwd(), 'src/styles/tailwind.css');
 
 	try {
 		const cssContent = fs.readFileSync(cssPath, 'utf8');
@@ -113,45 +113,6 @@ function parseColorsFromCSS() {
 }
 
 /**
- * Parse the CSS file to extract gradient variables from the @theme directive.
- *
- * @returns {object} The gradient palette object
- */
-function parseGradientsFromCSS() {
-	const cssPath = path.join(process.cwd(), 'src/styles/tailwind/colors.css');
-
-	try {
-		const cssContent = fs.readFileSync(cssPath, 'utf8');
-
-		// Find the @theme block
-		const themeMatch = cssContent.match(/@theme\s*\{([\s\S]*?)\}/);
-		if (!themeMatch) {
-			console.warn('No @theme directive found in CSS file');
-			return {};
-		}
-
-		const themeContent = themeMatch[1];
-
-		// Extract gradient variables (--gradient-*)
-		const gradientRegex = /--gradient-([^:]+):\s*([^;]+);/g;
-		const gradients = {};
-		let match;
-
-		while ((match = gradientRegex.exec(themeContent)) !== null) {
-			const gradientName = match[1].trim();
-			const gradientValue = match[2].trim();
-
-			gradients[gradientName] = gradientValue;
-		}
-
-		return gradients;
-	} catch (error) {
-		console.error('Error reading CSS file:', error);
-		return {};
-	}
-}
-
-/**
  * Get the color palette from the theme.
  *
  * Colors that are darker should be prefixed with 'dark-'
@@ -163,20 +124,20 @@ function getPalette() {
 	const palette = [];
 	const colors = parseColorsFromCSS();
 
-	for (const color in colors) {
-		if (['transparent', 'current', 'currentColor'].includes(color)) {
+	for ( const color in colors ) {
+		if ( ['transparent', 'current', 'currentColor'].includes( color ) ) {
 			continue;
 		}
 
 		// For now, we're only handling simple color values
 		// If you have color objects with shades, you'll need to extend this logic
-		let slug = isDark(colors[color]) ? `dark-${color}` : color;
+		let slug = isDark( colors[color] ) ? `dark-${color}` : color;
 		let name = toTitleCase(color);
-		palette.push({
+		palette.push( {
 			color: colors[color],
 			name: name,
 			slug: slug,
-		});
+		} );
 	}
 
 	return palette;
@@ -189,17 +150,21 @@ function getPalette() {
  */
 function getGradients() {
 	const gradients = [];
-	const gradientVars = parseGradientsFromCSS();
 
-	for (const gradient in gradientVars) {
-		let slug = gradient;
-		let name = toTitleCase(gradient);
-		gradients.push({
-			gradient: gradientVars[gradient],
-			name: name,
-			slug: slug,
-		});
-	}
+	// Define gradients here if needed
+	// Example:
+	// const gradientDefinitions = {
+	//   'gradient-to-r': 'linear-gradient(to right, var(--tw-gradient-stops))',
+	//   'gradient-to-br': 'linear-gradient(to bottom right, var(--tw-gradient-stops))',
+	// };
+
+	// for ( const bgImage in gradientDefinitions ) {
+	//   gradients.push( {
+	//     name: bgImage.replace( 'gradient-', '' ).replace( '-', ' ' ).replace( /\b\w/g, char => char.toUpperCase() ),
+	//     slug: bgImage.replace( 'gradient-', '' ),
+	//     gradient: gradientDefinitions[bgImage],
+	//   } );
+	// }
 
 	return gradients;
 }

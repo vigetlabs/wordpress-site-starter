@@ -1,5 +1,5 @@
 @utility wp-block-quote-is-layout-flow {
-  &blockquote {
-    @apply border-l border-solid border-black;
-  }
+	&blockquote {
+		@apply border-l border-solid border-black;
+	}
 }
