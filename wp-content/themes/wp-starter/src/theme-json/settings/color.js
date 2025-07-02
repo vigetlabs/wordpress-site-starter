@@ -113,6 +113,45 @@ function parseColorsFromCSS() {
 }
 
 /**
+ * Parse the CSS file to extract gradient variables from the @theme directive.
+ *
+ * @returns {object} The gradient palette object
+ */
+function parseGradientsFromCSS() {
+	const cssPath = path.join(process.cwd(), 'src/styles/tailwind.css');
+
+	try {
+		const cssContent = fs.readFileSync(cssPath, 'utf8');
+
+		// Find the @theme block
+		const themeMatch = cssContent.match(/@theme\s*\{([\s\S]*?)\}/);
+		if (!themeMatch) {
+			console.warn('No @theme directive found in CSS file');
+			return {};
+		}
+
+		const themeContent = themeMatch[1];
+
+		// Extract gradient variables (--gradient-*)
+		const gradientRegex = /--gradient-([^:]+):\s*([^;]+);/g;
+		const gradients = {};
+		let match;
+
+		while ((match = gradientRegex.exec(themeContent)) !== null) {
+			const gradientName = match[1].trim();
+			const gradientValue = match[2].trim();
+
+			gradients[gradientName] = gradientValue;
+		}
+
+		return gradients;
+	} catch (error) {
+		console.error('Error reading CSS file:', error);
+		return {};
+	}
+}
+
+/**
  * Get the color palette from the theme.
  *
  * Colors that are darker should be prefixed with 'dark-'
@@ -150,21 +189,17 @@ function getPalette() {
  */
 function getGradients() {
 	const gradients = [];
+	const gradientVars = parseGradientsFromCSS();
 
-	// Define gradients here if needed
-	// Example:
-	// const gradientDefinitions = {
-	//   'gradient-to-r': 'linear-gradient(to right, var(--tw-gradient-stops))',
-	//   'gradient-to-br': 'linear-gradient(to bottom right, var(--tw-gradient-stops))',
-	// };
-
-	// for ( const bgImage in gradientDefinitions ) {
-	//   gradients.push( {
-	//     name: bgImage.replace( 'gradient-', '' ).replace( '-', ' ' ).replace( /\b\w/g, char => char.toUpperCase() ),
-	//     slug: bgImage.replace( 'gradient-', '' ),
-	//     gradient: gradientDefinitions[bgImage],
-	//   } );
-	// }
+	for (const gradient in gradientVars) {
+		let slug = gradient;
+		let name = toTitleCase(gradient);
+		gradients.push({
+			gradient: gradientVars[gradient],
+			name: name,
+			slug: slug,
+		});
+	}
 
 	return gradients;
 }
