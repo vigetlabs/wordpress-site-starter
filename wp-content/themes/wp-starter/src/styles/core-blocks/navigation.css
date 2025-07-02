@@ -1,14 +1,14 @@
 /** Navigation colors need to be updated to match your theme colors */
 @layer components {
 	.header-navigation {
-		@apply hidden bg-white dark:bg-black;
+		@apply bg-white dark:bg-black;
 
 		.wp-block-page-list {
-			@apply flex flex-col mobile-menu:flex-row;
+			@apply mobile-menu:flex-row flex flex-col;
 		}
 
 		.wp-block-navigation {
-			@apply flex w-full flex-col mobile-menu:w-auto mobile-menu:flex-row;
+			@apply mobile-menu:w-auto mobile-menu:flex-row flex w-full flex-col;
 
 			/* Hide WP defaults */
 			.wp-block-navigation__responsive-container-open,
@@ -34,7 +34,7 @@
 
 			.wp-block-pages-list__item,
 			.wp-block-navigation-submenu {
-				@apply flex flex-col mobile-menu:flex-row;
+				@apply mobile-menu:flex-row flex flex-col;
 
 				.wp-block-navigation-submenu__toggle {
 					@apply relative;

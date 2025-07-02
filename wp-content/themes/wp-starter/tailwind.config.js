@@ -29,7 +29,6 @@ module.exports = {
 		'./parts/**/*.{css,js,jsx,tsx,php,html}',
 		'./blocks/**/*.{css,js,jsx,tsx,php}',
 	],
-	darkMode: 'selector',
 	theme: {
 		contentSmall: maxWideContentWidth.toString()+'px',
 		contentBase: maxContentWidth.toString()+'px',
