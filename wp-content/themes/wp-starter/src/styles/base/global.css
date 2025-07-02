@@ -1,54 +1,54 @@
 @utility entry-content {
-  /*
+	/*
 		Adjust this to add space between blocks on a page.
 		Should be adjusted or removed as needed per project.
 	*/
-  & > *:not(:last-child) {
-    @apply mb-0;
-  }
+	& > *:not(:last-child) {
+		@apply mb-0;
+	}
 
-  & > *:not(.alignfull) {
-    max-width: theme('contentBase');
-    @apply !mx-auto;
-  }
+	& > *:not(.alignfull) {
+		max-width: var(--screen-container);
+		@apply !mx-auto;
+	}
 }
 
 @utility is-layout-constrained {
-  & > .acf-block-inner__container {
-    max-width: theme('contentBase');
-    @apply !mx-auto;
-  }
+	& > .acf-block-inner__container {
+		max-width: var(--screen-container);
+		@apply !mx-auto;
+	}
 
-  .block-editor-block-list__block .acf-block-inner__container > & {
-    max-width: theme('contentBase');
-    @apply !mx-auto;
-  }
-  &.is-content-justification-right > .acf-block-inner__container {
-    @apply justify-end text-right;
-  }
+	.block-editor-block-list__block .acf-block-inner__container > & {
+		max-width: var(--screen-container);
+		@apply !mx-auto;
+	}
+	&.is-content-justification-right > .acf-block-inner__container {
+		@apply justify-end text-right;
+	}
 
-  &.is-content-justification-left > .acf-block-inner__container {
-    @apply justify-start text-left;
-  }
+	&.is-content-justification-left > .acf-block-inner__container {
+		@apply justify-start text-left;
+	}
 }
 
 @utility acf-block-inner__container {
-  .is-layout-constrained > & {
-    max-width: theme('contentBase');
-    @apply !mx-auto;
-  }
+	.is-layout-constrained > & {
+		max-width: var(--screen-container);
+		@apply !mx-auto;
+	}
 
-  .block-editor-block-list__block & > .is-layout-constrained {
-    max-width: theme('contentBase');
-    @apply !mx-auto;
-  }
+	.block-editor-block-list__block & > .is-layout-constrained {
+		max-width: var(--screen-container);
+		@apply !mx-auto;
+	}
 }
 
 @utility block-editor-block-list__block {
-  & .acf-block-inner__container > .is-layout-constrained {
-    max-width: theme('contentBase');
-    @apply !mx-auto;
-  }
+	& .acf-block-inner__container > .is-layout-constrained {
+		max-width: var(--screen-container);
+		@apply !mx-auto;
+	}
 }
 
 @layer base {
