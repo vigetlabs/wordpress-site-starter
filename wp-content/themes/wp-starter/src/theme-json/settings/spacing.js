@@ -8,32 +8,32 @@ export default {
 	spacingSizes: [
 		{
 			name: '1',
-			size: theme.spacing['fluid-xs'],
+			size: 'var(--spacing-fluid-xs)',
 			slug: '10',
 		},
 		{
 			name: '2',
-			size: theme.spacing['fluid-sm'],
+			size: 'var(--spacing-fluid-sm)',
 			slug: '20',
 		},
 		{
 			name: '3',
-			size: theme.spacing['fluid-md'],
+			size: 'var(--spacing-fluid-md)',
 			slug: '30',
 		},
 		{
 			name: '4',
-			size: theme.spacing['fluid-lg'],
+			size: 'var(--spacing-fluid-lg)',
 			slug: '40',
 		},
 		{
 			name: '5',
-			size: theme.spacing['fluid-xl'],
+			size: 'var(--spacing-fluid-xl)',
 			slug: '50',
 		},
 		{
 			name: '6',
-			size: theme.spacing['fluid-2xl'],
+			size: 'var(--spacing-fluid-2xl)',
 			slug: '60',
 		},
 	],

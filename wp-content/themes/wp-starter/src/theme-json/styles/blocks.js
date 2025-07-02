@@ -10,7 +10,7 @@ const blocks = {
 	},
 	'core/buttons': {
 		spacing: {
-			blockGap: theme.spacing[12],
+			blockGap: 'var(--spacing-12)',
 		},
 	},
 	'core/categories': {

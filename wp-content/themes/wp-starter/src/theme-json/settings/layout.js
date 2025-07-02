@@ -1,6 +1,6 @@
 import theme from '../import_tailwind.js';
 
 export default {
-	contentSize: theme.contentBase,
-	wideSize: theme.contentSmall,
+	contentSize: "var(--screen-container)",
+	wideSize: "var(--screen-content-small)",
 };
