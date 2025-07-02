@@ -1,8 +1,8 @@
 @layer components {
-	.acf-block-dialog {
+	.wp-block-acf-dialog {
 		@apply relative !border !border-black;
 		.inner {
-			@apply relative p-24;
+			@apply !relative p-24;
 		}
 
 		.acfbt-dialog-close {

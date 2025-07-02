@@ -18,19 +18,19 @@ $button_text = get_field( 'button_text' );
 <div
 <?php if ( ! is_admin() ) : ?>
 	x-data="{
-	openDialog: false,
+		openDialog: false,
 
-	// Close the dialog when the user clicks backdrop
-	handleDialogClick(event) {
-		(event.target === $refs.dialogRef) && this.handleDialogClose()
-	},
+		// Close the dialog when the user clicks backdrop
+		handleDialogClick(event) {
+			(event.target === $refs.dialogRef) && this.handleDialogClose();
+		},
 
-	// Delay close to allow for animation
-	handleDialogClose() {
-		if (!this.openDialog) return
-		this.openDialog = false
-		$refs.dialogRef.close()
-	}
+		// Delay close to allow for animation
+		handleDialogClose() {
+			if (!this.openDialog) return;
+			this.openDialog = false;
+			$refs.dialogRef.close();
+		}
 	}"
 <?php endif; ?>
 >
