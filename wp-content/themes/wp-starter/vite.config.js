@@ -9,7 +9,7 @@ export default defineConfig(({ command }) => ({
 	root: 'src',
 	base: command === 'serve' ? '' : THEME + '/dist/',
 	plugins: [
-		// generateThemeJSON, // Temporarily disabled to fix theme config issues
+		generateThemeJSON, // Temporarily disabled to fix theme config issues
 		//Turn on if you want Vite to update with php files
 		liveReload([
 			// path.resolve(__dirname, './templates/**/*'),
