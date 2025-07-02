@@ -9,7 +9,7 @@
 	}
 }
 
-@utility is-style-breadcrumbs {
+.is-style-breadcrumbs {
 	/* WP breadcrumb styles */
 	@apply flex flex-wrap gap-8;
 
