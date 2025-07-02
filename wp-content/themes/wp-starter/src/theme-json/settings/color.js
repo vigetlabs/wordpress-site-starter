@@ -6,11 +6,11 @@ import path from 'path';
  * @param {string} str - The string to convert.
  * @returns {string} The title-cased string.
  */
-function toTitleCase( str ) {
+function toTitleCase(str) {
 	str = str.replace(/[_-]/g, ' ');
 	return str.replace(
 		/\w\S*/g,
-		text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+		(text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase(),
 	);
 }
 
@@ -57,7 +57,7 @@ function relativeLuminance(r, g, b) {
  *
  * @returns {boolean}
  */
-function isDark( color ) {
+function isDark(color) {
 	// Convert hex to RGB
 	const { r, g, b } = hexToRgb(color);
 
@@ -124,20 +124,20 @@ function getPalette() {
 	const palette = [];
 	const colors = parseColorsFromCSS();
 
-	for ( const color in colors ) {
-		if ( ['transparent', 'current', 'currentColor'].includes( color ) ) {
+	for (const color in colors) {
+		if (['transparent', 'current', 'currentColor'].includes(color)) {
 			continue;
 		}
 
 		// For now, we're only handling simple color values
 		// If you have color objects with shades, you'll need to extend this logic
-		let slug = isDark( colors[color] ) ? `dark-${color}` : color;
+		let slug = isDark(colors[color]) ? `dark-${color}` : color;
 		let name = toTitleCase(color);
-		palette.push( {
+		palette.push({
 			color: colors[color],
 			name: name,
 			slug: slug,
-		} );
+		});
 	}
 
 	return palette;
