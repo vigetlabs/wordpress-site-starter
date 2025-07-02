@@ -1,4 +1,4 @@
-.acf-block-alert-banner {
+@utility acf-block-alert-banner {
 	@apply flex gap-24 py-24 lg:gap-48;
 
 	.acf-block-inner__container {

@@ -1,57 +1,48 @@
-@theme {
-	--color-btn-bg-color: var(--color-black);
-	--color-btn-text-color: var(--color-white);
-	--color-btn-outline-border-color: var(--color-btn-bg-color);
-	--color-btn-outline-text-color: var(--color-black);
-}
-
 @utility btn-base {
-	@apply text-md inline-flex items-center gap-12 rounded-none transition;
-	@apply focus-visible:ring-4 focus-visible:outline-none;
-	@apply disabled:pointer-events-none disabled:opacity-20;
-	@apply min-h-40 px-20;
+  @apply inline-flex items-center transition text-base gap-12 rounded-none;
+  @apply focus:outline-none focus-visible:ring-4;
+  @apply disabled:opacity-20 disabled:pointer-events-none;
+  @apply px-20 min-h-40;
 
-	& svg {
-		@apply size-20;
-	}
+  & svg {
+    @apply size-20;
+  }
 }
 
 @utility btn-default {
-	@apply btn-base;
-	@apply bg-btn-bg-color text-btn-text-color;
-	@apply hover:bg-btn-bg-color/70;
-	@apply active:bg-btn-bg-color/70;
-	@apply focus-visible:bg-btn-bg-color/70 focus-visible:ring-btn-bg-color;
+  @apply btn-base;
+  @apply bg-black text-white;
+  @apply hover:bg-black active:bg-black focus-visible:bg-black focus-visible:ring-black;
 }
 
 @utility btn-outline {
-	@apply btn-base;
-	@apply border-btn-outline-border-color text-btn-outline-text-color border bg-transparent;
-	@apply hover:border-btn-outline-border-color/70 hover:bg-btn-bg-color/10 hover:text-btn-outline-text-color;
-	@apply active:bg-btn-outline-border-color/20 active:text-btn-outline-text-color;
-	@apply focus-visible:bg-btn-outline-border-color/20 focus-visible:ring-btn-outline-text-color;
+  @apply btn-base;
+  @apply border border-current bg-transparent text-black;
+  @apply hover:bg-black/5 hover:border-black hover:text-black;
+  @apply active:bg-black/15 active:text-black;
+  @apply focus-visible:bg-black/10 focus-visible:ring-black/15;
 }
 
-.wp-block-button {
-	.wp-block-button__link {
-		@apply btn-default;
-	}
+@utility wp-block-button {
+  .wp-block-button__link {
+    @apply btn-default;
+  }
 
-	&.is-style-outline {
-		.wp-block-button__link {
-			@apply btn-outline;
-		}
-	}
+  &.is-style-outline {
+    .wp-block-button__link {
+      @apply btn-outline;
+    }
+  }
 
-	&.is-style-icon-only {
-		.wp-block-button__link {
-			@apply text-zero gap-0;
-		}
-	}
+  &.is-style-icon-only {
+    .wp-block-button__link {
+      @apply text-zero gap-0;
+    }
+  }
 
-	&.is-style-plain {
-		.wp-block-button__link {
-			@apply text-btn-text-color rounded-none border-0 bg-transparent px-0;
-		}
-	}
+  &.is-style-plain {
+    .wp-block-button__link {
+      @apply border-0 bg-transparent px-0 text-black rounded-none;
+    }
+  }
 }
