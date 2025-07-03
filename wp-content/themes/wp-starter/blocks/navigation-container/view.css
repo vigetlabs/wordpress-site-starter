@@ -16,6 +16,6 @@
 	}
 
 	.navigation-content {
-		@apply flex flex-row;
+		@apply flex flex-row gap-24;
 	}
 }
