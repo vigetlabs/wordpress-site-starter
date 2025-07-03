@@ -7,7 +7,7 @@
 	}
 
 	.wp-block-navigation {
-		@apply mobile-menu:w-auto mobile-menu:flex-row flex w-full flex-col;
+		@apply mobile-menu:w-auto mobile-menu:flex-row flex w-full flex-col gap-24;
 
 		/* Hide WP defaults */
 		.wp-block-navigation__responsive-container-open,
