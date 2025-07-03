@@ -680,25 +680,31 @@ class PostCreateProjectScript extends ComposerScript {
 			return;
 		}
 
-		self::writeLine( 'Updating branding...' );
+		self::writeLine( 'Modifying branding...' );
+		$actionText = 'none' === self::$info['branding'] ? 'disabled' : 'updated';
+
+		// Go ahead and output the action message.
+		self::writeInfo( sprintf( 'Branding %s.', $actionText ) );
 
 		$footerFile = self::translatePath( 'wp-content/mu-plugins/viget-wp/src/classes/Admin/Footer.php' );
+		$loginScreenFile = self::translatePath( 'wp-content/mu-plugins/viget-wp/src/classes/Admin/LoginScreen.php' );
+
+		// Disable the login screen branding.
+		if ( file_exists( $loginScreenFile ) ) {
+			self::searchReplaceFile( '$this->login_css();', '// $this->login_css();', $loginScreenFile );
+		}
 
 		if ( ! file_exists( $footerFile ) ) {
-			self::writeWarning( 'Admin Footer file not found in MU Plugin. Skipping branding update.' );
 			return;
 		}
 
 		if ( 'none' === self::$info['branding'] ) {
 			self::searchReplaceFile( '$this->modify_footer_text();', '// $this->modify_footer_text();', $footerFile );
-
-			self::writeInfo( 'Branding removed.' );
+			self::searchReplaceFile( '$this->modify_footer_text();', '// $this->modify_footer_text();', $footerFile );
 			return;
 		}
 
 		self::searchReplaceFile( 'https://www.viget.com/', self::$info['branding-website'], $footerFile );
 		self::searchReplaceFile( 'Viget', self::$info['branding-name'], $footerFile );
-
-		self::writeInfo( 'Branding updated.' );
 	}
 }
