@@ -540,4 +540,39 @@ VIGET;
 		// Fallback to current directory if wp-content is not found
 		return $dir;
 	}
+
+	/**
+	 * Slugify some text.
+	 *
+	 * @param string $text
+	 *
+	 * @return string
+	 */
+	public static function slugify( string $text ): string {
+		$separator = '-';
+
+		// replace non letter or digits by separator
+		$text = preg_replace( '~[^\pL\d]+~u', $separator, $text );
+
+		// transliterate
+		$text = iconv( 'utf-8', 'us-ascii//TRANSLIT', $text );
+
+		// remove unwanted characters
+		$text = preg_replace( '~[^-\w]+~', '', $text );
+
+		// trim
+		$text = trim( $text, $separator );
+
+		// remove duplicate separator
+		$text = preg_replace( '~-+~', $separator, $text );
+
+		// lowercase
+		$text = strtolower( $text );
+
+		if ( empty( $text ) ) {
+			return '';
+		}
+
+		return $text;
+	}
 }

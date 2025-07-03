@@ -55,6 +55,7 @@ class PostInstallScript extends ComposerScript {
 	 * @var array
 	 */
 	private static array $activatePlugins = [
+		'create-block-theme' => 'Create Block Theme',
 		'viget-blocks-toolkit' => [
 			'name' => 'Viget Blocks Toolkit',
 			'dependencies' => [
@@ -96,15 +97,36 @@ class PostInstallScript extends ComposerScript {
 				self::populateDatabase();
 			} else {
 				// Pre-configure the Setup
+				$brandingName = self::$env['PROJECT_BRANDING_NAME'] ?? 'Viget';
+				$defaultUsername = 'viget';
+
+				if ( ! empty( self::$env['PROJECT_BRANDING'] ) ) {
+					if ( 'none' === self::$env['PROJECT_BRANDING'] ) {
+						$defaultUsername = 'root';
+					} elseif( 'custom' === self::$env['PROJECT_BRANDING'] && ! empty( self::$env['PROJECT_BRANDING_NAME'] ) ) {
+						$defaultUsername = self::slugify( self::$env['PROJECT_BRANDING_NAME'] );
+					}
+				}
+
+				$defaultEmail = 'fed+wp@viget.com';
+				if ( ! empty( self::$env['PROJECT_BRANDING'] ) ) {
+					if ( 'none' === self::$env['PROJECT_BRANDING'] ) {
+						$defaultEmail = 'your@domain.tld';
+					} elseif( 'custom' === self::$env['PROJECT_BRANDING'] && ! empty( self::$env['PROJECT_BRANDING_WEBSITE'] ) ) {
+						$domain = parse_url( self::$env['PROJECT_BRANDING_WEBSITE'], PHP_URL_HOST );
+						$defaultEmail = $defaultUsername . '@' . $domain;
+					}
+				}
+
 				self::$info = [
 					'title' => 'WordPress Site Starter',
-					'description' => 'A project developed by Viget.',
+					'description' => sprintf( 'A project developed by %s.', $brandingName ),
 					'url' => 'https://wpstarter.ddev.site',
-					'username' => 'viget',
-					'email' => 'fed+wp@viget.com',
+					'username' => $defaultUsername,
+					'email' => $defaultEmail,
 				];
 
-				// Do not activate Project Plugins
+				// Do not activate Project Plugins.
 				unset( self::$activatePlugins['seo-by-rank-math'] );
 				unset( self::$activatePlugins['wordfence'] );
 
