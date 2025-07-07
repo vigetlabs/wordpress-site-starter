@@ -3,7 +3,7 @@ export default {
 		variations: {
 			rounded: {
 				border: {
-					radius: 'var(--radius-lg)',
+					radius: 'var(--radius-default)',
 				},
 			},
 		},

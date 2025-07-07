@@ -27,10 +27,10 @@ jobs:
           ssh-keyscan ${{ secrets.DEPLOY_TARGET }} >> ~/.ssh/known_hosts
           ssh-keyscan ${{ secrets.DEPLOY_KIT_TARGET }} >> ~/.ssh/known_hosts
 
-      - name: Use Node.js 20
+      - name: Use Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       # Set up composer caching
       - name: Cache Composer dependencies
@@ -41,11 +41,11 @@ jobs:
 
       # Build theme
       - name: Install Theme Dependencies
-        uses: 'php-actions/composer@v6'
+        uses: "php-actions/composer@v6"
         with:
-          php_version: '8.2'
+          php_version: "8.2"
           dev: no
-          args: '--optimize-autoloader'
+          args: "--optimize-autoloader"
           working_dir: wp-content/themes/wp-starter
 
       - name: Build Theme
@@ -56,11 +56,11 @@ jobs:
 
       # Install viget-wp composer dependencies
       - name: Install viget-wp Dependencies
-        uses: 'php-actions/composer@v6'
+        uses: "php-actions/composer@v6"
         with:
-          php_version: '8.2'
+          php_version: "8.2"
           dev: no
-          args: '--optimize-autoloader'
+          args: "--optimize-autoloader"
           working_dir: wp-content/mu-plugins/viget-wp
 
       # Deploy code

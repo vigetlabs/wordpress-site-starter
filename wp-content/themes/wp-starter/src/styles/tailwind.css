@@ -3,15 +3,22 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
+	/* Aspect Ratios */
+	--aspect-ratio-5/3: 5/3;
+	--aspect-ratio-5/4: 5/4;
+
+	/* Screens */
+	--breakpoint-container: 1200px;
+	--breakpoint-content-wide: 900px;
+	--breakpoint-wp-cols: 781px;
+	--breakpoint-mobile-menu: 600px;
+	--breakpoint-xs: 480px;
+
 	/* Colors */
 	--color-transparent: transparent;
 	--color-current: currentColor;
 	--color-white: #ffffff;
 	--color-black: #000000;
-
-	/* Aspect Ratios */
-	--aspect-ratio-5/3: 5/3;
-	--aspect-ratio-5/4: 5/4;
 
 	/* Flex Basis */
 	--flex-basis-1/2-gap: calc((100% / 2) - var(--wp--style--block-gap));
@@ -67,10 +74,6 @@
 	--spacing-fluid-xl: clamp(6rem, 6rem + 2.5vw, 10rem);
 	--spacing-fluid-2xl: clamp(9rem, 9rem + 3.75vw, 15rem);
 
-	/* Screens */
-	--breakpoint-container: 1200px;
-	--breakpoint-content-small: 900px;
-	--breakpoint-wp-cols: 781px;
-	--breakpoint-mobile-menu: 600px;
-	--breakpoint-xs: 480px;
+	/* Radius */
+	--radius-default: 0.5rem;
 }
