@@ -21,8 +21,8 @@
       "gradients": []
     },
     "layout": {
-      "contentSize": "var(--screen-container)",
-      "wideSize": "var(--screen-content-small)"
+      "contentSize": "var(--breakpoint-container)",
+      "wideSize": "var(--breakpoint-content-wide)"
     },
     "spacing": {
       "spacingScale": {
@@ -404,7 +404,7 @@
         "variations": {
           "rounded": {
             "border": {
-              "radius": "var(--radius-lg)"
+              "radius": "var(--radius-default)"
             }
           }
         }
