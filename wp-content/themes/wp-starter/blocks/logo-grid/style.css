@@ -13,7 +13,7 @@
 		@apply basis-1/2-gap lg:basis-1/4-gap;
 
 		> div {
-			@apply !h-full;
+			@apply h-full!;
 		}
 
 		& > img {
@@ -25,6 +25,6 @@
 
 	/* Fix for image sizing in editor */
 	& .components-resizable-box__container {
-		@apply !shrink;
+		@apply shrink!;
 	}
 }

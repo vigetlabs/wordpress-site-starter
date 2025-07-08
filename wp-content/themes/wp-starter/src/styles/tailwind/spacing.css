@@ -24,12 +24,37 @@
 	--spacing-96: 96px;
 	--spacing-112: 112px;
 	--spacing-128: 128px;
+	--spacing-200: 200px;
 
 	/* Fluid Spacing */
-	--spacing-fluid-xs: clamp(6px, 6px + 0.3125vw, 12px);
-	--spacing-fluid-sm: clamp(12px, 12px + 0.5vw, 24px);
-	--spacing-fluid-md: clamp(24px, 24px + 1vw, 48px);
-	--spacing-fluid-lg: clamp(48px, 48px + 1.75vw, 96px);
-	--spacing-fluid-xl: clamp(96px, 96px + 2.5vw, 128px);
-	--spacing-fluid-2xl: clamp(128px, 128px + 3.75vw, 200px);
+	--spacing-fluid-xs: clamp(
+		var(--spacing-6),
+		var(--spacing-6) + 0.3125vw,
+		var(--spacing-12)
+	);
+	--spacing-fluid-sm: clamp(
+		var(--spacing-12),
+		var(--spacing-12) + 0.5vw,
+		var(--spacing-24)
+	);
+	--spacing-fluid-md: clamp(
+		var(--spacing-24),
+		var(--spacing-24) + 1vw,
+		var(--spacing-48)
+	);
+	--spacing-fluid-lg: clamp(
+		var(--spacing-48),
+		var(--spacing-48) + 1.75vw,
+		var(--spacing-96)
+	);
+	--spacing-fluid-xl: clamp(
+		var(--spacing-96),
+		var(--spacing-96) + 2.5vw,
+		var(--spacing-128)
+	);
+	--spacing-fluid-2xl: clamp(
+		var(--spacing-128),
+		var(--spacing-128) + 3.75vw,
+		var(--spacing-200)
+	);
 }
