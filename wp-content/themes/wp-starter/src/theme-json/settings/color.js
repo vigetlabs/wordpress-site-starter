@@ -74,7 +74,7 @@ function isDark(color) {
  * @returns {object} The color palette object
  */
 function parseColorsFromCSS() {
-	const cssPath = path.join(process.cwd(), 'src/styles/tailwind.css');
+	const cssPath = path.join(process.cwd(), 'src/styles/tailwind/colors.css');
 
 	try {
 		const cssContent = fs.readFileSync(cssPath, 'utf8');
@@ -118,7 +118,7 @@ function parseColorsFromCSS() {
  * @returns {object} The gradient palette object
  */
 function parseGradientsFromCSS() {
-	const cssPath = path.join(process.cwd(), 'src/styles/tailwind.css');
+	const cssPath = path.join(process.cwd(), 'src/styles/tailwind/colors.css');
 
 	try {
 		const cssContent = fs.readFileSync(cssPath, 'utf8');

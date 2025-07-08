@@ -21,7 +21,7 @@
 		}
 
 		.wp-block-button__link.wp-element-button {
-			@apply !m-0 bg-transparent !p-0 text-black underline hover:bg-transparent hover:no-underline focus-visible:bg-transparent focus-visible:no-underline;
+			@apply m-0! bg-transparent p-0! text-black underline hover:bg-transparent hover:no-underline focus-visible:bg-transparent focus-visible:no-underline;
 		}
 	}
 }

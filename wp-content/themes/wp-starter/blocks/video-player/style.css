@@ -25,7 +25,7 @@
 	}
 
 	.wp-block-cover {
-		@apply relative !z-20 mt-0 h-full;
+		@apply relative z-20! mt-0 h-full;
 	}
 
 	> .wp-block-group {
