@@ -1,0 +1,35 @@
+@theme {
+	/* Spacing */
+	--spacing-1: 1px;
+	--spacing-2: 2px;
+	--spacing-4: 4px;
+	--spacing-6: 6px;
+	--spacing-8: 8px;
+	--spacing-10: 10px;
+	--spacing-12: 12px;
+	--spacing-16: 16px;
+	--spacing-20: 20px;
+	--spacing-24: 24px;
+	--spacing-28: 28px;
+	--spacing-32: 32px;
+	--spacing-36: 36px;
+	--spacing-40: 40px;
+	--spacing-44: 44px;
+	--spacing-48: 48px;
+	--spacing-52: 52px;
+	--spacing-56: 56px;
+	--spacing-60: 60px;
+	--spacing-64: 64px;
+	--spacing-80: 80px;
+	--spacing-96: 96px;
+	--spacing-112: 112px;
+	--spacing-128: 128px;
+
+	/* Fluid Spacing */
+	--spacing-fluid-xs: clamp(6px, 6px + 0.3125vw, 12px);
+	--spacing-fluid-sm: clamp(12px, 12px + 0.5vw, 24px);
+	--spacing-fluid-md: clamp(24px, 24px + 1vw, 48px);
+	--spacing-fluid-lg: clamp(48px, 48px + 1.75vw, 96px);
+	--spacing-fluid-xl: clamp(96px, 96px + 2.5vw, 128px);
+	--spacing-fluid-2xl: clamp(128px, 128px + 3.75vw, 200px);
+}
