@@ -1,12 +1,8 @@
 @theme {
 	--color-btn-bg-color: var(--color-black);
 	--color-btn-text-color: var(--color-white);
-	--color-btn-border-color: var(--color-black);
-	--color-btn-hover-bg-color: var(--color-black);
-	--color-btn-hover-text-color: var(--color-white);
-	--color-btn-hover-border-color: var(--color-black);
-	--color-btn-active-bg-color: var(--color-black);
-	--color-btn-active-text-color: var(--color-white);
+	--color-btn-outline-bg-color: var(--color-black);
+	--color-btn-outline-text-color: var(--color-black);
 }
 
 @utility btn-base {
@@ -23,15 +19,17 @@
 @utility btn-default {
 	@apply btn-base;
 	@apply bg-btn-bg-color text-btn-text-color;
-	@apply hover:bg-btn-hover-bg-color focus-visible:bg-btn-hover-bg-color focus-visible:ring-btn-hover-bg-color active:bg-btn-active-bg-color;
+	@apply hover:bg-btn-bg-color/70;
+	@apply active:bg-btn-bg-color/70;
+	@apply focus-visible:bg-btn-bg-color/70 focus-visible:ring-btn-bg-color;
 }
 
 @utility btn-outline {
 	@apply btn-base;
-	@apply border-btn-border-color text-btn-text-color border bg-transparent;
-	@apply hover:border-btn-hover-border-color hover:bg-btn-hover-bg-color hover:text-btn-hover-text-color;
-	@apply active:bg-btn-active-bg-color active:text-btn-active-text-color;
-	@apply focus-visible:bg-btn-hover-bg-color focus-visible:ring-btn-hover-bg-color;
+	@apply border-btn-outline-bg-color text-btn-outline-text-color border bg-transparent;
+	@apply hover:border-btn-outline-bg-color/70 hover:bg-btn-outline-bg-color hover:text-btn-text-color;
+	@apply active:bg-btn-outline-bg-color/20 active:text-btn-outline-text-color;
+	@apply focus-visible:bg-btn-outline-bg-color/20 focus-visible:ring-btn-outline-text-color;
 }
 
 .wp-block-button {
