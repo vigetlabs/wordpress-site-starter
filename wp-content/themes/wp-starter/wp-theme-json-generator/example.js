@@ -2,7 +2,7 @@
 
 /**
  * Example usage of WP Theme JSON Generator
- * 
+ *
  * This file demonstrates how to use the package to generate
  * WordPress theme.json files from CSS variables.
  */
@@ -13,9 +13,9 @@ import WPThemeJSONGenerator from './src/index.js';
 console.log('=== Example 1: Basic Usage ===');
 
 const generator = new WPThemeJSONGenerator({
-  cssPath: 'example-styles.css',
-  outputPath: 'example-theme.json',
-  templatePartsPath: 'example-parts'
+  cssPath: '../src/styles/tailwind.css',
+  outputPath: '../theme.json',
+  templatePartsPath: '../parts'
 });
 
 // Generate theme.json data
@@ -62,4 +62,4 @@ const customThemeData = generator.generate(
 console.log('Custom theme data:', JSON.stringify(customThemeData, null, 2));
 
 console.log('\n=== Example Complete ===');
-console.log('Check the generated files and see the README.md for more examples!'); 
+console.log('Check the generated files and see the README.md for more examples!');

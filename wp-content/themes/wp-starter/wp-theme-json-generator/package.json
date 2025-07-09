@@ -1,5 +1,5 @@
 {
-  "name": "wp-theme-json-generator",
+  "name": "@wp-starter/theme-json-generator",
   "version": "1.0.0",
   "type": "module",
   "description": "A WordPress theme.json generator that extracts CSS variables and creates WordPress theme configuration",
@@ -45,10 +45,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/wp-theme-json-generator.git"
+    "url": "git+https://github.com/yourusername/wordpress-site-starter.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/wp-theme-json-generator/issues"
+    "url": "https://github.com/yourusername/wordpress-site-starter/issues"
   },
-  "homepage": "https://github.com/yourusername/wp-theme-json-generator#readme"
+  "homepage": "https://github.com/yourusername/wordpress-site-starter#readme"
 }

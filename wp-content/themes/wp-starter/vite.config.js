@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import path from 'path';
 import liveReload from 'vite-plugin-live-reload';
-import generateThemeJSON, { buildJSON } from './src/theme-json/generate_theme.js';
+import WPThemeJSONGenerator from './wp-theme-json-generator/src/index.js';
 
 const THEME = '/wp-content/themes/wp-starter';
 
@@ -9,7 +9,23 @@ export default defineConfig(({ command }) => ({
 	root: 'src',
 	base: command === 'serve' ? '' : THEME + '/dist/',
 	plugins: [
-		generateThemeJSON,
+		{
+			name: 'generate-theme-json',
+			configureServer(server) {
+				const generator = new WPThemeJSONGenerator({
+					cssPath: 'src/styles/tailwind.css',
+					outputPath: 'theme.json'
+				});
+				generator.watch();
+			},
+			closeBundle() {
+				const generator = new WPThemeJSONGenerator({
+					cssPath: 'src/styles/tailwind.css',
+					outputPath: 'theme.json'
+				});
+				generator.generateFile();
+			}
+		},
 		liveReload([
 			path.resolve(__dirname, './blocks/**/*.twig'),
 			path.resolve(__dirname, './**/*.php'),
@@ -41,5 +57,9 @@ export default defineConfig(({ command }) => ({
 	},
 }));
 
-// Call buildJSON to generate the file on build
-buildJSON()
+// Generate theme.json on build
+const generator = new WPThemeJSONGenerator({
+	cssPath: 'src/styles/tailwind.css',
+	outputPath: 'theme.json'
+});
+generator.generateFile();

@@ -8,7 +8,8 @@
   },
   "scripts": {
     "dev": "APP_ENV=dev vite --host",
-    "build": "vite build",
+    "build": "vite build && npm run build:theme-json",
+    "build:theme-json": "cd wp-theme-json-generator && npm run build && node example.js",
     "format": "prettier \"./src/**/*.{css,ts,tsx,js}\" --check",
     "format:fix": "prettier \"./src/**/*.{css,ts,tsx,js}\" --write",
     "plop": "plop"
