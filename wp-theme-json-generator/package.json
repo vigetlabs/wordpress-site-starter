@@ -1,0 +1,54 @@
+{
+  "name": "wp-theme-json-generator",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A WordPress theme.json generator that extracts CSS variables and creates WordPress theme configuration",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "clean": "rimraf dist",
+    "prepublishOnly": "npm run clean && npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "wordpress",
+    "theme",
+    "theme.json",
+    "css",
+    "variables",
+    "generator",
+    "build-tool"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.0",
+    "@rollup/plugin-terser": "^0.4.0",
+    "rollup": "^3.0.0",
+    "rimraf": "^5.0.0"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/wp-theme-json-generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/wp-theme-json-generator/issues"
+  },
+  "homepage": "https://github.com/yourusername/wp-theme-json-generator#readme"
+}

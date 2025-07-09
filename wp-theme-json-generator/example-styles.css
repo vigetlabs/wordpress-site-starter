@@ -1,0 +1,18 @@
+@theme {
+  --color-primary: #007cba;
+  --color-secondary: #005a87;
+  --color-accent: #00a0d2;
+  --color-success: #00a32a;
+  --color-warning: #dba617;
+  --color-error: #d63638;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-gray: #6c757d;
+  --color-light-gray: #f8f9fa;
+  --color-dark-gray: #343a40;
+
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-warm: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  --gradient-cool: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
