@@ -17,13 +17,6 @@ export default defineConfig(({ command }) => ({
 					outputPath: 'theme.json'
 				});
 				generator.watch();
-			},
-			closeBundle() {
-				const generator = new WPThemeJSONGenerator({
-					cssPath: 'src/styles/tailwind.css',
-					outputPath: 'theme.json'
-				});
-				generator.generateFile();
 			}
 		},
 		liveReload([
