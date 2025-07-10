@@ -1,33 +1,31 @@
-@layer components {
-	.acf-block-alert-banner {
-		@apply flex gap-24 py-24 lg:gap-48;
+.acf-block-alert-banner {
+	@apply flex gap-24 py-24 lg:gap-48;
 
-		.acf-block-inner__container {
-			@apply m-auto flex w-full flex-col items-start gap-24 text-sm sm:flex-wrap md:flex-row md:items-center md:py-0 lg:items-center lg:gap-48;
+	.acf-block-inner__container {
+		@apply m-auto flex w-full flex-col items-start gap-24 text-sm sm:flex-wrap lg:items-center lg:gap-48;
 
-			.wp-block-button .wp-block-button__link {
-				@apply border-black text-sm text-black;
-				@apply hover:bg-black hover:text-white;
-			}
+		.wp-block-button .wp-block-button__link {
+			@apply border-black text-sm text-black;
+			@apply hover:bg-black hover:text-white;
 		}
+	}
 
-		&.is-style-dismissible {
-			@apply relative;
+	&.is-style-dismissible {
+		@apply relative;
 
-			.dismiss {
-				@apply z-10 m-auto size-24 cursor-pointer border border-none border-black bg-transparent md:inset-y-0 lg:absolute lg:right-16;
-				@apply after:flex after:items-center after:justify-center after:text-black after:content-['\2715'];
-			}
+		.dismiss {
+			@apply z-10 m-auto size-24 cursor-pointer border border-none border-black bg-transparent lg:absolute lg:right-16;
+			@apply after:flex after:items-center after:justify-center after:text-black after:content-['\2715'];
 		}
+	}
 
-		&:not(.is-style-dismissible) {
-			& .dismiss {
-				@apply hidden;
-			}
+	&:not(.is-style-dismissible) {
+		& .dismiss {
+			@apply hidden;
 		}
+	}
 
-		& > p {
-			@apply flex-1;
-		}
+	& > p {
+		@apply flex-1;
 	}
 }

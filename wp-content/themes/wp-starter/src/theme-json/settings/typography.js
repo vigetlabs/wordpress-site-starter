@@ -1,5 +1,3 @@
-import theme from '../import_tailwind.js';
-
 export default {
 	fluid: true,
 	letterSpacing: false,
@@ -64,43 +62,42 @@ export default {
 			slug: 'system-serif',
 		},
 	],
-	// See tailwind.config.js for the sizes
-	// Uses var(--wp--preset--font-size--{slug}) for the variable.
+	// Font sizes now use CSS custom properties defined in tailwind.css
 	fontSizes: [
 		{
 			fluid: false,
 			name: 'Extra Small',
-			size: theme.fontSize['xs'][0][1],
+			size: 'var(--font-size-xs)',
 			slug: 'x-small',
 		},
 		{
 			fluid: false,
 			name: 'Small',
-			size: theme.fontSize['sm'][0][1],
+			size: 'var(--font-size-sm)',
 			slug: 'small',
 		},
 		{
 			fluid: false,
 			name: 'Medium',
-			size: theme.fontSize['md'][0][1],
+			size: 'var(--font-size-md)',
 			slug: 'medium',
 		},
 		{
 			fluid: false,
 			name: 'Large',
-			size: theme.fontSize['lg'][0][1],
+			size: 'var(--font-size-lg)',
 			slug: 'large',
 		},
 		{
 			fluid: false,
 			name: 'Extra Large',
-			size: theme.fontSize['xl'][0][1],
+			size: 'var(--font-size-xl)',
 			slug: 'x-large',
 		},
 		{
 			fluid: false,
 			name: '2X Large',
-			size: theme.fontSize['2xl'][0][1],
+			size: 'var(--font-size-2xl)',
 			slug: '2x-large',
 		},
 	],

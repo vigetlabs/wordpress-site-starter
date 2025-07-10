@@ -42,8 +42,7 @@
 	.block-editor-block-list__block
 		.acf-block-inner__container
 		> .is-layout-constrained {
-		max-width: theme('contentBase');
-		@apply !mx-auto;
+		@apply max-w-screen-container !mx-auto;
 	}
 
 	.is-layout-constrained {

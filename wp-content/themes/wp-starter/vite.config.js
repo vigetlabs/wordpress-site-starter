@@ -10,11 +10,8 @@ export default defineConfig(({ command }) => ({
 	base: command === 'serve' ? '' : THEME + '/dist/',
 	plugins: [
 		generateThemeJSON,
-		//Turn on if you want Vite to update with php files
 		liveReload([
-			// path.resolve(__dirname, './templates/**/*'),
-			// path.resolve(__dirname, './parts/**/*'),
-			// path.resolve(__dirname, './blocks/**/*'),
+			path.resolve(__dirname, './blocks/**/*.twig'),
 			path.resolve(__dirname, './**/*.php'),
 		]),
 	],
@@ -40,6 +37,7 @@ export default defineConfig(({ command }) => ({
 			usePolling: true,
 			interval: 1000,
 		},
+		cors: true,
 	},
 }));
 

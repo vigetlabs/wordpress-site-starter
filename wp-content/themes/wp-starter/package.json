@@ -1,45 +1,33 @@
 {
-	"name": "wp-starter",
-	"version": "0.1.0",
-	"type": "commonjs",
-	"engines": {
-		"node": ">=20.0.0",
-		"npm": ">=10.0.0"
-	},
-	"scripts": {
-		"dev": "APP_ENV=dev vite --host",
-		"build": "vite build",
-		"format": "prettier \"./src/**/*.{css,ts,tsx,js}\" --check",
-		"format:fix": "prettier \"./src/**/*.{css,ts,tsx,js}\" --write",
-		"plop": "plop"
-	},
-	"devDependencies": {
-		"autoprefixer": "^10.4.20",
-		"cssnano": "^7.0.6",
-		"eslint": "^8.57.1",
-		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-import": "^2.31.0",
-		"install": "^0.13.0",
-		"npm": "^10.9.2",
-		"path": "^0.12.7",
-		"plop": "^4.0.1",
-		"postcss": "^8.4.49",
-		"postcss-easy-import": "^4.0.0",
-		"postcss-import": "^16.1.0",
-		"postcss-import-ext-glob": "^2.1.1",
-		"postcss-nested-import": "^1.3.0",
-		"postcss-nesting": "^13.0.1",
-		"prettier": "^3.4.2",
-		"prettier-plugin-tailwindcss": "^0.6.9",
-		"tailwindcss": "^3.4.17",
-		"typescript": "^5.7.2",
-		"vite": "^5.4.11"
-	},
-	"dependencies": {
-		"@alpinejs/focus": "^3.14.8",
-		"@alpinejs/persist": "^3.14.8",
-		"@viget/tailwindcss-plugins": "^3.0.0",
-		"alpinejs": "^3.14.8",
-		"vite-plugin-live-reload": "^3.0.4"
-	}
+  "name": "wp-starter",
+  "version": "1.0.15",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=11.0.0"
+  },
+  "scripts": {
+    "dev": "APP_ENV=dev vite --host",
+    "build": "vite build",
+    "format": "prettier \"./src/**/*.{css,ts,tsx,js}\" --check",
+    "format:fix": "prettier \"./src/**/*.{css,ts,tsx,js}\" --write",
+    "plop": "plop"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.11",
+    "cssnano": "^7.0.6",
+    "plop": "^4.0.1",
+    "postcss": "^8.4.49",
+    "postcss-import-ext-glob": "^2.1.1",
+    "prettier": "^3.4.2",
+    "prettier-plugin-tailwindcss": "^0.6.13",
+    "tailwindcss": "^4.1.11",
+    "vite": "^7.0.0"
+  },
+  "dependencies": {
+    "@alpinejs/focus": "^3.14.8",
+    "@alpinejs/persist": "^3.14.8",
+    "alpinejs": "^3.14.8",
+    "vite-plugin-live-reload": "^3.0.4"
+  }
 }

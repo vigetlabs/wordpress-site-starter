@@ -1,5 +1,4 @@
 // Move any block that you are working to a new file to make it easier to maintain
-import theme from '../import_tailwind.js';
 import image from './blocks/image.js';
 
 const blocks = {
@@ -10,7 +9,7 @@ const blocks = {
 	},
 	'core/buttons': {
 		spacing: {
-			blockGap: theme.spacing[12],
+			blockGap: 'var(--spacing-12)',
 		},
 	},
 	'core/categories': {
@@ -299,7 +298,7 @@ const blocks = {
 		typography: {
 			fontFamily: 'var(--wp--preset--font-family--heading)',
 			fontSize: 'var(--wp--preset--font-size--x-large)',
-			lineHeight: "1"
+			lineHeight: '1',
 		},
 	},
 	'core/query-title': {

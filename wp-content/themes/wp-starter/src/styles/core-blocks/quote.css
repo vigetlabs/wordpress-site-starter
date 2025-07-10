@@ -1,5 +1,3 @@
-@layer components {
-	blockquote.wp-block-quote-is-layout-flow {
-		@apply border-l border-solid border-black;
-	}
+blockquote.wp-block-quote-is-layout-flow {
+	@apply border-l border-solid border-black;
 }

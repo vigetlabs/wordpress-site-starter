@@ -1,15 +1,16 @@
-import { theme as currentTheme } from '../../../tailwind.config.js';
+import fs from 'fs';
+import path from 'path';
 
 /**
  * Converts a string to title case.
  * @param {string} str - The string to convert.
  * @returns {string} The title-cased string.
  */
-function toTitleCase( str ) {
+function toTitleCase(str) {
 	str = str.replace(/[_-]/g, ' ');
 	return str.replace(
 		/\w\S*/g,
-		text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+		(text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase(),
 	);
 }
 
@@ -56,7 +57,7 @@ function relativeLuminance(r, g, b) {
  *
  * @returns {boolean}
  */
-function isDark( color ) {
+function isDark(color) {
 	// Convert hex to RGB
 	const { r, g, b } = hexToRgb(color);
 
@@ -65,6 +66,89 @@ function isDark( color ) {
 
 	// Threshold for dark text is 0.179
 	return luminance < 0.179;
+}
+
+/**
+ * Parse the CSS file to extract color variables from the @theme directive.
+ *
+ * @returns {object} The color palette object
+ */
+function parseColorsFromCSS() {
+	const cssPath = path.join(process.cwd(), 'src/styles/tailwind.css');
+
+	try {
+		const cssContent = fs.readFileSync(cssPath, 'utf8');
+
+		// Find the @theme block
+		const themeMatch = cssContent.match(/@theme\s*\{([\s\S]*?)\}/);
+		if (!themeMatch) {
+			console.warn('No @theme directive found in CSS file');
+			return {};
+		}
+
+		const themeContent = themeMatch[1];
+
+		// Extract color variables (--color-*)
+		const colorRegex = /--color-([^:]+):\s*([^;]+);/g;
+		const colors = {};
+		let match;
+
+		while ((match = colorRegex.exec(themeContent)) !== null) {
+			const colorName = match[1].trim();
+			const colorValue = match[2].trim();
+
+			// Skip transparent and currentColor as they're not actual colors
+			if (colorValue === 'transparent' || colorValue === 'currentColor') {
+				continue;
+			}
+
+			colors[colorName] = colorValue;
+		}
+
+		return colors;
+	} catch (error) {
+		console.error('Error reading CSS file:', error);
+		return {};
+	}
+}
+
+/**
+ * Parse the CSS file to extract gradient variables from the @theme directive.
+ *
+ * @returns {object} The gradient palette object
+ */
+function parseGradientsFromCSS() {
+	const cssPath = path.join(process.cwd(), 'src/styles/tailwind.css');
+
+	try {
+		const cssContent = fs.readFileSync(cssPath, 'utf8');
+
+		// Find the @theme block
+		const themeMatch = cssContent.match(/@theme\s*\{([\s\S]*?)\}/);
+		if (!themeMatch) {
+			console.warn('No @theme directive found in CSS file');
+			return {};
+		}
+
+		const themeContent = themeMatch[1];
+
+		// Extract gradient variables (--gradient-*)
+		const gradientRegex = /--gradient-([^:]+):\s*([^;]+);/g;
+		const gradients = {};
+		let match;
+
+		while ((match = gradientRegex.exec(themeContent)) !== null) {
+			const gradientName = match[1].trim();
+			const gradientValue = match[2].trim();
+
+			gradients[gradientName] = gradientValue;
+		}
+
+		return gradients;
+	} catch (error) {
+		console.error('Error reading CSS file:', error);
+		return {};
+	}
 }
 
 /**
@@ -77,32 +161,22 @@ function isDark( color ) {
  */
 function getPalette() {
 	const palette = [];
-	const colors = currentTheme.colors;
+	const colors = parseColorsFromCSS();
 
-	for ( const color in colors ) {
-		if ( ['transparent', 'current', 'currentColor'].includes( color ) ) {
+	for (const color in colors) {
+		if (['transparent', 'current', 'currentColor'].includes(color)) {
 			continue;
 		}
 
-		if ( typeof colors[color] === 'object' ) {
-			for ( const shade in colors[color] ) {
-				let slug = isDark( colors[color][shade] ) ? `dark-${color}-${shade}` : `${color}-${shade}`;
-				let name = `${toTitleCase(color)} ${shade}`;
-				palette.push( {
-					color: colors[color][shade],
-					name: name,
-					slug: slug,
-				} );
-			}
-		} else {
-			let slug = isDark( colors[color] ) ? `dark-${color}` : color;
-			let name = toTitleCase(color);
-			palette.push( {
-				color: colors[color],
-				name: name,
-				slug: slug,
-			} );
-		}
+		// For now, we're only handling simple color values
+		// If you have color objects with shades, you'll need to extend this logic
+		let slug = isDark(colors[color]) ? `dark-${color}` : color;
+		let name = toTitleCase(color);
+		palette.push({
+			color: colors[color],
+			name: name,
+			slug: slug,
+		});
 	}
 
 	return palette;
@@ -115,21 +189,16 @@ function getPalette() {
  */
 function getGradients() {
 	const gradients = [];
+	const gradientVars = parseGradientsFromCSS();
 
-	if ( ! currentTheme.extend.backgroundImage ) {
-		return gradients;
-	}
-
-	for ( const bgImage in currentTheme.extend.backgroundImage ) {
-		if ( ! currentTheme.extend.backgroundImage[bgImage].toLowerCase().includes( 'gradient' ) ) {
-			continue;
-		}
-
-		gradients.push( {
-			name: bgImage.replace( 'gradient-', '' ).replace( '-', ' ' ).replace( /\b\w/g, char => char.toUpperCase() ),
-			slug: bgImage.replace( 'gradient-', '' ),
-			gradient: currentTheme.extend.backgroundImage[bgImage],
-		} );
+	for (const gradient in gradientVars) {
+		let slug = gradient;
+		let name = toTitleCase(gradient);
+		gradients.push({
+			gradient: gradientVars[gradient],
+			name: name,
+			slug: slug,
+		});
 	}
 
 	return gradients;
