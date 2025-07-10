@@ -1,11 +1,3 @@
-.block-editor-rich-text__editable {
-	[data-type='core/list-item'] &.rich-text {
-		@apply inline-block;
-	}
-}
-
-.rich-text {
-	[data-type='core/list-item'] &.block-editor-rich-text__editable {
-		@apply inline-block;
-	}
+[data-type='core/list-item'] .block-editor-rich-text__editable.rich-text {
+	@apply inline-block;
 }
