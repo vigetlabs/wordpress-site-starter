@@ -32,6 +32,9 @@ class PostCreateProjectScript extends ComposerScript {
 		'function-prefix'  => 'wpstarter_',
 		'text-domain'      => 'wp-starter',
 		'proxy-domain'     => '',
+		'branding'         => 'viget',
+		'branding-name'    => '',
+		'branding-website' => '',
 	];
 
 	/**
@@ -165,12 +168,11 @@ class PostCreateProjectScript extends ComposerScript {
 		}
 
 		// Branding.
-		$branding = empty( self::$info['branding'] ) ? 'viget' : self::$info['branding'];
 		self::$info['branding'] = self::select( 'Agency Branding:', [
 			'viget' => 'Viget',
 			'custom' => 'Custom',
 			'none' => 'None',
-		], $branding );
+		], self::$info['branding'] );
 
 		if ( 'custom' === self::$info['branding'] ) {
 			$brandingName = empty( self::$info['branding-name'] ) ? 'My Agency' : self::$info['branding-name'];
@@ -218,41 +220,6 @@ class PostCreateProjectScript extends ComposerScript {
 	}
 
 	/**
-	 * Slugify some text.
-	 *
-	 * @param string $text
-	 *
-	 * @return string
-	 */
-	private static function slugify( string $text ): string {
-		$separator = '-';
-
-		// replace non letter or digits by separator
-		$text = preg_replace( '~[^\pL\d]+~u', $separator, $text );
-
-		// transliterate
-		$text = iconv( 'utf-8', 'us-ascii//TRANSLIT', $text );
-
-		// remove unwanted characters
-		$text = preg_replace( '~[^-\w]+~', '', $text );
-
-		// trim
-		$text = trim( $text, $separator );
-
-		// remove duplicate separator
-		$text = preg_replace( '~-+~', $separator, $text );
-
-		// lowercase
-		$text = strtolower( $text );
-
-		if ( empty( $text ) ) {
-			return '';
-		}
-
-		return $text;
-	}
-
-	/**
 	 * Store project info in the .ddev/.env file.
 	 *
 	 * @return void
@@ -267,6 +234,13 @@ class PostCreateProjectScript extends ComposerScript {
 		$envData .= PHP_EOL . 'PROJECT_TEXT_DOMAIN="' . self::escapeQuotes( self::$info['text-domain'] ) . '"';
 		$envData .= PHP_EOL . 'PROJECT_PACKAGE="' . self::escapeQuotes( self::$info['package'] ) . '"';
 		$envData .= PHP_EOL . 'PROJECT_FUNCTION_PREFIX="' . self::escapeQuotes( self::$info['function'] ) . '"';
+		$envData .= PHP_EOL . 'PROJECT_BRANDING="' . self::escapeQuotes( self::$info['branding'] ) . '"';
+		if ( ! empty( self::$info['branding-name'] ) ) {
+			$envData .= PHP_EOL . 'PROJECT_BRANDING_NAME="' . self::escapeQuotes( self::$info['branding-name'] ) . '"';
+		}
+		if ( ! empty( self::$info['branding-website'] ) ) {
+			$envData .= PHP_EOL . 'PROJECT_BRANDING_WEBSITE="' . self::escapeQuotes( self::$info['branding-website'] ) . '"';
+		}
 		$envData .= PHP_EOL . '# end project info';
 
 		file_put_contents( $envPath, $envData );
@@ -680,25 +654,31 @@ class PostCreateProjectScript extends ComposerScript {
 			return;
 		}
 
-		self::writeLine( 'Updating branding...' );
+		self::writeLine( 'Modifying branding...' );
+		$actionText = 'none' === self::$info['branding'] ? 'disabled' : 'updated';
+
+		// Go ahead and output the action message.
+		self::writeInfo( sprintf( 'Branding %s.', $actionText ) );
 
 		$footerFile = self::translatePath( 'wp-content/mu-plugins/viget-wp/src/classes/Admin/Footer.php' );
+		$loginScreenFile = self::translatePath( 'wp-content/mu-plugins/viget-wp/src/classes/Admin/LoginScreen.php' );
+
+		// Disable the login screen branding.
+		if ( file_exists( $loginScreenFile ) ) {
+			self::searchReplaceFile( '$this->login_css();', '// $this->login_css();', $loginScreenFile );
+		}
 
 		if ( ! file_exists( $footerFile ) ) {
-			self::writeWarning( 'Admin Footer file not found in MU Plugin. Skipping branding update.' );
 			return;
 		}
 
 		if ( 'none' === self::$info['branding'] ) {
 			self::searchReplaceFile( '$this->modify_footer_text();', '// $this->modify_footer_text();', $footerFile );
-
-			self::writeInfo( 'Branding removed.' );
+			self::searchReplaceFile( '$this->modify_footer_text();', '// $this->modify_footer_text();', $footerFile );
 			return;
 		}
 
 		self::searchReplaceFile( 'https://www.viget.com/', self::$info['branding-website'], $footerFile );
 		self::searchReplaceFile( 'Viget', self::$info['branding-name'], $footerFile );
-
-		self::writeInfo( 'Branding updated.' );
 	}
 }

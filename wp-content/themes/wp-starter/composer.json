@@ -37,7 +37,8 @@
   "require-dev": {
     "phpcompatibility/phpcompatibility-wp": "^2",
     "squizlabs/php_codesniffer": "^3.11",
-    "wp-coding-standards/wpcs": "^3.1"
+    "wp-coding-standards/wpcs": "^3.1",
+    "wpackagist-plugin/create-block-theme": "^2.7"
   },
   "config": {
     "sort-packages": true,
