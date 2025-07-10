@@ -14,7 +14,7 @@
 		@apply text-lg;
 	}
 	h4 {
-		@apply text-base;
+		@apply text-md;
 	}
 	h5 {
 		@apply text-sm;

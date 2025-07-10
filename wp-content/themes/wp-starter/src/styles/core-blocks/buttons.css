@@ -1,5 +1,5 @@
 @utility btn-base {
-	@apply inline-flex items-center gap-12 rounded-none text-base transition;
+	@apply text-md inline-flex items-center gap-12 rounded-none transition;
 	@apply focus-visible:ring-4 focus-visible:outline-none;
 	@apply disabled:pointer-events-none disabled:opacity-20;
 	@apply min-h-40 px-20;
