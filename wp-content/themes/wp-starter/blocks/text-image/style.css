@@ -10,11 +10,11 @@
 		@apply flex flex-col items-start gap-16 p-0;
 
 		.is-style-eyebrow {
-			@apply m-0 text-sm font-bold tracking-tighter uppercase;
+			@apply m-0 text-sm uppercase;
 		}
 
 		.wp-block-heading {
-			@apply m-0 text-lg leading-tight font-bold;
+			@apply m-0 text-lg;
 		}
 	}
 }
