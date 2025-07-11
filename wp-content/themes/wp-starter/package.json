@@ -1,7 +1,7 @@
 {
   "name": "wp-starter",
   "version": "0.1.0",
-  "type": "commonjs",
+  "type": "module",
   "engines": {
     "node": ">=22.0.0",
     "npm": ">=11.0.0"
