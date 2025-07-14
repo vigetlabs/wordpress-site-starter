@@ -1,0 +1,57 @@
+name: Build Theme
+
+on:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: build-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build Theme
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+
+      # Set up composer caching
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+
+      # Build theme
+      - name: Install Theme Dependencies
+        uses: "php-actions/composer@v6"
+        with:
+          php_version: "8.2"
+          dev: no
+          args: "--optimize-autoloader"
+          working_dir: wp-content/themes/wp-starter
+
+      - name: Build Theme
+        run: |
+          npm ci
+          npm run build
+        working-directory: wp-content/themes/wp-starter
+
+      # Install viget-wp composer dependencies
+      - name: Install viget-wp Dependencies
+        uses: "php-actions/composer@v6"
+        with:
+          php_version: "8.2"
+          dev: no
+          args: "--optimize-autoloader"
+          working_dir: wp-content/mu-plugins/viget-wp
+
+      - name: Build Success
+        run: echo "✅ Theme build completed successfully!"
