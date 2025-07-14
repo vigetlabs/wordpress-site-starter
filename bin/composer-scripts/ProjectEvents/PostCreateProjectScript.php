@@ -156,6 +156,7 @@ class PostCreateProjectScript extends ComposerScript {
 		self::$info['function'] = self::ask( 'Do you want to customize the function prefix?', self::$info['function'] );
 
 		// Proxy Domain.
+		self::$info['proxy-domain'] = self::$defaults['proxy-domain'];
 		self::$info['proxy-domain'] = self::ask( 'Would you like to proxy media (uploads) from another domain? (leave blank to skip)', self::$info['proxy-domain'] );
 
 		self::$info['proxy-domain'] = preg_replace( '#^https?://#', '', self::$info['proxy-domain'] );
@@ -168,6 +169,7 @@ class PostCreateProjectScript extends ComposerScript {
 		}
 
 		// Branding.
+		self::$info['branding'] = self::$defaults['branding'];
 		self::$info['branding'] = self::select( 'Agency Branding:', [
 			'viget' => 'Viget',
 			'custom' => 'Custom',
@@ -175,6 +177,9 @@ class PostCreateProjectScript extends ComposerScript {
 		], self::$info['branding'] );
 
 		if ( 'custom' === self::$info['branding'] ) {
+			self::$info['branding-name'] = self::$defaults['branding-name'];
+			self::$info['branding-website'] = self::$defaults['branding-website'];
+
 			$brandingName = empty( self::$info['branding-name'] ) ? 'My Agency' : self::$info['branding-name'];
 			self::$info['branding-name'] = self::ask( 'What is the name of your agency?', $brandingName );
 
