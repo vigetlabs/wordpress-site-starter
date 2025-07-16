@@ -663,9 +663,9 @@ class PostCreateProjectScript extends ComposerScript {
 		$footerFile = self::translatePath( 'wp-content/mu-plugins/viget-wp/src/classes/Admin/Footer.php' );
 		$loginScreenFile = self::translatePath( 'wp-content/mu-plugins/viget-wp/src/classes/Admin/LoginScreen.php' );
 
-		// Disable the login screen branding.
-		if ( file_exists( $loginScreenFile ) ) {
-			self::searchReplaceFile( '$this->login_css();', '// $this->login_css();', $loginScreenFile );
+		// Modify the login screen branding.
+		if ( 'viget' !== self::$info['branding'] && file_exists( $loginScreenFile ) ) {
+			self::searchReplaceFile( '$logo_url = VIGETWP_PLUGIN_URL . \'src/assets/images/logo.svg\';', "''", $loginScreenFile );
 		}
 
 		if ( ! file_exists( $footerFile ) ) {
@@ -678,7 +678,16 @@ class PostCreateProjectScript extends ComposerScript {
 			return;
 		}
 
-		self::searchReplaceFile( 'https://www.viget.com/', self::$info['branding-website'], $footerFile );
-		self::searchReplaceFile( 'Viget', self::$info['branding-name'], $footerFile );
+		if ( 'custom' !== self::$info['branding'] || empty( self::$info['branding-name'] ) || empty( self::$info['branding-website'] ) ) {
+			return;
+		}
+
+		if ( ! empty( self::$info['branding-website'] ) ) {
+			self::searchReplaceFile( 'https://www.viget.com/', self::$info['branding-website'], $footerFile );
+		}
+
+		if ( ! empty( self::$info['branding-name'] ) ) {
+			self::searchReplaceFile( 'Viget', self::$info['branding-name'], $footerFile );
+		}
 	}
 }
