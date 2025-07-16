@@ -403,8 +403,20 @@ class PostInstallScript extends ComposerScript {
 
 		// Site Description.
 		$name = self::$env['PROJECT_NAME'] ?? self::$info['title'];
-		$brandingName = self::$env['PROJECT_BRANDING_NAME'] ?? 'Viget';
-		$description = ! empty( self::$info['description'] ) ? self::$info['description'] : sprintf( 'A custom WordPress site for %s by %s.', $name, $brandingName );
+		$defaultDescription = sprintf( 'A custom WordPress site for %s', $name );
+
+		$brandingName = 'Viget';
+		if ( 'custom' === self::$env['PROJECT_BRANDING'] && ! empty( self::$env['PROJECT_BRANDING_NAME']) ) {
+			$brandingName = self::$env['PROJECT_BRANDING_NAME'];
+		} elseif ( 'none' === self::$env['PROJECT_BRANDING'] ) {
+			$brandingName = '';
+		}
+
+		if ( $brandingName ) {
+			$defaultDescription .= " by $brandingName";
+		}
+
+		$description = ! empty( self::$info['description'] ) ? self::$info['description'] : $defaultDescription;
 		self::$info['description'] = self::ask( 'What is the Site Description (tagline)?', $description );
 
 		// Site URL.
