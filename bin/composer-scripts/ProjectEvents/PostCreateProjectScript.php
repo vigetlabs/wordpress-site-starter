@@ -31,10 +31,7 @@ class PostCreateProjectScript extends ComposerScript {
 		'package-name'     => 'WPStarter',
 		'function-prefix'  => 'wpstarter_',
 		'text-domain'      => 'wp-starter',
-		'proxy-domain'     => '',
 		'branding'         => 'viget',
-		'branding-name'    => '',
-		'branding-website' => '',
 	];
 
 	/**
@@ -156,7 +153,8 @@ class PostCreateProjectScript extends ComposerScript {
 		self::$info['function'] = self::ask( 'Do you want to customize the function prefix?', self::$info['function'] );
 
 		// Proxy Domain.
-		self::$info['proxy-domain'] = self::ask( 'Would you like to proxy media (uploads) from another domain? (leave blank to skip)', self::$info['proxy-domain'] );
+		$proxyDomain = empty( self::$info['proxy-domain'] ) ? '' : self::$info['proxy-domain'];
+		self::$info['proxy-domain'] = self::ask( 'Would you like to proxy media (uploads) from another domain? (leave blank to skip)', $proxyDomain );
 
 		self::$info['proxy-domain'] = preg_replace( '#^https?://#', '', self::$info['proxy-domain'] );
 		self::$info['proxy-domain'] = rtrim( self::$info['proxy-domain'], '/' );
@@ -168,11 +166,12 @@ class PostCreateProjectScript extends ComposerScript {
 		}
 
 		// Branding.
+		$branding = empty( self::$info['branding'] ) ? self::$defaults['branding'] : self::$info['branding'];
 		self::$info['branding'] = self::select( 'Agency Branding:', [
 			'viget' => 'Viget',
 			'custom' => 'Custom',
 			'none' => 'None',
-		], self::$info['branding'] );
+		], $branding );
 
 		if ( 'custom' === self::$info['branding'] ) {
 			$brandingName = empty( self::$info['branding-name'] ) ? 'My Agency' : self::$info['branding-name'];
