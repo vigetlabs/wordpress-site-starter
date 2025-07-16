@@ -69,7 +69,7 @@ mkdir project-name && cd project-name && composer create-project --repository-ur
 You can quickly remove the project by using:
 
 ```bash
-ddev delete project-name -O -y && cd ../ && rm -rf project-name
+ddev stop && ddev delete project-name -O -y && cd ../ && rm -rf project-name
 ```
 
 ## Changelog

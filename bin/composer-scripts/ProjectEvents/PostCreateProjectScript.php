@@ -664,7 +664,7 @@ class PostCreateProjectScript extends ComposerScript {
 
 		// Modify the login screen branding.
 		if ( 'viget' !== self::$info['branding'] && file_exists( $loginScreenFile ) ) {
-			self::searchReplaceFile( '$logo_url = VIGETWP_PLUGIN_URL . \'src/assets/images/logo.svg\';', "''", $loginScreenFile );
+			self::searchReplaceFile( '$logo_url = VIGETWP_PLUGIN_URL . \'src/assets/images/logo.svg\';', '$logo_url = \'\';', $loginScreenFile );
 		}
 
 		if ( ! file_exists( $footerFile ) ) {
