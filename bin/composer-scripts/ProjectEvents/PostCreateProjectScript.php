@@ -160,7 +160,7 @@ class PostCreateProjectScript extends ComposerScript {
 		self::$info['proxy-domain'] = rtrim( self::$info['proxy-domain'], '/' );
 
 		// Make sure the proxy domain is a valid domain.
-		if ( ! filter_var( self::$info['proxy-domain'], FILTER_VALIDATE_DOMAIN ) ) {
+		if ( self::$info['proxy-domain'] && ! filter_var( self::$info['proxy-domain'], FILTER_VALIDATE_DOMAIN ) ) {
 			self::writeWarning( 'Invalid proxy domain name. Ignoring...' );
 			self::$info['proxy-domain'] = '';
 		}
