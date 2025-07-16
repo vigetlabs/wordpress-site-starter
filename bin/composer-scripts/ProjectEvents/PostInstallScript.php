@@ -34,6 +34,11 @@ class PostInstallScript extends ComposerScript {
 	const DEFAULT_ADMIN_USER = 'viget';
 
 	/**
+	 * Set Default Admin Email
+	 */
+	const DEFAULT_ADMIN_EMAIL = 'fed+wp@viget.com';
+
+	/**
 	 * @var array
 	 */
 	private static array $env = [];
@@ -408,11 +413,11 @@ class PostInstallScript extends ComposerScript {
 		self::$info['url'] = self::ask( 'What is the URL?*', $url );
 
 		// Admin Username.
-		self::$info['username'] = self::$info['username'] ?? self::DEFAULT_ADMIN_USER;
+		self::$info['username'] = self::$info['username'] ?? self::getDefaultAdminUsername();
 		self::$info['username'] = self::ask( 'Set the admin username:*', self::$info['username'] );
 
 		// Admin Email.
-		self::$info['email'] = self::$info['email'] ?? 'fed+wp@viget.com';
+		self::$info['email'] = self::$info['email'] ?? self::getDefaultAdminEmail( self::$info['username'] );
 		self::$info['email'] = self::ask( 'What is the admin email address?*', self::$info['email'] );
 
 		// Admin Password.
@@ -751,5 +756,38 @@ class PostInstallScript extends ComposerScript {
 		$success = self::centeredText( $success, 2, '*', '#1296BB' );
 
 		self::writeLine( $success );
+	}
+
+	/**
+	 * Get the default admin username.
+	 *
+	 * @return string
+	 */
+	private static function getDefaultAdminUsername(): string {
+		$defaultUsername = self::DEFAULT_ADMIN_USER;
+		if ( 'none' === self::$env['PROJECT_BRANDING'] ) {
+			$defaultUsername = 'root';
+		} elseif( 'custom' === self::$env['PROJECT_BRANDING'] && ! empty( self::$env['PROJECT_BRANDING_NAME'] ) ) {
+			$defaultUsername = self::slugify( self::$env['PROJECT_BRANDING_NAME'] );
+		}
+		return $defaultUsername;
+	}
+
+	/**
+	 * Get the default admin email.
+	 *
+	 * @param string $defaultUsername
+	 *
+	 * @return string
+	 */
+	private static function getDefaultAdminEmail( string $defaultUsername ): string {
+		$defaultEmail = self::DEFAULT_ADMIN_EMAIL;
+		if ( 'none' === self::$env['PROJECT_BRANDING'] ) {
+			$defaultEmail = 'your@domain.tld';
+		} elseif( 'custom' === self::$env['PROJECT_BRANDING'] && ! empty( self::$env['PROJECT_BRANDING_WEBSITE'] ) ) {
+			$domain = parse_url( self::$env['PROJECT_BRANDING_WEBSITE'], PHP_URL_HOST );
+			$defaultEmail = $defaultUsername . '@' . $domain;
+		}
+		return $defaultEmail;
 	}
 }
