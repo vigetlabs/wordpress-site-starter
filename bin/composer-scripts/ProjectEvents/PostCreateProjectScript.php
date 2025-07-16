@@ -686,7 +686,7 @@ class PostCreateProjectScript extends ComposerScript {
 		}
 
 		if ( ! empty( self::$info['branding-name'] ) ) {
-			self::searchReplaceFile( 'Viget', self::$info['branding-name'], $footerFile );
+			self::searchReplaceFile( 'esc_html__( \'Viget\', \'viget-wp\' )', 'esc_html__( \'' . addslashes( self::$info['branding-name'] ) . '\', \'viget-wp\' )', $footerFile );
 		}
 	}
 }
