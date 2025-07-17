@@ -1,7 +1,7 @@
 @theme {
 	--color-btn-bg-color: var(--color-black);
 	--color-btn-text-color: var(--color-white);
-	--color-btn-outline-bg-color: var(--color-black);
+	--color-btn-outline-border-color: var(--color-btn-bg-color);
 	--color-btn-outline-text-color: var(--color-black);
 }
 
@@ -26,10 +26,10 @@
 
 @utility btn-outline {
 	@apply btn-base;
-	@apply border-btn-outline-bg-color text-btn-outline-text-color border bg-transparent;
-	@apply hover:border-btn-outline-bg-color/70 hover:bg-btn-outline-bg-color hover:text-btn-text-color;
-	@apply active:bg-btn-outline-bg-color/20 active:text-btn-outline-text-color;
-	@apply focus-visible:bg-btn-outline-bg-color/20 focus-visible:ring-btn-outline-text-color;
+	@apply border-btn-outline-border-color text-btn-outline-text-color border bg-transparent;
+	@apply hover:border-btn-outline-border-color/70 hover:bg-btn-bg-color/10 hover:text-btn-outline-text-color;
+	@apply active:bg-btn-outline-border-color/20 active:text-btn-outline-text-color;
+	@apply focus-visible:bg-btn-outline-border-color/20 focus-visible:ring-btn-outline-text-color;
 }
 
 .wp-block-button {
