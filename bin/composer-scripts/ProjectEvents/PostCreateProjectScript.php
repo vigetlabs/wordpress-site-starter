@@ -31,10 +31,7 @@ class PostCreateProjectScript extends ComposerScript {
 		'package-name'     => 'WPStarter',
 		'function-prefix'  => 'wpstarter_',
 		'text-domain'      => 'wp-starter',
-		'proxy-domain'     => '',
 		'branding'         => 'viget',
-		'branding-name'    => '',
-		'branding-website' => '',
 	];
 
 	/**
@@ -156,23 +153,25 @@ class PostCreateProjectScript extends ComposerScript {
 		self::$info['function'] = self::ask( 'Do you want to customize the function prefix?', self::$info['function'] );
 
 		// Proxy Domain.
-		self::$info['proxy-domain'] = self::ask( 'Would you like to proxy media (uploads) from another domain? (leave blank to skip)', self::$info['proxy-domain'] );
+		$proxyDomain = empty( self::$info['proxy-domain'] ) ? '' : self::$info['proxy-domain'];
+		self::$info['proxy-domain'] = self::ask( 'Would you like to proxy media (uploads) from another domain? (leave blank to skip)', $proxyDomain );
 
 		self::$info['proxy-domain'] = preg_replace( '#^https?://#', '', self::$info['proxy-domain'] );
 		self::$info['proxy-domain'] = rtrim( self::$info['proxy-domain'], '/' );
 
 		// Make sure the proxy domain is a valid domain.
-		if ( ! filter_var( self::$info['proxy-domain'], FILTER_VALIDATE_DOMAIN ) ) {
+		if ( self::$info['proxy-domain'] && ! filter_var( self::$info['proxy-domain'], FILTER_VALIDATE_DOMAIN ) ) {
 			self::writeWarning( 'Invalid proxy domain name. Ignoring...' );
 			self::$info['proxy-domain'] = '';
 		}
 
 		// Branding.
+		$branding = empty( self::$info['branding'] ) ? self::$defaults['branding'] : self::$info['branding'];
 		self::$info['branding'] = self::select( 'Agency Branding:', [
 			'viget' => 'Viget',
 			'custom' => 'Custom',
 			'none' => 'None',
-		], self::$info['branding'] );
+		], $branding );
 
 		if ( 'custom' === self::$info['branding'] ) {
 			$brandingName = empty( self::$info['branding-name'] ) ? 'My Agency' : self::$info['branding-name'];
@@ -663,9 +662,9 @@ class PostCreateProjectScript extends ComposerScript {
 		$footerFile = self::translatePath( 'wp-content/mu-plugins/viget-wp/src/classes/Admin/Footer.php' );
 		$loginScreenFile = self::translatePath( 'wp-content/mu-plugins/viget-wp/src/classes/Admin/LoginScreen.php' );
 
-		// Disable the login screen branding.
-		if ( file_exists( $loginScreenFile ) ) {
-			self::searchReplaceFile( '$this->login_css();', '// $this->login_css();', $loginScreenFile );
+		// Modify the login screen branding.
+		if ( 'viget' !== self::$info['branding'] && file_exists( $loginScreenFile ) ) {
+			self::searchReplaceFile( '$logo_url = VIGETWP_PLUGIN_URL . \'src/assets/images/logo.svg\';', '$logo_url = \'\';', $loginScreenFile );
 		}
 
 		if ( ! file_exists( $footerFile ) ) {
@@ -678,7 +677,16 @@ class PostCreateProjectScript extends ComposerScript {
 			return;
 		}
 
-		self::searchReplaceFile( 'https://www.viget.com/', self::$info['branding-website'], $footerFile );
-		self::searchReplaceFile( 'Viget', self::$info['branding-name'], $footerFile );
+		if ( 'custom' !== self::$info['branding'] || empty( self::$info['branding-name'] ) || empty( self::$info['branding-website'] ) ) {
+			return;
+		}
+
+		if ( ! empty( self::$info['branding-website'] ) ) {
+			self::searchReplaceFile( 'https://www.viget.com/', self::$info['branding-website'], $footerFile );
+		}
+
+		if ( ! empty( self::$info['branding-name'] ) ) {
+			self::searchReplaceFile( 'esc_html__( \'Viget\', \'viget-wp\' )', 'esc_html__( \'' . addslashes( self::$info['branding-name'] ) . '\', \'viget-wp\' )', $footerFile );
+		}
 	}
 }
