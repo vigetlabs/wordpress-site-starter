@@ -1,0 +1,60 @@
+@theme {
+	/* Spacing */
+	--spacing-1: 1px;
+	--spacing-2: 2px;
+	--spacing-4: 4px;
+	--spacing-6: 6px;
+	--spacing-8: 8px;
+	--spacing-10: 10px;
+	--spacing-12: 12px;
+	--spacing-16: 16px;
+	--spacing-20: 20px;
+	--spacing-24: 24px;
+	--spacing-28: 28px;
+	--spacing-32: 32px;
+	--spacing-36: 36px;
+	--spacing-40: 40px;
+	--spacing-44: 44px;
+	--spacing-48: 48px;
+	--spacing-52: 52px;
+	--spacing-56: 56px;
+	--spacing-60: 60px;
+	--spacing-64: 64px;
+	--spacing-80: 80px;
+	--spacing-96: 96px;
+	--spacing-112: 112px;
+	--spacing-128: 128px;
+	--spacing-200: 200px;
+
+	/* Fluid Spacing */
+	--spacing-fluid-xs: clamp(
+		var(--spacing-6),
+		var(--spacing-6) + 0.3125vw,
+		var(--spacing-12)
+	);
+	--spacing-fluid-sm: clamp(
+		var(--spacing-12),
+		var(--spacing-12) + 0.5vw,
+		var(--spacing-24)
+	);
+	--spacing-fluid-md: clamp(
+		var(--spacing-24),
+		var(--spacing-24) + 1vw,
+		var(--spacing-48)
+	);
+	--spacing-fluid-lg: clamp(
+		var(--spacing-48),
+		var(--spacing-48) + 1.75vw,
+		var(--spacing-96)
+	);
+	--spacing-fluid-xl: clamp(
+		var(--spacing-96),
+		var(--spacing-96) + 2.5vw,
+		var(--spacing-128)
+	);
+	--spacing-fluid-2xl: clamp(
+		var(--spacing-128),
+		var(--spacing-128) + 3.75vw,
+		var(--spacing-200)
+	);
+}
