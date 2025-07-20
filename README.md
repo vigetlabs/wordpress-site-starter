@@ -74,6 +74,10 @@ ddev stop && ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.18
+
+* Hotfix custom branding bug.
+
 ### v1.0.17
 
 * Fixes a bug where ACF Pro was missing files.
