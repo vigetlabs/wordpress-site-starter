@@ -14,6 +14,13 @@ use Viget\ComposerScripts\ComposerScript;
 class PostCreateProjectScript extends ComposerScript {
 
 	/**
+	 * Branding Options
+	 */
+	const BRANDING_VIGET = 1;
+	const BRANDING_CUSTOM = 2;
+	const BRANDING_NONE = 3;
+
+	/**
 	 * @var array
 	 */
 	private static array $info = [];
@@ -31,7 +38,6 @@ class PostCreateProjectScript extends ComposerScript {
 		'package-name'     => 'WPStarter',
 		'function-prefix'  => 'wpstarter_',
 		'text-domain'      => 'wp-starter',
-		'branding'         => 'viget',
 	];
 
 	/**
@@ -166,19 +172,16 @@ class PostCreateProjectScript extends ComposerScript {
 		}
 
 		// Branding.
-		$branding = empty( self::$info['branding'] ) ? self::$defaults['branding'] : self::$info['branding'];
-		self::$info['branding'] = self::select( 'Agency Branding:', [
-			'viget' => 'Viget',
-			'custom' => 'Custom',
-			'none' => 'None',
-		], $branding );
+		$brandingOptions = self::getBrandingOptions();
+		$branding = empty( self::$info['branding'] ) ? self::BRANDING_VIGET : self::$info['branding'];
+		self::$info['branding'] = intval( self::select( 'Agency Branding:', $brandingOptions, $branding ) );
 
-		if ( 'custom' === self::$info['branding'] ) {
+		if ( self::BRANDING_CUSTOM === self::$info['branding'] ) {
 			$brandingName = empty( self::$info['branding-name'] ) ? 'My Agency' : self::$info['branding-name'];
 			self::$info['branding-name'] = self::ask( 'What is the name of your agency?', $brandingName );
 
 			if ( empty( self::$info['branding-name'] ) ) {
-				self::$info['branding'] = 'none';
+				self::$info['branding'] = self::BRANDING_NONE;
 			} else {
 				$brandingWebsite = empty( self::$info['branding-website'] ) ? 'https://' : self::$info['branding-website'];
 				self::$info['branding-website'] = self::ask( 'What is the website for your agency?', $brandingWebsite );
@@ -193,6 +196,8 @@ class PostCreateProjectScript extends ComposerScript {
 			}
 		}
 
+		$brandingText = $brandingOptions[ self::$info['branding'] ];
+
 		// Summary
 		$summary  = PHP_EOL . ' - Name: ' . self::$info['name'];
 		$summary .= PHP_EOL . ' - Slug: ' . self::$info['slug'];
@@ -202,8 +207,8 @@ class PostCreateProjectScript extends ComposerScript {
 		if ( ! empty( self::$info['proxy-domain'] ) ) {
 			$summary .= PHP_EOL . ' - Proxy Domain: ' . self::$info['proxy-domain'];
 		}
-		$summary .= PHP_EOL . ' - Branding: ' . ucwords( self::$info['branding'] );
-		if ( 'custom' === self::$info['branding'] ) {
+		$summary .= PHP_EOL . ' - Branding: ' . $brandingText;
+		if ( self::BRANDING_CUSTOM === self::$info['branding'] ) {
 			$summary .= ' (' . self::$info['branding-name'];
 			if ( ! empty( self::$info['branding-website'] ) ) {
 				$summary .= ' / ' . self::$info['branding-website'];
@@ -224,6 +229,9 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function storeProjectInfo(): void {
+		$brandingOptions = self::getBrandingOptions();
+		$branding = strtolower( $brandingOptions[ self::$info['branding'] ] );
+
 		$envPath = self::translatePath( '.ddev/.env' );
 		$envData = file_get_contents( $envPath );
 
@@ -233,7 +241,7 @@ class PostCreateProjectScript extends ComposerScript {
 		$envData .= PHP_EOL . 'PROJECT_TEXT_DOMAIN="' . self::escapeQuotes( self::$info['text-domain'] ) . '"';
 		$envData .= PHP_EOL . 'PROJECT_PACKAGE="' . self::escapeQuotes( self::$info['package'] ) . '"';
 		$envData .= PHP_EOL . 'PROJECT_FUNCTION_PREFIX="' . self::escapeQuotes( self::$info['function'] ) . '"';
-		$envData .= PHP_EOL . 'PROJECT_BRANDING="' . self::escapeQuotes( self::$info['branding'] ) . '"';
+		$envData .= PHP_EOL . 'PROJECT_BRANDING="' . self::escapeQuotes( $branding ) . '"';
 		if ( ! empty( self::$info['branding-name'] ) ) {
 			$envData .= PHP_EOL . 'PROJECT_BRANDING_NAME="' . self::escapeQuotes( self::$info['branding-name'] ) . '"';
 		}
@@ -649,12 +657,12 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function updateBranding(): void {
-		if ( empty( self::$info['branding'] ) || 'viget' === self::$info['branding'] ) {
+		if ( empty( self::$info['branding'] ) || self::BRANDING_VIGET === self::$info['branding'] ) {
 			return;
 		}
 
 		self::writeLine( 'Modifying branding...' );
-		$actionText = 'none' === self::$info['branding'] ? 'disabled' : 'updated';
+		$actionText = self::BRANDING_NONE === self::$info['branding'] ? 'disabled' : 'updated';
 
 		// Go ahead and output the action message.
 		self::writeInfo( sprintf( 'Branding %s.', $actionText ) );
@@ -663,7 +671,7 @@ class PostCreateProjectScript extends ComposerScript {
 		$loginScreenFile = self::translatePath( 'wp-content/mu-plugins/viget-wp/src/classes/Admin/LoginScreen.php' );
 
 		// Modify the login screen branding.
-		if ( 'viget' !== self::$info['branding'] && file_exists( $loginScreenFile ) ) {
+		if ( self::BRANDING_VIGET !== self::$info['branding'] && file_exists( $loginScreenFile ) ) {
 			self::searchReplaceFile( '$logo_url = VIGETWP_PLUGIN_URL . \'src/assets/images/logo.svg\';', '$logo_url = \'\';', $loginScreenFile );
 		}
 
@@ -671,13 +679,13 @@ class PostCreateProjectScript extends ComposerScript {
 			return;
 		}
 
-		if ( 'none' === self::$info['branding'] ) {
+		if ( self::BRANDING_NONE === self::$info['branding'] ) {
 			self::searchReplaceFile( '$this->modify_footer_text();', '// $this->modify_footer_text();', $footerFile );
 			self::searchReplaceFile( '$this->modify_footer_text();', '// $this->modify_footer_text();', $footerFile );
 			return;
 		}
 
-		if ( 'custom' !== self::$info['branding'] || empty( self::$info['branding-name'] ) || empty( self::$info['branding-website'] ) ) {
+		if ( self::BRANDING_CUSTOM !== self::$info['branding'] || empty( self::$info['branding-name'] ) || empty( self::$info['branding-website'] ) ) {
 			return;
 		}
 
@@ -688,5 +696,18 @@ class PostCreateProjectScript extends ComposerScript {
 		if ( ! empty( self::$info['branding-name'] ) ) {
 			self::searchReplaceFile( 'esc_html__( \'Viget\', \'viget-wp\' )', 'esc_html__( \'' . addslashes( self::$info['branding-name'] ) . '\', \'viget-wp\' )', $footerFile );
 		}
+	}
+
+	/**
+	 * Get the branding options.
+	 *
+	 * @return array
+	 */
+	private static function getBrandingOptions(): array {
+		return [
+			self::BRANDING_VIGET => 'Viget',
+			self::BRANDING_CUSTOM => 'Custom',
+			self::BRANDING_NONE => 'None',
+		];
 	}
 }
