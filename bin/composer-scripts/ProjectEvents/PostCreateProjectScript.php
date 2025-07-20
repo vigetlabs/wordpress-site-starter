@@ -176,8 +176,6 @@ class PostCreateProjectScript extends ComposerScript {
 		$branding = empty( self::$info['branding'] ) ? self::BRANDING_VIGET : self::$info['branding'];
 		self::$info['branding'] = intval( self::select( 'Agency Branding:', $brandingOptions, $branding ) );
 
-		$brandingText = $brandingOptions[ self::$info['branding'] ];
-
 		if ( self::BRANDING_CUSTOM === self::$info['branding'] ) {
 			$brandingName = empty( self::$info['branding-name'] ) ? 'My Agency' : self::$info['branding-name'];
 			self::$info['branding-name'] = self::ask( 'What is the name of your agency?', $brandingName );
@@ -197,6 +195,8 @@ class PostCreateProjectScript extends ComposerScript {
 				}
 			}
 		}
+
+		$brandingText = $brandingOptions[ self::$info['branding'] ];
 
 		// Summary
 		$summary  = PHP_EOL . ' - Name: ' . self::$info['name'];
