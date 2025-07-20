@@ -2,7 +2,7 @@
 
 This is a custom block starter theme built by [Viget](https://www.viget.com/). Update this file as needed for your custom theme.
 
-## Frontend Stack
+## Front-End Stack
 
 - [Vite](https://vitejs.dev/)
 - [AlpineJS](https://alpinejs.dev/)
@@ -39,7 +39,7 @@ Blocks are built using ACF and core WordPress blocks. Styles for the blocks are 
 
 ### Creating New Blocks
 
-The theme is set up with [plop](https://plopjs.com/) which will auto-generate a new block based on the options you input.
+The theme includes [plop](https://plopjs.com/) which will auto-generate a new block based on the options you input.
 To create a new block, run:
 
 ```bash
