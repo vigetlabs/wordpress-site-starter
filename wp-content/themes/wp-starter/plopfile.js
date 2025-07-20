@@ -16,14 +16,14 @@ module.exports = function (plop) {
 			},
 			{
 				type: 'input',
-				name: 'themeslug',
-				message: 'What is the slug for your theme?',
+				name: 'textdomain',
+				message: 'What is your theme\'s text domain?',
 				default: 'wp-starter',
 				validate: function (value) {
 					if (/.+/.test(value)) {
 					  return true;
 					}
-					return "Theme slug is required";
+					return "Theme text domain is required";
 				  },
 			},
 			{

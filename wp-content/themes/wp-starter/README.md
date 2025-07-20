@@ -1,63 +1,78 @@
 # WP Site Starter
 
-This is a custom block theme built by Viget. It is meant to be a starting place then customize and build out your theme. Please update this file to reflect your custom built theme. 
+This is a custom block starter theme built by [Viget](https://www.viget.com/). Update this file as needed for your custom theme.
 
 ## Frontend Stack
+
 - [Vite](https://vitejs.dev/)
 - [AlpineJS](https://alpinejs.dev/)
 - [Tailwind](https://tailwindcss.com/)
 
 ## Theme.json
-The `theme.json` holds a lot of the core WordPress theme settings. The `theme.json` is build using several js files in `/src/theme-json`, Vite builds all of these files and exports a `theme.json` for both `dev` and `build`. Do not edit directly `theme.json` as it will be over written on build. 
 
-Several of the Tailwind variables are pulled in and Tailwind should be used as the primary way to style elements. If you need to, you can pull in more Tailwind variable for custom styling in `theme.json`.
+The `theme.json` holds many of the core WordPress theme settings. The `theme.json` is built using several JS files in the `/src/theme-json/` directory. Vite builds all of these files and exports a `theme.json` for both `dev` and `build`. Do not edit directly `theme.json` as it will be overwritten on build.
 
-The files that create the `theme.json` can be used to set custom settings for blocks, global theme, or for custom templates. Here are a few references:
+Several of the Tailwind variables are pulled into `theme.json` and Tailwind should be used as the primary method for styling. If you need to, you can add more Tailwind variables for custom styling in `theme.json`.
+
+The files that create the `theme.json` can be used to apply custom settings for blocks, global theme styles, or define custom templates. Here are a few references:
+
 - [Global Settings & Styles](https://developer.wordpress.org/block-editor/how-to-guides/themes/global-settings-and-styles/)
 - [Theme.json reference](https://developer.wordpress.org/block-editor/reference-guides/theme-json-reference/theme-json-living/)
 - [Global Styles & theme.json](https://fullsiteediting.com/lessons/global-styles/)
 
 ## Custom Blocks 🧱
-Blocks are build using ACF and core WordPress blocks. Styles for the blocks are in `src/styles/blocks`.
+
+Blocks are built using ACF and core WordPress blocks. Styles for the blocks are located within the block folders.
 
 * Accordion
 * Alert Banner
+* Breadcrumbs
 * CTA
-* Image Caption
+* Image w/Caption
 * Logo Grid
-* Text Icon Cards
-* Text Image
+* Navigation Container
+* Page Header
+* Text & Icon Cards
+* Text & Image
 * Video Embed
+* Video Player
 
 ### Creating New Blocks
-The theme is set up with [plop](https://plopjs.com/) which will auto generate a new block based on the options you input. 
-In order build a new block run:
 
-```
+The theme is set up with [plop](https://plopjs.com/) which will auto-generate a new block based on the options you input.
+To create a new block, run:
+
+```bash
 ddev npm run plop block
 ```
 
-It will ask you a few question:
+You will be asked a few questions:
+
 * __What is the block name?__ - *This can be whatever you want.*
-* __What is the slug for your theme?__ - *This would your theme slug. If you are unsure of what that is, you can look at `textdomain:` in side of any `block.json` files.*
-* __Pick a WordPress icon for the block__ - *Icons are from [WordPress Icons](https://developer.wordpress.org/resource/dashicons/) and you can change the icon if you don't see one you want.*
+* __What is your theme's text domain?__ - *This is the text domain of your theme, which is usually the same as the theme folder name. If you are unsure of what this is, you can look at the `Text Domain:` value in your theme's `style.css` file.*
 * __Do you need block styles?__ - *Adds the option for adding a class to the block’s wrapper - [Block Styles](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-styles/)*
 * __Do you need block variations?__ - *Adds the option for a block variant - [Block Variations](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-variations/)*
 
-## Customizing Theme 🎨
-### Fonts
-Fonts are pulled in by [typography.js](/src/theme-json/settings/typography.js). Update the `src` to pull in the font files in `/src/fonts`. For more info on setting up WordPress fonts check out [fullsiteediting](https://fullsiteediting.com/lessons/creating-theme-json/#h-typography).
+Once your block is created, it is recommended you set the block's icon in `block.json`. You can pick from one of [WordPress's Dashicons](https://developer.wordpress.org/resource/dashicons/), or use your own custom SVG file.*
 
-The default font settings can be found in [_index.js](https://github.com/vigetlabs/wordpress-site-starter/blob/main/wp-content/themes/wp-starter/src/theme-json/styles/_index.js).
+## Customizing Theme 🎨
+
+### Fonts
+
+Fonts are pulled in by [typography.js](src/theme-json/settings/typography.js). Update the `src` to point to the font files in `/src/fonts/` directory. For more info on setting up WordPress fonts, check out [fullsiteediting](https://fullsiteediting.com/lessons/creating-theme-json/#h-typography).
+
+The default font settings can be found in [_index.js](src/theme-json/styles/_index.js).
 
 ### Colors
-You have access to all of [Tailwind's colors](https://tailwindcss.com/docs/customizing-colors) but feel free to create your own custom colors in the Tailwind config. 
-The theme comes with one accent color. The color name can be set in the top of the Tailwind config and the color are set in config theme. 
-Colors are pulled from Tailwind into `/src/theme-json/settings/color.js` to be used in Gutenberg and WordPress. 
-Prefix the Gutenberg color slug by adding `dark-` to flag that color as a dark enough for text, buttons to change color to dark mode.  
+
+You have access to all of [Tailwind's colors](https://tailwindcss.com/docs/customizing-colors), but feel free to create your own custom colors in the [Tailwind config](src/styles/tailwind/colors.css).
+
+Tailwind colors are automatically added to `theme.json` via [settings/color.js](src/theme-json/settings/color.js) and are available to use in WordPress. Some colors are automatically prefixed with `dark-` to identify automated style adjustments.
 
 ### Spacing
+
 The default spacing is fluid, meaning that it is larger on desktops and smaller on mobile screens.
+
 | Class | Min | Max |
 |-------|-----|-----|
 | `.fluid-xs` | `2px` | `16px` |
@@ -67,13 +82,13 @@ The default spacing is fluid, meaning that it is larger on desktops and smaller 
 | `.fluid-xl` | `96px` | `160px` |
 | `.fluid-2x` | `144px` | `240px` |
 
-To adjust the spacing you can edit them in `tailwind.config.js` under `spacing > fluid`. The `fluid` spacing is getting pull into `/src/theme-json/settings/spacing.js` and being used as the spacing for both margin and padding in Gutenberg.
+Adjust the spacing as needed from the [spacing.css](src/styles/tailwind/spacing.css) config file. The `fluid` spacing gets added to `theme.json` via [settings/spacing.js](src/theme-json/settings/spacing.js) and can be used to set margins and padding styles in the editor.
 
 ### Buttons
-WordPress button styles are normally built in the `theme.json` but because there is a limitations on hover/focus for button variants all the buttons style are build in Tailwind.
 
-The button styles are getting applied to the HTML in `/src/styles/core-blocks/buttons.css`. 
-If you have need to apply the buttons style to the mark up you can add one of two button classes.
+WordPress button styles are normally built in the `theme.json`, but because there is a limitations on hover/focus customizations on button variants, all the buttons style are built in Tailwind.
+
+The base button styles are found in [styles/core-blocks/buttons.css](src/styles/core-blocks/buttons.css). By default, there are two  built-in button classes:
 
 | Button Classes       |
 |----------------------|
@@ -81,9 +96,10 @@ If you have need to apply the buttons style to the mark up you can add one of tw
 | `.btn-outline`       |
 
 #### Adding more Buttons Styles
-If you need to add more button styles you can [register](https://developer.wordpress.org/reference/functions/register_block_style/) a new block style on the `core/button`. 
 
-```
+If you need to add more button styles, you can [register](https://developer.wordpress.org/reference/functions/register_block_style/) a new block style on the `core/button` inside of [blocks.php](inc/blocks.php):
+
+```php
 register_block_style(
 	'core/button',
 	[
@@ -92,14 +108,16 @@ register_block_style(
 	]
 );
 ```
-This will attach a class to the block in the pattern of `is-style-[name]`. Once you have the new button style registered you add the Tailwind style in `/src/styles/core-blocks/buttons.css`. It is recommended that you create descriptive button styles and not generic styles like "primary" or "secondary". 
+
+This will attach a class to the block in the pattern of `is-style-[name]`. Once you have the new button style registered you add the Tailwind style in `/src/styles/core-blocks/buttons.css`. It is recommended that you create descriptive button styles and not generic styles like "primary" or "secondary".
 
 #### Custom Button Icons
-The theme has a custom filter to add in custom icons for buttons. You can your custom SVG icons into `/src/images/icons/` and then pull in that SVG icon in `inc/icons.php`. In order for your SVG icon to update with the text you need to set `fill` or `stroke` (depending on your icon) to `currentColor`. 
+
+See Viget Blocks Toolkit for more information.
 
 ### Navigation
-The navigation has been set up to be fully accessible and is built using [Alpine](https://alpinejs.dev/) and the styles are set in CSS. You can edit the JS in `/src/components/dropdown.js` and the CSS in `/src/styles/core-blocks/navigation.css` if you need to customize the navigation. 
 
+The navigation has been set up to be fully accessible and is built using [Alpine](https://alpinejs.dev/) with a base set of [styles](src/styles/core-blocks/navigation.css).
 
 ## Troubleshooting
 
@@ -109,18 +127,17 @@ The WP Editor requires WOFF2 fonts. TTF/OTF fonts will load on render for templa
 
 ### Editor Styles
 
-The Editor loads the generated Tailwind output, which means you need to run `ddev npm run build` to generate CSS the Editor will import.
+The Editor loads the generated Tailwind output, which means you may need to run `ddev npm run build` to generate CSS used by the Editor.
 
 ### Disconnected Template Parts
 
-If you edit a template part in the CMS (like the Header), WP will use the database version. To reset to the Code version:
+If you edit a template part in the CMS (like the Header), WordPress will use the database version, overriding the template file in the theme. To reset to the code version:
 
-1. Open the template part in the Editor
-2. Click the part name in the top middle to bring up the Command Palette
+1. Open the template part in the Editor.
+2. Click the part name at the top of the screen to bring up the Command Palette.
 3. Type ‘Reset’ and select the command. This will remove DB modifications and reset to the code version.
+4. Alternatively, you can go to WP Admin > Appearance > Editor, locate the template, click the 3-dot menu on next to the name, then click Reset.
 
 ### Trying to find a value in `block.json`
 
-Not all the properties are completely documented, if you’re having trouble try:
-
-- The block schema at the main WP repo: https://github.com/WordPress/gutenberg/blob/trunk/schemas/json/block.json
+Not all the properties are completely documented. If you’re having trouble, check out the [block schema](https://github.com/WordPress/gutenberg/blob/trunk/schemas/json/block.json) in the main WP repository.
