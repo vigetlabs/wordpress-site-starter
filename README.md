@@ -74,6 +74,14 @@ ddev stop && ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.17
+
+* Fixes a bug where ACF Pro was missing files.
+* Fixes some bugs with Branding configuration.
+* Reorganizes Tailwind config CSS files.
+* Updates to the plop templates.
+* Updates to the theme README file.
+
 ### v1.0.16
 
 * Updated Vite to v7 - Updated build tool and dependencies
