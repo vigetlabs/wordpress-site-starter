@@ -50,10 +50,10 @@ You will be asked a few questions:
 
 * __What is the block name?__ - *This can be whatever you want.*
 * __What is your theme's text domain?__ - *This is the text domain of your theme, which is usually the same as the theme folder name. If you are unsure of what this is, you can look at the `Text Domain:` value in your theme's `style.css` file.*
-* __Do you need block styles?__ - *Adds the option for adding a class to the block’s wrapper - [Block Styles](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-styles/)*
-* __Do you need block variations?__ - *Adds the option for a block variant - [Block Variations](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-variations/)*
+* __Do you need block styles?__ - *Adds custom class names for the block - [See Block Styles](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-styles/)*
+* __Do you need block variations?__ - *Adds custom block variations - [See Block Variations](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-variations/)*
 
-Once your block is created, it is recommended you set the block's icon in `block.json`. You can pick from one of [WordPress's Dashicons](https://developer.wordpress.org/resource/dashicons/), or use your own custom SVG file.*
+Once your block is created, it is recommended you set the block's icon in `block.json`. You can pick from one of [WordPress's Dashicons](https://developer.wordpress.org/resource/dashicons/), or use your own custom SVG file.
 
 ## Customizing Theme 🎨
 
