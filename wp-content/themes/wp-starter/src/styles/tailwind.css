@@ -6,6 +6,8 @@
 
 /* Dark theme to be driven by a CSS selector instead of the prefers-color-scheme media query */
 @custom-variant dark (&:where(.dark, .dark *));
+@custom-variant mobile-menu-closed (body:has(.menu-closed[style]) &);
+@custom-variant mobile-menu-open (body:has(.menu-open[style]) &);
 
 /*
 	Check the css files in the tailwind folder for more variables
@@ -15,7 +17,9 @@
 	/* Screens (breakpoints) */
 	--breakpoint-container: 1200px;
 	--breakpoint-content-wide: 900px;
+	--breakpoint-admin-bar-desktop: 782px;
 	--breakpoint-wp-cols: 781px;
+	--breakpoint-admin-bar-sticky: 601px;
 	--breakpoint-mobile-menu: 600px;
 	--breakpoint-xs: 480px;
 

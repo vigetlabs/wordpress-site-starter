@@ -60,6 +60,7 @@
 	<div
 		{% if function('is_admin') == false %}
 			x-show="menuIsOpen"
+			:class="{ 'menu-hidden': !menuIsOpen }"
 			@click.away="menuIsOpen = false"
 		{% endif %}
 		class="acf-block-inner__container"

@@ -64,6 +64,7 @@ if ( ! is_admin() ) {
 	<div
 		<?php if ( ! is_admin() ) : ?>
 			x-show="menuIsOpen"
+			:class="{ 'menu-hidden': !menuIsOpen }"
 			@click.away="menuIsOpen = false"
 		<?php endif; ?>
 		class="acf-block-inner__container"
