@@ -45,7 +45,7 @@ if ( ! is_admin() ) {
 			<?php if ( ! is_admin() ) : ?>
 				x-show="!menuIsOpen"
 			<?php endif; ?>
-			class="m-2" xmlns="http://www.w3.org/2000/svg" width="27" height="18" viewBox="0 0 27 18" fill="currentColor" class="menu-open">
+			class="m-2 menu-open" xmlns="http://www.w3.org/2000/svg" width="27" height="18" viewBox="0 0 27 18" fill="currentColor">
 			<title><?php esc_html_e( 'Open Menu', 'wp-starter' ); ?></title>
 			<path d="M26.8059 1H0.805908" stroke="currentColor" stroke-width="1.5"></path>
 			<path d="M26.8059 17H0.805908" stroke="currentColor" stroke-width="1.5"></path>
@@ -55,7 +55,7 @@ if ( ! is_admin() ) {
 			<?php if ( ! is_admin() ) : ?>
 				x-show="menuIsOpen"
 			<?php endif; ?>
-			class="m-2" xmlns="http://www.w3.org/2000/svg" width="21" height="20" fill="currentColor" class="menu-close">
+			class="m-2 menu-close" xmlns="http://www.w3.org/2000/svg" width="21" height="20" fill="currentColor">
 			<title><?php esc_html_e( 'Close Menu', 'wp-starter' ); ?></title>
 			<path d="M19.192 19.192.808.808M1 19.192 19.385.808" stroke="currentColor" stroke-width="2"></path>
 		</svg>
