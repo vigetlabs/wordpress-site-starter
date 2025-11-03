@@ -1,0 +1,17 @@
+:root {
+	/* Viewport breakpoints (pulled from font-sizes config) */
+	--fluid-bp-min: var(--cfg-fluid-bp-min);
+	--fluid-bp-max: var(--cfg-fluid-bp-max);
+
+	/* Linear interpolation factor between 0–1 */
+	/* Using clamp to ensure t stays between 0 and 1 */
+	--fluid-t: clamp(0, calc((100vw - (var(--fluid-bp-min) * 1px)) / ((var(--fluid-bp-max) - var(--fluid-bp-min)) * 1px)), 1);
+
+	/* Computed fluid tokens */
+	--fluid-text-sm: clamp(var(--fs-sm-min), calc(var(--fs-sm-min) + (var(--fs-sm-max) - var(--fs-sm-min)) * var(--fluid-t)), var(--fs-sm-max));
+	--fluid-text-base: clamp(var(--fs-base-min), calc(var(--fs-base-min) + (var(--fs-base-max) - var(--fs-base-min)) * var(--fluid-t)), var(--fs-base-max));
+	--fluid-text-md: clamp(var(--fs-md-min), calc(var(--fs-md-min) + (var(--fs-md-max) - var(--fs-md-min)) * var(--fluid-t)), var(--fs-md-max));
+	--fluid-text-lg: clamp(var(--fs-lg-min), calc(var(--fs-lg-min) + (var(--fs-lg-max) - var(--fs-lg-min)) * var(--fluid-t)), var(--fs-lg-max));
+	--fluid-text-xl: clamp(var(--fs-xl-min), calc(var(--fs-xl-min) + (var(--fs-xl-max) - var(--fs-xl-min)) * var(--fluid-t)), var(--fs-xl-max));
+	--fluid-text-2xl: clamp(var(--fs-2xl-min), calc(var(--fs-2xl-min) + (var(--fs-2xl-max) - var(--fs-2xl-min)) * var(--fluid-t)), var(--fs-2xl-max));
+}
