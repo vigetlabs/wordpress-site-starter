@@ -1,17 +1,22 @@
+@import './inc/font-families.css';
+@import './inc/font-sizes.css';
+@import './inc/font-calculations.css';
+
 @theme {
 	/* Font Families */
-	--font-sans: var(--wp--preset--font-family--body);
-	--font-body: var(--wp--preset--font-family--body);
-	--font-heading: var(--wp--preset--font-family--heading);
+	--font-sans: var(--cfg-font-body);
+	--font-body: var(--cfg-font-body);
+	--font-heading: var(--cfg-font-heading);
 
-	/* Fluid Font Sizes */
-	--text-zero: 0;
-	--text-2xs: 0.5rem; /* 8px */
-	--text-xs: 0.625rem; /* 10px */
-	--text-sm: clamp(0.75rem, 2vw + 0.1rem, 0.875rem); /* 12px / 14px */
-	--text-base: clamp(0.9375rem, 2vw + 0.1rem, 1rem); /* 15px / 16px */
-	--text-md: clamp(1.125rem, 3vw + 0.1rem, 1.5rem); /* 18px / 24px */
-	--text-lg: clamp(1.5rem, 3vw + 0.5rem, 2rem); /* 24px / 32px */
-	--text-xl: clamp(2rem, 3vw + 1rem, 3rem); /* 32px / 48px */
-	--text-2xl: clamp(3rem, 3vw + 2rem, 4rem); /* 48px / 64px */
+	/* Font Sizes */
+	--text-zero: var(--cfg-text-zero);
+	--text-2xs: var(--cfg-text-2xs);
+	--text-xs: var(--cfg-text-xs);
+	--text-sm: var(--fluid-text-sm);
+	--text-base: var(--fluid-text-base);
+	--text-md: var(--fluid-text-md);
+	--text-lg: var(--fluid-text-lg);
+	--text-xl: var(--fluid-text-xl);
+	--text-2xl: var(--fluid-text-2xl);
+	--text-huge: var(--fluid-text-huge);
 }
