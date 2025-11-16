@@ -29,10 +29,10 @@
     "viget/viget-blocks-toolkit": "^1.1",
     "viget/viget-form-blocks": "^0.0.1",
     "viget/viget-parts-kit": "^1.0",
-    "wpackagist-plugin/accessibility-checker": "^1.27",
-    "wpackagist-plugin/safe-svg": "^2.3",
+    "wpackagist-plugin/accessibility-checker": "^1.34",
+    "wpackagist-plugin/safe-svg": "^2.4",
     "wpackagist-plugin/seo-by-rank-math": "^1.0",
-    "wpackagist-plugin/wordfence": "^8.0"
+    "wpackagist-plugin/wordfence": "^8.1"
   },
   "require-dev": {
     "phpcompatibility/phpcompatibility-wp": "^2.1",

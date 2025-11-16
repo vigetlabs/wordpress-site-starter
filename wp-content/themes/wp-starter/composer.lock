@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5de9ebaacd6212126a19b5de7542d5af",
+    "content-hash": "67bce4717fb73502f1b2fb2a97a2532e",
     "packages": [
         {
             "name": "composer/installers",
@@ -1144,15 +1144,15 @@
         },
         {
             "name": "wpackagist-plugin/accessibility-checker",
-            "version": "1.27.1",
+            "version": "1.34.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/accessibility-checker/",
-                "reference": "tags/1.27.1"
+                "reference": "tags/1.34.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/accessibility-checker.1.27.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/accessibility-checker.1.34.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1162,15 +1162,15 @@
         },
         {
             "name": "wpackagist-plugin/safe-svg",
-            "version": "2.3.1",
+            "version": "2.4.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/safe-svg/",
-                "reference": "tags/2.3.1"
+                "reference": "tags/2.4.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/safe-svg.2.3.1.zip"
+                "url": "https://downloads.wordpress.org/plugin/safe-svg.2.4.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1198,15 +1198,15 @@
         },
         {
             "name": "wpackagist-plugin/wordfence",
-            "version": "8.0.5",
+            "version": "8.1.2",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wordfence/",
-                "reference": "tags/8.0.5"
+                "reference": "tags/8.1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wordfence.8.0.5.zip"
+                "url": "https://downloads.wordpress.org/plugin/wordfence.8.1.2.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
