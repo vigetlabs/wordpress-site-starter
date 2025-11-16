@@ -1,6 +1,7 @@
 {
   "name": "viget/wordpress-site-starter",
   "description": "A custom WordPress Site Starter Kit by Viget.",
+  "version": "0.1.0",
   "keywords": [
     "wordpress",
     "components",

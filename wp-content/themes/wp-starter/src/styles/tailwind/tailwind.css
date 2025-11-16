@@ -1,8 +1,8 @@
 @import 'tailwindcss';
-@import './tailwind/colors.css';
-@import './tailwind/spacing.css';
-@import './tailwind/typography.css';
-@import './tailwind/images.css';
+@import './colors.css';
+@import './spacing.css';
+@import './typography.css';
+@import './images.css';
 
 /* Dark theme to be driven by a CSS selector instead of the prefers-color-scheme media query */
 @custom-variant dark (&:where(.dark, .dark *));
