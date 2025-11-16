@@ -35,8 +35,8 @@
     "wpackagist-plugin/wordfence": "^8.0"
   },
   "require-dev": {
-    "phpcompatibility/phpcompatibility-wp": "^2",
-    "squizlabs/php_codesniffer": "^3.11",
+    "phpcompatibility/phpcompatibility-wp": "^2.1",
+    "squizlabs/php_codesniffer": "^3.13",
     "wp-coding-standards/wpcs": "^3.1",
     "wpackagist-plugin/create-block-theme": "^2.7"
   },
