@@ -82,7 +82,7 @@ The default spacing is fluid, meaning that it is larger on desktops and smaller 
 | `.fluid-xl` | `96px` | `160px` |
 | `.fluid-2x` | `144px` | `240px` |
 
-Adjust the spacing as needed from the [spacing.css](src/styles/tailwind/spacing.css) config file. The `fluid` spacing gets added to `theme.json` via [settings/spacing.js](src/theme-json/settings/spacing.js) and can be used to set margins and padding styles in the editor.
+Adjust the spacing as needed from the [spacing.css](src/styles/tailwind/spacing.css) config file.
 
 ### Buttons
 
