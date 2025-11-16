@@ -522,11 +522,13 @@ class PostCreateProjectScript extends ComposerScript {
 			self::translatePath( '.ddev/.env' ),
 			self::translatePath( '.ddev/config.yaml' ),
 			self::translatePath( 'README.md' ),
+			self::translatePath( '.github/workflows/build.yaml' ),
 			$themeDir . '/.phpcs.xml',
 			$themeDir . '/readme.txt',
 			$themeDir . '/README.md',
 			$themeDir . '/style.css',
 			$themeDir . '/vite.config.js',
+			$themeDir . '/src/plop-templates/render.php.hbs',
 		];
 
 		// TODO: Search theme directory recursively.
@@ -669,6 +671,7 @@ class PostCreateProjectScript extends ComposerScript {
 
 		$footerFile = self::translatePath( 'wp-content/mu-plugins/viget-wp/src/classes/Admin/Footer.php' );
 		$loginScreenFile = self::translatePath( 'wp-content/mu-plugins/viget-wp/src/classes/Admin/LoginScreen.php' );
+		$stylesheetFile = self::translatePath( 'wp-content/themes/wp-starter/style.css' );
 
 		// Modify the login screen branding.
 		if ( self::BRANDING_VIGET !== self::$info['branding'] && file_exists( $loginScreenFile ) ) {
@@ -682,6 +685,7 @@ class PostCreateProjectScript extends ComposerScript {
 		if ( self::BRANDING_NONE === self::$info['branding'] ) {
 			self::searchReplaceFile( '$this->modify_footer_text();', '// $this->modify_footer_text();', $footerFile );
 			self::searchReplaceFile( '$this->modify_footer_text();', '// $this->modify_footer_text();', $footerFile );
+			self::searchReplaceFile( 'Viget, ', '', $stylesheetFile );
 			return;
 		}
 
@@ -691,10 +695,12 @@ class PostCreateProjectScript extends ComposerScript {
 
 		if ( ! empty( self::$info['branding-website'] ) ) {
 			self::searchReplaceFile( 'https://www.viget.com/', self::$info['branding-website'], $footerFile );
+			self::searchReplaceFile( 'https://viget.com', self::$info['branding-website'], $stylesheetFile );
 		}
 
 		if ( ! empty( self::$info['branding-name'] ) ) {
 			self::searchReplaceFile( 'esc_html__( \'Viget\', \'viget-wp\' )', 'esc_html__( \'' . addslashes( self::$info['branding-name'] ) . '\', \'viget-wp\' )', $footerFile );
+			self::searchReplaceFile( 'Viget,', self::$info['branding-name'] . ',', $stylesheetFile );
 		}
 	}
 
