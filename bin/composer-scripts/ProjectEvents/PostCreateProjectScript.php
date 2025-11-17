@@ -21,6 +21,12 @@ class PostCreateProjectScript extends ComposerScript {
 	const BRANDING_NONE = 3;
 
 	/**
+	 * Twig Options
+	 */
+	const TWIG_ENABLED = 1;
+	const TWIG_DISABLED = 2;
+
+	/**
 	 * @var array
 	 */
 	private static array $info = [];
@@ -29,15 +35,15 @@ class PostCreateProjectScript extends ComposerScript {
 	 * @var array
 	 */
 	private static array $defaults = [
-		'project-slug'     => 'wordpress-site-starter',
-		'project-name'     => 'WP Site Starter',
+		'project-slug' => 'wordpress-site-starter',
+		'project-name' => 'WP Site Starter',
 		'alt-project-name' => 'WordPress Site Starter',
-		'host-name'        => 'wpstarter',
-		'theme-name'       => 'WP Starter',
-		'theme-slug'       => 'wp-starter',
-		'package-name'     => 'WPStarter',
-		'function-prefix'  => 'wpstarter_',
-		'text-domain'      => 'wp-starter',
+		'host-name' => 'wpstarter',
+		'theme-name' => 'WP Starter',
+		'theme-slug' => 'wp-starter',
+		'package-name' => 'WPStarter',
+		'function-prefix' => 'wpstarter_',
+		'text-domain' => 'wp-starter',
 	];
 
 	/**
@@ -84,6 +90,9 @@ class PostCreateProjectScript extends ComposerScript {
 
 		// Perform project string replacements
 		self::updateProjectFiles();
+
+		// Remove Twig support if disabled.
+		self::maybeDisableTwig();
 
 		// Modify the description in the composer.json file.
 		self::updateComposerDescription();
@@ -158,6 +167,11 @@ class PostCreateProjectScript extends ComposerScript {
 		self::$info['function'] = str_replace( '-', '_', self::$info['slug'] ) . '_';
 		self::$info['function'] = self::ask( 'Do you want to customize the function prefix?', self::$info['function'] );
 
+		// Twig.
+		$twigOptions = self::getTwigOptions();
+		$twigPreference = empty( self::$info['twig'] ) ? self::TWIG_ENABLED : self::$info['twig'];
+		self::$info['twig'] = intval( self::select( 'Use Twig Templates?', $twigOptions, $twigPreference ) );
+
 		// Proxy Domain.
 		$proxyDomain = empty( self::$info['proxy-domain'] ) ? '' : self::$info['proxy-domain'];
 		self::$info['proxy-domain'] = self::ask( 'Would you like to proxy media (uploads) from another domain? (leave blank to skip)', $proxyDomain );
@@ -197,6 +211,7 @@ class PostCreateProjectScript extends ComposerScript {
 		}
 
 		$brandingText = $brandingOptions[ self::$info['branding'] ];
+		$twigText = self::$info['twig'] === self::TWIG_ENABLED ? 'Enabled' : 'Disabled';
 
 		// Summary
 		$summary  = PHP_EOL . ' - Name: ' . self::$info['name'];
@@ -204,6 +219,7 @@ class PostCreateProjectScript extends ComposerScript {
 		$summary .= PHP_EOL . ' - Text Domain: ' . self::$info['text-domain'];
 		$summary .= PHP_EOL . ' - Package: ' . self::$info['package'];
 		$summary .= PHP_EOL . ' - Function Prefix: ' . self::$info['function'];
+		$summary .= PHP_EOL . ' - Twig: ' . $twigText;
 		if ( ! empty( self::$info['proxy-domain'] ) ) {
 			$summary .= PHP_EOL . ' - Proxy Domain: ' . self::$info['proxy-domain'];
 		}
@@ -231,6 +247,7 @@ class PostCreateProjectScript extends ComposerScript {
 	private static function storeProjectInfo(): void {
 		$brandingOptions = self::getBrandingOptions();
 		$branding = strtolower( $brandingOptions[ self::$info['branding'] ] );
+		$twig = self::$info['twig'] === self::TWIG_ENABLED ? 'enabled' : 'disabled';
 
 		$envPath = self::translatePath( '.ddev/.env' );
 		$envData = file_get_contents( $envPath );
@@ -241,6 +258,7 @@ class PostCreateProjectScript extends ComposerScript {
 		$envData .= PHP_EOL . 'PROJECT_TEXT_DOMAIN="' . self::escapeQuotes( self::$info['text-domain'] ) . '"';
 		$envData .= PHP_EOL . 'PROJECT_PACKAGE="' . self::escapeQuotes( self::$info['package'] ) . '"';
 		$envData .= PHP_EOL . 'PROJECT_FUNCTION_PREFIX="' . self::escapeQuotes( self::$info['function'] ) . '"';
+		$envData .= PHP_EOL . 'PROJECT_TWIG="' . self::escapeQuotes( $twig ) . '"';
 		$envData .= PHP_EOL . 'PROJECT_BRANDING="' . self::escapeQuotes( $branding ) . '"';
 		if ( ! empty( self::$info['branding-name'] ) ) {
 			$envData .= PHP_EOL . 'PROJECT_BRANDING_NAME="' . self::escapeQuotes( self::$info['branding-name'] ) . '"';
@@ -388,6 +406,36 @@ class PostCreateProjectScript extends ComposerScript {
 	}
 
 	/**
+	 * Remove Twig support if disabled.
+	 *
+	 * @return void
+	 */
+	private static function maybeDisableTwig(): void {
+		if ( self::$info['twig'] !== self::TWIG_DISABLED ) {
+			return;
+		}
+
+		$themeDir = self::translatePath( 'wp-content/themes/' . self::$info['slug'] );
+
+		self::writeLine( 'Removing Twig support...' );
+
+		// Remove from Composer
+		$composerData = self::getComposerData( $themeDir );
+		unset( $composerData['require']['twig/twig'] );
+		self::updateComposerData( $composerData, $themeDir );
+
+		// Remove Twig files from the theme directory
+		$blockFiles = glob( $themeDir . '/blocks/**/*.twig', GLOB_BRACE );
+		$plopTemplates = glob( $themeDir . '/src/plop-templates/**/*.twig.hbs', GLOB_BRACE );
+
+		$twigFiles = array_merge( $blockFiles, $plopTemplates );
+
+		foreach ( $twigFiles as $twigFile ) {
+			unlink( $twigFile );
+		}
+	}
+
+	/**
 	 * Require ACF if auth.json file is present.
 	 *
 	 * @return void
@@ -522,11 +570,13 @@ class PostCreateProjectScript extends ComposerScript {
 			self::translatePath( '.ddev/.env' ),
 			self::translatePath( '.ddev/config.yaml' ),
 			self::translatePath( 'README.md' ),
+			self::translatePath( '.github/workflows/build.yaml' ),
 			$themeDir . '/.phpcs.xml',
 			$themeDir . '/readme.txt',
 			$themeDir . '/README.md',
 			$themeDir . '/style.css',
 			$themeDir . '/vite.config.js',
+			$themeDir . '/src/plop-templates/render.php.hbs',
 		];
 
 		// TODO: Search theme directory recursively.
@@ -669,6 +719,7 @@ class PostCreateProjectScript extends ComposerScript {
 
 		$footerFile = self::translatePath( 'wp-content/mu-plugins/viget-wp/src/classes/Admin/Footer.php' );
 		$loginScreenFile = self::translatePath( 'wp-content/mu-plugins/viget-wp/src/classes/Admin/LoginScreen.php' );
+		$stylesheetFile = self::translatePath( 'wp-content/themes/wp-starter/style.css' );
 
 		// Modify the login screen branding.
 		if ( self::BRANDING_VIGET !== self::$info['branding'] && file_exists( $loginScreenFile ) ) {
@@ -682,6 +733,7 @@ class PostCreateProjectScript extends ComposerScript {
 		if ( self::BRANDING_NONE === self::$info['branding'] ) {
 			self::searchReplaceFile( '$this->modify_footer_text();', '// $this->modify_footer_text();', $footerFile );
 			self::searchReplaceFile( '$this->modify_footer_text();', '// $this->modify_footer_text();', $footerFile );
+			self::searchReplaceFile( 'Viget, ', '', $stylesheetFile );
 			return;
 		}
 
@@ -691,10 +743,12 @@ class PostCreateProjectScript extends ComposerScript {
 
 		if ( ! empty( self::$info['branding-website'] ) ) {
 			self::searchReplaceFile( 'https://www.viget.com/', self::$info['branding-website'], $footerFile );
+			self::searchReplaceFile( 'https://viget.com', self::$info['branding-website'], $stylesheetFile );
 		}
 
 		if ( ! empty( self::$info['branding-name'] ) ) {
 			self::searchReplaceFile( 'esc_html__( \'Viget\', \'viget-wp\' )', 'esc_html__( \'' . addslashes( self::$info['branding-name'] ) . '\', \'viget-wp\' )', $footerFile );
+			self::searchReplaceFile( 'Viget,', self::$info['branding-name'] . ',', $stylesheetFile );
 		}
 	}
 
@@ -708,6 +762,18 @@ class PostCreateProjectScript extends ComposerScript {
 			self::BRANDING_VIGET => 'Viget',
 			self::BRANDING_CUSTOM => 'Custom',
 			self::BRANDING_NONE => 'None',
+		];
+	}
+
+	/**
+	 * Get the Twig options.
+	 *
+	 * @return array
+	 */
+	private static function getTwigOptions(): array {
+		return [
+			self::TWIG_ENABLED => 'Yes',
+			self::TWIG_DISABLED => 'No, use PHP templates',
 		];
 	}
 }
