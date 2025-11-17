@@ -74,6 +74,18 @@ ddev stop && ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.19
+
+* Updates ACF Pro to the latest version (6.6.2)
+* Bug fixes and other updates to the Navigation Container component.
+* Adds more dynamic Fluid Font Sizes.
+* Adds more dynamic Fluid Spacing Settings.
+* Remove WP Docs Generator
+* Addresses more branding changes
+* Adds option to disable Twig templates.
+* Small file structure refactoring.
+* Dependency (Composer/NPM) Updates.
+
 ### v1.0.18
 
 * Hotfix custom branding bug.
