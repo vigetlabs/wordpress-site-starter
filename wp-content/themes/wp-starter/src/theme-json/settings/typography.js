@@ -1,3 +1,5 @@
+import { getFontSizes } from '../helpers/fonts.js';
+
 export default {
 	fluid: true,
 	letterSpacing: false,
@@ -63,42 +65,5 @@ export default {
 		},
 	],
 	// Font sizes now use CSS custom properties defined in tailwind.css
-	fontSizes: [
-		{
-			fluid: false,
-			name: 'Extra Small',
-			size: 'var(--text-xs)',
-			slug: 'x-small',
-		},
-		{
-			fluid: false,
-			name: 'Small',
-			size: 'var(--text-sm)',
-			slug: 'small',
-		},
-		{
-			fluid: false,
-			name: 'Medium',
-			size: 'var(--text-md)',
-			slug: 'medium',
-		},
-		{
-			fluid: false,
-			name: 'Large',
-			size: 'var(--text-lg)',
-			slug: 'large',
-		},
-		{
-			fluid: false,
-			name: 'Extra Large',
-			size: 'var(--text-xl)',
-			slug: 'x-large',
-		},
-		{
-			fluid: false,
-			name: '2X Large',
-			size: 'var(--text-2xl)',
-			slug: '2x-large',
-		},
-	],
+	fontSizes: getFontSizes(),
 };

@@ -1,0 +1,17 @@
+<?php
+/**
+ * Block: {{titleCase name}}
+ *
+ * @global array $block
+ *
+ * @package WPStarter
+ */
+
+$inner = [ // phpcs:ignore
+	'template' => $block['template'] ?? [],
+];
+
+?>
+<section <?php block_attrs( $block ); ?>>
+	<?php inner_blocks( $inner ); ?>
+</section>

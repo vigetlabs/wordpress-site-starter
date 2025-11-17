@@ -10,8 +10,6 @@
 
 	/* ===========================================================
 		STRICT FONT SIZES
-		These font sizes should also be mirrored in
-		theme-json/settings/typography.js#fontSizes.
 	=========================================================== */
 	--cfg-text-zero: 0;
 	--cfg-text-2xs: 0.5rem; /* 8px */
@@ -24,8 +22,8 @@
 	--fs-sm-min: 0.75rem;
 	--fs-sm-max: 0.875rem;
 
-	/* base: 15px / 16px */
-	--fs-base-min: 0.9375rem;
+	/* base: 16px / 16px */
+	--fs-base-min: 1rem;
 	--fs-base-max: 1rem;
 
 	/* md: 18px / 24px */

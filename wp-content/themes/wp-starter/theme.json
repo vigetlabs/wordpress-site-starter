@@ -32,32 +32,32 @@
       "spacingSizes": [
         {
           "name": "1",
-          "size": "var(--spacing-fluid-xs)",
+          "size": "clamp( 6px, 6px + 0.3125vw, 12px )",
           "slug": "10"
         },
         {
           "name": "2",
-          "size": "var(--spacing-fluid-sm)",
+          "size": "clamp( 12px, 12px + 0.5vw, 24px )",
           "slug": "20"
         },
         {
           "name": "3",
-          "size": "var(--spacing-fluid-md)",
+          "size": "clamp( 24px, 24px + 1vw, 48px )",
           "slug": "30"
         },
         {
           "name": "4",
-          "size": "var(--spacing-fluid-lg)",
+          "size": "clamp( 48px, 48px + 1.75vw, 96px )",
           "slug": "40"
         },
         {
           "name": "5",
-          "size": "var(--spacing-fluid-xl)",
+          "size": "clamp( 96px, 96px + 2.5vw, 128px )",
           "slug": "50"
         },
         {
           "name": "6",
-          "size": "var(--spacing-fluid-2xl)",
+          "size": "clamp( 128px, 128px + 3.75vw, 200px )",
           "slug": "60"
         }
       ],
@@ -121,38 +121,50 @@
       "fontSizes": [
         {
           "fluid": false,
+          "name": "2X Small",
+          "size": "var(--cfg-text-2xs)",
+          "slug": "xx-small"
+        },
+        {
+          "fluid": false,
           "name": "Extra Small",
-          "size": "var(--text-xs)",
+          "size": "var(--cfg-text-xs)",
           "slug": "x-small"
         },
         {
           "fluid": false,
           "name": "Small",
-          "size": "var(--text-sm)",
+          "size": "var(--fluid-text-sm)",
           "slug": "small"
         },
         {
           "fluid": false,
+          "name": "Base",
+          "size": "var(--fluid-text-base)",
+          "slug": "base"
+        },
+        {
+          "fluid": false,
           "name": "Medium",
-          "size": "var(--text-md)",
+          "size": "var(--fluid-text-md)",
           "slug": "medium"
         },
         {
           "fluid": false,
           "name": "Large",
-          "size": "var(--text-lg)",
+          "size": "var(--fluid-text-lg)",
           "slug": "large"
         },
         {
           "fluid": false,
           "name": "Extra Large",
-          "size": "var(--text-xl)",
+          "size": "var(--fluid-text-xl)",
           "slug": "x-large"
         },
         {
           "fluid": false,
           "name": "2X Large",
-          "size": "var(--text-2xl)",
+          "size": "var(--fluid-text-2xl)",
           "slug": "2x-large"
         }
       ]
@@ -695,7 +707,18 @@
     },
     "css": ":where(.wp-site-blocks *:focus-visible){outline-width:2px;outline-style:solid}.has-dark-black-background-color:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) .wp-block-button__link:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) .wp-block-button.is-style-outline .wp-block-button__link:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) *:not(.has-text-color,.has-inline-color):not(.wp-block-button__link-icon):not(svg, polygon){color:var(--wp--preset--color--white);}"
   },
-  "templateParts": [],
+  "templateParts": [
+    {
+      "name": "footer",
+      "title": "Footer",
+      "area": "footer"
+    },
+    {
+      "name": "header",
+      "title": "Header",
+      "area": "header"
+    }
+  ],
   "version": 3,
   "$schema": "https://schemas.wp.org/wp/6.8/theme.json"
 }
