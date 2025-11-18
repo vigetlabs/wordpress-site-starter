@@ -74,6 +74,10 @@ ddev stop && ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.20
+
+* Fixes a bug removing Twig/Timber support
+
 ### v1.0.19
 
 * Updates ACF Pro to the latest version (6.6.2)

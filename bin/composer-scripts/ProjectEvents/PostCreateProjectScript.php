@@ -415,18 +415,19 @@ class PostCreateProjectScript extends ComposerScript {
 			return;
 		}
 
-		$themeDir = self::translatePath( 'wp-content/themes/' . self::$info['slug'] );
-
 		self::writeLine( 'Removing Twig support...' );
 
+		$timberPackage = 'timber/timber';
+		$themePath = self::translatePath( 'wp-content/themes/' . self::$info['slug'] . '/' );
+
 		// Remove from Composer
-		$composerData = self::getComposerData( $themeDir );
-		unset( $composerData['require']['twig/twig'] );
-		self::updateComposerData( $composerData, $themeDir );
+		$composerData = self::getComposerData( $themePath );
+		unset( $composerData['require'][$timberPackage] );
+		self::updateComposerData( $composerData, $themePath );
 
 		// Remove Twig files from the theme directory
-		$blockFiles = glob( $themeDir . '/blocks/**/*.twig', GLOB_BRACE );
-		$plopTemplates = glob( $themeDir . '/src/plop-templates/**/*.twig.hbs', GLOB_BRACE );
+		$blockFiles = glob( $themePath . 'blocks/**/*.twig', GLOB_BRACE );
+		$plopTemplates = glob( $themePath . 'src/plop-templates/**/*.twig.hbs', GLOB_BRACE );
 
 		$twigFiles = array_merge( $blockFiles, $plopTemplates );
 
@@ -483,7 +484,12 @@ class PostCreateProjectScript extends ComposerScript {
 		$composerData = self::getComposerData( $themePath );
 
 		// Update the Description.
-		$composerData['description'] = sprintf( 'A custom WordPress Site for %s by Viget.', self::$info['name'] );
+		$brandingText = 'by Viget';
+		if ( self::BRANDING_CUSTOM === self::$info['branding'] && ! empty( self::$info['branding-name'] ) ) {
+			$brandingText = \sprintf( 'by %s', self::$info['branding-name'] );
+		}
+
+		$composerData['description'] = \sprintf( 'A custom WordPress Site for %s %s.', self::$info['name'], $brandingText );
 		self::updateComposerData( $composerData, $themePath );
 
 		self::writeInfo( 'Composer Description Updated!' );
