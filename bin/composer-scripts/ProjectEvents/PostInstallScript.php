@@ -482,7 +482,8 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function importDatabase(): void {
-		$databaseFile = self::ask( 'Please specify the path to the database file' );
+		$defaultDatabaseFile = self::locateDatabaseFile();
+		$databaseFile = self::ask( 'Please specify the path to the database file', $defaultDatabaseFile );
 
 		if ( ! $databaseFile ) {
 			self::writeError( 'No database file provided.' );
@@ -506,6 +507,103 @@ class PostInstallScript extends ComposerScript {
 		self::runCommand( $cmd );
 
 		self::writeInfo( 'Database imported.' );
+
+		// Get the site URL with `wp option get siteurl`
+		$defaultSiteUrl = shell_exec( 'wp option get siteurl' );
+		if ( ! $defaultSiteUrl ) {
+			$defaultSiteUrl = '//';
+		} else {
+			$defaultSiteUrl = strtolower( $defaultSiteUrl );
+			$defaultSiteUrl = str_replace( 'https://', '//', $defaultSiteUrl );
+			$defaultSiteUrl = str_replace( 'http://', '//', $defaultSiteUrl );
+			$defaultSiteUrl = trim( $defaultSiteUrl );
+		}
+
+		$localUrl = strtolower( self::$info['url'] );
+		$localUrl = str_replace( 'https://', '//', $localUrl );
+		$localUrl = str_replace( 'http://', '//', $localUrl );
+		$localUrl = trim( $localUrl );
+
+		if ( $defaultSiteUrl === $localUrl ) {
+			return;
+		}
+
+		$siteUrl = self::ask( 'Please specify the URL in the database file to perform the search-replace on', $defaultSiteUrl );
+
+		$siteUrl = trim( strtolower( $siteUrl ) );
+
+		if ( ! $siteUrl ) {
+			self::writeError( 'No site URL provided. Skipping search-replace.' );
+			return;
+		}
+
+		self::writeInfo( 'Updating the database URLs...' );
+
+		// Run `wp search-replace` to replace the site URL.
+		$cmd = sprintf(
+			'wp search-replace %s %s',
+			escapeshellarg( $siteUrl ),
+			escapeshellarg( $localUrl )
+		);
+
+		self::runCommand( $cmd );
+
+		self::writeInfo( 'Database URLs updated.' );
+	}
+
+	/**
+	 * Locate the database file.
+	 *
+	 * @return string
+	 */
+	private static function locateDatabaseFile(): string {
+		$patterns = [
+			'*.sql',
+			'*.sql.gz',
+			'*.sql.bz2',
+			'*.sql.zip',
+			'*.sql.tar',
+			'*.sql.tar.gz',
+			'*.sql.tar.bz2',
+			'*.sql.7z',
+			'*.sql.xz',
+			'wp-content/*.sql',
+			'wp-content/*.sql.gz',
+			'wp-content/*.sql.bz2',
+			'wp-content/*.sql.zip',
+			'wp-content/*.sql.tar',
+			'wp-content/*.sql.tar.gz',
+			'wp-content/*.sql.tar.bz2',
+			'wp-content/*.sql.7z',
+			'wp-content/*.sql.xz',
+		];
+
+		$files = [];
+		foreach ( $patterns as $pattern ) {
+			$globResult = glob( self::translatePath( $pattern ) );
+			if ( $globResult !== false && ! empty( $globResult ) ) {
+				$files = array_merge( $files, $globResult );
+			}
+		}
+
+		if ( empty( $files ) ) {
+			return '';
+		}
+
+		usort( $files, function( $a, $b ) {
+			$mtimeA = filemtime( $a );
+			$mtimeB = filemtime( $b );
+
+			// First sort by modification time (descending - most recent first)
+			if ( $mtimeA !== $mtimeB ) {
+				return $mtimeB <=> $mtimeA;
+			}
+
+			// If same modification time, sort by filename descending
+			return strcmp( $b, $a );
+		} );
+
+		return $files[0];
 	}
 
 	/**

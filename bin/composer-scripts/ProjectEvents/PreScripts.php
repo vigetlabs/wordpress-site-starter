@@ -20,6 +20,7 @@ class PreScripts extends ComposerScript {
 		'viget/viget-blocks-toolkit' => 'viget-blocks-toolkit',
 		'viget/viget-form-blocks' => 'viget-form-blocks',
 		'viget/viget-parts-kit' => 'viget-parts-kit',
+		'viget/wp-sonny' => 'wp-sonny',
 	];
 
 	/**
