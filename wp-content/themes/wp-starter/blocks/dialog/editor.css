@@ -1,0 +1,34 @@
+@layer components {
+	.wp-block-acf-dialog {
+		@apply relative !border !border-black;
+
+		.acf-block-dialog {
+			@apply !relative;
+		}
+
+		.inner {
+			@apply !relative p-24;
+		}
+
+		.acfbt-dialog-close {
+			@apply absolute right-12 top-12 z-50 m-auto size-32 cursor-pointer border border-none border-black bg-transparent hover:bg-black;
+			@apply after:flex after:items-center after:justify-center after:text-black after:content-['\2715'] hover:after:text-white;
+		}
+	}
+
+	.acfbt-dialog-label {
+		@apply mb-24 block cursor-pointer;
+	}
+
+	.acfbt-dialog-checkbox {
+		@apply sr-only;
+	}
+
+	input:checked + label + div .acf-block-dialog {
+		@apply block w-2/3;
+	}
+
+	.is-root-container:has(.acf-block-dialog) {
+		@apply relative;
+	}
+}
