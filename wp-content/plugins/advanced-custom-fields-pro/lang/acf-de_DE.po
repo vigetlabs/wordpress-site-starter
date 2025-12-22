@@ -12,7 +12,7 @@
 # This file is distributed under the same license as Advanced Custom Fields.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-10-28T18:19:16+00:00\n"
+"PO-Revision-Date: 2025-12-11T18:22:21+00:00\n"
 "Report-Msgid-Bugs-To: http://support.advancedcustomfields.com\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
@@ -2957,7 +2957,7 @@ msgstr ""
 
 #: includes/admin/views/acf-taxonomy/advanced-settings.php:896
 msgid "Tag Cloud"
-msgstr "Schlagwörter-Wolke"
+msgstr "Schlagwort-Wolke"
 
 #: includes/admin/views/acf-taxonomy/advanced-settings.php:851
 msgid ""
@@ -4110,7 +4110,7 @@ msgstr "%s-Attribute"
 
 #: includes/admin/views/acf-post-type/advanced-settings.php:357
 msgid "Post Archives"
-msgstr "Beitrags-Archive"
+msgstr "Beitragsarchiv"
 
 #: includes/admin/views/acf-post-type/advanced-settings.php:356
 msgid ""
@@ -5414,7 +5414,7 @@ msgstr "Beitrags-Seite"
 
 #: includes/locations/class-acf-location-page-type.php:119
 msgid "Front Page"
-msgstr "Startseite"
+msgstr "Titelseite"
 
 #: includes/locations/class-acf-location-page-type.php:31
 msgid "Page Type"
@@ -6315,7 +6315,7 @@ msgstr "Bearbeiten"
 msgid "The changes you made will be lost if you navigate away from this page"
 msgstr "Deine Änderungen werden verlorengehen, wenn du diese Seite verlässt"
 
-#: includes/api/api-helpers.php:3009
+#: includes/api/api-helpers.php:3020
 msgid "File type must be %s."
 msgstr "Der Dateityp muss %s sein."
 
@@ -6324,35 +6324,35 @@ msgstr "Der Dateityp muss %s sein."
 #: includes/admin/views/acf-field-group/conditional-logic.php:191
 #: includes/admin/views/acf-field-group/location-group.php:14
 #: includes/admin/views/acf-field-group/locations.php:43
-#: includes/api/api-helpers.php:3006
+#: includes/api/api-helpers.php:3017
 msgid "or"
 msgstr "oder"
 
-#: includes/api/api-helpers.php:2982
+#: includes/api/api-helpers.php:2993
 msgid "File size must not exceed %s."
 msgstr "Die Dateigröße darf nicht größer als %s sein."
 
-#: includes/api/api-helpers.php:2978
+#: includes/api/api-helpers.php:2989
 msgid "File size must be at least %s."
 msgstr "Die Dateigröße muss mindestens %s sein."
 
-#: includes/api/api-helpers.php:2965
+#: includes/api/api-helpers.php:2976
 msgid "Image height must not exceed %dpx."
 msgstr "Die Höhe des Bild darf %dpx nicht überschreiten."
 
-#: includes/api/api-helpers.php:2961
+#: includes/api/api-helpers.php:2972
 msgid "Image height must be at least %dpx."
 msgstr "Die Höhe des Bildes muss mindestens %dpx sein."
 
-#: includes/api/api-helpers.php:2949
+#: includes/api/api-helpers.php:2960
 msgid "Image width must not exceed %dpx."
 msgstr "Die Breite des Bildes darf %dpx nicht überschreiten."
 
-#: includes/api/api-helpers.php:2945
+#: includes/api/api-helpers.php:2956
 msgid "Image width must be at least %dpx."
 msgstr "Die Breite des Bildes muss mindestens %dpx sein."
 
-#: includes/api/api-helpers.php:1434 includes/api/api-term.php:149
+#: includes/api/api-helpers.php:1445 includes/api/api-term.php:149
 msgid "(no title)"
 msgstr "(ohne Titel)"
 
@@ -6545,7 +6545,7 @@ msgstr "Weitere"
 
 #: includes/fields/class-acf-field-radio.php:31
 msgid "Radio Button"
-msgstr "Radiobutton"
+msgstr "Optionsfeld"
 
 #: includes/fields/class-acf-field-accordion.php:115
 msgid ""
@@ -6651,7 +6651,7 @@ msgstr "Das Laden ist fehlgeschlagen"
 #: includes/fields/class-acf-field-select.php:103
 msgctxt "Select2 JS searching"
 msgid "Searching&hellip;"
-msgstr "Suchen&hellip;"
+msgstr "Suchen …"
 
 #: includes/fields/class-acf-field-select.php:102
 msgctxt "Select2 JS load_more"
@@ -7556,48 +7556,48 @@ msgstr "Untergeordnete Felder"
 msgid "Group"
 msgstr "Gruppe"
 
-#: includes/fields/class-acf-field-google-map.php:230
+#: includes/fields/class-acf-field-google-map.php:231
 msgid "Customize the map height"
 msgstr "Kartenhöhe anpassen"
 
-#: includes/fields/class-acf-field-google-map.php:229
+#: includes/fields/class-acf-field-google-map.php:230
 #: includes/fields/class-acf-field-image.php:258
 #: includes/fields/class-acf-field-image.php:294
 #: includes/fields/class-acf-field-oembed.php:261
 msgid "Height"
 msgstr "Höhe"
 
-#: includes/fields/class-acf-field-google-map.php:218
+#: includes/fields/class-acf-field-google-map.php:219
 msgid "Set the initial zoom level"
 msgstr "Den Anfangswert für Zoom einstellen"
 
-#: includes/fields/class-acf-field-google-map.php:217
+#: includes/fields/class-acf-field-google-map.php:218
 msgid "Zoom"
 msgstr "Zoom"
 
-#: includes/fields/class-acf-field-google-map.php:191
-#: includes/fields/class-acf-field-google-map.php:204
+#: includes/fields/class-acf-field-google-map.php:192
+#: includes/fields/class-acf-field-google-map.php:205
 msgid "Center the initial map"
 msgstr "Ausgangskarte zentrieren"
 
-#: includes/fields/class-acf-field-google-map.php:190
-#: includes/fields/class-acf-field-google-map.php:203
+#: includes/fields/class-acf-field-google-map.php:191
+#: includes/fields/class-acf-field-google-map.php:204
 msgid "Center"
 msgstr "Zentriert"
 
-#: includes/fields/class-acf-field-google-map.php:162
+#: includes/fields/class-acf-field-google-map.php:156
 msgid "Search for address..."
 msgstr "Nach der Adresse suchen ..."
 
-#: includes/fields/class-acf-field-google-map.php:159
+#: includes/fields/class-acf-field-google-map.php:161
 msgid "Find current location"
 msgstr "Aktuelle Position finden"
 
-#: includes/fields/class-acf-field-google-map.php:158
+#: includes/fields/class-acf-field-google-map.php:160
 msgid "Clear location"
 msgstr "Position löschen"
 
-#: includes/fields/class-acf-field-google-map.php:157
+#: includes/fields/class-acf-field-google-map.php:159
 #: includes/fields/class-acf-field-relationship.php:609
 msgid "Search"
 msgstr "Suchen"
