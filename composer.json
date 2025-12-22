@@ -21,6 +21,10 @@
   ],
   "config": {
     "sort-packages": true,
+    "optimize-autoloader": true,
+    "platform": {
+      "php": "8.4"
+    },
     "allow-plugins": {
       "composer/installers": true,
       "dealerdirect/phpcodesniffer-composer-installer": true
