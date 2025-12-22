@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "67bce4717fb73502f1b2fb2a97a2532e",
+    "content-hash": "a685117677382c4ef742dc972f83494e",
     "packages": [
         {
             "name": "composer/installers",
@@ -825,16 +825,16 @@
         },
         {
             "name": "timber/timber",
-            "version": "v2.3.2",
+            "version": "v2.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/timber/timber.git",
-                "reference": "08ce601167a03ed7a4fa7da740481c17ed650ef0"
+                "reference": "7a87ac27c0b9deedffe419388b63a0c95d8798ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/timber/timber/zipball/08ce601167a03ed7a4fa7da740481c17ed650ef0",
-                "reference": "08ce601167a03ed7a4fa7da740481c17ed650ef0",
+                "url": "https://api.github.com/repos/timber/timber/zipball/7a87ac27c0b9deedffe419388b63a0c95d8798ca",
+                "reference": "7a87ac27c0b9deedffe419388b63a0c95d8798ca",
                 "shasum": ""
             },
             "require": {
@@ -844,16 +844,15 @@
             "require-dev": {
                 "ergebnis/composer-normalize": "^2.28",
                 "php-parallel-lint/php-parallel-lint": "^1.3",
-                "php-stubs/acf-pro-stubs": "^6.0",
                 "php-stubs/wp-cli-stubs": "^2.0",
                 "phpro/grumphp": "^2.0",
                 "phpstan/extension-installer": "^1.1",
-                "phpstan/phpstan": "^1.7",
+                "phpstan/phpstan": "^2",
                 "phpunit/phpunit": "^9.0",
-                "rector/rector": "^1.0",
+                "rector/rector": "^2.0",
                 "squizlabs/php_codesniffer": "^3.0",
-                "symplify/easy-coding-standard": "^12.2",
-                "szepeviktor/phpstan-wordpress": "^1.1",
+                "symplify/easy-coding-standard": "^12",
+                "szepeviktor/phpstan-wordpress": "^2",
                 "twig/cache-extra": "^3.17",
                 "wpackagist-plugin/advanced-custom-fields": "^6.0",
                 "wpackagist-plugin/co-authors-plus": "^3.6",
@@ -923,7 +922,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2025-05-13T13:41:56+00:00"
+            "time": "2025-09-24T14:07:33+00:00"
         },
         {
             "name": "twig/twig",
@@ -1006,16 +1005,16 @@
         },
         {
             "name": "viget/viget-blocks-toolkit",
-            "version": "v1.1.0",
+            "version": "v1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vigetlabs/viget-blocks-toolkit.git",
-                "reference": "1cf30e7f3a66c9fe30f2dec97b0a1d50df4c7732"
+                "reference": "0ef0133fdf74f0ca91f4453d25524249f3e0cd26"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vigetlabs/viget-blocks-toolkit/zipball/1cf30e7f3a66c9fe30f2dec97b0a1d50df4c7732",
-                "reference": "1cf30e7f3a66c9fe30f2dec97b0a1d50df4c7732",
+                "url": "https://api.github.com/repos/vigetlabs/viget-blocks-toolkit/zipball/0ef0133fdf74f0ca91f4453d25524249f3e0cd26",
+                "reference": "0ef0133fdf74f0ca91f4453d25524249f3e0cd26",
                 "shasum": ""
             },
             "require": {
@@ -1045,57 +1044,9 @@
             ],
             "support": {
                 "issues": "https://github.com/vigetlabs/viget-blocks-toolkit/issues",
-                "source": "https://github.com/vigetlabs/viget-blocks-toolkit/tree/v1.1.0"
+                "source": "https://github.com/vigetlabs/viget-blocks-toolkit/tree/v1.1.3"
             },
-            "time": "2025-03-05T18:26:51+00:00"
-        },
-        {
-            "name": "viget/viget-form-blocks",
-            "version": "0.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/vigetlabs/viget-form-blocks.git",
-                "reference": "318220f4d366a029aacdf0c259f19bbac310d8f3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/vigetlabs/viget-form-blocks/zipball/318220f4d366a029aacdf0c259f19bbac310d8f3",
-                "reference": "318220f4d366a029aacdf0c259f19bbac310d8f3",
-                "shasum": ""
-            },
-            "require": {
-                "composer/installers": "*"
-            },
-            "type": "wordpress-plugin",
-            "autoload": {
-                "psr-4": {
-                    "VigetFormBlocks\\": "classes/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Viget",
-                    "homepage": "https://viget.com/"
-                }
-            ],
-            "description": "Create forms in Gutenberg with ACF Blocks by Viget.",
-            "homepage": "https://github.com/vigetlabs/viget-form-blocks",
-            "keywords": [
-                "Forms",
-                "editor",
-                "gutenberg",
-                "plugin",
-                "wordpress"
-            ],
-            "support": {
-                "issues": "https://github.com/vigetlabs/viget-form-blocks/issues",
-                "source": "https://github.com/vigetlabs/viget-form-blocks/tree/v0.0.1"
-            },
-            "time": "2025-01-22T23:15:04+00:00"
+            "time": "2025-12-22T19:11:23+00:00"
         },
         {
             "name": "viget/viget-parts-kit",
@@ -1144,15 +1095,15 @@
         },
         {
             "name": "wpackagist-plugin/accessibility-checker",
-            "version": "1.34.0",
+            "version": "1.35.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/accessibility-checker/",
-                "reference": "tags/1.34.0"
+                "reference": "tags/1.35.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/accessibility-checker.1.34.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/accessibility-checker.1.35.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1180,15 +1131,15 @@
         },
         {
             "name": "wpackagist-plugin/seo-by-rank-math",
-            "version": "1.0.249",
+            "version": "1.0.260",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/seo-by-rank-math/",
-                "reference": "tags/1.0.249"
+                "reference": "tags/1.0.260"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/seo-by-rank-math.1.0.249.zip"
+                "url": "https://downloads.wordpress.org/plugin/seo-by-rank-math.1.0.260.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1198,15 +1149,15 @@
         },
         {
             "name": "wpackagist-plugin/wordfence",
-            "version": "8.1.2",
+            "version": "8.1.4",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/wordfence/",
-                "reference": "tags/8.1.2"
+                "reference": "tags/8.1.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wordfence.8.1.2.zip"
+                "url": "https://downloads.wordpress.org/plugin/wordfence.8.1.4.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"

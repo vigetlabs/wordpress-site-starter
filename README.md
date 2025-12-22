@@ -74,6 +74,10 @@ ddev stop && ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.22
+
+* Update Composer packages to latest.
+
 ### v1.0.21
 
 * Deprecate ACF/Accordion component and replace with Core/Accordion block
