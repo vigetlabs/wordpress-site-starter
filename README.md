@@ -74,6 +74,12 @@ ddev stop && ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.21
+
+* Deprecate ACF/Accordion component and replace with Core/Accordion block
+* Update PHP version in DDEV config to 8.4
+* Update ACF Pro to the latest version (6.7.0.2)
+
 ### v1.0.20
 
 * Fixes a bug removing Twig/Timber support
