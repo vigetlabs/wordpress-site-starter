@@ -13,7 +13,7 @@ database:
   version: "8.0"
 use_dns_when_possible: true
 composer_version: "2"
-nodejs_version: "22.12.0"
+nodejs_version: "24"
 corepack_enable: false
 override_config: true
 hooks:
