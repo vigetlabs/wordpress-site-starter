@@ -31,6 +31,7 @@ export default defineConfig(({ command }) => ({
 		rollupOptions: {
 			input: {
 				'main': path.resolve(__dirname, 'src/main.js'),
+				'admin': path.resolve(__dirname, 'src/admin.js'),
 			}
 		},
 	},

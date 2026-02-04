@@ -15,7 +15,7 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 // Init Vite.
 require_once get_stylesheet_directory() . '/inc/class-vite.php';
 if ( class_exists( __NAMESPACE__ . '\Vite' ) ) {
-	new Vite();
+	Vite::get_instance();
 }
 
 // Maybe Initialize Timber.
