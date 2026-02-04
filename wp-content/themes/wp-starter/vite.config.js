@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import path from 'path';
 import liveReload from 'vite-plugin-live-reload';
 import generateThemeJSON, { buildJSON } from './src/theme-json/generate.js';
-
+import ViteRestart from 'vite-plugin-restart';
 const THEME = '/wp-content/themes/wp-starter';
 
 export default defineConfig(({ command }) => ({
@@ -14,6 +14,12 @@ export default defineConfig(({ command }) => ({
 			path.resolve(__dirname, './blocks/**/*.twig'),
 			path.resolve(__dirname, './**/*.php'),
 		]),
+		ViteRestart({
+			restart: [
+				path.resolve(__dirname, './src/**/*.css'),
+				path.resolve(__dirname, './blocks/**/*.css'),
+			],
+		}),
 	],
 	build: {
 		// output dir for production build
