@@ -429,14 +429,6 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	public static function getSiteInfo(): void {
-		// Non-interactive: use pre-configured defaults (create-project flow).
-		$sentinelPath = self::translatePath( '.ddev/.created-via-project' );
-		if ( file_exists( $sentinelPath ) ) {
-			self::$info['password'] = self::$info['password'] ?? self::generatePassword();
-			self::writeInfo( 'Installing WordPress with project defaults...' );
-			return;
-		}
-
 		// Site Title.
 		$defaultTitle = self::$env['PROJECT_NAME'] ?? 'WordPress Site';
 		$title = ! empty( self::$info['title'] ) ? self::$info['title'] : $defaultTitle;
