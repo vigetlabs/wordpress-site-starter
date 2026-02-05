@@ -71,15 +71,15 @@ class PostInstallScript extends ComposerScript {
 	];
 
 	/**
-	 * Write debug output.
+	 * Write debug output (opt-in).
 	 *
-	 * Default: ON. Disable via `.ddev/.env`: STARTER_DEBUG=0
+	 * Enable via `.ddev/.env`: STARTER_DEBUG=1
 	 *
 	 * @param string $message
 	 * @return void
 	 */
 	private static function debug( string $message ): void {
-		if ( isset( self::$env['STARTER_DEBUG'] ) && self::$env['STARTER_DEBUG'] === '0' ) {
+		if ( empty( self::$env['STARTER_DEBUG'] ) ) {
 			return;
 		}
 
@@ -107,7 +107,7 @@ class PostInstallScript extends ComposerScript {
 
 		self::wait();
 
-		self::writeInfo( '[DEBUG] init() fromExecute=' . ( $fromExecute ? 'true' : 'false' ) );
+		self::debug( 'init() fromExecute=' . ( $fromExecute ? 'true' : 'false' ) );
 
 		if ( self::needsSetup() ) {
 			// Download WordPress
@@ -115,11 +115,14 @@ class PostInstallScript extends ComposerScript {
 
 			self::wait( 2 );
 
-			if ( $fromExecute ) {
-				// Give database population options
+			$sentinelPath = self::translatePath( '.ddev/.created-via-project' );
+			$createdViaProject = file_exists( $sentinelPath );
+
+			if ( $fromExecute && ! $createdViaProject ) {
+				// Dev cloned repo: give database population options
 				self::populateDatabase();
 			} else {
-				// Pre-configure the Setup
+				// Pre-configure the Setup (create-project flow; sentinel file present)
 				$brandingName = self::$env['PROJECT_BRANDING_NAME'] ?? 'Viget';
 				$defaultUsername = 'viget';
 
@@ -141,10 +144,13 @@ class PostInstallScript extends ComposerScript {
 					}
 				}
 
+				$projectName = self::$env['PROJECT_NAME'] ?? 'WordPress Site';
+				$projectSlug = self::$env['PROJECT_SLUG'] ?? 'wpstarter';
+
 				self::$info = [
-					'title' => 'WordPress Site Starter',
-					'description' => sprintf( 'A project developed by %s.', $brandingName ),
-					'url' => 'https://wpstarter.ddev.site',
+					'title' => $projectName,
+					'description' => \sprintf( 'A project developed by %s.', $brandingName ),
+					'url' => 'https://' . $projectSlug . '.ddev.site',
 					'username' => $defaultUsername,
 					'email' => $defaultEmail,
 				];
@@ -330,10 +336,8 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function populateDatabase(): void {
-		self::writeInfo( '[DEBUG] populateDatabase() entered' );
-
 		$isInstalled = self::isWordPressDbInstalled();
-		self::writeInfo( '[DEBUG] isWordPressDbInstalled=' . ( $isInstalled ? 'true' : 'false' ) );
+		self::debug( 'populateDatabase(): isWordPressDbInstalled=' . ( $isInstalled ? 'true' : 'false' ) );
 
 		if ( $isInstalled ) {
 			self::writeInfo( 'WordPress is already installed.' );
@@ -425,6 +429,14 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	public static function getSiteInfo(): void {
+		// Non-interactive: use pre-configured defaults (create-project flow).
+		$sentinelPath = self::translatePath( '.ddev/.created-via-project' );
+		if ( file_exists( $sentinelPath ) ) {
+			self::$info['password'] = self::$info['password'] ?? self::generatePassword();
+			self::writeInfo( 'Installing WordPress with project defaults...' );
+			return;
+		}
+
 		// Site Title.
 		$defaultTitle = self::$env['PROJECT_NAME'] ?? 'WordPress Site';
 		$title = ! empty( self::$info['title'] ) ? self::$info['title'] : $defaultTitle;
@@ -517,8 +529,6 @@ class PostInstallScript extends ComposerScript {
 			'wp core is-installed --path=%s >/dev/null 2>&1',
 			escapeshellarg( $path )
 		);
-
-		self::debug( 'isWordPressDbInstalled(): path=' . $path . ' getcwd=' . getcwd() );
 
 		exec( $cmd, $output, $exitCode );
 		self::debug( 'isWordPressDbInstalled(): exitCode=' . $exitCode );
@@ -712,6 +722,12 @@ class PostInstallScript extends ComposerScript {
 	 */
 	private static function installationCleanup(): void {
 		self::writeComment( 'Performing post-install cleanup...' );
+
+		// Remove create-project sentinel so it is never committed.
+		$sentinelPath = self::translatePath( '.ddev/.created-via-project' );
+		if ( file_exists( $sentinelPath ) ) {
+			unlink( $sentinelPath );
+		}
 
 		// Homepage Actions.
 		$homepage = [

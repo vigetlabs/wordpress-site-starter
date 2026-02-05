@@ -239,11 +239,9 @@ class ComposerScript {
 	 * @return void
 	 */
 	protected static function runCommand( string $cmd ): void {
-		// WP-CLI can emit noisy PHP 8.4 deprecations from the host runtime.
-		// Suppress deprecations for WP-CLI invocations to keep interactive prompts readable.
+		// WP-CLI can emit noisy PHP 8.4 deprecations and warnings. Redirect stderr to suppress.
 		if ( preg_match( '/^\s*wp\s+/', $cmd ) ) {
-			// 8191 = E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED
-			$cmd = "WP_CLI_PHP_ARGS='-d error_reporting=8191' " . $cmd;
+			$cmd = rtrim( $cmd ) . ' 2>/dev/null';
 		}
 
 		$output = shell_exec( $cmd );

@@ -103,6 +103,9 @@ class PostCreateProjectScript extends ComposerScript {
 		// Self Destruct.
 		self::destruct();
 
+		// Track that this project was created via the project script.
+		self::trackCreatedViaProject();
+
 		self::writeInfo( 'All set!' );
 	}
 
@@ -253,7 +256,6 @@ class PostCreateProjectScript extends ComposerScript {
 		$envData = file_get_contents( $envPath );
 
 		$envData .= PHP_EOL . '# start project info';
-		$envData .= PHP_EOL . 'STARTER_DEBUG=1';
 		$envData .= PHP_EOL . 'PROJECT_NAME="' . self::escapeQuotes( self::$info['name'] ) . '"';
 		$envData .= PHP_EOL . 'PROJECT_SLUG="' . self::escapeQuotes( self::$info['slug'] ) . '"';
 		$envData .= PHP_EOL . 'PROJECT_TEXT_DOMAIN="' . self::escapeQuotes( self::$info['text-domain'] ) . '"';
@@ -590,6 +592,16 @@ class PostCreateProjectScript extends ComposerScript {
 		$themeFiles = glob( $themeDir . '/{,*/,*/*/,*/*/*/,*/*/*/*/}*.{php,twig,html,json}', GLOB_BRACE );
 
 		return array_merge( $files, $themeFiles );
+	}
+
+	/**
+	 * Track that this project was created via the project script.
+	 *
+	 * @return void
+	 */
+	private static function trackCreatedViaProject(): void {
+		$sentinelPath = self::translatePath( '.ddev/.created-via-project' );
+		file_put_contents( $sentinelPath, '1' );
 	}
 
 	/**
