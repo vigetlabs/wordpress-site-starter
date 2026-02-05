@@ -14,6 +14,13 @@ namespace WPStarter;
 class Vite {
 
 	/**
+	 * Instance of this class.
+	 *
+	 * @var ?Vite
+	 */
+	private static ?Vite $instance = null;
+
+	/**
 	 * Storage of environment variables.
 	 *
 	 * @var string
@@ -63,6 +70,20 @@ class Vite {
 	private array $entries = [];
 
 	/**
+	 * The manifest.
+	 *
+	 * @var array
+	 */
+	private array $manifest = [];
+
+	/**
+	 * The variables to localize.
+	 *
+	 * @var array
+	 */
+	private array $vars = [];
+
+	/**
 	 * Whether this class has been initialized.
 	 *
 	 * @var bool
@@ -80,9 +101,14 @@ class Vite {
 	 * Set up vars and hooks.
 	 */
 	public function __construct() {
-		$this->site_url   = get_site_url();
-		$this->port       = is_ssl() ? getenv( 'VITE_PRIMARY_PORT' ) : getenv( 'VITE_SECONDARY_PORT' );
-		$this->dev_server = "{$this->site_url}:{$this->port}";
+		if ( $this->initialized ) {
+			return;
+		}
+
+		$this->initialized = true;
+		$this->site_url    = get_site_url();
+		$this->port        = is_ssl() ? getenv( 'VITE_PRIMARY_PORT' ) : getenv( 'VITE_SECONDARY_PORT' );
+		$this->dev_server  = "{$this->site_url}:{$this->port}";
 
 		$this->dist_url  = get_stylesheet_directory_uri() . '/dist/';
 		$this->dist_path = get_stylesheet_directory() . '/dist/.vite/';
@@ -95,7 +121,7 @@ class Vite {
 		// Set editor CSS/JS.
 		$this->entries['editor'] = 'main.js';
 
-		add_action( 'wp_head', [ $this, 'init' ], 100 );
+		add_action( 'init', [ $this, 'init' ], 100 );
 
 		add_action(
 			'admin_head',
@@ -115,6 +141,18 @@ class Vite {
 	}
 
 	/**
+	 * Get the instance of this class.
+	 *
+	 * @return Vite
+	 */
+	public static function get_instance(): Vite {
+		if ( ! self::$instance ) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+
+	/**
 	 * Initialize
 	 *
 	 * @param string $entry Entry key.
@@ -126,10 +164,7 @@ class Vite {
 			return;
 		}
 
-		$this->initialized = true;
-
-		/* Print Vite HTML tags */
-		echo $this->vite( $this->get_entry( $entry ) ); // phpcs:ignore
+		$this->vite( $this->get_entry( $entry ) );
 	}
 
 	/**
@@ -145,7 +180,7 @@ class Vite {
 			$key = rtrim( $entry, '.js' );
 		}
 
-		if ( array_key_exists( $key, $this->entries ) ) {
+		if ( \array_key_exists( $key, $this->entries ) ) {
 			// Log: Entry key already exists.
 			return;
 		}
@@ -165,7 +200,7 @@ class Vite {
 			$entry = 'default';
 		}
 
-		if ( array_key_exists( $entry, $this->entries ) ) {
+		if ( \array_key_exists( $entry, $this->entries ) ) {
 			return $this->entries[ $entry ];
 		}
 
@@ -173,85 +208,211 @@ class Vite {
 	}
 
 	/**
+	 * Localize variables for theme scripts.
+	 *
+	 * @param string $name The name of the script.
+	 * @param array $values The values to localize.
+	 *
+	 * @return void
+	 */
+	public function localize_vars( $name, $values ): void {
+		$this->vars[ $name ] = $values;
+	}
+
+	/**
 	 * Prints all the html entries needed for Vite
 	 *
 	 * @param string $entry The entry point file.
 	 *
-	 * @return string
+	 * @return void
 	 */
 	public function vite( string $entry ) {
 		if ( 'dev' === $this->env ) {
 			$scripts = [];
 
 			if ( ! $this->initialized ) {
-				$scripts[] = "<script type=\"module\" src=\"{$this->dev_server}/@vite/client\"></script>"; // phpcs:ignore
+				$scripts[] = \sprintf(
+					'<script type="module" src="%s/@vite/client" id="vite-client"></script>',
+					esc_url( $this->dev_server )
+				);
 			}
 
-			$scripts[] = "<script type=\"module\" src=\"{$this->dev_server}/{$entry}\"></script>"; // phpcs:ignore
+			$scripts[] = \sprintf(
+				'<script type="module" src="%s/%s" id="vite-entry-%s"></script>',
+				esc_url( $this->dev_server ),
+				esc_attr( $entry ),
+				esc_attr( $entry )
+			);
 
-			return implode( PHP_EOL, $scripts );
+			foreach ( $this->vars as $name => $values ) {
+				$scripts[] = \sprintf(
+					'<script id="vite-var-%s">window.%s = %s;</script>',
+					esc_attr( $name ),
+					esc_js( $name ),
+					json_encode( $values )
+				);
+			}
+
+			$hook = is_admin() ? 'admin_head' : 'wp_head';
+			add_action(
+				$hook,
+				function () use ( $scripts ) {
+					echo implode( PHP_EOL, $scripts );
+				},
+				100
+			);
+
+			return;
 		}
 
-		/* Will need to be updated to work with vendor files */
-		return implode(
-			PHP_EOL,
-			[
-				$this->js( $entry ),
-				$this->imports( $entry ),
-				$this->css( $entry ),
-			]
+		$this->js( $entry );
+		$this->imports( $entry );
+		$this->css( $entry );
+	}
+
+	/**
+	 * Load JS files.
+	 *
+	 * @param string $entry The entry point file.
+	 *
+	 * @return void
+	 */
+	private function js( string $entry ): void {
+		$url = $this->get_asset_url( $entry );
+
+		if ( ! $url ) {
+			return;
+		}
+
+		$manifest = $this->get_manifest();
+
+		if ( ! empty( $manifest[ $entry ] ) ) {
+			$hook = is_admin() ? 'admin_enqueue_scripts' : 'wp_enqueue_scripts';
+			add_action(
+				$hook,
+				function () use ( $url, $entry, $manifest ) {
+					$version       = $manifest[ $entry ]['version'] ?? wp_get_theme()->get( 'Version' );
+					$dependencies  = $manifest[ $entry ]['dependencies'] ?? [];
+					$script_handle = 'theme-script-' . $manifest[ $entry ]['name'];
+
+					wp_register_script(
+						$script_handle,
+						$url,
+						$dependencies,
+						$version,
+						[ 'in_footer' => true ]
+					);
+
+					foreach ( $this->vars as $name => $values ) {
+						wp_localize_script(
+							$script_handle,
+							$name,
+							$values
+						);
+					}
+
+					wp_enqueue_script( $script_handle );
+				}
+			);
+
+			return;
+		}
+
+		$hook = is_admin() ? 'admin_head' : 'wp_head';
+		add_action(
+			$hook,
+			function () use ( $url, $entry ) {
+				\printf(
+					'<script type="module" crossorigin src="%s" id="vite-entry-%s"></script>',
+					esc_url( $url ),
+					esc_attr( $entry )
+				);
+			}
 		);
 	}
 
 	/**
-	 * Helpers to print tags
+	 * Load import URLs.
 	 *
 	 * @param string $entry The entry point file.
 	 *
-	 * @return string
+	 * @return void
 	 */
-	private function js( string $entry ): string {
-		$url = $this->get_asset_url( $entry );
+	private function imports( string $entry ): void {
+		$manifest = $this->get_manifest();
 
-		if ( ! $url ) {
-			return '';
+		foreach ( $this->get_imports( $entry ) as $index => $url ) {
+			if ( ! empty( $manifest[ $entry ] ) ) {
+				$hook = is_admin() ? 'admin_enqueue_scripts' : 'wp_enqueue_scripts';
+				add_action(
+					$hook,
+					function () use ( $url, $manifest, $entry, $index ) {
+						$version      = $manifest[ $entry ]['version'] ?? wp_get_theme()->get( 'Version' );
+						$dependencies = $manifest[ $entry ]['dependencies'] ?? [];
+						$suffix       = \count( $manifest[ $entry ]['imports'] ) > 1 ? '' : $index + 1;
+						wp_enqueue_style(
+							'theme-style-preload-' . $manifest[ $entry ]['name'] . $suffix,
+							$url,
+							$dependencies,
+							$version,
+							'all'
+						);
+					}
+				);
+			} else {
+				$hook = is_admin() ? 'admin_head' : 'wp_head';
+				add_action(
+					$hook,
+					function () use ( $url ) {
+						\printf( '<link rel="modulepreload" href="%s">', esc_url( $url ) ); // phpcs:ignore
+					}
+				);
+			}
 		}
-
-		return sprintf( '<script type="module" crossorigin src="%s"></script>', esc_url( $url ) ); // phpcs:ignore
 	}
 
 	/**
-	 * Helper to print preload URLs.
+	 * Load CSS files.
 	 *
 	 * @param string $entry The entry point file.
 	 *
-	 * @return string
+	 * @return void
 	 */
-	private function imports( string $entry ): string {
-		$res = '';
+	private function css( string $entry ): void {
+		$manifest = $this->get_manifest();
 
-		foreach ( $this->get_imports( $entry ) as $url ) {
-			$res .= sprintf( '<link rel="modulepreload" href="%s">', esc_url( $url ) );
+		foreach ( $this->get_css( $entry ) as $index => $url ) {
+			if ( ! empty( $manifest[ $entry ] ) ) {
+				$hook = is_admin() ? 'admin_enqueue_scripts' : 'wp_enqueue_scripts';
+				add_action(
+					$hook,
+					function () use ( $url, $entry, $manifest, $index ) {
+						$version      = $manifest[ $entry ]['version'] ?? wp_get_theme()->get( 'Version' );
+						$dependencies = $manifest[ $entry ]['dependencies'] ?? [];
+						$suffix       = \count( $manifest[ $entry ]['css'] ) > 1 ? '' : $index + 1;
+
+						wp_enqueue_style(
+							'theme-style-' . $manifest[ $entry ]['name'] . $suffix,
+							$url,
+							$dependencies,
+							$version,
+							'all'
+						);
+					}
+				);
+			} else {
+				$hook = is_admin() ? 'admin_head' : 'wp_head';
+				add_action(
+					$hook,
+					function () use ( $url ) {
+						\printf(
+							'<link rel="stylesheet" href="%s">',
+							esc_url( $url )
+						);
+					}
+				);
+			}
 		}
-
-		return $res;
-	}
-
-	/**
-	 * Adjust theme style tags.
-	 *
-	 * @param string $entry The entry point file.
-	 *
-	 * @return string
-	 */
-	private function css( string $entry ): string {
-		$tags = '';
-
-		foreach ( $this->get_css( $entry ) as $url ) {
-			$tags .= sprintf( '<link rel="stylesheet" href="%s">', esc_url( $url ) ); // phpcs:ignore
-		}
-
-		return $tags;
 	}
 
 	/**
@@ -259,7 +420,11 @@ class Vite {
 	 *
 	 * @return array
 	 */
-	private function get_manifest(): array {
+	public function get_manifest(): array {
+		if ( ! empty( $this->manifest ) ) {
+			return $this->manifest;
+		}
+
 		$manifest = $this->dist_path . '/manifest.json';
 
 		if ( ! file_exists( $manifest ) ) {
@@ -290,7 +455,9 @@ class Vite {
 			die( esc_html__( 'Error: The manifest.json file is empty or doesn\'t exist.', 'wp-starter' ) );
 		}
 
-		return json_decode( $contents, true );
+		$this->manifest = json_decode( $contents, true );
+
+		return $this->manifest;
 	}
 
 	/**
@@ -300,7 +467,7 @@ class Vite {
 	 *
 	 * @return string
 	 */
-	private function get_asset_url( string $entry ): string {
+	public function get_asset_url( string $entry ): string {
 		$manifest = $this->get_manifest();
 
 		if ( ! isset( $manifest[ $entry ] ) ) {
@@ -364,7 +531,7 @@ class Vite {
 			return $tag;
 		}
 
-		return sprintf( '<script type="module" crossorigin src="%s"></script>', esc_url( $src ) ); // phpcs:ignore
+		return str_replace( '<script ', '<script type="module" crossorigin ', $tag );
 	}
 
 	/**
@@ -382,11 +549,7 @@ class Vite {
 			return $tag;
 		}
 
-		return sprintf(
-			'<link rel="modulepreload" href="%s" media="%s">',
-			esc_url( $href ),
-			esc_attr( $media )
-		);
+		return str_replace( '<link ', '<link rel="modulepreload" ', $tag );
 	}
 
 	/**
@@ -435,12 +598,22 @@ class Vite {
 
 		foreach ( $this->get_css( $file ) as $url ) {
 			++$i;
-			wp_enqueue_style( 'theme-style-editor-' . $i, $url, $css_dependencies, '1.0' );
+			wp_enqueue_style(
+				'theme-style-editor-' . $i,
+				$url,
+				$css_dependencies,
+				wp_get_theme()->get( 'Version' )
+			);
 		}
 
 		foreach ( $this->get_imports( $file ) as $url ) {
 			++$i;
-			wp_enqueue_style( 'theme-style-preload-editor-' . $i, $url, $css_dependencies, '1.0' );
+			wp_enqueue_style(
+				'theme-style-preload-editor-' . $i,
+				$url,
+				$css_dependencies,
+				wp_get_theme()->get( 'Version' )
+			);
 		}
 
 		/* Theme Gutenberg blocks JS. */
@@ -466,7 +639,7 @@ class Vite {
 				'theme-script-editor-vite-client',
 				$vite_client,
 				$js_dependencies,
-				'1.0',
+				wp_get_theme()->get( 'Version' ),
 				true
 			);
 
@@ -474,7 +647,7 @@ class Vite {
 				'theme-script-editor-vite-entry',
 				$vite_entry,
 				[ 'theme-script-editor-vite-client' ],
-				'1.0',
+				wp_get_theme()->get( 'Version' ),
 				true
 			);
 		} else {
@@ -482,7 +655,7 @@ class Vite {
 				'theme-script-editor-main',
 				$script_url,
 				$js_dependencies,
-				'1.0',
+				wp_get_theme()->get( 'Version' ),
 				true
 			);
 		}

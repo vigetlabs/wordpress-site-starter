@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import path from 'path';
 import liveReload from 'vite-plugin-live-reload';
 import generateThemeJSON, { buildJSON } from './src/theme-json/generate.js';
-
+import viteGlobWatch from './src/plugins/vite-glob-watch.js';
 const THEME = '/wp-content/themes/wp-starter';
 
 export default defineConfig(({ command }) => ({
@@ -14,6 +14,12 @@ export default defineConfig(({ command }) => ({
 			path.resolve(__dirname, './blocks/**/*.twig'),
 			path.resolve(__dirname, './**/*.php'),
 		]),
+		viteGlobWatch({
+			watchPaths: [
+				path.resolve(__dirname, './src/**/*.css'),
+				path.resolve(__dirname, './blocks/**/*.css'),
+			],
+		}),
 	],
 	build: {
 		// output dir for production build
@@ -25,6 +31,7 @@ export default defineConfig(({ command }) => ({
 		rollupOptions: {
 			input: {
 				'main': path.resolve(__dirname, 'src/main.js'),
+				'admin': path.resolve(__dirname, 'src/admin.js'),
 			}
 		},
 	},

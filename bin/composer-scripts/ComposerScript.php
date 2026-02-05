@@ -44,6 +44,11 @@ class ComposerScript {
 	public static ?ConsoleOutput $output = null;
 
 	/**
+	 * @var array
+	 */
+	public static array $env = [];
+
+	/**
 	 * Set the event object
 	 *
 	 * @param Event $event
@@ -147,6 +152,22 @@ class ComposerScript {
 	}
 
 	/**
+	 * Write debug output (opt-in).
+	 *
+	 * Enable via `.ddev/.env`: STARTER_DEBUG=1
+	 *
+	 * @param string $message
+	 * @return void
+	 */
+	protected static function debug( string $message ): void {
+		if ( empty( self::$env['STARTER_DEBUG'] ) ) {
+			return;
+		}
+
+		self::writeInfo( '[debug] ' . $message );
+	}
+
+	/**
 	 * Output a comment to the terminal window.
 	 *
 	 * @param string $content
@@ -239,6 +260,11 @@ class ComposerScript {
 	 * @return void
 	 */
 	protected static function runCommand( string $cmd ): void {
+		// WP-CLI can emit noisy PHP 8.4 deprecations and warnings. Redirect stderr to suppress.
+		if ( preg_match( '/^\s*wp\s+/', $cmd ) ) {
+			$cmd = rtrim( $cmd ) . ' 2>/dev/null';
+		}
+
 		$output = shell_exec( $cmd );
 
 		if ( null !== $output ) {
@@ -388,12 +414,12 @@ class ComposerScript {
 	 */
 	protected static function renderVigetLogo(): void {
 		$logo = <<<VIGET
-                          <fg=#F26D20>.::::.</>
-                        <fg=#F26D20>-========-</>
-                       <fg=#F26D20>-===========</>
-       <fg=#1296BB>..:::::::..</>     <fg=#F26D20>:==========-</>
-    <fg=#1296BB>.:-===========--.</>   <fg=#F26D20>.-======-:</>
-  <fg=#1296BB>.-=================-.</>     <fg=#F26D20>..</>
+                          <fg=#F16C22>.::::.</>
+                        <fg=#F16C22>-========-</>
+                       <fg=#F16C22>-===========</>
+       <fg=#1296BB>..:::::::..</>     <fg=#F16C22>:==========-</>
+    <fg=#1296BB>.:-===========--.</>   <fg=#F16C22>.-======-:</>
+  <fg=#1296BB>.-=================-.</>     <fg=#F16C22>..</>
  <fg=#1296BB>.=====================.</>
  <fg=#1296BB>:=====================-</>
  <fg=#1296BB>:=-===================-</>

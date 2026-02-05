@@ -1,4 +1,4 @@
-module.exports = function (plop) {
+export default function (plop) {
 	// Block generator
 	plop.setGenerator('block', {
 		description: 'Set up a new block',

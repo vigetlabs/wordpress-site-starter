@@ -254,4 +254,7 @@ wp-config.php
 
 # End of https://www.toptal.com/developers/gitignore/api/wordpress,phpstorm,macos,composer,windows,visualstudiocode
 
+# Temporary sentinel for create-project flow (deleted by PostInstall)
+.ddev/.created-via-project
+
 .idea/

@@ -41,11 +41,6 @@ class PostInstallScript extends ComposerScript {
 	/**
 	 * @var array
 	 */
-	private static array $env = [];
-
-	/**
-	 * @var array
-	 */
 	private static array $info = [];
 
 	/**
@@ -91,17 +86,22 @@ class PostInstallScript extends ComposerScript {
 
 		self::wait();
 
+		self::debug( 'init() fromExecute=' . ( $fromExecute ? 'true' : 'false' ) );
+
 		if ( self::needsSetup() ) {
 			// Download WordPress
 			self::downloadWordPress();
 
 			self::wait( 2 );
 
-			if ( $fromExecute ) {
-				// Give database population options
+			$sentinelPath = self::translatePath( '.ddev/.created-via-project' );
+			$createdViaProject = file_exists( $sentinelPath );
+
+			if ( $fromExecute && ! $createdViaProject ) {
+				// Dev cloned repo: give database population options
 				self::populateDatabase();
 			} else {
-				// Pre-configure the Setup
+				// Pre-configure the Setup (create-project flow; sentinel file present)
 				$brandingName = self::$env['PROJECT_BRANDING_NAME'] ?? 'Viget';
 				$defaultUsername = 'viget';
 
@@ -123,10 +123,13 @@ class PostInstallScript extends ComposerScript {
 					}
 				}
 
+				$projectName = self::$env['PROJECT_NAME'] ?? 'WordPress Site';
+				$projectSlug = self::$env['PROJECT_SLUG'] ?? 'wpstarter';
+
 				self::$info = [
-					'title' => 'WordPress Site Starter',
-					'description' => sprintf( 'A project developed by %s.', $brandingName ),
-					'url' => 'https://wpstarter.ddev.site',
+					'title' => $projectName,
+					'description' => \sprintf( 'A project developed by %s.', $brandingName ),
+					'url' => 'https://' . $projectSlug . '.ddev.site',
 					'username' => $defaultUsername,
 					'email' => $defaultEmail,
 				];
@@ -289,7 +292,9 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function deletePlugin( string $plugin ): void {
-		if ( false === shell_exec( sprintf( 'wp plugin is-installed %s >/dev/null 2>&1', escapeshellarg( $plugin ) ) ) ) {
+		$checkCmd = sprintf( 'wp plugin is-installed %s >/dev/null 2>&1', escapeshellarg( $plugin ) );
+		exec( $checkCmd, $output, $exitCode );
+		if ( $exitCode !== 0 ) {
 			return;
 		}
 
@@ -309,10 +314,15 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function populateDatabase(): void {
-		if ( self::isWordPressDbInstalled() ) {
+		$isInstalled = self::isWordPressDbInstalled();
+		self::debug( 'populateDatabase(): isWordPressDbInstalled=' . ( $isInstalled ? 'true' : 'false' ) );
+
+		if ( $isInstalled ) {
 			self::writeInfo( 'WordPress is already installed.' );
 			return;
 		}
+
+		self::debug( 'populateDatabase(): WordPress NOT installed. Showing DB options.' );
 
 		$options = [
 			self::INSTALL_WP_OPT => 'Install WordPress',
@@ -343,6 +353,7 @@ class PostInstallScript extends ComposerScript {
 	 */
 	private static function doFreshInstall(): void {
 		// Run the WordPress Installation
+		self::debug( 'doFreshInstall(): starting wp core install.' );
 		self::installWordPress();
 
 		// Wait for WordPress to complete installation.
@@ -396,6 +407,8 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	public static function getSiteInfo(): void {
+		self::writeInfo( 'Gathering site info...' );
+
 		// Site Title.
 		$defaultTitle = self::$env['PROJECT_NAME'] ?? 'WordPress Site';
 		$title = ! empty( self::$info['title'] ) ? self::$info['title'] : $defaultTitle;
@@ -463,7 +476,16 @@ class PostInstallScript extends ComposerScript {
 	 * @return bool
 	 */
 	private static function isWordPressInstalled(): bool {
-		return false !== shell_exec( 'wp core is-installed' );
+		$path = self::translatePath( './' );
+		$cmd = sprintf(
+			'wp core is-installed --path=%s >/dev/null 2>&1',
+			escapeshellarg( $path )
+		);
+
+		exec( $cmd, $output, $exitCode );
+		self::debug( 'isWordPressInstalled(): exitCode=' . $exitCode );
+
+		return $exitCode === 0;
 	}
 
 	/**
@@ -472,7 +494,17 @@ class PostInstallScript extends ComposerScript {
 	 * @return bool
 	 */
 	private static function isWordPressDbInstalled(): bool {
-		exec('wp option get siteurl --quiet 2>/dev/null', $output, $exitCode);
+		// `wp core is-installed` is the most reliable “DB + config are installed” signal.
+		// Using exit codes avoids false positives when PHP deprecations/warnings are printed.
+		$path = self::translatePath( './' );
+		$cmd = sprintf(
+			'wp core is-installed --path=%s >/dev/null 2>&1',
+			escapeshellarg( $path )
+		);
+
+		exec( $cmd, $output, $exitCode );
+		self::debug( 'isWordPressDbInstalled(): exitCode=' . $exitCode );
+
 		return $exitCode === 0;
 	}
 
@@ -631,7 +663,14 @@ class PostInstallScript extends ComposerScript {
 	 */
 	private static function activateTheme(): void {
 		$slug = self::$env['PROJECT_SLUG'] ?? basename( self::$env['VITE_PROJECT_DIR'] ) ?? '';
-		if ( ! $slug || false === shell_exec( sprintf( 'wp theme is-installed %s >/dev/null 2>&1', escapeshellarg( $slug ) ) ) ) {
+		if ( ! $slug ) {
+			self::writeWarning( 'Skipping theme activation. Theme slug not found.' );
+			return;
+		}
+
+		$checkCmd = sprintf( 'wp theme is-installed %s >/dev/null 2>&1', escapeshellarg( $slug ) );
+		exec( $checkCmd, $output, $exitCode );
+		if ( $exitCode !== 0 ) {
 			self::writeWarning( 'Skipping theme activation. Theme "' . $slug . '" not found.' );
 			return;
 		}
@@ -655,6 +694,12 @@ class PostInstallScript extends ComposerScript {
 	 */
 	private static function installationCleanup(): void {
 		self::writeComment( 'Performing post-install cleanup...' );
+
+		// Remove create-project sentinel so it is never committed.
+		$sentinelPath = self::translatePath( '.ddev/.created-via-project' );
+		if ( file_exists( $sentinelPath ) ) {
+			unlink( $sentinelPath );
+		}
 
 		// Homepage Actions.
 		$homepage = [
@@ -810,7 +855,9 @@ class PostInstallScript extends ComposerScript {
 	 * @return bool
 	 */
 	private static function activatePlugin( string $slug, string|array $plugin ): bool {
-		if ( false === shell_exec( sprintf( 'wp plugin is-installed %s', escapeshellarg( $slug ) ) ) ) {
+		$checkCmd = sprintf( 'wp plugin is-installed %s >/dev/null 2>&1', escapeshellarg( $slug ) );
+		exec( $checkCmd, $output, $exitCode );
+		if ( $exitCode !== 0 ) {
 			self::writeWarning( 'Skipping plugin activation. Plugin "' . $slug . '" not installed.' );
 			return false;
 		}
@@ -858,9 +905,9 @@ class PostInstallScript extends ComposerScript {
 		];
 
 		if ( ! empty( self::$info['username'] ) && ! empty( self::$info['password'] ) ) {
-			$success[] = 'Admin Username: ' . self::$info['username'];
+			$success[] = 'Admin Username: <fg=#F16C22>' . self::$info['username'] . '</>';
 			$success[] = '<fg=#F26D20>Important!</> Make a note of the Admin Password:';
-			$success[] = '<fg=#F26D20>' . self::$info['password'] . '</>';
+			$success[] = '<fg=#F16C22>' . self::$info['password'] . '</>';
 		}
 
 		$success = self::centeredText( $success, 2, '*', '#1296BB' );
