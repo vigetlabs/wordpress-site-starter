@@ -41,11 +41,6 @@ class PostInstallScript extends ComposerScript {
 	/**
 	 * @var array
 	 */
-	private static array $env = [];
-
-	/**
-	 * @var array
-	 */
 	private static array $info = [];
 
 	/**

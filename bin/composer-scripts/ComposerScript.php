@@ -44,6 +44,11 @@ class ComposerScript {
 	public static ?ConsoleOutput $output = null;
 
 	/**
+	 * @var array
+	 */
+	public static array $env = [];
+
+	/**
 	 * Set the event object
 	 *
 	 * @param Event $event
