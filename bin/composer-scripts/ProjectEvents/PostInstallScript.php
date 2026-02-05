@@ -429,6 +429,8 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	public static function getSiteInfo(): void {
+		self::writeInfo( 'Gathering site info...' );
+
 		// Site Title.
 		$defaultTitle = self::$env['PROJECT_NAME'] ?? 'WordPress Site';
 		$title = ! empty( self::$info['title'] ) ? self::$info['title'] : $defaultTitle;
@@ -925,9 +927,9 @@ class PostInstallScript extends ComposerScript {
 		];
 
 		if ( ! empty( self::$info['username'] ) && ! empty( self::$info['password'] ) ) {
-			$success[] = 'Admin Username: ' . self::$info['username'];
+			$success[] = 'Admin Username: <fg=#F16C22>' . self::$info['username'] . '</>';
 			$success[] = '<fg=#F26D20>Important!</> Make a note of the Admin Password:';
-			$success[] = '<fg=#F26D20>' . self::$info['password'] . '</>';
+			$success[] = '<fg=#F16C22>' . self::$info['password'] . '</>';
 		}
 
 		$success = self::centeredText( $success, 2, '*', '#1296BB' );
