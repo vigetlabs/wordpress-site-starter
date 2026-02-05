@@ -116,7 +116,7 @@ class LoginScreen {
 	 * @return string
 	 */
 	private function get_logo_url(): string {
-		$logo_url = VIGETWP_PLUGIN_URL . 'src/assets/images/logo.svg';
+		$logo_url = VIGETWP_PLUGIN_URL . 'src/assets/images/viget-logo-transparent.svg';
 		if ( has_custom_logo() ) {
 			$logo_url = wp_get_attachment_image_url( get_theme_mod( 'custom_logo' ), 'full' );
 		}

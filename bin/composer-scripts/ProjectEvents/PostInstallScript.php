@@ -186,7 +186,6 @@ class PostInstallScript extends ComposerScript {
 
 		// Only run the rest of the script if we are in development mode.
 		if ( !$event->isDevMode() ) {
-			self::writeOutput( 'Not in development mode. Skipping init script.' );
 			return;
 		}
 
