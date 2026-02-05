@@ -71,6 +71,22 @@ class PostInstallScript extends ComposerScript {
 	];
 
 	/**
+	 * Write debug output.
+	 *
+	 * Default: ON. Disable via `.ddev/.env`: STARTER_DEBUG=0
+	 *
+	 * @param string $message
+	 * @return void
+	 */
+	private static function debug( string $message ): void {
+		if ( isset( self::$env['STARTER_DEBUG'] ) && self::$env['STARTER_DEBUG'] === '0' ) {
+			return;
+		}
+
+		self::writeInfo( '[debug] ' . $message );
+	}
+
+	/**
 	 * Initialize the script.
 	 *
 	 * @param Event $event
@@ -90,6 +106,8 @@ class PostInstallScript extends ComposerScript {
 		self::loadDDEVEnvironmentVars();
 
 		self::wait();
+
+		self::writeInfo( '[DEBUG] init() fromExecute=' . ( $fromExecute ? 'true' : 'false' ) );
 
 		if ( self::needsSetup() ) {
 			// Download WordPress
@@ -290,7 +308,9 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function deletePlugin( string $plugin ): void {
-		if ( false === shell_exec( sprintf( 'wp plugin is-installed %s >/dev/null 2>&1', escapeshellarg( $plugin ) ) ) ) {
+		$checkCmd = sprintf( 'wp plugin is-installed %s >/dev/null 2>&1', escapeshellarg( $plugin ) );
+		exec( $checkCmd, $output, $exitCode );
+		if ( $exitCode !== 0 ) {
 			return;
 		}
 
@@ -310,10 +330,17 @@ class PostInstallScript extends ComposerScript {
 	 * @return void
 	 */
 	private static function populateDatabase(): void {
-		if ( self::isWordPressDbInstalled() ) {
+		self::writeInfo( '[DEBUG] populateDatabase() entered' );
+
+		$isInstalled = self::isWordPressDbInstalled();
+		self::writeInfo( '[DEBUG] isWordPressDbInstalled=' . ( $isInstalled ? 'true' : 'false' ) );
+
+		if ( $isInstalled ) {
 			self::writeInfo( 'WordPress is already installed.' );
 			return;
 		}
+
+		self::debug( 'populateDatabase(): WordPress NOT installed. Showing DB options.' );
 
 		$options = [
 			self::INSTALL_WP_OPT => 'Install WordPress',
@@ -344,6 +371,7 @@ class PostInstallScript extends ComposerScript {
 	 */
 	private static function doFreshInstall(): void {
 		// Run the WordPress Installation
+		self::debug( 'doFreshInstall(): starting wp core install.' );
 		self::installWordPress();
 
 		// Wait for WordPress to complete installation.
@@ -464,7 +492,16 @@ class PostInstallScript extends ComposerScript {
 	 * @return bool
 	 */
 	private static function isWordPressInstalled(): bool {
-		return false !== shell_exec( 'wp core is-installed' );
+		$path = self::translatePath( './' );
+		$cmd = sprintf(
+			'wp core is-installed --path=%s >/dev/null 2>&1',
+			escapeshellarg( $path )
+		);
+
+		exec( $cmd, $output, $exitCode );
+		self::debug( 'isWordPressInstalled(): exitCode=' . $exitCode );
+
+		return $exitCode === 0;
 	}
 
 	/**
@@ -473,7 +510,19 @@ class PostInstallScript extends ComposerScript {
 	 * @return bool
 	 */
 	private static function isWordPressDbInstalled(): bool {
-		exec('wp option get siteurl --quiet 2>/dev/null', $output, $exitCode);
+		// `wp core is-installed` is the most reliable “DB + config are installed” signal.
+		// Using exit codes avoids false positives when PHP deprecations/warnings are printed.
+		$path = self::translatePath( './' );
+		$cmd = sprintf(
+			'wp core is-installed --path=%s >/dev/null 2>&1',
+			escapeshellarg( $path )
+		);
+
+		self::debug( 'isWordPressDbInstalled(): path=' . $path . ' getcwd=' . getcwd() );
+
+		exec( $cmd, $output, $exitCode );
+		self::debug( 'isWordPressDbInstalled(): exitCode=' . $exitCode );
+
 		return $exitCode === 0;
 	}
 
@@ -632,7 +681,14 @@ class PostInstallScript extends ComposerScript {
 	 */
 	private static function activateTheme(): void {
 		$slug = self::$env['PROJECT_SLUG'] ?? basename( self::$env['VITE_PROJECT_DIR'] ) ?? '';
-		if ( ! $slug || false === shell_exec( sprintf( 'wp theme is-installed %s >/dev/null 2>&1', escapeshellarg( $slug ) ) ) ) {
+		if ( ! $slug ) {
+			self::writeWarning( 'Skipping theme activation. Theme slug not found.' );
+			return;
+		}
+
+		$checkCmd = sprintf( 'wp theme is-installed %s >/dev/null 2>&1', escapeshellarg( $slug ) );
+		exec( $checkCmd, $output, $exitCode );
+		if ( $exitCode !== 0 ) {
 			self::writeWarning( 'Skipping theme activation. Theme "' . $slug . '" not found.' );
 			return;
 		}
@@ -811,7 +867,9 @@ class PostInstallScript extends ComposerScript {
 	 * @return bool
 	 */
 	private static function activatePlugin( string $slug, string|array $plugin ): bool {
-		if ( false === shell_exec( sprintf( 'wp plugin is-installed %s', escapeshellarg( $slug ) ) ) ) {
+		$checkCmd = sprintf( 'wp plugin is-installed %s >/dev/null 2>&1', escapeshellarg( $slug ) );
+		exec( $checkCmd, $output, $exitCode );
+		if ( $exitCode !== 0 ) {
 			self::writeWarning( 'Skipping plugin activation. Plugin "' . $slug . '" not installed.' );
 			return false;
 		}

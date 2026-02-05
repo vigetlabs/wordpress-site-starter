@@ -253,6 +253,7 @@ class PostCreateProjectScript extends ComposerScript {
 		$envData = file_get_contents( $envPath );
 
 		$envData .= PHP_EOL . '# start project info';
+		$envData .= PHP_EOL . 'STARTER_DEBUG=1';
 		$envData .= PHP_EOL . 'PROJECT_NAME="' . self::escapeQuotes( self::$info['name'] ) . '"';
 		$envData .= PHP_EOL . 'PROJECT_SLUG="' . self::escapeQuotes( self::$info['slug'] ) . '"';
 		$envData .= PHP_EOL . 'PROJECT_TEXT_DOMAIN="' . self::escapeQuotes( self::$info['text-domain'] ) . '"';
