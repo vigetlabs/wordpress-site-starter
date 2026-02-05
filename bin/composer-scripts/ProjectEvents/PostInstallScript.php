@@ -71,22 +71,6 @@ class PostInstallScript extends ComposerScript {
 	];
 
 	/**
-	 * Write debug output (opt-in).
-	 *
-	 * Enable via `.ddev/.env`: STARTER_DEBUG=1
-	 *
-	 * @param string $message
-	 * @return void
-	 */
-	private static function debug( string $message ): void {
-		if ( empty( self::$env['STARTER_DEBUG'] ) ) {
-			return;
-		}
-
-		self::writeInfo( '[debug] ' . $message );
-	}
-
-	/**
 	 * Initialize the script.
 	 *
 	 * @param Event $event
