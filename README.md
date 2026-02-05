@@ -74,6 +74,18 @@ ddev stop && ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.23
+
+* Updated Composer packages to latest.
+* Updated `npm` packages to latest.
+* Removed Viget Part Kit plugin.
+* Updated NodeJS to v24.x
+* Fixed a bug related to initial WordPress setup/installation.
+* Fixed a bug with the default Admin Login logo.
+* Updates to `class-vite.php` to use proper hooks and enequeuing methods, allowing localized JS variables.
+* Adds `viteGlobWatch` Vite plugin to refresh CSS when new files are added.
+* Fixes a bug with `plopfile.js`
+
 ### v1.0.22
 
 * Update Composer packages to latest.
