@@ -116,28 +116,23 @@ class Vite {
 		$this->env = getenv( 'ENVIRONMENT' );
 
 		// Set front-end CSS/JS.
-		$this->entries['default'] = 'main.js';
+		$this->add_entry( 'main.js', 'default' );
+		$this->add_entry( 'main.js' );
 
 		// Set editor CSS/JS.
-		$this->entries['editor'] = 'main.js';
+		$this->add_entry( 'main.js', 'editor' );
 
-		add_action( 'init', [ $this, 'init' ], 100 );
-
-		add_action(
-			'admin_head',
-			function () {
-				$screen = get_current_screen();
-				if ( $screen->is_block_editor ) {
-					$this->init( 'editor' );
-				}
-			}
-		);
+		// Set admin CSS/JS.
+		$this->add_entry( 'admin.js' );
 
 		add_filter( 'script_loader_tag', [ $this, 'script_loader' ], 10, 3 );
 		add_filter( 'style_loader_tag', [ $this, 'style_loader' ], 10, 4 );
 
-		// Load admin assets.
-		$this->admin_assets( 'editor' );
+		// Initialize Vite.
+		add_action( 'init', [ $this, 'init' ], 100 );
+
+		// Load block editor assets.
+		$this->block_assets( 'editor' );
 	}
 
 	/**
@@ -160,11 +155,15 @@ class Vite {
 	 * @return void
 	 */
 	public function init( string $entry = '' ): void {
+		if ( ! $entry ) {
+			$entry = is_admin() ? 'admin' : 'default';
+		}
+
 		if ( ! $this->get_entry( $entry ) ) {
 			return;
 		}
 
-		$this->vite( $this->get_entry( $entry ) );
+		$this->vite( $entry );
 	}
 
 	/**
@@ -229,6 +228,7 @@ class Vite {
 	public function vite( string $entry ) {
 		if ( 'dev' === $this->env ) {
 			$scripts = [];
+			$file    = $this->get_entry( $entry );
 
 			if ( ! $this->initialized ) {
 				$scripts[] = \sprintf(
@@ -240,7 +240,7 @@ class Vite {
 			$scripts[] = \sprintf(
 				'<script type="module" src="%s/%s" id="vite-entry-%s"></script>',
 				esc_url( $this->dev_server ),
-				esc_attr( $entry ),
+				esc_attr( $file ),
 				esc_attr( $entry )
 			);
 
@@ -278,7 +278,8 @@ class Vite {
 	 * @return void
 	 */
 	private function js( string $entry ): void {
-		$url = $this->get_asset_url( $entry );
+		$file = $this->get_entry( $entry );
+		$url  = $this->get_asset_url( $file );
 
 		if ( ! $url ) {
 			return;
@@ -286,14 +287,14 @@ class Vite {
 
 		$manifest = $this->get_manifest();
 
-		if ( ! empty( $manifest[ $entry ] ) ) {
+		if ( ! empty( $manifest[ $file ] ) ) {
 			$hook = is_admin() ? 'admin_enqueue_scripts' : 'wp_enqueue_scripts';
 			add_action(
 				$hook,
-				function () use ( $url, $entry, $manifest ) {
-					$version       = $manifest[ $entry ]['version'] ?? wp_get_theme()->get( 'Version' );
-					$dependencies  = $manifest[ $entry ]['dependencies'] ?? [];
-					$script_handle = 'theme-script-' . $manifest[ $entry ]['name'];
+				function () use ( $url, $entry, $file, $manifest ) {
+					$version       = $manifest[ $file ]['version'] ?? wp_get_theme()->get( 'Version' );
+					$dependencies  = $manifest[ $file ]['dependencies'] ?? [];
+					$script_handle = 'theme-script-' . $manifest[ $file ]['name'];
 
 					wp_register_script(
 						$script_handle,
@@ -339,19 +340,20 @@ class Vite {
 	 * @return void
 	 */
 	private function imports( string $entry ): void {
+		$file     = $this->get_entry( $entry );
 		$manifest = $this->get_manifest();
 
-		foreach ( $this->get_imports( $entry ) as $index => $url ) {
-			if ( ! empty( $manifest[ $entry ] ) ) {
+		foreach ( $this->get_imports( $file ) as $index => $url ) {
+			if ( ! empty( $manifest[ $file ] ) ) {
 				$hook = is_admin() ? 'admin_enqueue_scripts' : 'wp_enqueue_scripts';
 				add_action(
 					$hook,
-					function () use ( $url, $manifest, $entry, $index ) {
-						$version      = $manifest[ $entry ]['version'] ?? wp_get_theme()->get( 'Version' );
-						$dependencies = $manifest[ $entry ]['dependencies'] ?? [];
-						$suffix       = \count( $manifest[ $entry ]['imports'] ) > 1 ? '' : $index + 1;
+					function () use ( $url, $manifest, $entry, $file, $index ) {
+						$version      = $manifest[ $file ]['version'] ?? wp_get_theme()->get( 'Version' );
+						$dependencies = $manifest[ $file ]['dependencies'] ?? [];
+						$suffix       = \count( $manifest[ $file ]['imports'] ) > 1 ? '' : $index + 1;
 						wp_enqueue_style(
-							'theme-style-preload-' . $manifest[ $entry ]['name'] . $suffix,
+							'theme-style-preload-' . $manifest[ $file ]['name'] . $suffix,
 							$url,
 							$dependencies,
 							$version,
@@ -364,7 +366,10 @@ class Vite {
 				add_action(
 					$hook,
 					function () use ( $url ) {
-						\printf( '<link rel="modulepreload" href="%s">', esc_url( $url ) ); // phpcs:ignore
+						\printf(
+							'<link rel="modulepreload" href="%s">',
+							esc_url( $url )
+						);
 					}
 				);
 			}
@@ -379,20 +384,21 @@ class Vite {
 	 * @return void
 	 */
 	private function css( string $entry ): void {
+		$file     = $this->get_entry( $entry );
 		$manifest = $this->get_manifest();
 
-		foreach ( $this->get_css( $entry ) as $index => $url ) {
-			if ( ! empty( $manifest[ $entry ] ) ) {
+		foreach ( $this->get_css( $file ) as $index => $url ) {
+			if ( ! empty( $manifest[ $file ] ) ) {
 				$hook = is_admin() ? 'admin_enqueue_scripts' : 'wp_enqueue_scripts';
 				add_action(
 					$hook,
-					function () use ( $url, $entry, $manifest, $index ) {
-						$version      = $manifest[ $entry ]['version'] ?? wp_get_theme()->get( 'Version' );
-						$dependencies = $manifest[ $entry ]['dependencies'] ?? [];
-						$suffix       = \count( $manifest[ $entry ]['css'] ) > 1 ? '' : $index + 1;
+					function () use ( $url, $entry, $file, $manifest, $index ) {
+						$version      = $manifest[ $file ]['version'] ?? wp_get_theme()->get( 'Version' );
+						$dependencies = $manifest[ $file ]['dependencies'] ?? [];
+						$suffix       = \count( $manifest[ $file ]['css'] ) > 1 ? '' : $index + 1;
 
 						wp_enqueue_style(
-							'theme-style-' . $manifest[ $entry ]['name'] . $suffix,
+							'theme-style-' . $manifest[ $file ]['name'] . $suffix,
 							$url,
 							$dependencies,
 							$version,
@@ -504,12 +510,12 @@ class Vite {
 	 *
 	 * @return array
 	 */
-	private function get_css( string $entry ): array {
+	private function get_css( string $entry_file ): array {
 		$urls     = [];
 		$manifest = $this->get_manifest();
 
-		if ( ! empty( $manifest[ $entry ]['css'] ) ) {
-			foreach ( $manifest[ $entry ]['css'] as $file ) {
+		if ( ! empty( $manifest[ $entry_file ]['css'] ) ) {
+			foreach ( $manifest[ $entry_file ]['css'] as $file ) {
 				$urls[] = $this->dist_url . $file;
 			}
 		}
@@ -527,7 +533,10 @@ class Vite {
 	 * @return string
 	 */
 	public function script_loader( string $tag, string $handle, string $src ): string {
-		if ( ! str_contains( $handle, 'theme-script-' ) ) {
+		$theme_handles = [ 'theme-script-', 'theme-vite-canvas-' ];
+		$is_theme      = array_reduce( $theme_handles, fn( $carry, $prefix ) => $carry || str_contains( $handle, $prefix ), false );
+
+		if ( ! $is_theme ) {
 			return $tag;
 		}
 
@@ -553,111 +562,98 @@ class Vite {
 	}
 
 	/**
-	 * Enqueue assets in Admin.
+	 * Enqueue Vite assets into the editor canvas iframe head.
 	 *
-	 * @param string $entry The entry point file.
+	 * The editor canvas is an iframe that renders the block content. Assets are
+	 * collected via _wp_get_iframed_editor_assets() which runs enqueue_block_assets
+	 * with should_load_block_editor_scripts_and_styles returning false.
+	 *
+	 * @param string $entry The entry point key.
 	 */
-	public function admin_assets( $entry = '' ): void {
-		if ( ! $entry ) {
-			$screen = get_current_screen();
-			$entry  = $screen && 'site-editor' === $screen->base ? 'default' : 'editor';
-		}
-
+	public function block_assets( string $entry = 'editor' ): void {
 		if ( ! $this->get_entry( $entry ) ) {
 			return;
 		}
 
-		foreach ( $this->get_css( $this->get_entry( $entry ) ) as $url ) {
-			add_editor_style( $url );
-			break;
-		}
-	}
-
-	/**
-	 * Enqueue assets for block editor
-	 *
-	 * @param string $entry The entry point file.
-	 */
-	public function block_assets( $entry = '' ): void {
-		if ( ! $entry ) {
-			$screen = get_current_screen();
-			$entry  = $screen && 'site-editor' === $screen->base ? 'default' : 'editor';
-		}
-
-		if ( ! $this->get_entry( $entry ) ) {
-			return;
-		}
-
-		$i    = 0;
 		$file = $this->get_entry( $entry );
 
-		$css_dependencies = [
-			'wp-block-library-theme',
-			'wp-block-library',
-		];
+		add_action(
+			'enqueue_block_assets',
+			function () use ( $file, $entry ) {
+				// Only enqueue when collecting assets for the editor canvas iframe.
+				if ( apply_filters( 'should_load_block_editor_scripts_and_styles', true ) ) {
+					return;
+				}
 
-		foreach ( $this->get_css( $file ) as $url ) {
-			++$i;
-			wp_enqueue_style(
-				'theme-style-editor-' . $i,
-				$url,
-				$css_dependencies,
-				wp_get_theme()->get( 'Version' )
-			);
-		}
+				if ( 'dev' === $this->env ) {
+					$vite_client_url = $this->dev_server . '/@vite/client';
+					$vite_entry_url  = $this->dev_server . '/' . $file;
 
-		foreach ( $this->get_imports( $file ) as $url ) {
-			++$i;
-			wp_enqueue_style(
-				'theme-style-preload-editor-' . $i,
-				$url,
-				$css_dependencies,
-				wp_get_theme()->get( 'Version' )
-			);
-		}
+					wp_enqueue_script(
+						'theme-vite-canvas-client',
+						$vite_client_url,
+						[],
+						wp_get_theme()->get( 'Version' ),
+						false
+					);
+					wp_enqueue_script(
+						'theme-vite-canvas-entry',
+						$vite_entry_url,
+						[ 'theme-vite-canvas-client' ],
+						wp_get_theme()->get( 'Version' ),
+						false
+					);
+				} else {
+					$script_url   = $this->get_asset_url( $file );
+					$manifest     = $this->get_manifest();
+					$dependencies = $manifest[ $file ]['dependencies'] ?? [];
 
-		/* Theme Gutenberg blocks JS. */
-		$js_dependencies = [
-			'wp-block-editor',
-			'wp-blocks',
-			'wp-editor',
-			'wp-components',
-			'wp-compose',
-			'wp-data',
-			'wp-element',
-			'wp-hooks',
-			'wp-i18n',
-		];
+					wp_register_script(
+						'theme-vite-canvas-entry',
+						$script_url,
+						$dependencies,
+						wp_get_theme()->get( 'Version' ),
+						false
+					);
 
-		$script_url = $this->get_asset_url( $file );
+					foreach ( $this->vars as $name => $values ) {
+						wp_localize_script(
+							'theme-vite-canvas-entry',
+							$name,
+							$values
+						);
+					}
 
-		if ( 'dev' === $this->env ) {
-			$vite_client = $this->dev_server . '/@vite/client';
-			$vite_entry  = $this->dev_server . '/' . $entry;
+					wp_enqueue_script( 'theme-vite-canvas-entry' );
 
-			wp_register_script(
-				'theme-script-editor-vite-client',
-				$vite_client,
-				$js_dependencies,
-				wp_get_theme()->get( 'Version' ),
-				true
-			);
+					// Use same handle format as css() so getCompatibilityStyles() finds them
+					// in the iframe and doesn't warn about "added incorrectly".
+					foreach ( $this->get_css( $file ) as $index => $url ) {
+						if ( ! empty( $manifest[ $file ] ) ) {
+							$version      = $manifest[ $file ]['version'] ?? wp_get_theme()->get( 'Version' );
+							$dep          = $manifest[ $file ]['dependencies'] ?? [];
+							$suffix       = \count( $manifest[ $file ]['css'] ) > 1 ? '' : $index + 1;
+							$style_handle = 'theme-style-' . $manifest[ $file ]['name'] . $suffix;
 
-			wp_enqueue_script(
-				'theme-script-editor-vite-entry',
-				$vite_entry,
-				[ 'theme-script-editor-vite-client' ],
-				wp_get_theme()->get( 'Version' ),
-				true
-			);
-		} else {
-			wp_enqueue_script(
-				'theme-script-editor-main',
-				$script_url,
-				$js_dependencies,
-				wp_get_theme()->get( 'Version' ),
-				true
-			);
-		}
+							wp_enqueue_style(
+								$style_handle,
+								$url,
+								$dep,
+								$version,
+								'all'
+							);
+						} else {
+							wp_enqueue_style(
+								'theme-vite-canvas-style-' . $index,
+								$url,
+								[],
+								wp_get_theme()->get( 'Version' )
+							);
+						}
+					}
+				}
+			},
+			5
+		);
 	}
 }
