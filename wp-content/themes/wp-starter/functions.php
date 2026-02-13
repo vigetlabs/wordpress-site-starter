@@ -28,3 +28,13 @@ require_once get_stylesheet_directory() . '/inc/blocks.php';
 
 // Custom Icons.
 require_once get_stylesheet_directory() . '/inc/icons.php';
+
+// Webfont.
+// add_action( 'wp_enqueue_scripts', function () {
+// 	wp_enqueue_style(
+// 		'THEME-adobe-fonts',
+// 		'https://use.typekit.net/xxxxxxx.css',
+// 		[],
+// 		null
+// 	);
+// } );

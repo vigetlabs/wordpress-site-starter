@@ -14,6 +14,7 @@ export default {
 			fontFamily: 'Roboto Condensed',
 			name: 'Roboto Condensed',
 			slug: 'body',
+			// If using an external webfont, remove `fontFace` blocks and add enqueue to `functions.php`
 			fontFace: [
 				{
 					fontFamily: 'Roboto Condensed',
