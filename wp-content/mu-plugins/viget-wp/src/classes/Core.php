@@ -21,6 +21,7 @@ use VigetWP\Admin\Menu;
 use VigetWP\Admin\TinyMCE;
 use VigetWP\Features\DisableComments;
 use VigetWP\Features\Gravatar;
+use VigetWP\Plugins\CreateBlockTheme;
 use VigetWP\Plugins\ACF\GravityForms;
 use VigetWP\Plugins\ACF\Toolbars;
 
@@ -166,7 +167,8 @@ class Core {
 		new DashboardWidgets();
 		new FileEditors();
 
-		## Plugins
+		// Plugins
+		new CreateBlockTheme();
 
 		// ACF
 		new Toolbars();
