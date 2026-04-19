@@ -1,3 +1,4 @@
+/* PostCSS (postcss-ff-fluid-fonts) removes --fluid-t and rewrites --fluid-text-* for Firefox-safe clamp(..., calc(px + vw), ...). */
 :root {
 	/* Viewport breakpoints (pulled from font-sizes config) */
 	--fluid-bp-min: var(--cfg-fluid-bp-min);

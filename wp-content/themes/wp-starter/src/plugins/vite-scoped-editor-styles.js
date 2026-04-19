@@ -24,9 +24,12 @@
 import path from 'path';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
+import { createRequire } from 'node:module';
 import postcss from 'postcss';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const require = createRequire(import.meta.url);
+const { postcssPlugin: postcssFfFluidFonts } = require('./fluid-font-calculations.cjs');
 
 const VIRTUAL_MODULE_ID = 'virtual:editor-scoped-styles';
 const RESOLVED_ID = '\0' + VIRTUAL_MODULE_ID;
@@ -210,7 +213,11 @@ export default function viteEditorStyles(options = {}) {
 			import('@tailwindcss/postcss'),
 		]);
 
-		cssProcessor = postcss([postcssImportExtGlob(), tailwindPostcss()]);
+		cssProcessor = postcss([
+			postcssImportExtGlob(),
+			tailwindPostcss(),
+			postcssFfFluidFonts(),
+		]);
 		return cssProcessor;
 	}
 

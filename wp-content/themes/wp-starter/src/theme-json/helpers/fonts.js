@@ -5,7 +5,11 @@
 
 import fs from 'fs';
 import path from 'path';
+import { createRequire } from 'node:module';
 import { toTitleCase } from './strings.js';
+
+const require = createRequire(import.meta.url);
+const { getFluidTextDeclMap, tokenFromFluidVar, THEME_ROOT } = require('../../plugins/fluid-font-calculations.cjs');
 
 /** Supported filters for block-specific font sizes (--text-{filter}-*). */
 const SUPPORTED_FILTERS = ['headline', 'ui'];
@@ -61,8 +65,9 @@ function getFontSizes( filter = '' ) {
 		return [];
 	}
 
-	const cssPath = path.join(process.cwd(), 'src/styles/tailwind/typography.css');
+	const cssPath = path.join(THEME_ROOT, 'src/styles/tailwind/typography.css');
 	const cssContent = fs.readFileSync(cssPath, 'utf8');
+	const fluidClampByProp = getFluidTextDeclMap(THEME_ROOT);
 
 	const matches = [];
 	const regex = filter
@@ -77,10 +82,16 @@ function getFontSizes( filter = '' ) {
 	return matches
 		.filter( ( { token } ) => ( filter ? true : token !== 'zero' ) )
 		.map( ( { token, sizeValue } ) => {
+			const fluidToken = tokenFromFluidVar(sizeValue);
+			const size =
+				fluidToken && fluidClampByProp.has(`--fluid-text-${fluidToken}`)
+					? fluidClampByProp.get(`--fluid-text-${fluidToken}`)
+					: sizeValue;
+
 			return {
 				fluid: false,
 				name: fontNames[token] || toTitleCase( token ),
-				size: sizeValue,
+				size,
 				slug: fontSlugs[token] || token.toLowerCase(),
 			};
 		} );
