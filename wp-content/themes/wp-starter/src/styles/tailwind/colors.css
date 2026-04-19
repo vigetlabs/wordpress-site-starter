@@ -1,7 +1,7 @@
-@theme {
-	/* Colors */
-	--color-transparent: transparent;
-	--color-current: currentColor;
-	--color-white: #ffffff;
-	--color-black: #000000;
-}
+/**
+ * Colors are defined in the following files:
+ * - inc/colors-palette.css: Theme/Editor-specific colors.
+ * - inc/colors-utilities.css: Tailwind-only colors.
+ */
+@import './inc/colors-palette.css';
+@import './inc/colors-utilities.css';

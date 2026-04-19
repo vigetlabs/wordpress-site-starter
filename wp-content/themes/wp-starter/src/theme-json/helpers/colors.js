@@ -56,13 +56,20 @@ function isDark(color) {
 	return luminance < 0.179;
 }
 
+/** File whose @theme block defines colors synced to theme.json / the block editor. */
+const EDITOR_PALETTE_CSS = path.join(
+	process.cwd(),
+	'src/styles/tailwind/inc/colors-palette.css',
+);
+
 /**
- * Parse the CSS file to extract color variables from the @theme directive.
+ * Parse the palette CSS file to extract color variables from the @theme directive.
+ * Tailwind-only colors live in colors-utilities.css and are intentionally not parsed here.
  *
  * @returns {object} The color palette object
  */
 function parseColorsFromCSS() {
-	const cssPath = path.join(process.cwd(), 'src/styles/tailwind/colors.css');
+	const cssPath = EDITOR_PALETTE_CSS;
 
 	try {
 		const cssContent = fs.readFileSync(cssPath, 'utf8');
@@ -101,12 +108,12 @@ function parseColorsFromCSS() {
 }
 
 /**
- * Parse the CSS file to extract gradient variables from the @theme directive.
+ * Parse the palette CSS file to extract gradient variables from the @theme directive.
  *
  * @returns {object} The gradient palette object
  */
 function parseGradientsFromCSS() {
-	const cssPath = path.join(process.cwd(), 'src/styles/tailwind/colors.css');
+	const cssPath = EDITOR_PALETTE_CSS;
 
 	try {
 		const cssContent = fs.readFileSync(cssPath, 'utf8');
