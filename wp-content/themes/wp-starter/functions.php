@@ -23,8 +23,14 @@ if ( class_exists( '\Timber\Timber' ) ) {
 	\Timber\Timber::init();
 }
 
+// Helper functions.
+require_once get_stylesheet_directory() . '/inc/helpers.php';
+
 // Block Functions.
 require_once get_stylesheet_directory() . '/inc/blocks.php';
 
 // Custom Icons.
 require_once get_stylesheet_directory() . '/inc/icons.php';
+
+// Initialize the Core theme.
+WPStarter();
