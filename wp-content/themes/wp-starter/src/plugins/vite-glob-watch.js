@@ -39,16 +39,22 @@ export default function viteGlobWatch(options = {}) {
 
 			server.watcher.add(resolvedPaths);
 
-			const handleAddOrUnlink = (file) => {
-				if (!file.endsWith('.css')) return;
+		const handleAddOrUnlink = (file) => {
+			if (!file.endsWith('.css')) return;
 
-				if (debounceTimer) clearTimeout(debounceTimer);
+			if (debounceTimer) clearTimeout(debounceTimer);
 
-				debounceTimer = setTimeout(() => {
-					debounceTimer = null;
-					server.restart();
-				}, DEBOUNCE_MS);
-			};
+			debounceTimer = setTimeout(async () => {
+				debounceTimer = null;
+				try {
+					await server.restart();
+				} catch (e) {
+					server.config.logger.error(
+						`[vite-glob-watch] restart failed: ${e.message}`
+					);
+				}
+			}, DEBOUNCE_MS);
+		};
 
 			server.watcher.on('add', handleAddOrUnlink);
 			server.watcher.on('unlink', handleAddOrUnlink);

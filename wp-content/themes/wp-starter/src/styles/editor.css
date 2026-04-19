@@ -1,0 +1,6 @@
+/* Import Main styles */
+@import './main.css';
+
+/* Import Editor-specific styles */
+@import-glob './editor/*.css';
+@import-glob './../../blocks/**/editor.css';

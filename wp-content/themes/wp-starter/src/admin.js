@@ -1,1 +1,2 @@
-// Admin scripts.
+// Import Admin styles
+import './styles/admin.css';
