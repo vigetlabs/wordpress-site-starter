@@ -705,7 +705,7 @@
       "fontWeight": "400",
       "lineHeight": "1.55"
     },
-    "css": ":where(.wp-site-blocks *:focus-visible){outline-width:2px;outline-style:solid}.has-dark-black-background-color:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) .wp-block-button__link:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) .wp-block-button.is-style-outline .wp-block-button__link:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) *:not(.has-text-color,.has-inline-color):not(.wp-block-button__link-icon):not(svg, polygon){color:var(--wp--preset--color--white);}"
+    "css": ":where(.wp-site-blocks *:focus-visible){outline-width:2px;outline-style:solid}.has-dark-black-background-color:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) .wp-block-button__link:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) .wp-block-button.is-style-outline .wp-block-button__link:not(.has-text-color),\n\t\t.has-dark-black-background-color:not(.has-text-color) *:not(.has-text-color,.has-inline-color):not(.wp-block-button__link-icon):not(svg, path, polygon):not(.components-button):not(.components-placeholder):not(.components-placeholder__label):not(.components-placeholder__instructions):not(.sf-map-canvas):not(.sf-map-canvas *):not(:has(div > .gm-style)):not(.acf-block-salesforce-map-embed):not(.acf-block-salesforce-map-embed *):not(.has-white-background-color):not(.has-white-background-color *){color:var(--wp--preset--color--white);}"
   },
   "templateParts": [
     {

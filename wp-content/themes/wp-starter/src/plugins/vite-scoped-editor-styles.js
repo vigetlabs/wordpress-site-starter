@@ -22,7 +22,7 @@
  */
 
 import path from 'path';
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { createRequire } from 'node:module';
 import postcss from 'postcss';
@@ -30,6 +30,9 @@ import postcss from 'postcss';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
 const { postcssPlugin: postcssFfFluidFonts } = require('./fluid-font-calculations.cjs');
+
+/** Absolute path to fluid math + PostCSS plugin (used for explicit watch). */
+const FLUID_FONT_CALCULATIONS = path.join(__dirname, 'fluid-font-calculations.cjs');
 
 const VIRTUAL_MODULE_ID = 'virtual:editor-scoped-styles';
 const RESOLVED_ID = '\0' + VIRTUAL_MODULE_ID;
@@ -290,15 +293,34 @@ export default function viteEditorStyles(options = {}) {
 
 			const { scopedCss, unscopedCss, deps } = await cssVariantsPromise;
 
+			// Only watch files that exist. Tailwind's incremental compiler can retain
+			// stale `dependency` messages (e.g. after moving fluid-font-calculations.cjs);
+			// addWatchFile on a missing path makes Vite treat it as an import and fail.
 			for (const dep of deps) {
-				this.addWatchFile(dep);
+				if (existsSync(dep)) {
+					this.addWatchFile(dep);
+				}
 			}
+
+			this.addWatchFile(FLUID_FONT_CALCULATIONS);
 
 			return buildModule(scopedCss, unscopedCss);
 		},
 
 		handleHotUpdate({ file, modules, server }) {
-			if (!file.endsWith('.css')) return;
+			const isCss = file.endsWith('.css');
+			const isPostcssConfig = file.endsWith('postcss.config.cjs');
+			const isFluidCalc = file.endsWith('fluid-font-calculations.cjs');
+			const isThisPlugin = file.endsWith('vite-scoped-editor-styles.js');
+
+			if (!isCss && !isPostcssConfig && !isFluidCalc && !isThisPlugin) {
+				return;
+			}
+
+			// Drop Tailwind's processor so the next build does not reuse stale dependency paths.
+			if (isPostcssConfig || isFluidCalc || isThisPlugin) {
+				cssProcessor = null;
+			}
 
 			triggerBuild();
 
