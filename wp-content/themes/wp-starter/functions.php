@@ -26,6 +26,9 @@ if ( class_exists( '\Timber\Timber' ) ) {
 // Helper functions.
 require_once get_stylesheet_directory() . '/inc/helpers.php';
 
+// Asset Registration.
+require_once get_stylesheet_directory() . '/inc/assets.php';
+
 // Block Functions.
 require_once get_stylesheet_directory() . '/inc/blocks.php';
 

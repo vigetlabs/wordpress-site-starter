@@ -7,6 +7,20 @@
 
 namespace WPStarter;
 
+// Default to block version 3.
+add_filter(
+	'acf/blocks/default_block_version',
+	function( $version, $block ) {
+		if ( ! empty( $block['blockVersion'] ) ) {
+			return $block['blockVersion'];
+		}
+
+		return 3;
+	},
+	10,
+	2
+);
+
 // Add Components block Category.
 add_filter(
 	'block_categories_all',
