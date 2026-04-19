@@ -1,142 +1,143 @@
 <?php
 /**
- * Inspired from:
+ * Vite asset loader for WordPress.
  *
- * @source https://github.com/andrefelipe/vite-php-setup
  * @package WPStarter
  */
 
 namespace WPStarter;
 
 /**
- * This class handles loading Vite assets.
+ * Handles loading Vite assets in development and production modes.
+ *
+ * ## Built-in entry points
+ *
+ * | Key     | File        | Hook                         |
+ * |---------|-------------|------------------------------|
+ * | default | main.js     | wp_enqueue_scripts           |
+ * | admin   | admin.js    | admin_enqueue_scripts        |
+ * | editor  | editor.js   | enqueue_block_editor_assets  |
+ *
+ * The editor entry imports virtual:editor-scoped-styles, which the
+ * vite-scoped-editor-styles Vite plugin uses to inject CSS scoped to
+ * .editor-styles-wrapper — replicating add_editor_style() in both
+ * dev (with HMR) and prod.
+ *
+ * ## Entry mirroring for add_css_dependency(), add_js_dependency(), localize_vars()
+ *
+ * | $entry value   | Effect                                        |
+ * |----------------|-----------------------------------------------|
+ * | null (default) | Adds to 'default' AND mirrors to 'editor'    |
+ * | 'default'      | Same as null — mirrors to 'editor'            |
+ * | 'main'         | Adds only to 'default'; editor does NOT get it |
+ * | 'editor'       | Adds only to 'editor'                         |
+ * | 'admin'        | Adds only to 'admin'                          |
+ *
+ * ## Singleton
+ *
+ * Always obtain the instance via Vite::get_instance(). Hooks and filters are
+ * registered once in the constructor; subsequent calls to get_instance() return
+ * the cached instance without re-running any setup.
  */
 class Vite {
 
 	/**
-	 * Instance of this class.
+	 * Singleton instance.
 	 *
 	 * @var ?Vite
 	 */
 	private static ?Vite $instance = null;
 
 	/**
-	 * Storage of environment variables.
+	 * ENVIRONMENT env var value ('dev' enables dev mode).
 	 *
 	 * @var string
 	 */
 	private string $env;
 
 	/**
-	 * The site URL.
+	 * WordPress site URL used to build the dev server base URL.
 	 *
 	 * @var string
 	 */
 	private string $site_url;
 
 	/**
-	 * The port to be used.
+	 * Vite dev server port number (as a string from getenv).
 	 *
-	 * @var int
+	 * @var string
 	 */
 	private string $port;
 
 	/**
-	 * The dev server.
+	 * Full Vite dev server base URL
 	 *
 	 * @var string
 	 */
 	private string $dev_server;
 
 	/**
-	 * The URL to the dist folder.
+	 * URL to the theme dist/ folder.
 	 *
 	 * @var string
 	 */
 	private string $dist_url;
 
 	/**
-	 * The path to the dist folder.
+	 * Filesystem path to dist/.vite/ (for reading manifest.json).
 	 *
 	 * @var string
 	 */
 	private string $dist_path;
 
 	/**
-	 * The entry files.
+	 * Registered entries: key → JS filename relative to Vite root.
 	 *
-	 * @var array
+	 * @var array<string, string>
 	 */
 	private array $entries = [];
 
 	/**
-	 * The manifest.
+	 * Cached manifest.json contents.
 	 *
 	 * @var array
 	 */
 	private array $manifest = [];
 
 	/**
-	 * The variables to localize.
+	 * Per-entry CSS dependency WP style handles.
 	 *
-	 * @var array
+	 * @var array<string, string[]>
+	 */
+	private array $css_deps = [];
+
+	/**
+	 * Per-entry JS dependency WP script handles.
+	 *
+	 * @var array<string, string[]>
+	 */
+	private array $js_deps = [];
+
+	/**
+	 * Per-entry wp_localize_script() payloads: entry → [var_name => values].
+	 *
+	 * @var array<string, array<string, mixed>>
 	 */
 	private array $vars = [];
 
 	/**
-	 * Whether this class has been initialized.
+	 * Whether the "manifest missing" admin notice has been queued.
 	 *
 	 * @var bool
 	 */
-	private bool $initialized = false;
+	private bool $did_manifest_notice = false;
+
+	// -------------------------------------------------------------------------
+	// Singleton
+	// -------------------------------------------------------------------------
 
 	/**
-	 * If admin notice has been printed.
-	 *
-	 * @var bool
-	 */
-	private bool $did_admin_notice = false;
-
-	/**
-	 * Set up vars and hooks.
-	 */
-	public function __construct() {
-		if ( $this->initialized ) {
-			return;
-		}
-
-		$this->initialized = true;
-		$this->site_url    = get_site_url();
-		$this->port        = is_ssl() ? getenv( 'VITE_PRIMARY_PORT' ) : getenv( 'VITE_SECONDARY_PORT' );
-		$this->dev_server  = "{$this->site_url}:{$this->port}";
-
-		$this->dist_url  = get_stylesheet_directory_uri() . '/dist/';
-		$this->dist_path = get_stylesheet_directory() . '/dist/.vite/';
-
-		$this->env = getenv( 'ENVIRONMENT' );
-
-		// Set front-end CSS/JS.
-		$this->add_entry( 'main.js', 'default' );
-		$this->add_entry( 'main.js' );
-
-		// Set editor CSS/JS.
-		$this->add_entry( 'main.js', 'editor' );
-
-		// Set admin CSS/JS.
-		$this->add_entry( 'admin.js' );
-
-		add_filter( 'script_loader_tag', [ $this, 'script_loader' ], 10, 3 );
-		add_filter( 'style_loader_tag', [ $this, 'style_loader' ], 10, 4 );
-
-		// Initialize Vite.
-		add_action( 'init', [ $this, 'init' ], 100 );
-
-		// Load block editor assets.
-		$this->block_assets( 'editor' );
-	}
-
-	/**
-	 * Get the instance of this class.
+	 * Return the singleton instance, constructing it on first call.
 	 *
 	 * @return Vite
 	 */
@@ -147,282 +148,137 @@ class Vite {
 		return self::$instance;
 	}
 
+	// -------------------------------------------------------------------------
+	// Construction — called exactly once by get_instance()
+	// -------------------------------------------------------------------------
+
 	/**
-	 * Initialize
+	 * Configure properties and register all hooks and filters.
 	 *
-	 * @param string $entry Entry key.
-	 *
-	 * @return void
+	 * Do not call directly — use Vite::get_instance() instead.
 	 */
-	public function init( string $entry = '' ): void {
-		if ( ! $entry ) {
-			$entry = is_admin() ? 'admin' : 'default';
-		}
+	public function __construct() {
+		$this->site_url   = get_site_url();
+		$this->port       = (string) ( is_ssl()
+			? getenv( 'VITE_PRIMARY_PORT' )
+			: getenv( 'VITE_SECONDARY_PORT' ) );
+		$this->dev_server = "{$this->site_url}:{$this->port}";
+		$this->dist_url   = get_stylesheet_directory_uri() . '/dist/';
+		$this->dist_path  = get_stylesheet_directory() . '/dist/.vite/';
+		$this->env        = (string) getenv( 'ENVIRONMENT' );
 
-		if ( ! $this->get_entry( $entry ) ) {
-			return;
-		}
+		// Register built-in entry points.
+		$this->add_entry( 'main.js',   'default' );
+		$this->add_entry( 'admin.js',  'admin' );
+		$this->add_entry( 'editor.js', 'editor' );
 
-		$this->vite( $entry );
+		// Add type="module" crossorigin to all Vite-owned script tags.
+		add_filter( 'script_loader_tag', [ $this, 'script_loader_tag' ], 10, 3 );
+
+		// Enqueue each entry on the appropriate WordPress hook.
+		add_action( 'wp_enqueue_scripts',         fn() => $this->enqueue_entry( 'default' ) );
+		add_action( 'admin_enqueue_scripts',       fn() => $this->enqueue_entry( 'admin' ) );
+		add_action( 'enqueue_block_editor_assets', fn() => $this->enqueue_entry( 'editor' ) );
+	}
+
+	// -------------------------------------------------------------------------
+	// Public API
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Whether the current environment is dev mode.
+	 *
+	 * @return bool
+	 */
+	public function is_dev(): bool {
+		return 'dev' === $this->env;
 	}
 
 	/**
-	 * Add a new entry point file.
+	 * Register a Vite entry point.
 	 *
-	 * @param string $entry The entry point file.
-	 * @param string $key   The callable array key index.
-	 *
-	 * @return void
+	 * @param string $file JS filename relative to the Vite root (e.g. 'main.js').
+	 * @param string $key  PHP key used to reference this entry. Defaults to the
+	 *                     base filename without extension.
 	 */
-	public function add_entry( string $entry, string $key = '' ): void {
+	public function add_entry( string $file, string $key = '' ): void {
 		if ( ! $key ) {
-			$key = rtrim( $entry, '.js' );
+			$key = pathinfo( $file, PATHINFO_FILENAME );
 		}
 
-		if ( \array_key_exists( $key, $this->entries ) ) {
-			// Log: Entry key already exists.
+		if ( array_key_exists( $key, $this->entries ) ) {
 			return;
 		}
 
-		$this->entries[ $key ] = $entry;
+		$this->entries[ $key ] = $file;
+
+		// Initialise per-entry storage so callers never hit undefined key warnings.
+		$this->css_deps[ $key ] ??= [];
+		$this->js_deps[ $key ]  ??= [];
+		$this->vars[ $key ]     ??= [];
 	}
 
 	/**
-	 * Get entry point file by key.
+	 * Return the entry filename for a given key, or false if not found.
 	 *
-	 * @param string $entry The entry point key.
-	 *
+	 * @param string $key Entry key. Defaults to 'default'.
 	 * @return string|false
 	 */
-	public function get_entry( string $entry = '' ): string|false {
-		if ( ! $entry ) {
-			$entry = 'default';
-		}
-
-		if ( \array_key_exists( $entry, $this->entries ) ) {
-			return $this->entries[ $entry ];
-		}
-
-		return false;
+	public function get_entry( string $key = 'default' ): string|false {
+		return $this->entries[ $key ] ?? false;
 	}
 
 	/**
-	 * Localize variables for theme scripts.
+	 * Register a WP style handle as a CSS dependency for an entry.
 	 *
-	 * @param string $name The name of the script.
-	 * @param array $values The values to localize.
+	 * The style must be registered with wp_register_style() before the
+	 * enqueue hook fires (e.g. during 'init').
 	 *
-	 * @return void
+	 * @param string      $handle WP style handle.
+	 * @param string|null $entry  See class-level mirroring table. Default null.
 	 */
-	public function localize_vars( $name, $values ): void {
-		$this->vars[ $name ] = $values;
+	public function add_css_dependency( string $handle, ?string $entry = null ): void {
+		foreach ( $this->resolve_entries( $entry ) as $key ) {
+			$this->css_deps[ $key ] ??= [];
+			$this->css_deps[ $key ][] = $handle;
+		}
 	}
 
 	/**
-	 * Prints all the html entries needed for Vite
+	 * Register a WP script handle as a JS dependency for an entry.
 	 *
-	 * @param string $entry The entry point file.
+	 * The script must be registered with wp_register_script() before the
+	 * enqueue hook fires.
 	 *
-	 * @return void
+	 * @param string      $handle WP script handle.
+	 * @param string|null $entry  See class-level mirroring table. Default null.
 	 */
-	public function vite( string $entry ) {
-		if ( 'dev' === $this->env ) {
-			$scripts = [];
-			$file    = $this->get_entry( $entry );
-
-			if ( ! $this->initialized ) {
-				$scripts[] = \sprintf(
-					'<script type="module" src="%s/@vite/client" id="vite-client"></script>',
-					esc_url( $this->dev_server )
-				);
-			}
-
-			$scripts[] = \sprintf(
-				'<script type="module" src="%s/%s" id="vite-entry-%s"></script>',
-				esc_url( $this->dev_server ),
-				esc_attr( $file ),
-				esc_attr( $entry )
-			);
-
-			foreach ( $this->vars as $name => $values ) {
-				$scripts[] = \sprintf(
-					'<script id="vite-var-%s">window.%s = %s;</script>',
-					esc_attr( $name ),
-					esc_js( $name ),
-					json_encode( $values )
-				);
-			}
-
-			$hook = is_admin() ? 'admin_head' : 'wp_head';
-			add_action(
-				$hook,
-				function () use ( $scripts ) {
-					echo implode( PHP_EOL, $scripts );
-				},
-				100
-			);
-
-			return;
+	public function add_js_dependency( string $handle, ?string $entry = null ): void {
+		foreach ( $this->resolve_entries( $entry ) as $key ) {
+			$this->js_deps[ $key ] ??= [];
+			$this->js_deps[ $key ][] = $handle;
 		}
-
-		$this->js( $entry );
-		$this->imports( $entry );
-		$this->css( $entry );
 	}
 
 	/**
-	 * Load JS files.
+	 * Store a wp_localize_script() payload to inject when the entry is enqueued.
 	 *
-	 * @param string $entry The entry point file.
-	 *
-	 * @return void
+	 * @param string      $name   JavaScript global variable name.
+	 * @param array       $values Values to expose on window[name].
+	 * @param string|null $entry  See class-level mirroring table. Default null.
 	 */
-	private function js( string $entry ): void {
-		$file = $this->get_entry( $entry );
-		$url  = $this->get_asset_url( $file );
-
-		if ( ! $url ) {
-			return;
-		}
-
-		$manifest = $this->get_manifest();
-
-		if ( ! empty( $manifest[ $file ] ) ) {
-			$hook = is_admin() ? 'admin_enqueue_scripts' : 'wp_enqueue_scripts';
-			add_action(
-				$hook,
-				function () use ( $url, $entry, $file, $manifest ) {
-					$version       = $manifest[ $file ]['version'] ?? wp_get_theme()->get( 'Version' );
-					$dependencies  = $manifest[ $file ]['dependencies'] ?? [];
-					$script_handle = 'theme-script-' . $manifest[ $file ]['name'];
-
-					wp_register_script(
-						$script_handle,
-						$url,
-						$dependencies,
-						$version,
-						[ 'in_footer' => true ]
-					);
-
-					foreach ( $this->vars as $name => $values ) {
-						wp_localize_script(
-							$script_handle,
-							$name,
-							$values
-						);
-					}
-
-					wp_enqueue_script( $script_handle );
-				}
-			);
-
-			return;
-		}
-
-		$hook = is_admin() ? 'admin_head' : 'wp_head';
-		add_action(
-			$hook,
-			function () use ( $url, $entry ) {
-				\printf(
-					'<script type="module" crossorigin src="%s" id="vite-entry-%s"></script>',
-					esc_url( $url ),
-					esc_attr( $entry )
-				);
-			}
-		);
-	}
-
-	/**
-	 * Load import URLs.
-	 *
-	 * @param string $entry The entry point file.
-	 *
-	 * @return void
-	 */
-	private function imports( string $entry ): void {
-		$file     = $this->get_entry( $entry );
-		$manifest = $this->get_manifest();
-
-		foreach ( $this->get_imports( $file ) as $index => $url ) {
-			if ( ! empty( $manifest[ $file ] ) ) {
-				$hook = is_admin() ? 'admin_enqueue_scripts' : 'wp_enqueue_scripts';
-				add_action(
-					$hook,
-					function () use ( $url, $manifest, $entry, $file, $index ) {
-						$version      = $manifest[ $file ]['version'] ?? wp_get_theme()->get( 'Version' );
-						$dependencies = $manifest[ $file ]['dependencies'] ?? [];
-						$suffix       = \count( $manifest[ $file ]['imports'] ) > 1 ? '' : $index + 1;
-						wp_enqueue_style(
-							'theme-style-preload-' . $manifest[ $file ]['name'] . $suffix,
-							$url,
-							$dependencies,
-							$version,
-							'all'
-						);
-					}
-				);
-			} else {
-				$hook = is_admin() ? 'admin_head' : 'wp_head';
-				add_action(
-					$hook,
-					function () use ( $url ) {
-						\printf(
-							'<link rel="modulepreload" href="%s">',
-							esc_url( $url )
-						);
-					}
-				);
-			}
+	public function localize_vars( string $name, array $values, ?string $entry = null ): void {
+		foreach ( $this->resolve_entries( $entry ) as $key ) {
+			$this->vars[ $key ] ??= [];
+			$this->vars[ $key ][ $name ] = $values;
 		}
 	}
 
 	/**
-	 * Load CSS files.
+	 * Return the parsed Vite manifest, loading from disk on first call.
 	 *
-	 * @param string $entry The entry point file.
-	 *
-	 * @return void
-	 */
-	private function css( string $entry ): void {
-		$file     = $this->get_entry( $entry );
-		$manifest = $this->get_manifest();
-
-		foreach ( $this->get_css( $file ) as $index => $url ) {
-			if ( ! empty( $manifest[ $file ] ) ) {
-				$hook = is_admin() ? 'admin_enqueue_scripts' : 'wp_enqueue_scripts';
-				add_action(
-					$hook,
-					function () use ( $url, $entry, $file, $manifest, $index ) {
-						$version      = $manifest[ $file ]['version'] ?? wp_get_theme()->get( 'Version' );
-						$dependencies = $manifest[ $file ]['dependencies'] ?? [];
-						$suffix       = \count( $manifest[ $file ]['css'] ) > 1 ? '' : $index + 1;
-
-						wp_enqueue_style(
-							'theme-style-' . $manifest[ $file ]['name'] . $suffix,
-							$url,
-							$dependencies,
-							$version,
-							'all'
-						);
-					}
-				);
-			} else {
-				$hook = is_admin() ? 'admin_head' : 'wp_head';
-				add_action(
-					$hook,
-					function () use ( $url ) {
-						\printf(
-							'<link rel="stylesheet" href="%s">',
-							esc_url( $url )
-						);
-					}
-				);
-			}
-		}
-	}
-
-	/**
-	 * Helper to locate build files
+	 * Returns an empty array if the manifest is missing (prod build not yet run)
+	 * and queues a one-time admin notice.
 	 *
 	 * @return array
 	 */
@@ -431,229 +287,282 @@ class Vite {
 			return $this->manifest;
 		}
 
-		$manifest = $this->dist_path . '/manifest.json';
+		$path = $this->dist_path . 'manifest.json';
 
-		if ( ! file_exists( $manifest ) ) {
-			if ( ! $this->did_admin_notice ) {
-				return [];
-			}
-
-			add_action(
-				'admin_notices',
-				function () {
-					printf(
-						'<div class="notice notice-warning is-dismissible">
-						<p>%s</p>
-					</div>',
-						esc_html__( 'Manifest.json file is missing. Run "ddev npm run build" to fix.', 'wp-starter' )
-					);
-				}
-			);
-
-			$this->did_admin_notice = true;
-
+		if ( ! file_exists( $path ) ) {
+			$this->maybe_show_manifest_notice();
 			return [];
 		}
 
-		$contents = file_get_contents( $manifest );
+		$contents = file_get_contents( $path );
 
 		if ( ! $contents ) {
-			die( esc_html__( 'Error: The manifest.json file is empty or doesn\'t exist.', 'wp-starter' ) );
+			$this->maybe_show_manifest_notice();
+			return [];
 		}
 
-		$this->manifest = json_decode( $contents, true );
+		$decoded = json_decode( $contents, true );
 
+		if ( ! is_array( $decoded ) ) {
+			$this->maybe_show_manifest_notice();
+			return [];
+		}
+
+		$this->manifest = $decoded;
 		return $this->manifest;
 	}
 
 	/**
-	 * Get Asset URL
+	 * Return the absolute URL to a built JS asset for a given entry key.
 	 *
-	 * @param string $entry The entry point file.
+	 * @param string $key Entry key.
+	 * @return string URL or empty string if the manifest or entry is unavailable.
+	 */
+	public function get_asset_url( string $key ): string {
+		$file     = $this->get_entry( $key );
+		$manifest = $this->get_manifest();
+
+		if ( ! $file || empty( $manifest[ $file ]['file'] ) ) {
+			return '';
+		}
+
+		return $this->dist_url . $manifest[ $file ]['file'];
+	}
+
+	// -------------------------------------------------------------------------
+	// Filters
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Add type="module" crossorigin to Vite-owned script tags.
 	 *
+	 * Matches handles with these prefixes:
+	 *   - theme-vite-client   (/@vite/client in dev)
+	 *   - theme-vite-entry-*  (entry scripts in dev)
+	 *   - theme-script-*      (built entry scripts in prod)
+	 *
+	 * @param string $tag    Full <script> tag markup.
+	 * @param string $handle Script handle.
+	 * @param string $src    Script source URL.
 	 * @return string
 	 */
-	public function get_asset_url( string $entry ): string {
-		$manifest = $this->get_manifest();
+	public function script_loader_tag( string $tag, string $handle, string $src ): string {
+		$prefixes = [ 'theme-vite-client', 'theme-vite-entry-', 'theme-script-' ];
 
-		if ( ! isset( $manifest[ $entry ] ) ) {
-			die( esc_html__( 'Could not find entry in manifest for', 'wp-starter' ) . ' ' . esc_html( $entry ) );
-		}
+		$is_module = array_reduce(
+			$prefixes,
+			fn( $carry, $prefix ) => $carry || str_starts_with( $handle, $prefix ),
+			false
+		);
 
-		return $this->dist_url . $manifest[ $entry ]['file'];
-	}
-
-	/**
-	 * Get import URLs.
-	 *
-	 * @param string $entry The entry point file.
-	 *
-	 * @return array
-	 */
-	private function get_imports( string $entry ): array {
-		$urls     = [];
-		$manifest = $this->get_manifest();
-
-		if ( ! empty( $manifest[ $entry ]['imports'] ) ) {
-			foreach ( $manifest[ $entry ]['imports'] as $imports ) {
-				$urls[] = $this->dist_url . $manifest[ $imports ]['file'];
-			}
-		}
-
-		return $urls;
-	}
-
-	/**
-	 * Get CSS URLs
-	 *
-	 * @param string $entry The entry point file.
-	 *
-	 * @return array
-	 */
-	private function get_css( string $entry_file ): array {
-		$urls     = [];
-		$manifest = $this->get_manifest();
-
-		if ( ! empty( $manifest[ $entry_file ]['css'] ) ) {
-			foreach ( $manifest[ $entry_file ]['css'] as $file ) {
-				$urls[] = $this->dist_url . $file;
-			}
-		}
-
-		return $urls;
-	}
-
-	/**
-	 * Adjust theme script tags.
-	 *
-	 * @param string $tag    The generated tag (markup).
-	 * @param string $handle The script handle.
-	 * @param string $src    The script source.
-	 *
-	 * @return string
-	 */
-	public function script_loader( string $tag, string $handle, string $src ): string {
-		$theme_handles = [ 'theme-script-', 'theme-vite-canvas-' ];
-		$is_theme      = array_reduce( $theme_handles, fn( $carry, $prefix ) => $carry || str_contains( $handle, $prefix ), false );
-
-		if ( ! $is_theme ) {
+		if ( ! $is_module ) {
 			return $tag;
 		}
 
 		return str_replace( '<script ', '<script type="module" crossorigin ', $tag );
 	}
 
-	/**
-	 * Adjust theme style tags.
-	 *
-	 * @param string $tag    The generated tag (markup).
-	 * @param string $handle The style handle.
-	 * @param string $href   The style URL.
-	 * @param string $media  The style media.
-	 *
-	 * @return string
-	 */
-	public function style_loader( string $tag, string $handle, string $href, string $media ): string {
-		if ( ! str_contains( $handle, 'theme-style-preload-' ) ) {
-			return $tag;
-		}
+	// -------------------------------------------------------------------------
+	// Private — entry loading
+	// -------------------------------------------------------------------------
 
-		return str_replace( '<link ', '<link rel="modulepreload" ', $tag );
+	/**
+	 * Resolve the $entry parameter to concrete entry keys, applying mirroring.
+	 *
+	 * @param string|null $entry
+	 * @return string[]
+	 */
+	private function resolve_entries( ?string $entry ): array {
+		return match ( $entry ) {
+			null, 'default' => [ 'default', 'editor' ],
+			'main'          => [ 'default' ],
+			default         => [ $entry ],
+		};
 	}
 
 	/**
-	 * Enqueue Vite assets into the editor canvas iframe head.
+	 * Top-level dispatch: load one entry in dev or prod mode.
 	 *
-	 * The editor canvas is an iframe that renders the block content. Assets are
-	 * collected via _wp_get_iframed_editor_assets() which runs enqueue_block_assets
-	 * with should_load_block_editor_scripts_and_styles returning false.
-	 *
-	 * @param string $entry The entry point key.
+	 * @param string $key Entry key.
 	 */
-	public function block_assets( string $entry = 'editor' ): void {
-		if ( ! $this->get_entry( $entry ) ) {
+	private function enqueue_entry( string $key ): void {
+		if ( ! $this->get_entry( $key ) ) {
 			return;
 		}
 
-		$file = $this->get_entry( $entry );
+		if ( $this->is_dev() ) {
+			$this->enqueue_dev( $key );
+		} else {
+			$this->enqueue_prod_js( $key );
+			$this->enqueue_prod_css( $key );
+			$this->enqueue_preloads( $key );
+		}
 
-		add_action(
-			'enqueue_block_assets',
-			function () use ( $file, $entry ) {
-				// Only enqueue when collecting assets for the editor canvas iframe.
-				if ( apply_filters( 'should_load_block_editor_scripts_and_styles', true ) ) {
-					return;
-				}
+		// CSS deps (e.g. Typekit) enqueued in both dev and prod.
+		$this->enqueue_css_deps( $key );
+	}
 
-				if ( 'dev' === $this->env ) {
-					$vite_client_url = $this->dev_server . '/@vite/client';
-					$vite_entry_url  = $this->dev_server . '/' . $file;
+	/**
+	 * Dev mode: register and enqueue the Vite HMR client and entry script.
+	 *
+	 * 'theme-vite-client' is registered once; WordPress deduplicates if
+	 * multiple hooks call enqueue_dev() on the same admin page.
+	 *
+	 * @param string $key Entry key.
+	 */
+	private function enqueue_dev( string $key ): void {
+		$file   = $this->get_entry( $key );
+		$handle = 'theme-vite-entry-' . $key;
 
-					wp_enqueue_script(
-						'theme-vite-canvas-client',
-						$vite_client_url,
-						[],
-						wp_get_theme()->get( 'Version' ),
-						false
-					);
-					wp_enqueue_script(
-						'theme-vite-canvas-entry',
-						$vite_entry_url,
-						[ 'theme-vite-canvas-client' ],
-						wp_get_theme()->get( 'Version' ),
-						false
-					);
-				} else {
-					$script_url   = $this->get_asset_url( $file );
-					$manifest     = $this->get_manifest();
-					$dependencies = $manifest[ $file ]['dependencies'] ?? [];
-
-					wp_register_script(
-						'theme-vite-canvas-entry',
-						$script_url,
-						$dependencies,
-						wp_get_theme()->get( 'Version' ),
-						false
-					);
-
-					foreach ( $this->vars as $name => $values ) {
-						wp_localize_script(
-							'theme-vite-canvas-entry',
-							$name,
-							$values
-						);
-					}
-
-					wp_enqueue_script( 'theme-vite-canvas-entry' );
-
-					// Use same handle format as css() so getCompatibilityStyles() finds them
-					// in the iframe and doesn't warn about "added incorrectly".
-					foreach ( $this->get_css( $file ) as $index => $url ) {
-						if ( ! empty( $manifest[ $file ] ) ) {
-							$version      = $manifest[ $file ]['version'] ?? wp_get_theme()->get( 'Version' );
-							$dep          = $manifest[ $file ]['dependencies'] ?? [];
-							$suffix       = \count( $manifest[ $file ]['css'] ) > 1 ? '' : $index + 1;
-							$style_handle = 'theme-style-' . $manifest[ $file ]['name'] . $suffix;
-
-							wp_enqueue_style(
-								$style_handle,
-								$url,
-								$dep,
-								$version,
-								'all'
-							);
-						} else {
-							wp_enqueue_style(
-								'theme-vite-canvas-style-' . $index,
-								$url,
-								[],
-								wp_get_theme()->get( 'Version' )
-							);
-						}
-					}
-				}
-			},
-			5
+		// Vite HMR client — fixed handle, WP deduplicates on repeat enqueues.
+		wp_register_script(
+			'theme-vite-client',
+			$this->dev_server . '/@vite/client',
+			[],
+			null,
+			[ 'in_footer' => false ]
 		);
+
+		// Entry module — must load in <head> so Vite HMR sockets initialise early.
+		wp_register_script(
+			$handle,
+			$this->dev_server . '/' . $file,
+			array_merge( [ 'theme-vite-client' ], $this->js_deps[ $key ] ?? [] ),
+			null,
+			[ 'in_footer' => false ]
+		);
+
+		foreach ( $this->vars[ $key ] ?? [] as $name => $values ) {
+			wp_localize_script( $handle, $name, $values );
+		}
+
+		wp_enqueue_script( $handle );
+	}
+
+	/**
+	 * Prod mode: register and enqueue the built JS file from the manifest.
+	 *
+	 * @param string $key Entry key.
+	 */
+	private function enqueue_prod_js( string $key ): void {
+		$file     = $this->get_entry( $key );
+		$manifest = $this->get_manifest();
+
+		if ( empty( $manifest[ $file ] ) ) {
+			return;
+		}
+
+		$url    = $this->dist_url . $manifest[ $file ]['file'];
+		$ver    = $manifest[ $file ]['version'] ?? wp_get_theme()->get( 'Version' );
+		$deps   = array_merge(
+			$manifest[ $file ]['dependencies'] ?? [],
+			$this->js_deps[ $key ] ?? []
+		);
+		$handle = 'theme-script-' . $key;
+
+		wp_register_script( $handle, $url, $deps, $ver, [ 'in_footer' => true ] );
+
+		foreach ( $this->vars[ $key ] ?? [] as $name => $values ) {
+			wp_localize_script( $handle, $name, $values );
+		}
+
+		wp_enqueue_script( $handle );
+	}
+
+	/**
+	 * Prod mode: enqueue CSS files listed in the manifest for this entry.
+	 *
+	 * For the 'editor' entry this is typically a no-op because editor.js uses
+	 * virtual:editor-scoped-styles, which bundles the scoped CSS inside the JS.
+	 *
+	 * @param string $key Entry key.
+	 */
+	private function enqueue_prod_css( string $key ): void {
+		$file     = $this->get_entry( $key );
+		$manifest = $this->get_manifest();
+
+		if ( empty( $manifest[ $file ]['css'] ) ) {
+			return;
+		}
+
+		$ver          = $manifest[ $file ]['version'] ?? wp_get_theme()->get( 'Version' );
+		$css_dep_handles = $this->css_deps[ $key ] ?? [];
+
+		foreach ( $manifest[ $file ]['css'] as $index => $css_file ) {
+			$suffix = $index > 0 ? '-' . $index : '';
+			wp_enqueue_style(
+				'theme-style-' . $key . $suffix,
+				$this->dist_url . $css_file,
+				$css_dep_handles,
+				$ver
+			);
+		}
+	}
+
+	/**
+	 * Enqueue external CSS dependencies registered for an entry (both modes).
+	 *
+	 * @param string $key Entry key.
+	 */
+	private function enqueue_css_deps( string $key ): void {
+		foreach ( $this->css_deps[ $key ] ?? [] as $dep_handle ) {
+			if ( wp_style_is( $dep_handle, 'registered' ) ) {
+				wp_enqueue_style( $dep_handle );
+			}
+		}
+	}
+
+	/**
+	 * Prod mode: emit <link rel="modulepreload"> tags for Rollup dynamic imports.
+	 *
+	 * Called from within an enqueue hook callback, so we schedule output via
+	 * the corresponding head action which fires later in the same request.
+	 *
+	 * @param string $key Entry key.
+	 */
+	private function enqueue_preloads( string $key ): void {
+		$file     = $this->get_entry( $key );
+		$manifest = $this->get_manifest();
+		$imports  = $manifest[ $file ]['imports'] ?? [];
+
+		if ( empty( $imports ) ) {
+			return;
+		}
+
+		$urls = array_filter( array_map(
+			fn( $chunk ) => isset( $manifest[ $chunk ]['file'] )
+				? $this->dist_url . $manifest[ $chunk ]['file']
+				: null,
+			$imports
+		));
+
+		if ( empty( $urls ) ) {
+			return;
+		}
+
+		$hook = is_admin() ? 'admin_head' : 'wp_head';
+		add_action( $hook, function () use ( $urls ) {
+			foreach ( $urls as $url ) {
+				printf( '<link rel="modulepreload" href="%s">' . PHP_EOL, esc_url( $url ) );
+			}
+		});
+	}
+
+	/**
+	 * Show a one-time admin notice when manifest.json is missing or unreadable.
+	 */
+	private function maybe_show_manifest_notice(): void {
+		if ( $this->did_manifest_notice ) {
+			return;
+		}
+
+		$this->did_manifest_notice = true;
+
+		add_action( 'admin_notices', function () {
+			printf(
+				'<div class="notice notice-warning is-dismissible"><p>%s</p></div>',
+				esc_html__( 'Vite manifest.json is missing. Run "ddev npm run build" to generate it.', 'wp-starter' )
+			);
+		});
 	}
 }
