@@ -15,10 +15,20 @@ location @media_proxy {
 
     # Use variable to force DNS resolution
     set $upstream_host ""; # Set to the domain you want to proxy to.
+
+    # Optional upstream Basic Auth
+    # From a shell (macOS/Linux), with username and password substituted:
+    #   printf 'username:password' | base64 | tr -d '\n'
+    # Then assign (note the "Basic " prefix and a single line of base64):
+    #   set $media_proxy_authorization "Basic PASTE_OUTPUT_HERE";
+    # Leave empty to omit the Authorization header entirely.
+    set $media_proxy_authorization "";
+
     proxy_pass https://$upstream_host$uri;
 
     # Essential headers
     proxy_set_header Host $upstream_host;
+    proxy_set_header Authorization $media_proxy_authorization;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
