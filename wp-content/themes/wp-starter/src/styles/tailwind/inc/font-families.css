@@ -1,3 +1,10 @@
+/**
+There shouldn't be a need to change these here unless adding a new font:
+--cfg-font-alt: var(--wp--preset--font-family--alt);
+
+Manage fonts from theme-json/settings/typography.js file.
+
+*/
 :root {
 	--cfg-font-body: var(--wp--preset--font-family--body);
 	--cfg-font-heading: var(--wp--preset--font-family--heading);
