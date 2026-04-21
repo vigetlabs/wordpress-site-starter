@@ -5,11 +5,15 @@
   "icon": "align-center",
   "category": "components",
   "textdomain": "wp-starter",
-  "keywords": ["cta", "button", "heading", "section"],
+  "keywords": [ "cta", "button", "heading", "section" ],
   "attributes": {
     "align": {
       "type": "string",
       "default": "full"
+    },
+    "templateLock": {
+      "type": "string",
+      "default": "contentOnly"
     },
     "style": {
       "type": "object",
@@ -32,6 +36,7 @@
       "backgroundImage": true,
       "backgroundSize": true
     },
+    "innerContainer": false,
     "layout": {
       "default": {
         "type": "constrained",
@@ -41,7 +46,7 @@
       "allowCustomContentAndWideSize": false
     },
     "spacing": {
-      "padding": ["top", "bottom"]
+      "padding": [ "top", "bottom" ]
     }
   },
   "acf": {
