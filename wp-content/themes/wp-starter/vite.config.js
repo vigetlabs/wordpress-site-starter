@@ -3,6 +3,8 @@ import path from 'path';
 import liveReload from 'vite-plugin-live-reload';
 import generateThemeJSON, { buildJSON } from './src/theme-json/generate.js';
 import viteGlobWatch from './src/plugins/vite-glob-watch.js';
+import viteEditorStyles from './src/plugins/vite-scoped-editor-styles.js';
+
 const THEME = '/wp-content/themes/wp-starter';
 
 export default defineConfig(({ command }) => ({
@@ -20,6 +22,13 @@ export default defineConfig(({ command }) => ({
 				path.resolve(__dirname, './blocks/**/*.css'),
 			],
 		}),
+		viteEditorStyles({
+			cssEntry: path.resolve(__dirname, 'src/styles/main.css'),
+			watchPaths: [
+				path.resolve(__dirname, './src/**/*.css'),
+				path.resolve(__dirname, './blocks/**/*.css'),
+			],
+		}),
 	],
 	build: {
 		// output dir for production build
@@ -27,12 +36,13 @@ export default defineConfig(({ command }) => ({
 		emptyOutDir: true,
 		// emit manifest so PHP can find the hashed files
 		manifest: true,
-		// our entry
+		minify: 'terser',
 		rollupOptions: {
 			input: {
-				'main': path.resolve(__dirname, 'src/main.js'),
-				'admin': path.resolve(__dirname, 'src/admin.js'),
-			}
+				main:   path.resolve(__dirname, 'src/main.js'),
+				admin:  path.resolve(__dirname, 'src/admin.js'),
+				editor: path.resolve(__dirname, 'src/editor.js'),
+			},
 		},
 	},
 	server: {

@@ -19,11 +19,13 @@
     "plop": "^4.0.5",
     "postcss": "^8.5.6",
     "postcss-import-ext-glob": "^2.1.1",
+    "postcss-prefix-selector": "^2.1.1",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.6.13",
     "tailwindcss": "^4.1.18",
-    "vite": "^7.3.1",
-    "vite-plugin-live-reload": "^3.0.5"
+    "terser": "^5.46.1",
+    "vite": "^8.0.8",
+    "vite-plugin-live-reload": "^3.1.0"
   },
   "dependencies": {
     "@alpinejs/focus": "^3.15.8",
