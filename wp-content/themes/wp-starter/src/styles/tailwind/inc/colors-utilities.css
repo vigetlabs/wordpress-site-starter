@@ -1,0 +1,10 @@
+/*
+ * Tailwind-only theme tokens
+ * --------------------------
+ * This file is not read by theme-json/helpers/colors.js.
+ */
+@theme {
+	--color-transparent: transparent;
+	--color-current: currentColor;
+ 	--color-accent: #00A3EE;
+}

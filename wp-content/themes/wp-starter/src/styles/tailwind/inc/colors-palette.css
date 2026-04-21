@@ -1,0 +1,13 @@
+/*
+ * Block editor + theme.json palette
+ * -------------------------------
+ * Colors and gradients defined here are read by src/theme-json/helpers/colors.js
+ * and become WordPress color / gradient presets (block picker, theme.json).
+ *
+ * For Tailwind-only tokens that must not appear in the editor, use `colors-utilities.css`.
+ */
+@theme {
+	/* Theme Colors */
+	--color-white: #ffffff;
+	--color-black: #000000;
+}
