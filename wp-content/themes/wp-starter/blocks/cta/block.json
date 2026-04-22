@@ -15,6 +15,10 @@
       "type": "string",
       "default": "contentOnly"
     },
+    "blockPattern": {
+      "type": "string",
+      "default": "cta-default"
+    },
     "style": {
       "type": "object",
       "default": {

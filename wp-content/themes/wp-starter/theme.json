@@ -709,6 +709,11 @@
   },
   "templateParts": [
     {
+      "name": "cta",
+      "title": "Cta",
+      "area": "uncategorized"
+    },
+    {
       "name": "footer",
       "title": "Footer",
       "area": "footer"

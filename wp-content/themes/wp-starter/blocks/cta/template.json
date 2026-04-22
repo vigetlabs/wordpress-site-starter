@@ -1,11 +1,153 @@
 {
   "template": [
     [
-      "core/template-part",
+      "core/heading",
       {
-        "slug": "cta",
-        "templateLock": "contentOnly"
+        "placeholder": "Headline Goes Here",
+        "textAlign": "center",
+        "style": {
+					"typography": {
+						"textAlign": "center"
+					}
+				},
+        "role": "content"
       }
+    ],
+    [
+      "core/paragraph",
+      {
+        "align": "center",
+        "placeholder": "Body text goes here...",
+        "style": {
+					"typography": {
+						"textAlign": "center"
+					}
+				},
+        "role": "content"
+      }
+    ],
+    [
+      "core/buttons",
+      {
+        "layout": {
+          "type": "flex",
+          "justifyContent": "center"
+        },
+        "role": "content"
+      },
+      [
+        [
+          "core/button",
+          {
+            "placeholder": "Button Text",
+            "role": "content"
+          }
+        ]
+      ]
+    ],
+    [
+      "core/group",
+      {
+        "templateLock": "contentOnly"
+      },
+      [
+        [
+          "core/heading",
+          {
+            "placeholder": "Headline Goes Here",
+            "textAlign": "center",
+            "style": {
+              "typography": {
+                "textAlign": "center"
+              }
+            },
+            "role": "content"
+          }
+        ],
+        [
+          "core/paragraph",
+          {
+            "align": "center",
+            "placeholder": "Body text goes here...",
+            "style": {
+              "typography": {
+                "textAlign": "center"
+              }
+            },
+            "role": "content"
+          }
+        ],
+        [
+          "core/buttons",
+          {
+            "layout": {
+              "type": "flex",
+              "justifyContent": "center"
+            },
+            "role": "content"
+          },
+          [
+            [
+              "core/button",
+              {
+                "placeholder": "Button Text",
+                "role": "content"
+              }
+            ]
+          ]
+        ]
+      ]
+    ],
+    [
+      "core/group",
+      {},
+      [
+        [
+          "core/heading",
+          {
+            "placeholder": "Headline Goes Here",
+            "textAlign": "center",
+            "style": {
+              "typography": {
+                "textAlign": "center"
+              }
+            },
+            "role": "content"
+          }
+        ],
+        [
+          "core/paragraph",
+          {
+            "align": "center",
+            "placeholder": "Body text goes here...",
+            "style": {
+              "typography": {
+                "textAlign": "center"
+              }
+            },
+            "role": "content"
+          }
+        ],
+        [
+          "core/buttons",
+          {
+            "layout": {
+              "type": "flex",
+              "justifyContent": "center"
+            },
+            "role": "content"
+          },
+          [
+            [
+              "core/button",
+              {
+                "placeholder": "Button Text",
+                "role": "content"
+              }
+            ]
+          ]
+        ]
+      ]
     ]
   ]
 }
