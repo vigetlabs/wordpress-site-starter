@@ -32,15 +32,6 @@ require_once get_stylesheet_directory() . '/inc/assets.php';
 // Block Functions.
 require_once get_stylesheet_directory() . '/inc/blocks.php';
 
-// Synced patterns (wp_block) maintained by the theme.
-require_once get_stylesheet_directory() . '/inc/synced-patterns.php';
-
-// WP-CLI commands.
-if ( defined( 'WP_CLI' ) && WP_CLI ) {
-	require_once get_stylesheet_directory() . '/inc/cli/wpstarter-cli.php';
-	\WPStarter\CLI\WpStarter_CLI::register();
-}
-
 // Custom Icons.
 require_once get_stylesheet_directory() . '/inc/icons.php';
 
