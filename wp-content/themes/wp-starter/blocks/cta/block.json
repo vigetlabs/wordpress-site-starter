@@ -49,6 +49,10 @@
       "allowOrientation": false,
       "allowCustomContentAndWideSize": false
     },
+    "lock": {
+      "move": true,
+      "remove": false
+    },
     "spacing": {
       "padding": [ "top", "bottom" ]
     }
