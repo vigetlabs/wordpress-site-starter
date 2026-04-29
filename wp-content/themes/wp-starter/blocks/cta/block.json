@@ -2,7 +2,7 @@
   "name": "cta",
   "title": "Call to Action",
   "description": "Displays the Call to Action Component.",
-  "icon": "align-center",
+  "icon": "megaphone",
   "category": "components",
   "textdomain": "wp-starter",
   "keywords": [ "cta", "button", "heading", "section" ],
@@ -14,10 +14,6 @@
     "templateLock": {
       "type": "string",
       "default": "contentOnly"
-    },
-    "blockPattern": {
-      "type": "string",
-      "default": "cta-default"
     },
     "style": {
       "type": "object",

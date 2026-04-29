@@ -1,153 +1,44 @@
 {
-  "template": [
-    [
-      "core/heading",
-      {
-        "placeholder": "Headline Goes Here",
-        "textAlign": "center",
-        "style": {
+	"template": [
+		[
+			"core/heading",
+			{
+				"level": 2,
+				"placeholder": "Headline Goes Here",
+				"style": {
 					"typography": {
 						"textAlign": "center"
 					}
-				},
-        "role": "content"
-      }
-    ],
-    [
-      "core/paragraph",
-      {
-        "align": "center",
-        "placeholder": "Body text goes here...",
-        "style": {
+				}
+			}
+		],
+		[
+			"core/paragraph",
+			{
+				"placeholder": "Body text goes here...",
+				"style": {
 					"typography": {
 						"textAlign": "center"
 					}
-				},
-        "role": "content"
-      }
-    ],
-    [
-      "core/buttons",
-      {
-        "layout": {
-          "type": "flex",
-          "justifyContent": "center"
-        },
-        "role": "content"
-      },
-      [
-        [
-          "core/button",
-          {
-            "placeholder": "Button Text",
-            "role": "content"
-          }
-        ]
-      ]
-    ],
-    [
-      "core/group",
-      {
-        "templateLock": "contentOnly"
-      },
-      [
-        [
-          "core/heading",
-          {
-            "placeholder": "Headline Goes Here",
-            "textAlign": "center",
-            "style": {
-              "typography": {
-                "textAlign": "center"
-              }
-            },
-            "role": "content"
-          }
-        ],
-        [
-          "core/paragraph",
-          {
-            "align": "center",
-            "placeholder": "Body text goes here...",
-            "style": {
-              "typography": {
-                "textAlign": "center"
-              }
-            },
-            "role": "content"
-          }
-        ],
-        [
-          "core/buttons",
-          {
-            "layout": {
-              "type": "flex",
-              "justifyContent": "center"
-            },
-            "role": "content"
-          },
-          [
-            [
-              "core/button",
-              {
-                "placeholder": "Button Text",
-                "role": "content"
-              }
-            ]
-          ]
-        ]
-      ]
-    ],
-    [
-      "core/group",
-      {},
-      [
-        [
-          "core/heading",
-          {
-            "placeholder": "Headline Goes Here",
-            "textAlign": "center",
-            "style": {
-              "typography": {
-                "textAlign": "center"
-              }
-            },
-            "role": "content"
-          }
-        ],
-        [
-          "core/paragraph",
-          {
-            "align": "center",
-            "placeholder": "Body text goes here...",
-            "style": {
-              "typography": {
-                "textAlign": "center"
-              }
-            },
-            "role": "content"
-          }
-        ],
-        [
-          "core/buttons",
-          {
-            "layout": {
-              "type": "flex",
-              "justifyContent": "center"
-            },
-            "role": "content"
-          },
-          [
-            [
-              "core/button",
-              {
-                "placeholder": "Button Text",
-                "role": "content"
-              }
-            ]
-          ]
-        ]
-      ]
-    ]
-  ]
+				}
+			}
+		],
+		[
+			"core/buttons",
+			{
+				"layout": {
+					"type": "flex",
+					"justifyContent": "center"
+				}
+			},
+			[
+				[
+					"core/button",
+					{
+						"placeholder": "Button Text"
+					}
+				]
+			]
+		]
+	]
 }
