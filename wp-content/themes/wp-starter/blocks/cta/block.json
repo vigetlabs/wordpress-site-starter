@@ -36,7 +36,6 @@
       "backgroundImage": true,
       "backgroundSize": true
     },
-    "innerContainer": false,
     "layout": {
       "default": {
         "type": "constrained",
