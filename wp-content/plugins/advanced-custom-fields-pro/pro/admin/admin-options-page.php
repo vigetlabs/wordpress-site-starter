@@ -3,7 +3,7 @@
  * @package ACF
  * @author  WP Engine
  *
- * © 2025 Advanced Custom Fields (ACF®). All rights reserved.
+ * © 2026 Advanced Custom Fields (ACF®). All rights reserved.
  * "ACF" is a trademark of WP Engine.
  * Licensed under the GNU General Public License v2 or later.
  * https://www.gnu.org/licenses/gpl-2.0.html
@@ -117,6 +117,9 @@ if ( ! class_exists( 'acf_admin_options_page' ) ) :
 
 			// load acf scripts
 			acf_enqueue_scripts();
+
+			// Localize options page slug for repeater pagination capability checks.
+			acf_localize_data( array( 'options_page_slug' => $this->page['menu_slug'] ) );
 
 			// actions
 			add_action( 'acf/input/admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );

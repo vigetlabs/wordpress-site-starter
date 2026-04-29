@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b367c89bb9b2c49e0237c1a7a246fbc9",
+    "content-hash": "a1575f5c3b983d0cd1ec825b661a4e94",
     "packages": [
         {
             "name": "composer/installers",
@@ -1005,16 +1005,16 @@
         },
         {
             "name": "viget/viget-blocks-toolkit",
-            "version": "v1.1.3",
+            "version": "v1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vigetlabs/viget-blocks-toolkit.git",
-                "reference": "0ef0133fdf74f0ca91f4453d25524249f3e0cd26"
+                "reference": "4bf3652fb267c03c54a55dc9aa28ef1d32a59be7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vigetlabs/viget-blocks-toolkit/zipball/0ef0133fdf74f0ca91f4453d25524249f3e0cd26",
-                "reference": "0ef0133fdf74f0ca91f4453d25524249f3e0cd26",
+                "url": "https://api.github.com/repos/vigetlabs/viget-blocks-toolkit/zipball/4bf3652fb267c03c54a55dc9aa28ef1d32a59be7",
+                "reference": "4bf3652fb267c03c54a55dc9aa28ef1d32a59be7",
                 "shasum": ""
             },
             "require": {
@@ -1044,21 +1044,21 @@
             ],
             "support": {
                 "issues": "https://github.com/vigetlabs/viget-blocks-toolkit/issues",
-                "source": "https://github.com/vigetlabs/viget-blocks-toolkit/tree/v1.1.3"
+                "source": "https://github.com/vigetlabs/viget-blocks-toolkit/tree/v1.1.5"
             },
-            "time": "2025-12-22T19:11:23+00:00"
+            "time": "2026-03-25T23:55:41+00:00"
         },
         {
             "name": "wpackagist-plugin/accessibility-checker",
-            "version": "1.37.0",
+            "version": "1.39.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/accessibility-checker/",
-                "reference": "tags/1.37.0"
+                "reference": "tags/1.39.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/accessibility-checker.1.37.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/accessibility-checker.1.39.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -1749,21 +1749,57 @@
         },
         {
             "name": "wpackagist-plugin/create-block-theme",
-            "version": "2.8.0",
+            "version": "2.9.0",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/create-block-theme/",
-                "reference": "tags/2.8.0"
+                "reference": "tags/2.9.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/create-block-theme.2.8.0.zip"
+                "url": "https://downloads.wordpress.org/plugin/create-block-theme.2.9.0.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/create-block-theme/"
+        },
+        {
+            "name": "wpackagist-plugin/plugin-check",
+            "version": "1.9.0",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/plugin-check/",
+                "reference": "tags/1.9.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/plugin-check.1.9.0.zip"
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/plugin-check/"
+        },
+        {
+            "name": "wpackagist-plugin/wp-mail-logging",
+            "version": "1.16.0",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/wp-mail-logging/",
+                "reference": "tags/1.16.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/wp-mail-logging.1.16.0.zip"
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/wp-mail-logging/"
         }
     ],
     "aliases": [],
