@@ -42,7 +42,7 @@
       "attributes": {
         "align": "left",
         "layout": {
-            "justifyContent": "left"
+          "justifyContent": "left"
         }
       },
       "scope": [ "transform" ],
