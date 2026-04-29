@@ -5,22 +5,32 @@
   "icon": "format-image",
   "category": "components",
   "textdomain": "wp-starter",
-  "keywords": ["photo", "upload", "media", "picture", "image", "caption"],
-  "allowedBlocks":[ "core/image" ],
+  "keywords": [ "photo", "upload", "media", "picture", "image", "caption" ],
+  "allowedBlocks": [ "core/image" ],
+  "attributes": {
+    "templateLock": {
+      "type": "string",
+      "default": "contentOnly"
+    }
+  },
   "supports": {
     "jsx": true,
     "mode": false,
     "alignWide": true,
+    "color": {
+      "background": true
+    },
     "layout": {
       "default": {
         "type": "constrained"
       }
     },
-    "color": {
-      "background": true
+    "lock": {
+      "move": true,
+      "remove": false
     },
     "spacing": {
-      "margin": ["top", "bottom"]
+      "margin": [ "top", "bottom" ]
     }
   },
   "acf": {
