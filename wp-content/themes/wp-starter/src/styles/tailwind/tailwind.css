@@ -23,10 +23,10 @@
 	--breakpoint-mobile-menu: 600px;
 	--breakpoint-xs: 480px;
 
-	/* Flex Basis */
-	--flex-basis-1/2-gap: calc((100% / 2) - var(--wp--style--block-gap));
-	--flex-basis-1/3-gap: calc((100% / 3) - var(--wp--style--block-gap));
-	--flex-basis-1/4-gap: calc((100% / 4) - var(--wp--style--block-gap));
+	/* Flex basis minus block gap */
+	--flex-basis-1\/2-gap: calc((100% / 2) - var(--wp--style--block-gap));
+	--flex-basis-1\/3-gap: calc((100% / 3) - var(--wp--style--block-gap));
+	--flex-basis-1\/4-gap: calc((100% / 4) - var(--wp--style--block-gap));
 
 	/* Rounded Corners */
 	--radius-default: 0.5rem;

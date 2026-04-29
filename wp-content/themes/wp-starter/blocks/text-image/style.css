@@ -1,12 +1,12 @@
 .acf-block-text-image {
-	.wp-block-media-text {
+	& .wp-block-media-text {
 		@apply gap-fluid-sm;
 	}
-	.wp-block-media-text__media {
+	& .wp-block-media-text__media {
 		@apply w-full;
 	}
 
-	.wp-block-media-text__content {
+	& .wp-block-media-text__content {
 		@apply flex flex-col items-start gap-16 p-0;
 
 		.is-style-eyebrow {

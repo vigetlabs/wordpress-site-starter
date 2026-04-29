@@ -1,7 +1,11 @@
 .acf-block-logo-grid {
 	@apply flex flex-wrap justify-center gap-24;
 
-	& figure {
+	> .acf-innerblocks-container {
+		@apply contents;
+	}
+
+	figure {
 		@apply flex;
 		@apply aspect-5/3;
 		@apply basis-1/2-gap lg:basis-1/4-gap;
@@ -18,7 +22,7 @@
 	}
 
 	/* Fix for image sizing in editor */
-	& .components-resizable-box__container {
+	.components-resizable-box__container {
 		@apply shrink!;
 	}
 }

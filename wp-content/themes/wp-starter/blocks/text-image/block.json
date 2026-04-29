@@ -5,13 +5,14 @@
   "icon": "align-left",
   "category": "components",
   "textdomain": "wp-starter",
-  "keywords": ["photo", "upload", "media", "picture", "image", "align", "left", "right", "content", "text"],
-  "allowedBlocks": [
-    "core/media-text",
-    "core/paragraph",
-    "core/heading",
-    "core/group"
-  ],
+  "keywords": [ "photo", "upload", "media", "picture", "image", "align", "left", "right", "content", "text" ],
+  "allowedBlocks": [ "core/media-text", "core/paragraph", "core/heading", "core/group" ],
+  "attributes": {
+    "templateLock": {
+      "type": "string",
+      "default": "contentOnly"
+    }
+  },
   "supports": {
     "jsx": true,
     "mode": false,
@@ -20,7 +21,7 @@
       "background": true
     },
     "spacing": {
-      "padding": ["top", "bottom"]
+      "padding": [ "top", "bottom" ]
     },
     "layout": {
       "default": {
@@ -28,6 +29,24 @@
       },
       "allowOrientation": false,
       "allowCustomContentAndWideSize": false
+    },
+    "lock": {
+      "move": true,
+      "remove": false
+    },
+    "mediaPosition": {
+      "transformations": [
+        {
+          "core/media-text": {
+            "attributes": {
+              "mediaPosition": {
+                "left": "left",
+                "right": "right"
+              }
+            }
+          }
+        }
+      ]
     }
   },
   "acf": {

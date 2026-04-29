@@ -42,7 +42,7 @@ function wpstarter_breadcrumbs( ?array $block_template = [] ): void {
 	}
 
 	if ( ! $block_template ) {
-		$block_template = [];
+		$block_template = [ [ 'core/breadcrumbs' ] ];
 	}
 
 	$inner = [

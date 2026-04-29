@@ -5,14 +5,10 @@
   "icon": "menu-alt3",
   "category": "components",
   "textdomain": "wp-starter",
-  "keywords": [
-    "menu",
-    "mobile",
-    "group",
-    "toggle"
-  ],
+  "keywords": [ "menu", "mobile", "group", "toggle" ],
   "supports": {
     "jsx": true,
+    "innerContainer": true,
     "layout": {
       "default": {
         "type": "flex",

@@ -5,11 +5,15 @@
   "icon": "schedule",
   "category": "components",
   "textdomain": "wp-starter",
-  "keywords": ["header", "hero", "heading", "section", "top", "logo", "branding"],
+  "keywords": [ "header", "hero", "heading", "section", "top", "logo", "branding" ],
   "attributes": {
     "align": {
       "type": "string",
       "default": "full"
+    },
+    "templateLock": {
+      "type": "string",
+      "default": "contentOnly"
     },
     "useRootPaddingAwareAlignments": {
       "type": "boolean",
@@ -47,6 +51,10 @@
         "type": "constrained"
       },
       "allowCustomContentAndWideSize": false
+    },
+    "lock": {
+      "move": true,
+      "remove": false
     }
   },
   "acf": {
