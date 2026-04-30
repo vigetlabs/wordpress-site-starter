@@ -1,0 +1,23 @@
+@layer components {
+	html:has(.acf-block-dialog[open]),
+	body:has(.acf-block-dialog[open]) {
+		@apply overflow-hidden;
+	}
+
+	.acf-block-dialog {
+		@apply top-0 right-0 bottom-0 left-0 !m-auto h-1/2 w-1/2 rounded border-none bg-white;
+
+		&::backdrop {
+			@apply bg-black/70;
+		}
+
+		.acf-dialog-close {
+			@apply absolute top-12 right-12 z-10 m-auto size-32 cursor-pointer border border-none border-black bg-transparent hover:bg-black;
+			@apply after:flex after:items-center after:justify-center after:text-black after:content-['\2715'] hover:after:text-white;
+		}
+
+		> .inner {
+			@apply flex flex-col p-24;
+		}
+	}
+}
