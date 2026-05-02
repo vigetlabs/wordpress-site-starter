@@ -9,6 +9,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /** Directory containing this file (`src/theme-json`). */
 const THEME_JSON_DIR = __dirname;
+/** Theme-root `blocks/` (not `src/blocks`). */
+const THEME_BLOCKS_DIR = path.join(__dirname, '../../blocks');
 
 /** Fluid typography sources: changing breakpoints or font ranges should refresh theme.json presets. */
 const FLUID_CSS_WATCH_PATHS = [
@@ -23,11 +25,47 @@ const generateThemeJSON = {
 			buildJSON();
 		};
 
-		fs.watch(THEME_JSON_DIR, rebuild);
+		rebuild();
 
-		for (const watchPath of FLUID_CSS_WATCH_PATHS) {
-			fs.watch(watchPath, rebuild);
+		const themeJsonAbs = path.normalize(THEME_JSON_DIR);
+		const blocksAbs = path.normalize(THEME_BLOCKS_DIR);
+		const fluidAbs = FLUID_CSS_WATCH_PATHS.map((p) => path.normalize(p));
+
+		server.watcher.add(themeJsonAbs);
+		if (fs.existsSync(THEME_BLOCKS_DIR)) {
+			server.watcher.add(blocksAbs);
 		}
+		for (const watchPath of fluidAbs) {
+			server.watcher.add(watchPath);
+		}
+
+		const shouldRebuild = (filePath) => {
+			const normalized = path.normalize(filePath);
+			if (normalized.startsWith(themeJsonAbs)) {
+				return true;
+			}
+			if (
+				normalized.endsWith('block.json') &&
+				normalized.includes(`${path.sep}blocks${path.sep}`)
+			) {
+				return true;
+			}
+			if (fluidAbs.some((p) => normalized === p)) {
+				return true;
+			}
+			return false;
+		};
+
+		server.watcher.on('change', (filePath) => {
+			if (shouldRebuild(filePath)) {
+				rebuild();
+			}
+		});
+		server.watcher.on('add', (filePath) => {
+			if (shouldRebuild(filePath)) {
+				rebuild();
+			}
+		});
 	},
 };
 

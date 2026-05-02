@@ -1,7 +1,7 @@
 /*
  * Tailwind-only theme tokens
  * --------------------------
- * This file is not read by theme-json/helpers/colors.js.
+ * Merged into getPaletteAll() for block.json color slugs; not part of the global editor palette.
  */
 @theme {
 	--color-transparent: transparent;

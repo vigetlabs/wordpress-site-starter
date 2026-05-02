@@ -1,4 +1,7 @@
-//Hide/show setting in the block editor
+// Configure custom block settings for each block to override the default theme settings.
+
+import { getThemeBlockSettings } from '../helpers/blocks.js';
+
 export default {
 	'core/button': {
 		border: {
@@ -59,4 +62,5 @@ export default {
 			width: false,
 		},
 	},
+	...getThemeBlockSettings()
 };
