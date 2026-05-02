@@ -1,8 +1,7 @@
 import { getPalette, getGradients } from '../helpers/colors.js';
 
 /**
- * Palette and gradients come from `src/styles/tailwind/inc/colors-palette.css` only.
- * Add Tailwind-only tokens in `colors-utilities.css` so they stay out of the block editor.
+ * Global preset lists come from `colors-palette.css`. Tokens in `colors-utilities.css` stay out of the global palette.
  */
 export default {
 	defaultDuotone: false,

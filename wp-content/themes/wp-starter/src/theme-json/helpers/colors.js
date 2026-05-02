@@ -62,11 +62,16 @@ const EDITOR_PALETTE_CSS = path.join(
 	'src/styles/tailwind/inc/colors-palette.css',
 );
 
+/** Tailwind-only tokens; merged into `getPaletteAll()` / `getColorObject()` but excluded from global `getPalette()`. */
+const EDITOR_UTILITIES_CSS = path.join(
+	process.cwd(),
+	'src/styles/tailwind/inc/colors-utilities.css',
+);
+
 /**
  * Parse the palette CSS file to extract color variables from the @theme directive.
- * Tailwind-only colors live in colors-utilities.css and are intentionally not parsed here.
  *
- * @returns {object} The color palette object
+ * @returns {object} map of token name -> CSS value
  */
 function parseColorsFromCSS() {
 	const cssPath = EDITOR_PALETTE_CSS;
@@ -103,6 +108,46 @@ function parseColorsFromCSS() {
 		return colors;
 	} catch (error) {
 		console.error('Error reading CSS file:', error);
+		return {};
+	}
+}
+
+/**
+ * Parse colors-utilities.css @theme block (--color-* only).
+ *
+ * @returns {object} map of token name -> CSS value
+ */
+function parseUtilitiesColorsFromCSS() {
+	try {
+		if (!fs.existsSync(EDITOR_UTILITIES_CSS)) {
+			return {};
+		}
+
+		const cssContent = fs.readFileSync(EDITOR_UTILITIES_CSS, 'utf8');
+		const themeMatch = cssContent.match(/@theme\s*\{([\s\S]*?)\}/);
+		if (!themeMatch) {
+			return {};
+		}
+
+		const themeContent = themeMatch[1];
+		const colorRegex = /--color-([^:]+):\s*([^;]+);/g;
+		const colors = {};
+		let match;
+
+		while ((match = colorRegex.exec(themeContent)) !== null) {
+			const colorName = match[1].trim();
+			const colorValue = match[2].trim();
+
+			if (colorValue === 'transparent' || colorValue === 'currentColor') {
+				continue;
+			}
+
+			colors[colorName] = colorValue;
+		}
+
+		return colors;
+	} catch (error) {
+		console.error('Error reading utilities CSS file:', error);
 		return {};
 	}
 }
@@ -189,6 +234,96 @@ function getPalette() {
 }
 
 /**
+ * Utility-only palette entries (same slug rules as {@link getPalette}).
+ *
+ * @returns {Array<{ color: string, name: string, slug: string }>}
+ */
+function getUtilitiesPalette() {
+	const palette = [];
+	const colors = parseUtilitiesColorsFromCSS();
+
+	const specialColors = ['base', 'contrast', 'accent-4', 'accent-5', 'accent-6', 'accent'];
+
+	for (const color in colors) {
+		if (['transparent', 'current', 'currentColor'].includes(color)) {
+			continue;
+		}
+
+		let slug;
+		if (specialColors.includes(color)) {
+			slug = color;
+		} else {
+			slug = isDark(colors[color]) ? `dark-${color}` : color;
+		}
+
+		palette.push({
+			color: colors[color],
+			name: toTitleCase(color),
+			slug,
+		});
+	}
+
+	return palette;
+}
+
+/**
+ * Palette tokens from colors-palette.css plus colors-utilities.css (for slug resolution in block.json).
+ * Core entries win when slug matches.
+ *
+ * @returns {Array<{ color: string, name: string, slug: string }>}
+ */
+function getPaletteAll() {
+	const core = getPalette();
+	const utils = getUtilitiesPalette();
+	const bySlug = new Map();
+
+	for (const entry of core) {
+		bySlug.set(entry.slug, entry);
+	}
+
+	for (const entry of utils) {
+		if (!bySlug.has(entry.slug)) {
+			bySlug.set(entry.slug, entry);
+		}
+	}
+
+	return [...bySlug.values()];
+}
+
+/**
+ * Gradients from colors-palette.css @theme plus optional utilities file.
+ *
+ * @returns {Array<{ gradient: string, name: string, slug: string }>}
+ */
+function parseGradientsFromUtilitiesCSS() {
+	try {
+		if (!fs.existsSync(EDITOR_UTILITIES_CSS)) {
+			return {};
+		}
+
+		const cssContent = fs.readFileSync(EDITOR_UTILITIES_CSS, 'utf8');
+		const themeMatch = cssContent.match(/@theme\s*\{([\s\S]*?)\}/);
+		if (!themeMatch) {
+			return {};
+		}
+
+		const themeContent = themeMatch[1];
+		const gradientRegex = /--gradient-([^:]+):\s*([^;]+);/g;
+		const gradients = {};
+		let match;
+
+		while ((match = gradientRegex.exec(themeContent)) !== null) {
+			gradients[match[1].trim()] = match[2].trim();
+		}
+
+		return gradients;
+	} catch (error) {
+		console.error('Error reading utilities gradients:', error);
+		return {};
+	}
+}
+
+/**
  * Get the gradients from the theme.
  *
  * @returns {*[]}
@@ -210,4 +345,84 @@ function getGradients() {
 	return gradients;
 }
 
-export { getPalette, getGradients };
+/**
+ * Gradients from palette + utilities (utilities fill slugs not in core).
+ *
+ * @returns {Array<{ gradient: string, name: string, slug: string }>}
+ */
+function getGradientsAll() {
+	const core = getGradients();
+	const gradientVars = parseGradientsFromUtilitiesCSS();
+	const extras = [];
+
+	for (const key in gradientVars) {
+		extras.push({
+			gradient: gradientVars[key],
+			name: toTitleCase(key),
+			slug: key,
+		});
+	}
+
+	const bySlug = new Map();
+	for (const entry of core) {
+		bySlug.set(entry.slug, entry);
+	}
+	for (const entry of extras) {
+		if (!bySlug.has(entry.slug)) {
+			bySlug.set(entry.slug, entry);
+		}
+	}
+
+	return [...bySlug.values()];
+}
+
+/**
+ * Global duotone presets (extend when duotone tokens are added to theme CSS or theme.json).
+ *
+ * @returns {Array<{ colors: string[], name: string, slug: string }>}
+ */
+function getDuotones() {
+	return [];
+}
+
+/**
+ * Get a color object from the palette or utilities.
+ *
+ * @param {string} color - The color slug.
+ *
+ * @returns {object|undefined} The color object.
+ */
+function getColorObject(color) {
+	return getPaletteAll().find((item) => item.slug === color);
+}
+
+/**
+ * Resolve a gradient preset by slug.
+ *
+ * @param {string} slug
+ * @returns {object|undefined}
+ */
+function getGradientObject(slug) {
+	return getGradientsAll().find((item) => item.slug === slug);
+}
+
+/**
+ * Resolve a duotone preset by slug.
+ *
+ * @param {string} slug
+ * @returns {object|undefined}
+ */
+function getDuotoneObject(slug) {
+	return getDuotones().find((item) => item.slug === slug);
+}
+
+export {
+	getPalette,
+	getPaletteAll,
+	getGradients,
+	getGradientsAll,
+	getDuotones,
+	getColorObject,
+	getGradientObject,
+	getDuotoneObject,
+};
