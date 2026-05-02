@@ -127,6 +127,75 @@ function booleanOrUndefined(value) {
 	return value;
 }
 
+function isPlainObject(value) {
+	return (
+		value !== null &&
+		typeof value === 'object' &&
+		!Array.isArray(value)
+	);
+}
+
+/**
+ * Recursively merge two block-setting objects. Values from **generated**
+ * (from `block.json`) win on conflicts; nested plain objects merge.
+ * Arrays and primitives from generated replace entirely.
+ *
+ * @param {unknown} base - Typically static entries from `settings/blocks.js`
+ * @param {unknown} generated - Output from {@link getThemeBlockSettings}
+ * @returns {unknown}
+ */
+function deepMergePreferGenerated(base, generated) {
+	if (generated === undefined || generated === null) {
+		return base;
+	}
+	if (base === undefined || base === null) {
+		return generated;
+	}
+	if (Array.isArray(generated) || Array.isArray(base)) {
+		return generated;
+	}
+	if (!isPlainObject(base) || !isPlainObject(generated)) {
+		return generated;
+	}
+
+	const out = { ...base };
+	for (const key of Object.keys(generated)) {
+		out[key] = deepMergePreferGenerated(base[key], generated[key]);
+	}
+	return out;
+}
+
+/**
+ * Merge static `settings.blocks.js` config with block-json-generated settings.
+ * For each block name present in either source, entries are deep-merged and
+ * **`block.json`-derived settings take priority** over manual JS config.
+ *
+ * @param {Record<string, object>} manualBlocks
+ * @param {Record<string, object>} generatedBlocks
+ * @returns {Record<string, object>}
+ */
+export function mergeThemeBlocksSettings(manualBlocks, generatedBlocks) {
+	const manual = manualBlocks || {};
+	const generated = generatedBlocks || {};
+	const keys = new Set([
+		...Object.keys(manual),
+		...Object.keys(generated),
+	]);
+	const out = {};
+
+	for (const blockName of keys) {
+		const m = manual[blockName];
+		const g = generated[blockName];
+		if (m !== undefined && g !== undefined) {
+			out[blockName] = deepMergePreferGenerated(m, g);
+		} else {
+			out[blockName] = g !== undefined ? g : m;
+		}
+	}
+
+	return out;
+}
+
 /**
  * Build per-block `settings.blocks[<block>]` entries from each theme
  * `block.json`. The block's `settings` object is passed through as-is (merged
