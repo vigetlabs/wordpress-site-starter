@@ -6,14 +6,14 @@
     [
       "core/columns",
       {
-        "verticalAlignment":"center"
+        "verticalAlignment": "center"
       },
       [
         [
           "core/column",
           {
-            "verticalAlignment":"center",
-            "width":"66.66%"
+            "verticalAlignment": "center",
+            "width": "66.66%"
           },
           [
             [
@@ -22,7 +22,7 @@
             [
               "core/paragraph",
               {
-                "placeholder": "Page description ponam in culpa idiota aliis pravitatis. Principium ponere culpam in se justum praeceptum. Neque improperes et aliis qui non perfecte ipse docuit."
+                "placeholder": "Page description..."
               }
             ]
           ]
@@ -30,8 +30,8 @@
         [
           "core/column",
           {
-            "verticalAlignment":"center",
-            "width":"33.33%"
+            "verticalAlignment": "center",
+            "width": "33.33%"
           },
           [
             [

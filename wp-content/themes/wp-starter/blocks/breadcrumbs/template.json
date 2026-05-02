@@ -3,26 +3,25 @@
     [
       "core/buttons",
       {
-        "align":"wide",
-        "className":"is-style-breadcrumbs"
+        "className": "is-style-breadcrumbs"
       },
       [
         [
           "core/button",
           {
-            "text":"Breadcrumb"
+            "text": "Breadcrumb"
           }
         ],
         [
           "core/button",
           {
-            "text":"Breadcrumb"
+            "text": "Breadcrumb"
           }
         ],
         [
           "core/button",
           {
-            "text":"Breadcrumb"
+            "text": "Breadcrumb"
           }
         ]
       ]

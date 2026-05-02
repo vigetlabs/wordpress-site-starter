@@ -2,7 +2,7 @@
   "template": [
     [
       "core/media-text",
-      [],
+      {},
       [
         [
           "core/paragraph",

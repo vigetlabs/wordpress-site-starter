@@ -5,19 +5,8 @@
   "icon": "networking",
   "category": "components",
   "textdomain": "wp-starter",
-  "keywords": [
-    "history",
-    "hierarchy",
-    "navigation",
-    "trail",
-    "rankmath",
-    "seo",
-    "sitemap"
-  ],
-  "allowedBlocks": [
-    "core/buttons",
-    "core/button"
-  ],
+  "keywords": [ "history", "hierarchy", "navigation", "trail", "rankmath", "seo", "sitemap" ],
+  "allowedBlocks": [ "core/buttons", "core/button" ],
   "supports": {
     "jsx": true,
     "mode": false,

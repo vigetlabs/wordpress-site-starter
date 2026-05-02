@@ -24,6 +24,35 @@ The files that create the `theme.json` can be used to apply custom settings for 
 
 Blocks are built using ACF and core WordPress blocks. Styles for the blocks are located within the block folders.
 
+### Inner block templates (`template.json`)
+
+Many blocks ship a [`template.json`](https://developer.wordpress.org/block-editor/how-to-guides/block-tutorial/nested-blocks-inner-blocks/) file next to `block.json`. That file defines the **default inner block template** (for example, which core Heading, Paragraph, and Button blocks appear inside a CTA).
+
+**Important:** that template is applied when the block is first inserted (or when the inner area is still empty). After the editor saves the page, WordPress stores the full nested block tree in the database. **Updating `template.json` in the theme does not retroactively change existing blocks** on already-saved posts. For sitewide structural updates you can use one or more of:
+
+- **Synced patterns** — the theme ships a prototype CTA inner pattern and a versioned `wp_block` (see below and [`docs/block-structure-strategy.md`](docs/block-structure-strategy.md)).
+- **Migrations** — use `wp wpstarter blocks migrate` with a custom migration when you need to rewrite saved markup.
+- **Server-rendered layout** — move stable structure into `render.php` / Twig so updates deploy with the theme without touching post content.
+
+See [`docs/block-structure-strategy.md`](docs/block-structure-strategy.md) for a per-block recommendation table.
+
+### Synced CTA inner pattern (prototype)
+
+- **Unsynced pattern (inserter):** `patterns/cta-inner-content-only.php` — Group with `templateLock: contentOnly` and the same core blocks as the CTA `template.json`, useful as a curated starting point or reference markup.
+- **Synced `wp_block` (Library):** on theme switch or when an editor loads wp-admin, the theme ensures a published synced pattern titled **“WP Starter: CTA inner (synced)”** exists. When you change its markup in [`inc/synced-patterns.php`](inc/synced-patterns.php), bump `WPSTARTER_SYNCED_CTA_INNER_VERSION` so the next admin request or CLI run refreshes the pattern for all references.
+- **WP-CLI:** `wp wpstarter patterns sync` creates or updates the synced pattern; add `--force` to rewrite content regardless of the stored version option.
+
+### Block content migrations (WP-CLI)
+
+Scaffold command (list migrations, run a placeholder, dry-run):
+
+```bash
+wp wpstarter blocks migrate --dry-run
+wp wpstarter blocks migrate --migration=example_placeholder --post-type=post,page
+```
+
+Implement real transforms inside [`inc/cli/wpstarter-cli.php`](inc/cli/wpstarter-cli.php) using `parse_blocks()` and `serialize_blocks()` when you change inner structure.
+
 * Accordion
 * Alert Banner
 * Breadcrumbs

@@ -1,21 +1,44 @@
 {
-  "template": [
-    [
-      "core/heading",
-      {
-        "textAlign":"center",
-        "placeholder": "Headline Goes Here"
-      }
-    ],
-    [
-      "core/paragraph",
-      {
-        "align":"center",
-        "placeholder": "Body text goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat"
-      }
-    ],
-    [
-      "core/button"
-    ]
-  ]
+	"template": [
+		[
+			"core/heading",
+			{
+				"level": 2,
+				"placeholder": "Headline Goes Here",
+				"style": {
+					"typography": {
+						"textAlign": "center"
+					}
+				}
+			}
+		],
+		[
+			"core/paragraph",
+			{
+				"placeholder": "Body text goes here...",
+				"style": {
+					"typography": {
+						"textAlign": "center"
+					}
+				}
+			}
+		],
+		[
+			"core/buttons",
+			{
+				"layout": {
+					"type": "flex",
+					"justifyContent": "center"
+				}
+			},
+			[
+				[
+					"core/button",
+					{
+						"placeholder": "Button Text"
+					}
+				]
+			]
+		]
+	]
 }

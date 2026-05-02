@@ -3,19 +3,27 @@
     [
       "core/heading",
       {
-        "textAlign":"center"
+        "style": {
+          "typography": {
+            "textAlign": "center"
+          }
+        }
       }
     ],
     [
       "core/paragraph",
       {
-        "align":"center"
+        "style": {
+          "typography": {
+            "textAlign": "center"
+          }
+        }
       }
     ],
     [
       "core/embed",
       {
-        "align":"center"
+        "align": "center"
       }
     ]
   ]

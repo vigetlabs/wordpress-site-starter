@@ -1,10 +1,10 @@
 .rank-math-breadcrumb {
 	/* Rank Math breadcrumb styles */
-	p {
+	& p {
 		@apply flex flex-wrap gap-8;
 	}
 
-	a {
+	& a {
 		@apply text-black underline hover:no-underline focus-visible:no-underline;
 	}
 }

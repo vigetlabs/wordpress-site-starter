@@ -2,14 +2,18 @@
   "name": "cta",
   "title": "Call to Action",
   "description": "Displays the Call to Action Component.",
-  "icon": "align-center",
+  "icon": "megaphone",
   "category": "components",
   "textdomain": "wp-starter",
-  "keywords": ["cta", "button", "heading", "section"],
+  "keywords": [ "cta", "button", "heading", "section" ],
   "attributes": {
     "align": {
       "type": "string",
       "default": "full"
+    },
+    "templateLock": {
+      "type": "string",
+      "default": "contentOnly"
     },
     "style": {
       "type": "object",
@@ -40,8 +44,12 @@
       "allowOrientation": false,
       "allowCustomContentAndWideSize": false
     },
+    "lock": {
+      "move": true,
+      "remove": false
+    },
     "spacing": {
-      "padding": ["top", "bottom"]
+      "padding": [ "top", "bottom" ]
     }
   },
   "acf": {

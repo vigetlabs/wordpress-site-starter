@@ -5,16 +5,20 @@
   "icon": "bell",
   "category": "components",
   "textdomain": "wp-starter",
-  "keywords": [ "notification","alert","banner","information","bar","important","dismiss"],
-  "allowedBlocks": ["core/paragraph","core/button"],
+  "keywords": [ "notification", "alert", "banner", "information", "bar", "important", "dismiss" ],
+  "allowedBlocks": [ "core/paragraph","core/button" ],
   "attributes": {
+    "align": {
+      "type": "string",
+      "default": "full"
+    },
     "block_id": {
       "type": "string",
       "default": ""
     },
-    "align": {
+    "templateLock": {
       "type": "string",
-      "default": "full"
+      "default": "contentOnly"
     },
     "backgroundColor": {
       "type": "string",
@@ -46,6 +50,10 @@
       },
       "allowOrientation": false,
       "allowCustomContentAndWideSize": false
+    },
+    "lock": {
+      "move": true,
+      "remove": false
     }
   },
   "acf": {

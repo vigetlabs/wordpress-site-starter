@@ -3,20 +3,28 @@
     [
       "core/heading",
       {
-        "content": "Headline goes here",
-        "textAlign": "center"
+        "content": "Headline text...",
+        "style": {
+          "typography": {
+            "textAlign": "center"
+          }
+        }
       }
     ],
     [
       "core/paragraph",
       {
-        "content": "Lorem ipsum dolor sit amet consectetur. Egestas turpis gravida vestibulum auctor lacinia mattis ultrices viverra placerat. Mauris risus vel mattis nulla mi odio lobortis. Donec dignissim convallis turpis sapien nisi.",
-        "align": "center"
+        "placeholder": "Body text...",
+        "style": {
+          "typography": {
+            "textAlign": "center"
+          }
+        }
       }
     ],
     [
       "core/group",
-      [],
+      {},
       [
         [
           "core/cover",
@@ -26,7 +34,7 @@
             "contentPosition": "center center",
             "isUserOverlayColor": true,
             "layout": {
-              "type":"constrained"
+              "type": "constrained"
             }
           },
           [
