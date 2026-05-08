@@ -429,10 +429,7 @@ class PostCreateProjectScript extends ComposerScript {
 		self::updateComposerData( $composerData, $themePath );
 
 		// Remove Twig files from the theme directory
-		$blockFiles = glob( $themePath . 'blocks/**/*.twig', GLOB_BRACE );
-		$plopTemplates = glob( $themePath . 'src/plop-templates/**/*.twig.hbs', GLOB_BRACE );
-
-		$twigFiles = array_merge( $blockFiles, $plopTemplates );
+		$twigFiles = glob( $themePath . 'blocks/**/*.twig', GLOB_BRACE );
 
 		foreach ( $twigFiles as $twigFile ) {
 			unlink( $twigFile );
@@ -585,7 +582,6 @@ class PostCreateProjectScript extends ComposerScript {
 			$themeDir . '/README.md',
 			$themeDir . '/style.css',
 			$themeDir . '/vite.config.js',
-			$themeDir . '/src/plop-templates/render.php.hbs',
 		];
 
 		// TODO: Search theme directory recursively.

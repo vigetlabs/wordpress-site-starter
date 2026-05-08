@@ -68,21 +68,18 @@ Implement real transforms inside [`inc/cli/wpstarter-cli.php`](inc/cli/wpstarter
 
 ### Creating New Blocks
 
-The theme includes [plop](https://plopjs.com/) which will auto-generate a new block based on the options you input.
-To create a new block, run:
+Block scaffolding is driven by AI assistants. The repo ships an [`AGENTS.md`](../../../AGENTS.md) at the repo root that documents the file layout, naming conventions, render patterns (Timber/Twig + PHP fallback), accessibility expectations, and ACF field group format used by every block in this starter.
 
-```bash
-ddev npm run plop block
-```
+To create a new block, point your AI assistant at that guide and describe what you need — a ticket, a design, a data model, or even a casual "build a block for X" / "create a [name] block". Any AI assistant (Cursor, Aider, Continue, Copilot Chat, etc.) can read `AGENTS.md` directly. Claude Code users get an auto-triggering skill at [`.claude/skills/wp-block-generator/SKILL.md`](../../../.claude/skills/wp-block-generator/SKILL.md) that wraps the same instructions.
 
-You will be asked a few questions:
+The assistant will:
 
-* __What is the block name?__ - *This can be whatever you want.*
-* __What is your theme's text domain?__ - *This is the text domain of your theme, which is usually the same as the theme folder name. If you are unsure of what this is, you can look at the `Text Domain:` value in your theme's `style.css` file.*
-* __Do you need block styles?__ - *Adds custom class names for the block - [See Block Styles](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-styles/)*
-* __Do you need block variations?__ - *Adds custom block variations - [See Block Variations](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-variations/)*
+- Detect the active theme slug, text domain, namespace, and whether Twig is enabled.
+- Generate `block.json`, `template.json`, `style.css`, `render.php` (and `render.twig` when Twig is on), `block.php` if helpers are needed, and ACF field group JSON if fields are needed.
+- Output each file with its repo-relative path and a "Next steps" section for placement, ACF import, and any manual work.
+- Cite current WordPress / ACF / Timber / Alpine / WCAG documentation for anything not directly grounded in this repo's existing blocks.
 
-Once your block is created, it is recommended you set the block's icon in `block.json`. You can pick from one of [WordPress's Dashicons](https://developer.wordpress.org/resource/dashicons/), or use your own custom SVG file.
+After the block is generated, set the block's icon in `block.json` — pick one of [WordPress's Dashicons](https://developer.wordpress.org/resource/dashicons/) or supply a custom SVG. Block styles and variations can be added in `block.json`'s `styles` and `variations` arrays — see [Block Styles](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-styles/) and [Block Variations](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-variations/).
 
 ## Customizing Theme 🎨
 
