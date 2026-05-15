@@ -36,6 +36,7 @@ Following the series of prompts, the project will be set up with the following:
 5. **ACF Pro**: If an `auth.json` file is present in the project root, ACF Pro will be installed.
 6. **`package.json` Dependencies**: All necessary script and style build dependencies for the theme will be installed and initialized.
 7. **Cleanup**: Any setup files will be removed and the project will be ready for development.
+8. **Agent Skills Sync**: WordPress Agent Skills are synced after `ddev start` and can be refreshed at any time.
 
 After the setup is complete, it is recommended to perform your initial commit and push to your project repository.
 
@@ -53,6 +54,33 @@ git push -u origin main
 
 Be sure to update the origin with the correct remote repository URL (and remove the `<>` brackets).
 Information on developing the theme, styling, and building blocks can be found in the theme [README](wp-content/themes/wp-starter/README.md).
+
+## Agent Skills
+
+This starter automatically syncs WordPress Agent Skills on every `ddev start` using:
+
+```bash
+ddev agent-skills-sync
+```
+
+The synced skill directories are intentionally ignored from git:
+
+- `.codex/skills/`
+- `.cursor/skills/`
+- `.claude/skills/`
+- `.github/skills/`
+
+You can manually refresh skills any time:
+
+```bash
+ddev agent-skills-sync
+```
+
+Optional environment variables for pinning/customizing source:
+
+- `AGENT_SKILLS_REF` (default: `trunk`)
+- `AGENT_SKILLS_REPO_URL` (default: `https://github.com/WordPress/agent-skills.git`)
+- `AGENT_SKILLS_TARGETS` (default: `codex,vscode,claude,cursor`)
 
 # Development
 

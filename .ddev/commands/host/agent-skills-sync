@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+## Description: Install or refresh WordPress agent skills
+## Usage: agent-skills-sync [--quiet]
+## Example: ddev agent-skills-sync
+
+set -euo pipefail
+
+QUIET=0
+
+for arg in "$@"; do
+	if [[ "$arg" == "--quiet" ]]; then
+		QUIET=1
+	fi
+done
+
+REPO_URL="${AGENT_SKILLS_REPO_URL:-https://github.com/WordPress/agent-skills.git}"
+REF="${AGENT_SKILLS_REF:-trunk}"
+TARGETS="${AGENT_SKILLS_TARGETS:-codex,vscode,claude,cursor}"
+
+log() {
+	if [[ "$QUIET" -eq 0 ]]; then
+		printf '%s\n' "$*"
+	fi
+}
+
+log "Syncing WordPress agent skills (${REF})..."
+
+APP_ROOT="${DDEV_APPROOT:-$(pwd)}"
+temp_dir="$(mktemp -d)"
+trap 'rm -rf "$temp_dir"' EXIT
+
+log "Cloning WordPress/agent-skills..."
+if ! git clone --depth 1 --branch "$REF" "$REPO_URL" "$temp_dir/agent-skills" 2>/dev/null; then
+	git clone --depth 1 "$REPO_URL" "$temp_dir/agent-skills"
+	cd "$temp_dir/agent-skills"
+	git fetch --depth 1 origin "$REF" || true
+	git checkout "$REF"
+else
+	cd "$temp_dir/agent-skills"
+fi
+
+log "Building skillpack..."
+node shared/scripts/skillpack-build.mjs --clean
+
+log "Installing skills into project..."
+node shared/scripts/skillpack-install.mjs --dest="$APP_ROOT" --targets="$TARGETS"
+
+log "Agent skills sync complete."

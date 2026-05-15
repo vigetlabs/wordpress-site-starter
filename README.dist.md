@@ -19,7 +19,7 @@ To start the local server and build process, run:
 ddev start
 ```
 
-This will install the WordPress files, composer packages, npm packages, and start the DDEV server. You will also be ask if you want to import a database or start with a new install. Once the server is started, DDEV will automatically start Vite for local development.
+This will install the WordPress files, composer packages, npm packages, and start the DDEV server. You will also be ask if you want to import a database or start with a new install. Once the server is started, DDEV will automatically start Vite for local development and sync WordPress Agent Skills.
 
 You are all ready to start working on the site.
 
@@ -33,11 +33,22 @@ The deploy script should build the files for production, but if you want to test
 * *List other Plugins used*
 
 ## Commands
-The command `ddev start` will automatically start Vite so you should not need to use any `npm` commands.
+The command `ddev start` will automatically start Vite and sync WordPress Agent Skills.
 
 ```bash
 ddev start
+ddev agent-skills-sync
 ddev rebuild
 ddev stop
 ```
 If you do need to run `npm` to troubleshoot something, you need to run it inside of DDEV by running `ddev npm run dev` inside of your custom theme folder.
+
+### Agent Skills
+
+`ddev start` runs `ddev agent-skills-sync` automatically. You can also run it manually at any time to refresh to the latest skillpack.
+
+Optional environment variables for pinning/customizing source:
+
+- `AGENT_SKILLS_REF` (default: `trunk`)
+- `AGENT_SKILLS_REPO_URL` (default: `https://github.com/WordPress/agent-skills.git`)
+- `AGENT_SKILLS_TARGETS` (default: `codex,vscode,claude,cursor`)
