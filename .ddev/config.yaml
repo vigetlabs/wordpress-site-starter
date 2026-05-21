@@ -20,6 +20,7 @@ hooks:
   post-start:
     - composer: install -d /var/www/html/wp-content/mu-plugins/viget-wp
     - composer: install -d /var/www/html/wp-content/themes/wp-starter
+    - exec-host: ./.ddev/commands/host/agent-skills-sync --quiet
     - exec-host: ddev launch && exit
 web_environment:
   - ENVIRONMENT=dev
