@@ -1,5 +1,9 @@
-//Hide/show setting in the block editor
-export default {
+// Configure custom block settings for each block to override the default theme settings.
+// Merged with values derived from each block's `block.json`; **`block.json` wins on conflicts.**
+
+import { getThemeBlockSettings, mergeThemeBlocksSettings } from '../helpers/blocks.js';
+
+const blockSettings = {
 	'core/button': {
 		border: {
 			color: false,
@@ -60,3 +64,5 @@ export default {
 		},
 	},
 };
+
+export default mergeThemeBlocksSettings(blockSettings, getThemeBlockSettings());

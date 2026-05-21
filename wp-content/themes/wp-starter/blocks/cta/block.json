@@ -25,12 +25,18 @@
       }
     }
   },
+  "settings": {
+    "color": {
+      "custom": false
+    }
+  },
   "supports": {
     "jsx": true,
     "mode": false,
     "alignWide": true,
     "color": {
-      "background": true
+      "background": true,
+      "text": false
     },
     "background": {
       "backgroundImage": true,

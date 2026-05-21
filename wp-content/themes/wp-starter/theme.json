@@ -228,6 +228,11 @@
           "style": false,
           "width": false
         }
+      },
+      "acf/cta": {
+        "color": {
+          "custom": false
+        }
       }
     }
   },

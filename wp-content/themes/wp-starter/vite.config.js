@@ -14,6 +14,7 @@ export default defineConfig(({ command }) => ({
 		generateThemeJSON,
 		liveReload([
 			path.resolve(__dirname, './blocks/**/*.twig'),
+			path.resolve(__dirname, './theme.json'),
 			path.resolve(__dirname, './**/*.php'),
 		]),
 		viteGlobWatch({
