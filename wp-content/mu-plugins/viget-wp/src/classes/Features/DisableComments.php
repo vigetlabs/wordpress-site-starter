@@ -25,7 +25,7 @@ class DisableComments {
 		// Remove comments from admin bar.
 		$this->remove_admin_bar_comments();
 
-		// Remove REST API comments.
+		// Disable default comments in the REST API.
 		$this->disable_rest_api_comments();
 
 		// Remove comment blocks.
@@ -59,10 +59,12 @@ class DisableComments {
 			function () {
 				global $pagenow;
 
-				// Disable support for comments and trackbacks in post types
+				// Disable support for comments and trackbacks.
 				foreach ( get_post_types() as $post_type ) {
 					if ( post_type_supports( $post_type, 'comments' ) ) {
 						remove_post_type_support( $post_type, 'comments' );
+					}
+					if ( post_type_supports( $post_type, 'trackbacks' ) ) {
 						remove_post_type_support( $post_type, 'trackbacks' );
 					}
 				}
@@ -84,12 +86,6 @@ class DisableComments {
 		add_filter(
 			'vigetwp_admin_menu',
 			function ( array $menu ): array {
-//				$menu[] = [
-//					'menu'    => 'options-general.php',
-//					'submenu' => 'options-discussion.php',
-//					'remove'  => true,
-//				];
-
 				$menu[] = [
 					'menu'   => 'edit-comments.php',
 					'remove' => true,
@@ -126,15 +122,26 @@ class DisableComments {
 	 * @return void
 	 */
 	public function disable_rest_api_comments(): void {
-		// Removes REST API endpoints
-		add_filter( 'rest_pre_insert_comment', '__return_empty_string' );
-
+		// Block only default/public comments while allowing editor Notes.
 		add_filter(
-			'rest_endpoints',
-			function ( array $endpoints ): array {
-				unset( $endpoints['comments'] );
-				return $endpoints;
-			}
+			'rest_pre_insert_comment',
+			function ( $prepared_comment, \WP_REST_Request $request ) {
+				$comment_type = $request->get_param( 'type' )
+					?? ( $prepared_comment->comment_type ?? null )
+					?? 'comment';
+
+				if ( 'note' === $comment_type ) {
+					return $prepared_comment;
+				}
+
+				return new \WP_Error(
+					'comments_disabled',
+					__( 'Comments are disabled for this site.', 'viget-wp' ),
+					[ 'status' => 403 ]
+				);
+			},
+			10,
+			2
 		);
 	}
 
