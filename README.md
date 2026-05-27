@@ -102,6 +102,22 @@ ddev stop && ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.0.24
+
+* Updated Composer packages to latest.
+* Updated `npm` packages to latest.
+* Updated Timber/Twig to latest.
+* Updates to Vite Class w/support for iframe and non-iframe block editor.
+* Bug fix for Firefox fonts.
+* Added Tailwind-only color support (excluded from theme.json).
+* Added Basic Auth support for media-proxy feature.
+* Added Create Block Theme relative URL correction.
+* Set default block states to locked.
+* Added block-specific color settings.
+* Added WordPress Agent Skills.
+* Added AGENTS.md and block creation skills.
+* Enable Block Notes support.
+
 ### v1.0.23
 
 * Updated Composer packages to latest.
