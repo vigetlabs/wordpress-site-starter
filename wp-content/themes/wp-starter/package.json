@@ -10,13 +10,11 @@
     "dev": "APP_ENV=dev vite --host",
     "build": "vite build",
     "format": "prettier \"./src/**/*.{css,ts,tsx,js}\" --check",
-    "format:fix": "prettier \"./src/**/*.{css,ts,tsx,js}\" --write",
-    "plop": "plop"
+    "format:fix": "prettier \"./src/**/*.{css,ts,tsx,js}\" --write"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",
     "cssnano": "^7.1.2",
-    "plop": "^4.0.5",
     "postcss": "^8.5.6",
     "postcss-import-ext-glob": "^2.1.1",
     "postcss-prefix-selector": "^2.1.1",
