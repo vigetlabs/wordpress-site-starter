@@ -1,5 +1,5 @@
 ---
-name: wp-block-generator
+name: viget-block-generator
 description: >
   Generates complete WordPress ACF block code for this WP Site Starter project.
   Use this skill whenever the user provides a block ticket, description, design,
