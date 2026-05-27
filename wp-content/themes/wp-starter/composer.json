@@ -28,10 +28,10 @@
     "idleberg/wordpress-vite-assets": "^1.2",
     "timber/timber": "^2.4",
     "viget/viget-blocks-toolkit": "^1.1",
-    "wpackagist-plugin/accessibility-checker": "^1.39",
+    "wpackagist-plugin/accessibility-checker": "^1.42",
     "wpackagist-plugin/safe-svg": "^2.4",
     "wpackagist-plugin/seo-by-rank-math": "^1.0",
-    "wpackagist-plugin/wordfence": "^8.1"
+    "wpackagist-plugin/wordfence": "^8.2"
   },
   "require-dev": {
     "phpcompatibility/phpcompatibility-wp": "^2.1",

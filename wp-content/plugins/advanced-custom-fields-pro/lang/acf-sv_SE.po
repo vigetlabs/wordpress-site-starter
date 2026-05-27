@@ -12,7 +12,7 @@
 # This file is distributed under the same license as Advanced Custom Fields.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-03-31T22:11:49+00:00\n"
+"PO-Revision-Date: 2026-05-26T16:02:32+00:00\n"
 "Report-Msgid-Bugs-To: http://support.advancedcustomfields.com\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
@@ -20,6 +20,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: gettext\n"
 "Project-Id-Version: Advanced Custom Fields\n"
+
+#: src/Site_Health/Site_Health.php:1009
+msgid "Datastore Enabled"
+msgstr ""
+
+#: includes/local-json.php:154
+msgid ""
+"ACF saved your changes to the database, but could not update the Local JSON "
+"file. Check that the configured Local JSON save path is writable."
+msgstr ""
+
+#: includes/ajax/class-acf-ajax-upgrade.php:45
+msgid "Invalid site ID."
+msgstr "Ogiltigt webbplats-ID."
 
 #. translators: 1: number of post types, 2: number of blocks using ACF schema
 #: src/Site_Health/Site_Health.php:999
@@ -40,7 +54,7 @@ msgstr ""
 
 #: src/Site_Health/Site_Health.php:968
 msgid "AI Actions Executed"
-msgstr ""
+msgstr "AI-åtgärder utförda"
 
 #. translators: %s - number of successful tasks performed
 #: src/Site_Health/Site_Health.php:963
@@ -60,7 +74,7 @@ msgstr ""
 
 #: src/Site_Health/Site_Health.php:940
 msgid "Not available (requires WordPress 6.9+)"
-msgstr ""
+msgstr "Inte tillgänglig (kräver WordPress 6.9+)"
 
 #: src/Site_Health/Site_Health.php:939
 msgid "Abilities API"
@@ -68,23 +82,23 @@ msgstr ""
 
 #: src/Site_Health/Site_Health.php:929
 msgid "AI Support"
-msgstr ""
+msgstr "AI-stöd"
 
 #: src/Site_Health/Site_Health.php:396
 msgid "Disabled"
-msgstr ""
+msgstr "Inaktiverad"
 
 #: src/Site_Health/Site_Health.php:395
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiverad"
 
 #: src/AI/GEO/GEO.php:135
 msgid "All Types"
-msgstr ""
+msgstr "Alla typer"
 
 #: src/AI/GEO/GEO.php:134
 msgid "Common Types"
-msgstr ""
+msgstr "Vanliga typer"
 
 #: src/AI/GEO/GEO.php:104
 msgid ""
@@ -110,7 +124,7 @@ msgstr ""
 
 #: src/AI/GEO/GEO.php:65
 msgid "Schema"
-msgstr ""
+msgstr "Schema"
 
 #: src/AI/GEO/FieldSettings.php:169
 msgid "Schema.org Output Format"
@@ -127,7 +141,7 @@ msgstr ""
 
 #: src/AI/GEO/FieldSettings.php:95
 msgid "Missing required parameters"
-msgstr ""
+msgstr "Saknar obligatoriska parametrar"
 
 #: src/AI/AI.php:157
 msgid ""
@@ -158,7 +172,7 @@ msgstr ""
 
 #: src/AI/AI.php:149
 msgid "AI Guidance for Taxonomy"
-msgstr ""
+msgstr "AI-vägledning för taxonomi"
 
 #: src/AI/AI.php:148
 msgid ""
@@ -179,7 +193,7 @@ msgstr ""
 
 #: src/AI/AI.php:142
 msgid "AI Guidance for Post Type"
-msgstr ""
+msgstr "AI-vägledning för inläggstyp"
 
 #: src/AI/AI.php:141
 msgid ""
@@ -190,17 +204,19 @@ msgstr ""
 
 #: src/AI/AI.php:140
 msgid "Allow AI Access to Post Content"
-msgstr ""
+msgstr "Tillåt AI-åtkomst till inläggsinnehåll"
 
 #: src/AI/AI.php:137
 msgid ""
 "Provide a description that will help AI systems understand the purpose and "
 "how to use this effectively."
 msgstr ""
+"Ange en beskrivning som hjälper AI-system att förstå syftet och hur man "
+"använder detta effektivt."
 
 #: src/AI/AI.php:136
 msgid "AI Description"
-msgstr ""
+msgstr "AI-beskrivning"
 
 #: src/AI/AI.php:135
 msgid ""
@@ -210,11 +226,11 @@ msgstr ""
 
 #: src/AI/AI.php:134
 msgid "Allow AI Access"
-msgstr ""
+msgstr "Tillåt AI-åtkomst"
 
 #: src/AI/AI.php:103
 msgid "ACF AI"
-msgstr ""
+msgstr "ACF AI"
 
 #: src/AI/Abilities/Taxonomy.php:697
 msgid "ACF custom taxonomy created successfully"
@@ -226,7 +242,7 @@ msgstr ""
 
 #: src/AI/Abilities/Taxonomy.php:645
 msgid "A taxonomy with this key already exists"
-msgstr ""
+msgstr "En taxonomi med detta namn finns redan"
 
 #. translators: %d: Number of ACF custom taxonomies
 #: src/AI/Abilities/Taxonomy.php:603
@@ -248,7 +264,7 @@ msgstr ""
 #. translators: %s The singular label for the custom taxonomy.
 #: src/AI/Abilities/Taxonomy.php:387
 msgid "Update a %s term by its ID."
-msgstr ""
+msgstr "Uppdatera en %s-term efter dess ID."
 
 #. translators: %s The singular label for the custom taxonomy.
 #: src/AI/Abilities/Taxonomy.php:385
@@ -290,7 +306,7 @@ msgstr ""
 
 #: src/AI/Abilities/Taxonomy.php:78
 msgid "Register Custom Taxonomy"
-msgstr ""
+msgstr "Registrera anpassad taxonomi"
 
 #: src/AI/Abilities/Taxonomy.php:43
 msgid "Get all ACF registered custom taxonomies"
@@ -322,12 +338,12 @@ msgstr[1] ""
 #. translators: %s The singular label for the custom post type.
 #: src/AI/Abilities/PostType.php:415
 msgid "Delete a %s by its ID."
-msgstr ""
+msgstr "Ta bort en %s efter dess ID."
 
 #. translators: %s The singular label for the custom post type.
 #: src/AI/Abilities/PostType.php:413
 msgid "Delete a %s"
-msgstr ""
+msgstr "Ta bort en %s"
 
 #. translators: %s The singular label for the custom post type.
 #: src/AI/Abilities/PostType.php:385
@@ -337,7 +353,7 @@ msgstr ""
 #. translators: %s The singular label for the custom post type.
 #: src/AI/Abilities/PostType.php:383
 msgid "Update a %s"
-msgstr ""
+msgstr "Uppdatera en %s"
 
 #. translators: %s The singular label for the custom post type.
 #: src/AI/Abilities/PostType.php:346
@@ -347,7 +363,7 @@ msgstr ""
 #. translators: %s The singular label for the custom post type.
 #: src/AI/Abilities/PostType.php:344
 msgid "View a %s"
-msgstr ""
+msgstr "Visa en %s"
 
 #. translators: %s The singular label for the custom post type.
 #: src/AI/Abilities/PostType.php:317
@@ -357,7 +373,7 @@ msgstr ""
 #. translators: %s The singular label for the custom post type.
 #: src/AI/Abilities/PostType.php:315
 msgid "Create %s"
-msgstr ""
+msgstr "Skapa %s"
 
 #. translators: %s The plural label for the custom post type.
 #: src/AI/Abilities/PostType.php:248
@@ -449,7 +465,7 @@ msgstr ""
 
 #: includes/acf-field-functions.php:882 src/AI/GEO/GEO.php:78
 msgid "Experimental"
-msgstr ""
+msgstr "Experimentell"
 
 #: src/Site_Health/Site_Health.php:860
 msgid "Blocks Using Auto Inline Editing"
@@ -542,7 +558,7 @@ msgstr ""
 #: includes/fields/class-acf-field-date_picker.php:243
 #: includes/fields/class-acf-field-date_time_picker.php:230
 msgid "Default to the current date"
-msgstr ""
+msgstr "Standard till nuvarande datum"
 
 #: includes/assets.php:372
 msgid "Toggle panel"
@@ -1379,6 +1395,7 @@ msgstr "Ogiltiga argument för begäran."
 #: includes/ajax/class-acf-ajax-local-json-diff.php:46
 #: includes/ajax/class-acf-ajax-query-users.php:42
 #: includes/ajax/class-acf-ajax-upgrade.php:33
+#: includes/ajax/class-acf-ajax-upgrade.php:40
 #: includes/ajax/class-acf-ajax-user-setting.php:47
 #: src/AI/GEO/FieldSettings.php:82
 msgid "Sorry, you do not have permission to do that."
@@ -2463,8 +2480,8 @@ msgstr "Relation är lika med"
 
 #: src/Blocks/Bindings.php:41
 msgctxt "The core ACF block binding source name for fields on the current page"
-msgid "ACF Fields"
-msgstr "ACF-fält"
+msgid "Custom Fields"
+msgstr "Anpassade fält"
 
 #: includes/admin/views/browse-fields-modal.php:24
 msgid "ACF PRO Feature"
@@ -6179,7 +6196,7 @@ msgid "Show this field group if"
 msgstr "Visa denna fältgrupp om"
 
 #: includes/admin/views/upgrade/upgrade.php:94
-#: includes/ajax/class-acf-ajax-upgrade.php:43
+#: includes/ajax/class-acf-ajax-upgrade.php:57
 msgid "No updates available."
 msgstr "Inga uppdateringar tillgängliga."
 
