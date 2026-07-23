@@ -19,9 +19,9 @@ namespace WPStarter;
  * | editor  | editor.js   | enqueue_block_editor_assets  |
  *
  * The editor entry imports virtual:editor-scoped-styles, which the
- * vite-scoped-editor-styles Vite plugin uses to inject CSS scoped to
- * .editor-styles-wrapper — replicating add_editor_style() in both
- * dev (with HMR) and prod.
+ * vite-scoped-editor-styles Vite plugin uses to inject editor.css
+ * (main styles + editor-only sheets) scoped to .editor-styles-wrapper —
+ * replicating add_editor_style() in both dev (with HMR) and prod.
  *
  * ## Entry mirroring for add_css_dependency(), add_js_dependency(), localize_vars()
  *
