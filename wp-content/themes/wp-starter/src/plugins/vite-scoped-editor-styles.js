@@ -1,8 +1,9 @@
 /**
  * Vite plugin: virtual:editor-scoped-styles
  *
- * Imported by editor.js. Runs the full PostCSS pipeline on src/styles/main.css
- * and returns a JS module that:
+ * Imported by editor.js. Runs the full PostCSS pipeline on the configured
+ * cssEntry (typically src/styles/editor.css, which imports main.css plus
+ * editor-only sheets) and returns a JS module that:
  *   - Injects scoped CSS into the parent admin document (non-iframe editor).
  *     Only `body` and bare element selectors (h1, p, ul …) are prefixed with
  *     `.editor-styles-wrapper` — mirroring WordPress's transformStyles() logic.
@@ -10,6 +11,11 @@
  *   - Injects unscoped CSS directly into the Gutenberg editor iframe (no
  *     prefix needed inside the iframe).
  *   - Copies cross-origin font <link> tags into the iframe.
+ *
+ * Nested @import-glob: postcss-import-ext-glob only expands globs in the file
+ * it processes. Before Tailwind runs, we recursively inline local @imports
+ * whose targets still contain @import-glob (e.g. editor.css → main.css) so
+ * those globs expand relative to the imported file.
  *
  * HMR: handleHotUpdate() explicitly invalidates the virtual module and returns
  * [mod] so Vite pushes an update to the browser on every CSS change.  Relying
@@ -224,10 +230,55 @@ export default function viteEditorStyles(options = {}) {
 		return cssProcessor;
 	}
 
+	/**
+	 * Expand @import-glob in `css`, then replace local @imports that still
+	 * contain @import-glob with their glob-expanded contents (recursively).
+	 * Leaves package / URL imports and plain CSS @imports for Tailwind.
+	 */
+	async function expandNestedImportGlobs(css, from, seen = new Set()) {
+		const { default: postcssImportExtGlob } = await import('postcss-import-ext-glob');
+		const expanded = (await postcss([postcssImportExtGlob()]).process(css, { from })).css;
+		const importRe = /@import\s+(?:url\(\s*)?['"]([^'"\n]+)['"]\s*\)?\s*;/g;
+
+		let output = '';
+		let lastIndex = 0;
+
+		for (const match of expanded.matchAll(importRe)) {
+			output += expanded.slice(lastIndex, match.index);
+			lastIndex = match.index + match[0].length;
+
+			const rel = match[1];
+			if (!rel.startsWith('.')) {
+				output += match[0];
+				continue;
+			}
+
+			const abs = path.resolve(path.dirname(from), rel);
+			if (!existsSync(abs) || seen.has(abs)) {
+				output += match[0];
+				continue;
+			}
+
+			const child = readFileSync(abs, 'utf-8');
+			if (!child.includes('@import-glob')) {
+				output += match[0];
+				continue;
+			}
+
+			seen.add(abs);
+			output += await expandNestedImportGlobs(child, abs, seen);
+			output += '\n';
+		}
+
+		output += expanded.slice(lastIndex);
+		return output;
+	}
+
 	async function buildCssVariants(cssEntryPath) {
 		const rawCss = readFileSync(cssEntryPath, 'utf-8');
+		const flattenedCss = await expandNestedImportGlobs(rawCss, cssEntryPath);
 		const processor = await getCssProcessor();
-		const result = await processor.process(rawCss, { from: cssEntryPath });
+		const result = await processor.process(flattenedCss, { from: cssEntryPath });
 		const unscopedCss = result.css;
 
 		const deps = new Set(

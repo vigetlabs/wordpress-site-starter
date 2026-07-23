@@ -24,7 +24,7 @@ export default defineConfig(({ command }) => ({
 			],
 		}),
 		viteEditorStyles({
-			cssEntry: path.resolve(__dirname, 'src/styles/main.css'),
+			cssEntry: path.resolve(__dirname, 'src/styles/editor.css'),
 			watchPaths: [
 				path.resolve(__dirname, './src/**/*.css'),
 				path.resolve(__dirname, './blocks/**/*.css'),
