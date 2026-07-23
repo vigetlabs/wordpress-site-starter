@@ -110,6 +110,33 @@ The default spacing is fluid, meaning that it is larger on desktops and smaller 
 
 Adjust the spacing as needed from the [spacing.css](src/styles/tailwind/spacing.css) config file.
 
+### Images
+
+Images live in `src/public/images/`. Reference them from any CSS file — a plain `url()` or a Tailwind arbitrary value — with the `@images` alias instead of a relative path, so the reference doesn't depend on how deeply nested the CSS file is:
+
+```css
+.icon-logo {
+	background-image: url('@images/logo.svg');
+}
+```
+
+```html
+<div class="bg-[url('@images/logo.svg')]"></div>
+```
+
+> Tailwind v4 scans the whole repo (respecting `.gitignore`) for anything that looks like a utility class — including code fences in this file. Only use filenames that actually exist in `src/public/images/` in examples here, or the next build will fail trying to resolve a file that doesn't exist.
+
+Vite resolves `@images/*` in both dev (served straight from source, unoptimized) and build (copied into `dist/assets/` with a content hash — or inlined as a data URI if the file is small — and compressed via `vite-plugin-image-optimizer`).
+
+Separately, **the entire `src/public/images/` folder is always mirrored into `dist/images/`** on every build, whether or not anything references a given file in CSS/JS, and every file there is optimized in place too. This matters because `src/` is not part of the production deploy artifact — only `dist/` ships — so any PHP that needs a filesystem path or URL to an image directly (not through compiled CSS) can't hardcode a `src/...` path; it has to switch between the dev source and the built copy. Use the theme's `Vite` helper for that instead of hand-rolling the dev/prod check:
+
+```php
+$path = \WPStarter\Vite::get_instance()->get_image_path( 'logo.svg' ); // filesystem path
+$url  = \WPStarter\Vite::get_instance()->get_image_url( 'logo.svg' );  // URL
+```
+
+See the custom-logo fallback in [`inc/blocks.php`](inc/blocks.php) and the custom button icons in [`inc/icons.php`](inc/icons.php) for real usages.
+
 ### Buttons
 
 WordPress button styles are normally built in the `theme.json`, but because there is a limitations on hover/focus customizations on button variants, all the buttons style are built in Tailwind.

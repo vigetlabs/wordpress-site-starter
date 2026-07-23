@@ -329,6 +329,40 @@ class Vite {
 		return $this->dist_url . $manifest[ $file ]['file'];
 	}
 
+	/**
+	 * Resolve a filesystem path under the mirrored images directory.
+	 *
+	 * `src/` is not part of the production deploy artifact -- only `dist/`
+	 * ships -- so any PHP code that reads image bytes directly (file_exists(),
+	 * file_get_contents(), etc.) must switch source directories between dev
+	 * and prod, same as the JS/CSS asset URLs above.
+	 *
+	 * @param string $relative Path relative to the images directory, e.g. 'logo.svg'.
+	 * @return string Absolute filesystem path.
+	 */
+	public function get_image_path( string $relative = '' ): string {
+		$dir = $this->is_dev()
+			? get_stylesheet_directory() . '/src/public/images/'
+			: get_stylesheet_directory() . '/dist/images/';
+
+		return $dir . ltrim( $relative, '/' );
+	}
+
+	/**
+	 * Resolve a URL under the mirrored images directory. Same dev/prod switch
+	 * as get_image_path().
+	 *
+	 * @param string $relative Path relative to the images directory, e.g. 'logo.svg'.
+	 * @return string Absolute URL.
+	 */
+	public function get_image_url( string $relative = '' ): string {
+		$base = $this->is_dev()
+			? get_theme_file_uri( '/src/public/images/' )
+			: $this->dist_url . 'images/';
+
+		return $base . ltrim( $relative, '/' );
+	}
+
 	// -------------------------------------------------------------------------
 	// Filters
 	// -------------------------------------------------------------------------
