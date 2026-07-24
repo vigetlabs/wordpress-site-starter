@@ -6,6 +6,7 @@ import viteGlobWatch from './src/plugins/vite-glob-watch.js';
 import viteEditorStyles from './src/plugins/vite-scoped-editor-styles.js';
 
 const THEME = '/wp-content/themes/wp-starter';
+const VITE_PORT = parseInt(process.env.VITE_PRIMARY_PORT ?? '5273');
 
 export default defineConfig(({ command }) => ({
 	root: 'src',
@@ -48,9 +49,9 @@ export default defineConfig(({ command }) => ({
 	},
 	server: {
 		host: "0.0.0.0",
-		origin: "https://wpstarter.ddev.site:5273",
+		origin: `https://wpstarter.ddev.site:${VITE_PORT}`,
 		strictPort: true,
-		port: parseInt(process.env.VITE_PRIMARY_PORT ?? '5273'),
+		port: VITE_PORT,
 		watch: {
 			usePolling: true,
 			interval: 1000,
