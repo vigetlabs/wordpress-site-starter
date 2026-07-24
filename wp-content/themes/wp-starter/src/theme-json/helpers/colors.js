@@ -89,7 +89,7 @@ function parseColorsFromCSS() {
 		const themeContent = themeMatch[1];
 
 		// Extract color variables (--color-*)
-		const colorRegex = /--color-([^:]+):\s*([^;]+);/g;
+		const colorRegex = /--color-([\w-]+):\s*([^;]+);/g;
 		const colors = {};
 		let match;
 
@@ -130,7 +130,7 @@ function parseUtilitiesColorsFromCSS() {
 		}
 
 		const themeContent = themeMatch[1];
-		const colorRegex = /--color-([^:]+):\s*([^;]+);/g;
+		const colorRegex = /--color-([\w-]+):\s*([^;]+);/g;
 		const colors = {};
 		let match;
 
@@ -173,7 +173,7 @@ function parseGradientsFromCSS() {
 		const themeContent = themeMatch[1];
 
 		// Extract gradient variables (--gradient-*)
-		const gradientRegex = /--gradient-([^:]+):\s*([^;]+);/g;
+		const gradientRegex = /--gradient-([\w-]+):\s*([^;]+);/g;
 		const gradients = {};
 		let match;
 
@@ -308,7 +308,7 @@ function parseGradientsFromUtilitiesCSS() {
 		}
 
 		const themeContent = themeMatch[1];
-		const gradientRegex = /--gradient-([^:]+):\s*([^;]+);/g;
+		const gradientRegex = /--gradient-([\w-]+):\s*([^;]+);/g;
 		const gradients = {};
 		let match;
 
