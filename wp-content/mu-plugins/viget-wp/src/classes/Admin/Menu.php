@@ -13,6 +13,35 @@ class Menu {
 	public function __construct() {
 		// Customize the Admin Menu
 		$this->customize_menus();
+
+		// Hide the Appearance items the Site Editor replaces
+		$this->remove_appearance_items();
+	}
+
+	/**
+	 * Remove Appearance Submenu Items
+	 *
+	 * @return void
+	 */
+	private function remove_appearance_items(): void {
+		add_filter(
+			'vigetwp_admin_menu',
+			function ( array $mods ): array {
+				if ( ! wp_is_block_theme() ) {
+					return $mods;
+				}
+
+				foreach ( [ 'font-library.php', 'nav-menus.php', 'widgets.php' ] as $submenu ) {
+					$mods[] = [
+						'menu'    => 'themes.php',
+						'submenu' => $submenu,
+						'remove'  => true,
+					];
+				}
+
+				return $mods;
+			}
+		);
 	}
 
 	/**
