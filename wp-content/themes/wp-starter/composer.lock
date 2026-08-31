@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9a2d6017734105593317daaa0258c2d5",
+    "content-hash": "9b3251cb713da45a95a46b29b1db31a1",
     "packages": [
         {
             "name": "composer/installers",
@@ -1021,16 +1021,16 @@
         },
         {
             "name": "viget/viget-blocks-toolkit",
-            "version": "v1.1.5",
+            "version": "v1.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vigetlabs/viget-blocks-toolkit.git",
-                "reference": "4bf3652fb267c03c54a55dc9aa28ef1d32a59be7"
+                "reference": "548ed20b41a949fd333ee76ea13ebf44fa3862d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vigetlabs/viget-blocks-toolkit/zipball/4bf3652fb267c03c54a55dc9aa28ef1d32a59be7",
-                "reference": "4bf3652fb267c03c54a55dc9aa28ef1d32a59be7",
+                "url": "https://api.github.com/repos/vigetlabs/viget-blocks-toolkit/zipball/548ed20b41a949fd333ee76ea13ebf44fa3862d8",
+                "reference": "548ed20b41a949fd333ee76ea13ebf44fa3862d8",
                 "shasum": ""
             },
             "require": {
@@ -1060,9 +1060,9 @@
             ],
             "support": {
                 "issues": "https://github.com/vigetlabs/viget-blocks-toolkit/issues",
-                "source": "https://github.com/vigetlabs/viget-blocks-toolkit/tree/v1.1.5"
+                "source": "https://github.com/vigetlabs/viget-blocks-toolkit/tree/v1.1.8"
             },
-            "time": "2026-03-25T23:55:41+00:00"
+            "time": "2026-08-31T02:32:47+00:00"
         },
         {
             "name": "wpackagist-plugin/accessibility-checker",
@@ -1828,5 +1828,5 @@
         "ext-json": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
