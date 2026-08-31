@@ -131,6 +131,7 @@ Child blocks (nested inside a parent) always have `"parent": ["acf/<parent-slug>
 - Common `supports.layout` types: `"constrained"`, `"grid"`, `"flex"`.
 - Add `"color": { "background": true }` under `supports` when background color switching is needed.
 - Add `"spacing": { "padding": ["top","bottom"] }` under `supports` when padding control is needed.
+- Add `"autoId": true` under `supports` only when the block needs a generated html `id` on its wrapper (in-page anchor target, scoped styles). Defaults to `false` as of Viget Blocks Toolkit 1.1.8 — before that every block got one automatically. This is unrelated to core's `anchor` support, which renders an editor-typed id and needs no declaration.
 - Add `"styles": [...]` for block style variations (like dismissible/default).
 - Grid parent blocks (e.g. card containers): use `"type": "grid"` layout with `"columnCount"` and `"minimumColumnWidth": null`.
 - For a real-world reference of supports/attributes, see [`blocks/alert-banner/block.json`](wp-content/themes/wp-starter/blocks/alert-banner/block.json) and [`blocks/cta/block.json`](wp-content/themes/wp-starter/blocks/cta/block.json).
@@ -460,7 +461,7 @@ These global helpers are registered in the theme — use them freely:
 
 - `block_attrs( $block, $class = '', $attrs = [] )` — outputs all block wrapper attributes.
 - `inner_blocks( $args )` — outputs ACF inner blocks; accepts `template`, `allowedBlocks`, `templateLock`.
-- `get_block_id( $block )` — returns a unique ID for the block instance.
+- `get_block_id( $block )` — returns a unique ID for the block instance. Note this returns a value whether or not the block declares `supports.autoId`; the support controls only whether `block_attrs()` renders it as an html `id`.
 
 Project-specific helpers (singletons, taxonomy accessors, icon registries, etc.) are not assumed by this guide — discover them by reading existing blocks in the active theme.
 
@@ -548,5 +549,6 @@ Do not invent API surfaces. If you're not sure, fetch and cite, or ask the devel
 - PHP files use `// phpcs:ignore` comments on lines that intentionally break PHPCS rules (like inline array assignments in render.php).
 - For Alpine.js: `x-data`, `x-show`, etc. go in `$attrs` array in `render.php` and are only applied when `! is_admin()`.
 - `$persist()` is available for Alpine.js persistent state (used in alert-banner).
+- Blocks do not render an html `id` by default. If markup or JS needs to reference the wrapper by id, either declare `"supports": { "autoId": true }` or pass one explicitly: `block_attrs( $block, '', [ 'id' => $id ] )` — see [`blocks/alert-banner/render.php`](wp-content/themes/wp-starter/blocks/alert-banner/render.php). Prefer an Alpine `x-ref` over an id for scripting.
 - Child block `block.json` files must include `"parent": ["acf/<parent-slug>"]`.
 - Always add a dev fallback in `render.twig` for blocks that pull dynamic data (taxonomies, CPT queries) so the block looks good before real data exists.
