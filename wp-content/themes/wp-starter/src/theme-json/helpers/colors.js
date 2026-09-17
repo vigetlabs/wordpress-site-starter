@@ -407,6 +407,27 @@ function getGradientObject(slug) {
 }
 
 /**
+ * Resolve a color token's raw name (e.g. 'black', 'gray-600') to its WP preset
+ * CSS var, honoring the `dark-` slug prefix {@link getPalette} applies to colors
+ * that fail the luminance check. Prefer this over hardcoding
+ * `var(--wp--preset--color--X)` - the dark- prefix is derived from the color's
+ * current value and shifts silently if that value changes.
+ *
+ * @param {string} name Raw color token name as defined in the CSS (no `dark-` prefix).
+ * @returns {string} e.g. 'var(--wp--preset--color--dark-black)'
+ */
+function colorVar(name) {
+	const entry = getColorObject(name) ?? getColorObject(`dark-${name}`);
+
+	if (!entry) {
+		console.warn(`[theme.json] colorVar(): unknown color token "${name}"`);
+		return `var(--wp--preset--color--${name})`;
+	}
+
+	return `var(--wp--preset--color--${entry.slug})`;
+}
+
+/**
  * Resolve a duotone preset by slug.
  *
  * @param {string} slug
@@ -423,6 +444,7 @@ export {
 	getGradientsAll,
 	getDuotones,
 	getColorObject,
+	colorVar,
 	getGradientObject,
 	getDuotoneObject,
 };
