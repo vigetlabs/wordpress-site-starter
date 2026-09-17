@@ -58,7 +58,7 @@ class LoginScreen {
 					<?php if ( $logo_url ) : ?>
 						#login h1 a,
 						.login h1 a {
-							background-image: url('<?php echo esc_html( $logo_url ); ?>');
+							background-image: url('<?php echo esc_url( $logo_url ); ?>');
 							background-repeat: no-repeat;
 							background-size: contain;
 							height: 65px;
@@ -71,14 +71,19 @@ class LoginScreen {
 					}
 					body.login::after {
 						content: '';
-						background-image: url('<?php echo esc_html( $logo_url ); ?>');
+						background-image: url('<?php echo esc_url( $logo_url ); ?>');
 						background-repeat: no-repeat;
-						background-position: -10% 0;
-						background-size: 300%;
+						background-position: 95% 0;
+						background-size: 200%;
 						position: absolute;
 						inset: 0;
 						z-index: -1;
 						opacity: 0.075;
+					}
+					@media screen and (max-width: 768px) {
+						body.login::after {
+							background-size: 300%;
+						}
 					}
 					body.login.wp-core-ui .button-primary {
 						background-color: var(--brand-primary);
@@ -116,11 +121,15 @@ class LoginScreen {
 	 * @return string
 	 */
 	private function get_logo_url(): string {
-		$logo_url = VIGETWP_PLUGIN_URL . 'src/assets/images/viget-logo-transparent.svg';
 		if ( has_custom_logo() ) {
-			$logo_url = wp_get_attachment_image_url( get_theme_mod( 'custom_logo' ), 'full' );
+			return wp_get_attachment_image_url( get_theme_mod( 'custom_logo' ), 'full' );
 		}
-		return $logo_url;
+
+		if ( file_exists( get_stylesheet_directory() . '/dist/images/logo.svg' ) ) {
+			return get_stylesheet_directory_uri() . '/dist/images/logo.svg';
+		}
+
+		return VIGETWP_PLUGIN_URL . 'src/assets/images/viget-logo-transparent.svg';
 	}
 
 	/**

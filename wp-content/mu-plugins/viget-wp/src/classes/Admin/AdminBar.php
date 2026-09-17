@@ -13,11 +13,26 @@ namespace VigetWP\Admin;
 class AdminBar {
 
 	/**
-	 * Customize Admin Menu Bar
+	 * Initialize the Admin Menu Bar Customizations.
 	 */
 	public function __construct() {
+		// Remove the WordPress logo from the admin bar.
+		$this->remove_wp_logo();
+
 		// Customize the Admin Bar
 		$this->customize_admin_bar();
+	}
+
+	/**
+	 * Remove the WordPress logo from the admin bar.
+	 *
+	 * @return void
+	 */
+	private function remove_wp_logo(): void {
+		add_action( 'wp_before_admin_bar_render', function() {
+			global $wp_admin_bar;
+			$wp_admin_bar->remove_node( 'wp-logo' );
+		} );
 	}
 
 	/**

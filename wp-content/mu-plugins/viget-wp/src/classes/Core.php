@@ -19,6 +19,7 @@ use VigetWP\Admin\CustomScripts;
 use VigetWP\Admin\LoginScreen;
 use VigetWP\Admin\Menu;
 use VigetWP\Admin\TinyMCE;
+use VigetWP\Features\BodyClasses;
 use VigetWP\Features\DisableComments;
 use VigetWP\Features\Gravatar;
 use VigetWP\Plugins\CreateBlockTheme;
@@ -152,6 +153,7 @@ class Core {
 	 */
 	private function init_modules(): void {
 		// Features
+		new BodyClasses();
 		new DisableComments();
 		new Gravatar();
 		new CustomScripts();
