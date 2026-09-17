@@ -70,6 +70,13 @@
     ]
   },
   "extra": {
+    "licensed-repositories": {
+      "connect.advancedcustomfields.com": {
+        "name": "ACF Pro",
+        "package": "wpengine/advanced-custom-fields-pro",
+        "secret": "ACF_LICENSE_KEY"
+      }
+    },
     "installer-paths": {
       "../../mu-plugins/{$name}": [
         "type:wordpress-muplugin"

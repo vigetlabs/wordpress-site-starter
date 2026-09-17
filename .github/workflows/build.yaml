@@ -36,14 +36,30 @@ jobs:
           path: /tmp/composer-cache
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
+      # This check has no deploy target, so licensed plugins are activated
+      # against the local ddev URL - a free, unlimited dev activation. Set the
+      # LICENSE_SITE_URL repository variable to override.
+      - name: Resolve license site URL
+        id: license
+        run: |
+          set -euo pipefail
+          site_url="${LICENSE_SITE_URL:-}"
+          if [ -z "$site_url" ]; then
+            project="$(sed -n 's/^name: *//p' .ddev/config.yaml | head -1)"
+            site_url="https://$project.ddev.site"
+          fi
+          echo "Licensing against ${site_url%/}/"
+          echo "site_url=${site_url%/}/" >> "$GITHUB_OUTPUT"
+        env:
+          LICENSE_SITE_URL: ${{ vars.LICENSE_SITE_URL }}
+
       # Build theme
       - name: Install Theme Dependencies
-        uses: "php-actions/composer@v6"
+        uses: ./.github/actions/composer-install
         with:
-          php_version: "8.2"
-          dev: no
-          args: "--optimize-autoloader"
-          working_dir: wp-content/themes/wp-starter
+          working-directory: wp-content/themes/wp-starter
+          site-url: ${{ steps.license.outputs.site_url }}
+          secrets-json: ${{ toJSON(secrets) }}
 
       - name: Build Theme
         run: |
@@ -53,12 +69,9 @@ jobs:
 
       # Install viget-wp composer dependencies
       - name: Install viget-wp Dependencies
-        uses: "php-actions/composer@v6"
+        uses: ./.github/actions/composer-install
         with:
-          php_version: "8.2"
-          dev: no
-          args: "--optimize-autoloader"
-          working_dir: wp-content/mu-plugins/viget-wp
+          working-directory: wp-content/mu-plugins/viget-wp
 
       - name: Build Success
         run: echo "✅ Theme build completed successfully!"

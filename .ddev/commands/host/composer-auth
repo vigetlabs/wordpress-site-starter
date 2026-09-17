@@ -1,0 +1,152 @@
+#!/usr/bin/env bash
+
+## Description: Add licensed plugin credentials to the theme's auth.json so Composer can install them
+## Usage: composer-auth [flags]
+## Example: "ddev composer-auth" (prompt for missing keys) or "ddev composer-auth --check"
+## Flags: [{"Name":"check","Usage":"report which credentials are missing, without prompting"},{"Name":"force","Usage":"re-prompt for credentials that are already present"}]
+
+set -euo pipefail
+
+APPROOT="${DDEV_APPROOT:-$(pwd)}"
+THEME_DIR="$APPROOT/wp-content/themes/wp-starter"
+AUTH_FILE="$THEME_DIR/auth.json"
+COMPOSER_FILE="$THEME_DIR/composer.json"
+SITE_URL="${DDEV_PRIMARY_URL:-https://wpstarter.ddev.site}"
+SITE_URL="${SITE_URL%/}/"
+
+CHECK_ONLY=0
+FORCE=0
+
+for arg in "$@"; do
+	case "$arg" in
+		--check) CHECK_ONLY=1 ;;
+		--force) FORCE=1 ;;
+	esac
+done
+
+if [[ -t 1 ]]; then
+	BOLD=$'\033[1m'
+	DIM=$'\033[2m'
+	GREEN=$'\033[32m'
+	YELLOW=$'\033[33m'
+	RESET=$'\033[0m'
+else
+	BOLD="" DIM="" GREEN="" YELLOW="" RESET=""
+fi
+
+info() { printf '    %s%s%s\n' "$DIM" "$*" "$RESET"; }
+warn() { printf '%s !  %s%s\n' "$YELLOW" "$*" "$RESET" >&2; }
+done_msg() { printf '%s ✓  %s%s\n' "$GREEN" "$*" "$RESET"; }
+
+if ! command -v jq >/dev/null 2>&1; then
+	warn "jq is required to read and merge auth.json. Install it, then run 'ddev composer-auth' again."
+	exit 1
+fi
+
+# Licensed repositories live in the theme's composer.json under
+# extra.licensed-repositories, alongside the repositories they authenticate.
+if [[ ! -f "$COMPOSER_FILE" ]]; then
+	warn "No composer.json at $COMPOSER_FILE."
+	exit 1
+fi
+
+# --check only reports repositories whose package is actually required, so a
+# project that hasn't switched a plugin over to Composer yet isn't nagged for a
+# key it doesn't need. An interactive run always offers every repository.
+repos="$(jq -r --argjson required "$CHECK_ONLY" '
+	( ( .require // {} ) + ( ."require-dev" // {} ) ) as $installed
+	| .extra["licensed-repositories"] // {}
+	| to_entries[]
+	| select( $required == 0 or ( .value.package // "" ) == "" or $installed[ .value.package ] )
+	| [ .key, ( .value.name // .key ), ( .value.password // "{site_url}" ) ]
+	| @tsv
+' "$COMPOSER_FILE")"
+
+if [[ -z "$repos" ]]; then
+	[[ "$CHECK_ONLY" -eq 1 ]] || info "No licensed repositories are configured."
+	exit 0
+fi
+
+# An auth.json may already exist - keep every entry it holds and only add what is missing.
+auth_json='{}'
+if [[ -s "$AUTH_FILE" ]]; then
+	if ! auth_json="$(jq '.' "$AUTH_FILE" 2>/dev/null)"; then
+		warn "$AUTH_FILE is not valid JSON. Fix or remove it, then run 'ddev composer-auth' again."
+		exit 1
+	fi
+fi
+
+has_credentials() {
+	printf '%s' "$auth_json" | jq -e --arg host "$1" '
+		( .["http-basic"][$host].username // "" ) != ""
+	' >/dev/null 2>&1
+}
+
+set_credentials() {
+	auth_json="$(printf '%s' "$auth_json" | jq \
+		--arg host "$1" --arg username "$2" --arg password "$3" \
+		'.["http-basic"][$host] = { username: $username, password: $password }')"
+}
+
+missing=0
+prompted=0
+
+# Read the repository list on FD 3 so prompts still read from the terminal.
+while IFS=$'\t' read -r host name password_template <&3; do
+	[[ -n "$host" ]] || continue
+
+	if has_credentials "$host" && [[ "$FORCE" -eq 0 ]]; then
+		[[ "$CHECK_ONLY" -eq 1 ]] && done_msg "$name credentials found."
+		continue
+	fi
+
+	missing=$(( missing + 1 ))
+
+	if [[ "$CHECK_ONLY" -eq 1 ]]; then
+		warn "No $name credentials. Run 'ddev composer-auth' to add them."
+		continue
+	fi
+
+	printf '\n%s%s license key needed%s\n' "$BOLD" "$name" "$RESET"
+	info "Composer installs $name from $host."
+	info "The key is in 1Password. Leave blank to skip - $name won't install."
+
+	license_key=""
+	if [[ -t 0 ]]; then
+		read -r -p "    License key: " license_key || true
+	elif ! read -r license_key; then
+		warn "Not an interactive terminal and no key on stdin - skipping the prompt."
+	fi
+
+	license_key="$(printf '%s' "$license_key" | tr -d '[:space:]')"
+
+	if [[ -z "$license_key" ]]; then
+		warn "Skipped $name. Run 'ddev composer-auth' when you have the key."
+		continue
+	fi
+
+	# The license key authenticates as the username; the password defaults to the
+	# site URL being licensed, which is what these repositories expect.
+	password="${password_template//\{site_url\}/$SITE_URL}"
+	password="${password//\{key\}/$license_key}"
+
+	set_credentials "$host" "$license_key" "$password"
+	prompted=$(( prompted + 1 ))
+	done_msg "Added $name credentials for $SITE_URL"
+done 3<<< "$repos"
+
+if [[ "$CHECK_ONLY" -eq 1 ]]; then
+	[[ "$missing" -eq 0 ]] && exit 0
+	exit 1
+fi
+
+if [[ "$prompted" -eq 0 ]]; then
+	[[ "$missing" -eq 0 ]] && done_msg "All licensed plugin credentials are already in auth.json."
+	exit 0
+fi
+
+mkdir -p "$THEME_DIR"
+umask 077
+printf '%s\n' "$auth_json" > "$AUTH_FILE"
+
+done_msg "Wrote wp-content/themes/wp-starter/auth.json"
