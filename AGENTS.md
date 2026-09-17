@@ -59,14 +59,19 @@ Every block lives at `wp-content/themes/<theme-slug>/blocks/<block-slug>/` and c
 | `block.json` | yes | Block metadata, supports, attributes, ACF config |
 | `style.css` | yes | Front-end + editor styles (Tailwind, scaffold empty) |
 | `template.json` | most blocks | Default inner block structure |
-| `render.php` | custom render blocks | PHP data prep → `Timber::render()` (Twig on) or inline HTML (Twig off) |
+| `render.php` | custom render blocks only | PHP data prep → `Timber::render()` (Twig on) or inline HTML (Twig off) |
 | `render.twig` | Twig-on custom render blocks | Twig output template |
 | `block.php` | when needed | Helper functions, filters (Twig functions, block styles) |
-| `<slug>/group_*.json` | when ACF fields needed | ACF field group JSON |
+| `editor.css` | when needed | Editor-only styles (not loaded on the front end) |
+| `view.css` | when needed | Front-end-only styles (not loaded in the editor) |
+| `script.js` | when needed | Alpine component registered from the theme's `src/_main.js` |
+| `<slug>/group_*.json` | rarely | ACF field group JSON, for fields scoped to this block |
+
+**Do not scaffold a `render.php` for an InnerBlocks-only block.** Viget Blocks Toolkit renders any block with `"supports": { "jsx": true }` and no render file through its own `views/jsx.php`, honoring `tagName` and `innerContainer`. Most blocks in both this theme and the projects built from it have no `render.php` at all - `blocks/cta/`, `blocks/logo-grid/`, `blocks/page-header/`, `blocks/text-image/` are all `block.json` + `style.css` + `template.json`. Adding an empty passthrough render file is the most common thing to get wrong here.
 
 **Two rendering modes:**
 
-1. **InnerBlocks-only** — `template.json` defines content structure. Use a minimal `render.php` (and `render.twig` when Twig is enabled) that just calls `inner_blocks()`. Use when no PHP data fetching is needed.
+1. **InnerBlocks-only** — `template.json` defines content structure and the toolkit's `jsx.php` renders it. Generate **no** `render.php` and no `render.twig`. Use when no PHP data fetching is needed. Set `supports.tagName` to change the wrapper element and `supports.innerContainer: false` to drop the `.acf-block-inner__container` div.
 2. **Custom render** — `render.php` preps data and (Twig on) calls `Timber::render()` or (Twig off) outputs HTML inline. Use when the block needs ACF fields, WP queries, or custom logic.
 
 Child blocks (nested inside a parent) always have `"parent": ["acf/<parent-slug>"]` in `block.json`.
@@ -77,7 +82,7 @@ Child blocks (nested inside a parent) always have `"parent": ["acf/<parent-slug>
 2. **Determine rendering mode** — does the block need PHP data (ACF fields, WP queries)? → custom render. Purely composed of core/child blocks? → InnerBlocks-only.
 3. **Determine if ACF fields are needed** — if yes, generate `group_*.json`.
 4. **Determine if child blocks are needed** — if yes, create a subdirectory for each child block with its own full set of files.
-5. **Generate all files** per the templates below. Skip `render.twig` if Twig is disabled.
+5. **Generate all files** per the templates below. Skip `render.twig` if Twig is disabled, and skip `render.php` entirely for InnerBlocks-only blocks.
 6. **Output instructions** telling the developer where each file goes and any manual steps (e.g. ACF field group import).
 
 ### File templates
@@ -132,6 +137,21 @@ Child blocks (nested inside a parent) always have `"parent": ["acf/<parent-slug>
 - Add `"color": { "background": true }` under `supports` when background color switching is needed.
 - Add `"spacing": { "padding": ["top","bottom"] }` under `supports` when padding control is needed.
 - Add `"styles": [...]` for block style variations (like dismissible/default).
+- Add `"supports": { "tagName": "div" }` to change the wrapper element the toolkit's `jsx.php` renders (defaults to `section`).
+- Add `"supports": { "innerContainer": false }` to drop the `.acf-block-inner__container` wrapper div.
+- Add `"supports": { "lock": { "move": true, "remove": false } }` to set the block's default lock state.
+- A top-level `"settings"` key sets theme.json settings scoped to this block. It's read at build time by `src/theme-json/helpers/blocks.js` and merged into `settings.blocks["acf/<slug>"]`, and **`block.json` wins over `src/theme-json/settings/blocks.js` on conflicts**. Use it to restrict a block's controls without editing a central file:
+
+  ```json
+  "settings": {
+    "color": {
+      "custom": false,
+      "palette": [ "primary", "white" ]
+    }
+  }
+  ```
+
+  Palette entries may be slugs (resolved against the theme palette, `dark-` prefix included) or full preset objects. A flat `"settings": { "palette": [...] }` is accepted and normalized to `color.palette`.
 - Grid parent blocks (e.g. card containers): use `"type": "grid"` layout with `"columnCount"` and `"minimumColumnWidth": null`.
 - For a real-world reference of supports/attributes, see [`blocks/alert-banner/block.json`](wp-content/themes/wp-starter/blocks/alert-banner/block.json) and [`blocks/cta/block.json`](wp-content/themes/wp-starter/blocks/cta/block.json).
 
@@ -369,7 +389,14 @@ For a complete real-world example with `$persist()` Alpine state, see [`blocks/a
 
 #### ACF field group JSON (`group_*.json`)
 
-Only needed when the block has ACF fields. Filename format is `group_<random_hex>.json`. Generate a plausible random hex key.
+Only needed when the block has its **own** ACF fields. Filename format is `group_<random_hex>.json`. Generate a plausible random hex key.
+
+**Check whether the block needs fields at all before generating one.** Blocks here are usually composed of inner blocks, or read data from the post they're rendered in. ACF adds `postId` to every block's `uses_context`, so a block nested in a `core/post-template` receives the looped post as `$post_id` - that's how card blocks render in PHP without declaring a single field. See `blocks/insight-grid-card/render.php` in a project built from this starter.
+
+Where the file goes depends on what the fields are attached to:
+
+- **Fields scoped to one block** live in that block's folder. The toolkit adds each block directory to ACF's JSON load/save paths, so they sync with no extra config.
+- **Fields attached to a post type, page template, or options page** live in the theme's `acf-json/` directory. In practice this is where most project field groups end up, targeting `post_type`, `page_template`, or `options_page` rather than `block`.
 
 ```json
 {
