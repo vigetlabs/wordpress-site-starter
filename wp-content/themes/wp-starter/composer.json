@@ -1,7 +1,6 @@
 {
   "name": "viget/wordpress-site-starter",
   "description": "A custom WordPress Site Starter Kit by Viget.",
-  "version": "0.1.0",
   "keywords": [
     "wordpress",
     "components",
@@ -10,7 +9,7 @@
     "tailwind",
     "vite"
   ],
-  "license": "MIT",
+  "license": "GPL-2.0-or-later",
   "authors": [
     {
       "name": "Viget",

@@ -70,7 +70,7 @@ Implement real transforms inside [`inc/cli/wpstarter-cli.php`](inc/cli/wpstarter
 
 Block scaffolding is driven by AI assistants. The repo ships an [`AGENTS.md`](../../../AGENTS.md) at the repo root that documents the file layout, naming conventions, render patterns (Timber/Twig + PHP fallback), accessibility expectations, and ACF field group format used by every block in this starter.
 
-To create a new block, point your AI assistant at that guide and describe what you need — a ticket, a design, a data model, or even a casual "build a block for X" / "create a [name] block". Any AI assistant (Cursor, Aider, Continue, Copilot Chat, etc.) can read `AGENTS.md` directly. Claude Code users get an auto-triggering skill at [`.claude/skills/wp-block-generator/SKILL.md`](../../../.claude/skills/wp-block-generator/SKILL.md) that wraps the same instructions.
+To create a new block, point your AI assistant at that guide and describe what you need — a ticket, a design, a data model, or even a casual "build a block for X" / "create a [name] block". Any AI assistant (Cursor, Aider, Continue, Copilot Chat, etc.) can read `AGENTS.md` directly. Claude Code users get an auto-triggering skill at [`.claude/skills/viget-block-generator/SKILL.md`](../../../.claude/skills/viget-block-generator/SKILL.md) that wraps the same instructions.
 
 The assistant will:
 

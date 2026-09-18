@@ -2,7 +2,7 @@
 
 Instructions for AI coding assistants (Claude Code, Cursor, Aider, Continue, Copilot Chat, etc.) working in this WordPress Site Starter repo. The goal is to make this starter quick and reliable to extend, regardless of which assistant a developer uses.
 
-This file is the source of truth. Tool-specific entry points (e.g. `.claude/skills/wp-block-generator/SKILL.md`) are thin wrappers that point here.
+This file is the source of truth. Tool-specific entry points (e.g. `.claude/skills/viget-block-generator/SKILL.md`) are thin wrappers that point here.
 
 ---
 
@@ -543,6 +543,7 @@ Do not invent API surfaces. If you're not sure, fetch and cite, or ask the devel
 ## Gotchas
 
 - Never edit `theme.json` directly — it's generated from `src/theme-json/`.
+- The theme's version stays at `0.1.0` in `style.css`, `readme.txt` and `package.json`. It's the starting version for a generated project, not a bug. Starter releases are tracked in `packages.json` and `CHANGELOG.md` only.
 - `"supports.mode": false` is always set — disables ACF's block mode switcher.
 - The `acf-json/` folder (when present) auto-syncs ACF field groups; placing JSON there is preferred over manual import.
 - `render.php` and `render.twig` are kept in sync when Twig is enabled.

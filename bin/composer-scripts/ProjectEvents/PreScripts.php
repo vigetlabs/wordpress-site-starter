@@ -14,13 +14,14 @@ use Viget\ComposerScripts\ComposerScript;
 class PreScripts extends ComposerScript {
 
 	/**
+	 * Directories scanned for locally cloned packages.
+	 *
 	 * @var array
 	 */
-	private static array $repoPlugins = [
-		'viget/viget-blocks-toolkit' => 'viget-blocks-toolkit',
-		'viget/viget-form-blocks' => 'viget-form-blocks',
-		'viget/viget-parts-kit' => 'viget-parts-kit',
-		'viget/wp-sonny' => 'wp-sonny',
+	private static array $scanDirs = [
+		'wp-content/plugins',
+		'wp-content/mu-plugins',
+		'wp-content/themes',
 	];
 
 	/**
@@ -62,68 +63,80 @@ class PreScripts extends ComposerScript {
 	}
 
 	/**
-	 * Check if repo plugins exist locally (folder containing .git) and nullify their installation or update.
+	 * Move locally cloned repos out of the way so Composer can't overwrite them.
 	 *
 	 * @return void
 	 */
 	private static function checkRepoPlugins(): void {
-		$installationManager = self::$composer->getInstallationManager();
 		$protectedPackages = [];
 
-		// Temporarily rename directories with .git folders
-		foreach (self::$repoPlugins as $packageName => $folderName) {
-			$package = self::$composer->getRepositoryManager()->getLocalRepository()->findPackage($packageName, '*');
+		foreach ( self::findGitRepos() as $label => $installPath ) {
+			$tempPath = $installPath . '_git_backup_' . uniqid();
 
-			if ($package) {
-				$installPath = $installationManager->getInstallPath($package);
+			if ( is_dir( $tempPath ) ) {
+				continue;
+			}
 
-				if (file_exists($installPath) && is_dir($installPath . '/.git')) {
-					$tempPath = $installPath . '_git_backup_' . uniqid();
+			self::writeInfo( sprintf( 'Protecting Git repository: %s', $label ) );
 
-					// Skip if already renamed
-					if (!is_dir($installPath) || is_dir($tempPath)) {
-						continue;
-					}
+			rename( $installPath, $tempPath );
 
-					self::writeInfo(sprintf('Protecting Git repository: %s', $packageName));
-					rename($installPath, $tempPath);
-					$protectedPackages[$packageName] = [
-						'original' => $installPath,
-						'temp' => $tempPath
-					];
+			$protectedPackages[ $label ] = [
+				'original' => $installPath,
+				'temp'     => $tempPath,
+			];
+		}
+
+		if ( empty( $protectedPackages ) ) {
+			return;
+		}
+
+		// Store protected packages information in temporary file
+		$tempFile = sys_get_temp_dir() . '/composer_protected_packages_' . md5( json_encode( array_keys( $protectedPackages ) ) ) . '.json';
+		file_put_contents( $tempFile, json_encode( $protectedPackages ) );
+
+		register_shutdown_function( function () use ( $tempFile ) {
+			if ( file_exists( $tempFile ) ) {
+				self::restoreGitRepos( $tempFile );
+			}
+		} );
+
+		// Listen for post events
+		foreach ( [ 'post-install-cmd', 'post-update-cmd' ] as $eventName ) {
+			self::$event->getComposer()->getEventDispatcher()->addListener(
+				$eventName,
+				function () use ( $tempFile ) {
+					self::restoreGitRepos( $tempFile );
+				},
+				1000 // High priority to ensure this runs early
+			);
+		}
+	}
+
+	/**
+	 * Find plugin, mu-plugin and theme directories that are Git clones.
+	 *
+	 * The package running Composer is skipped - moving it would break the install.
+	 *
+	 * @return array Label => absolute path.
+	 */
+	private static function findGitRepos(): array {
+		$repos  = [];
+		$self   = self::getProjectFolder();
+
+		foreach ( self::$scanDirs as $scanDir ) {
+			$dirs = glob( self::translatePath( $scanDir ) . '/*', GLOB_ONLYDIR );
+
+			foreach ( $dirs as $dir ) {
+				if ( ! is_dir( $dir . '/.git' ) || realpath( $dir ) === $self ) {
+					continue;
 				}
+
+				$repos[ basename( $scanDir ) . '/' . basename( $dir ) ] = $dir;
 			}
 		}
 
-		// Register post-event listeners if we have protected packages
-		if (!empty($protectedPackages)) {
-			// Store protected packages information in temporary file
-			$tempFile = sys_get_temp_dir() . '/composer_protected_packages_' . md5(json_encode(array_keys($protectedPackages))) . '.json';
-			file_put_contents($tempFile, json_encode($protectedPackages));
-
-			register_shutdown_function(function() use ($tempFile) {
-				if (file_exists($tempFile)) {
-					self::restoreGitRepos($tempFile);
-				}
-			});
-
-			// Listen for post events
-			self::$event->getComposer()->getEventDispatcher()->addListener(
-				'post-install-cmd',
-				function() use ($tempFile) {
-					self::restoreGitRepos($tempFile);
-				},
-				1000 // High priority to ensure this runs early
-			);
-
-			self::$event->getComposer()->getEventDispatcher()->addListener(
-				'post-update-cmd',
-				function() use ($tempFile) {
-					self::restoreGitRepos($tempFile);
-				},
-				1000 // High priority to ensure this runs early
-			);
-		}
+		return $repos;
 	}
 
 	/**
