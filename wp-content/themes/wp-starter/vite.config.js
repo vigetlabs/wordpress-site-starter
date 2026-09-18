@@ -5,6 +5,7 @@ import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import generateThemeJSON, { buildJSON } from './src/theme-json/generate.js';
 import viteGlobWatch from './src/plugins/vite-glob-watch.js';
 import viteEditorStyles from './src/plugins/vite-scoped-editor-styles.js';
+import rewriteImagesAlias from './src/plugins/rewrite-image-alias-urls.js';
 
 const THEME = '/wp-content/themes/wp-starter';
 const VITE_PORT = parseInt(process.env.VITE_PRIMARY_PORT ?? '5273');
@@ -39,6 +40,7 @@ export default defineConfig(({ command }) => ({
 				path.resolve(__dirname, './blocks/**/*.css'),
 			],
 		}),
+		rewriteImagesAlias(),
 		ViteImageOptimizer(),
 	],
 	build: {
