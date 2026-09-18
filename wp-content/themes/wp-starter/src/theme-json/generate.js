@@ -75,7 +75,7 @@ function buildJSON() {
 		styles: styles,
 		templateParts: templateParts,
 		version: 3,
-		$schema: 'https://schemas.wp.org/wp/6.9/theme.json',
+		$schema: 'https://schemas.wp.org/wp/7.1/theme.json',
 	};
 
 	fs.writeFileSync('theme.json', JSON.stringify(data, null, 2));

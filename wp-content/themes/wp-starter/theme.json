@@ -25,9 +25,6 @@
       "wideSize": "var(--breakpoint-content-wide)"
     },
     "spacing": {
-      "spacingScale": {
-        "steps": 0
-      },
       "defaultSpacingSizes": false,
       "spacingSizes": [
         {
@@ -697,7 +694,7 @@
       }
     },
     "spacing": {
-      "blockGap": 0,
+      "blockGap": "0",
       "padding": {
         "left": "var(--wp--preset--spacing--20)",
         "right": "var(--wp--preset--spacing--20)"
@@ -725,5 +722,5 @@
     }
   ],
   "version": 3,
-  "$schema": "https://schemas.wp.org/wp/6.9/theme.json"
+  "$schema": "https://schemas.wp.org/wp/7.1/theme.json"
 }
