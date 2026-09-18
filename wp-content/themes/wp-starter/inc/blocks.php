@@ -104,8 +104,7 @@ add_filter(
 			return $html;
 		}
 
-		$logo_path = '/src/images/logo.svg';
-		$logo_file = get_stylesheet_directory() . $logo_path;
+		$logo_file = Vite::get_instance()->get_image_path( 'logo.svg' );
 
 		if ( ! file_exists( $logo_file ) ) {
 			return $html;
@@ -114,7 +113,7 @@ add_filter(
 		$aria_current = is_front_page() && ! is_paged() ? ' aria-current="page"' : '';
 		$sample_logo  = sprintf(
 			'<img src="%1$s" />',
-			get_theme_file_uri( $logo_path )
+			Vite::get_instance()->get_image_url( 'logo.svg' )
 		);
 
 		return sprintf(
