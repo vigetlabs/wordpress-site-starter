@@ -31,7 +31,7 @@
     "wpackagist-plugin/accessibility-checker": "^1.42",
     "wpackagist-plugin/safe-svg": "^2.4",
     "wpackagist-plugin/seo-by-rank-math": "^1.0",
-    "wpackagist-plugin/wordfence": "^8.2"
+    "wpackagist-plugin/wordfence": "^9.0"
   },
   "require-dev": {
     "phpcompatibility/phpcompatibility-wp": "^2.1",
