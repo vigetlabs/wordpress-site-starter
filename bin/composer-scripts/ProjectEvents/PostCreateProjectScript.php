@@ -696,6 +696,23 @@ class PostCreateProjectScript extends ComposerScript {
 	}
 
 	/**
+	 * Remove the starter's changelog.
+	 *
+	 * @return void
+	 */
+	private static function removeChangelog(): void {
+		$changelog = self::translatePath( 'CHANGELOG.md' );
+
+		if ( ! file_exists( $changelog ) ) {
+			return;
+		}
+
+		unlink( $changelog );
+
+		self::writeInfo( 'Changelog removed!' );
+	}
+
+	/**
 	 * Remove the version sync script.
 	 *
 	 * @return void
@@ -767,6 +784,9 @@ class PostCreateProjectScript extends ComposerScript {
 
 		// Remove the version sync script, which reads packages.json.
 		self::removeVersionSyncScript();
+
+		// Remove the starter's changelog. The project tracks its own.
+		self::removeChangelog();
 
 		// Remove site-starter composer file
 		self::removeRootComposer();
