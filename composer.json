@@ -39,6 +39,6 @@
   },
   "require-dev": {
     "composer/composer": "^2.10",
-    "symfony/console": "^7.4"
+    "symfony/console": "^8.1"
   }
 }

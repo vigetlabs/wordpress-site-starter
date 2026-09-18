@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
-    "cssnano": "^7.1.9",
+    "cssnano": "^9.0.5",
     "postcss": "^8.5.28",
     "postcss-import-ext-glob": "^2.1.1",
     "postcss-prefix-selector": "^2.2.1",
