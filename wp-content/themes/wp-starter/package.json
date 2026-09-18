@@ -13,24 +13,24 @@
     "format:fix": "prettier \"./src/**/*.{css,ts,tsx,js}\" --write"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.18",
+    "@tailwindcss/postcss": "^4.3.3",
     "cssnano": "^7.1.2",
     "postcss": "^8.5.6",
     "postcss-import-ext-glob": "^2.1.1",
-    "postcss-prefix-selector": "^2.1.1",
-    "prettier": "^3.8.1",
-    "prettier-plugin-tailwindcss": "^0.6.13",
-    "sharp": "^0.35.3",
-    "svgo": "^4.0.2",
+    "postcss-prefix-selector": "^2.2.1",
+    "prettier": "^3.9.6",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "sharp": "^0.35.4",
+    "svgo": "^4.1.0",
     "tailwindcss": "^4.1.18",
-    "terser": "^5.46.1",
-    "vite": "^8.0.8",
+    "terser": "^5.51.2",
+    "vite": "^8.3.0",
     "vite-plugin-image-optimizer": "^2.0.3",
     "vite-plugin-live-reload": "^3.1.0"
   },
   "dependencies": {
-    "@alpinejs/focus": "^3.15.8",
-    "@alpinejs/persist": "^3.15.8",
-    "alpinejs": "^3.15.8"
+    "@alpinejs/focus": "^3.17.3",
+    "@alpinejs/persist": "^3.17.3",
+    "alpinejs": "^3.17.3"
   }
 }
