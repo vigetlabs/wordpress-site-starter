@@ -10,7 +10,7 @@ This is the README for your new site. Feel free to update any of this info to ma
 * [Composer](https://getcomposer.org/) - [Installation](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos)
 * [DDEV](https://ddev.readthedocs.io/en/stable/) - [Installation](https://ddev.readthedocs.io/en/stable/users/install/ddev-installation/)
 * [Docker](https://docs.docker.com/desktop/install/mac-install/) (or compatible container alternative like OrbStack)
-* For ACF Pro, create an `auth.json` file in `wp-content/themes/wp-starter/` from the [ACF Website](https://www.advancedcustomfields.com/my-account/view-licenses/).
+* **Licensed plugins** (ACF Pro) - Run `ddev composer-auth` to add the license keys Composer needs, then `ddev restart`. The command only prompts for keys that are missing and merges them into an existing `auth.json`, so a file you already dropped in is left alone. Keys come from 1Password or the [ACF Website](https://www.advancedcustomfields.com/my-account/view-licenses/).
 
 ## Setup and Running
 To start the local server and build process, run:
@@ -32,15 +32,40 @@ The deploy script should build the files for production, but if you want to test
 * [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/)
 * *List other Plugins used*
 
+### Licensed plugins
+Plugins Composer installs from a paid repository authenticate through `auth.json`, which is gitignored. Each one is registered in the theme's `composer.json` under `extra.licensed-repositories`, keyed by the repository host:
+
+```json
+"extra": {
+    "licensed-repositories": {
+        "connect.advancedcustomfields.com": {
+            "name": "ACF Pro",
+            "package": "wpengine/advanced-custom-fields-pro",
+            "secret": "ACF_LICENSE_KEY"
+        }
+    }
+}
+```
+
+* `name` - what the prompt and log output call the plugin.
+* `package` - the Composer package the repository serves. Credentials are only required once the package is, so a plugin still committed to the repo doesn't nag on `ddev start` or in CI.
+* `secret` - the GitHub Actions secret holding the license key for builds and deploys.
+* `password` - optional template for the `auth.json` password, defaulting to `{site_url}`. `{key}` is also available for repositories that expect the license key in both fields.
+
+Both `ddev composer-auth` and the build workflow read that list, so adding a licensed plugin means adding its `repositories` entry, its `extra.licensed-repositories` entry, and the matching GitHub Actions secret - nothing else.
+
 ## Commands
 The command `ddev start` will automatically start Vite and sync WordPress Agent Skills.
 
 ```bash
 ddev start
+ddev composer-auth
 ddev agent-skills-sync
 ddev rebuild
 ddev stop
 ```
+
+`ddev composer-auth` prompts only for license keys that `auth.json` is missing, and merges what you enter into the file rather than replacing it. Use `--check` to see what is missing and `--force` to replace a key that is already there.
 If you do need to run `npm` to troubleshoot something, you need to run it inside of DDEV by running `ddev npm run dev` inside of your custom theme folder.
 
 ### Agent Skills

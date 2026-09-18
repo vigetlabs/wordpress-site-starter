@@ -18,6 +18,8 @@ corepack_enable: false
 override_config: true
 hooks:
   post-start:
+    # Warn about missing licensed plugin credentials before Composer 401s on them.
+    - exec-host: ./.ddev/commands/host/composer-auth --check || true
     - composer: install -d /var/www/html/wp-content/mu-plugins/viget-wp
     - composer: install -d /var/www/html/wp-content/themes/wp-starter
     - exec-host: ./.ddev/commands/host/agent-skills-sync --quiet

@@ -97,8 +97,8 @@ class PostCreateProjectScript extends ComposerScript {
 		// Modify the description in the composer.json file.
 		self::updateComposerDescription();
 
-		// Require ACF if auth.json file is present.
-		self::maybeRequireACF();
+		// Require licensed plugins that auth.json has credentials for.
+		self::maybeRequireLicensedPlugins();
 
 		// Self Destruct.
 		self::destruct();
@@ -437,34 +437,74 @@ class PostCreateProjectScript extends ComposerScript {
 	}
 
 	/**
-	 * Require ACF if auth.json file is present.
+	 * Require licensed plugins that auth.json has credentials for.
+	 *
+	 * Licensed plugins are registered in the theme's composer.json under
+	 * extra.licensed-repositories, keyed by the repository host - the same list
+	 * "ddev composer-auth" reads. A project only switches a plugin over to
+	 * Composer once auth.json can actually authenticate against its repository.
 	 *
 	 * @return void
 	 */
-	public static function maybeRequireACF(): void {
-		self::writeLine( 'Checking for ACF auth.json...' );
+	public static function maybeRequireLicensedPlugins(): void {
+		self::writeLine( 'Checking for licensed plugin credentials...' );
 
-		$authPath = self::translatePath( 'wp-content/themes/' . self::$info['slug'] . '/auth.json' );
-
-		if ( ! file_exists( $authPath ) ) {
-			self::writeWarning( 'auth.json file not found. Skipping ACF requirement.' );
-			return;
-		}
-
-		$acfPackage   = 'wpengine/advanced-custom-fields-pro';
 		$themePath    = self::translatePath( 'wp-content/themes/' . self::$info['slug'] . '/' );
 		$composerData = self::getComposerData( $themePath );
+		$licensed     = $composerData['extra']['licensed-repositories'] ?? [];
 
-		if ( ! empty( $composerData['require'][ $acfPackage ] ) ) {
-			self::writeInfo( 'ACF already required in composer.json.' );
+		if ( ! $licensed ) {
+			self::writeInfo( 'No licensed repositories configured.' );
 			return;
 		}
 
-		$composerData['require'][ $acfPackage ] = '*';
+		$authPath = $themePath . 'auth.json';
+
+		if ( ! file_exists( $authPath ) ) {
+			self::writeWarning( 'auth.json file not found. Run "ddev composer-auth" to add license keys.' );
+			return;
+		}
+
+		$auth = json_decode( (string) file_get_contents( $authPath ), true );
+
+		if ( ! is_array( $auth ) ) {
+			self::writeWarning( 'auth.json could not be read. Skipping licensed plugins.' );
+			return;
+		}
+
+		$updated = false;
+
+		foreach ( $licensed as $host => $repository ) {
+			$package = $repository['package'] ?? '';
+			$name    = $repository['name'] ?? $host;
+
+			if ( ! $package ) {
+				continue;
+			}
+
+			if ( empty( $auth['http-basic'][ $host ]['username'] ) ) {
+				self::writeWarning( \sprintf( 'No %s credentials in auth.json. Skipping.', $name ) );
+				continue;
+			}
+
+			if ( ! empty( $composerData['require'][ $package ] ) ) {
+				self::writeInfo( \sprintf( '%s already required in composer.json.', $name ) );
+				continue;
+			}
+
+			$composerData['require'][ $package ] = '*';
+			$updated                             = true;
+
+			self::writeInfo( \sprintf( '%s added to composer.json.', $name ) );
+		}
+
+		if ( ! $updated ) {
+			return;
+		}
 
 		self::updateComposerData( $composerData, $themePath );
 
-		self::writeInfo( 'ACF Composer dependency updated!' );
+		self::writeInfo( 'Licensed plugin Composer dependencies updated!' );
 	}
 
 	/**
@@ -575,6 +615,7 @@ class PostCreateProjectScript extends ComposerScript {
 			self::translatePath( 'bin/build' ),
 			self::translatePath( '.ddev/.env' ),
 			self::translatePath( '.ddev/config.yaml' ),
+			self::translatePath( '.ddev/commands/host/composer-auth' ),
 			self::translatePath( 'README.md' ),
 			self::translatePath( '.github/workflows/build.yaml' ),
 			$themeDir . '/.phpcs.xml',

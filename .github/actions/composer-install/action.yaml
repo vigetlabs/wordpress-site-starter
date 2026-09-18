@@ -1,0 +1,119 @@
+name: Composer Install
+description: >-
+  Run "composer install" for one directory, writing (and then removing)
+  credentials for any licensed plugin repositories that directory requires.
+
+inputs:
+  working-directory:
+    description: Directory containing the composer.json to install.
+    required: true
+  site-url:
+    description: >-
+      URL the licensed plugins are activated against. Only required when the
+      target composer.json declares extra.licensed-repositories.
+    required: false
+    default: ""
+  secrets-json:
+    description: toJSON(secrets) from the calling workflow - license keys are looked up by name.
+    required: false
+    default: "{}"
+  php-version:
+    description: PHP version to install with.
+    required: false
+    default: "8.2"
+
+runs:
+  using: composite
+  steps:
+    # Licensed plugin repositories are listed in the target composer.json under
+    # extra.licensed-repositories, the same source "ddev composer-auth" reads.
+    # They authenticate with the license key as username and the site URL being
+    # licensed as password. A mismatched URL returns a 401.
+    - name: Write Composer credentials for licensed plugins
+      id: credentials
+      shell: bash
+      env:
+        ALL_SECRETS: ${{ inputs.secrets-json }}
+        SITE_URL: ${{ inputs.site-url }}
+        WORKING_DIRECTORY: ${{ inputs.working-directory }}
+      run: |
+        set -euo pipefail
+        cd "$WORKING_DIRECTORY"
+
+        # Only repositories whose package is actually required need credentials.
+        repos="$(jq -r '
+          ( ( .require // {} ) + ( ."require-dev" // {} ) ) as $installed
+          | .extra["licensed-repositories"] // {}
+          | to_entries[]
+          | select( ( .value.package // "" ) == "" or $installed[ .value.package ] )
+          | [ .key, ( .value.name // .key ), ( .value.secret // "" ), ( .value.password // "{site_url}" ) ]
+          | @tsv
+        ' composer.json)"
+
+        if [ -z "$repos" ]; then
+          echo "No licensed repositories require credentials."
+          exit 0
+        fi
+
+        if [ -z "$SITE_URL" ]; then
+          echo "::error::site-url is required to license the plugins required by $WORKING_DIRECTORY"
+          exit 1
+        fi
+
+        # Keep any auth.json already present, and set it aside for the cleanup step.
+        backup="$RUNNER_TEMP/auth.json.${WORKING_DIRECTORY//\//_}.orig"
+        auth='{}'
+        if [ -f auth.json ]; then
+          cp auth.json "$backup"
+          auth="$(jq '.' auth.json)"
+        fi
+
+        while IFS="$(printf '\t')" read -r host name secret password_template; do
+          [ -n "$host" ] || continue
+
+          key="$(printf '%s' "$ALL_SECRETS" | jq -r --arg secret "$secret" '.[$secret] // ""')"
+          if [ -z "$key" ]; then
+            echo "::error::Secret $secret is not set - $name cannot be installed"
+            exit 1
+          fi
+
+          password="${password_template//\{site_url\}/$SITE_URL}"
+          password="${password//\{key\}/$key}"
+
+          auth="$(printf '%s' "$auth" | jq \
+            --arg host "$host" --arg username "$key" --arg password "$password" \
+            '.["http-basic"][$host] = { username: $username, password: $password }')"
+
+          echo "Added $name credentials for $host"
+        done < <(printf '%s\n' "$repos")
+
+        printf '%s\n' "$auth" > auth.json
+        {
+          echo "written=true"
+          echo "backup=$backup"
+        } >> "$GITHUB_OUTPUT"
+
+    - name: Install dependencies
+      uses: "php-actions/composer@v6"
+      with:
+        php_version: ${{ inputs.php-version }}
+        dev: no
+        args: "--optimize-autoloader"
+        working_dir: ${{ inputs.working-directory }}
+
+    # Keep credentials out of the build artifact and the WP Engine repo,
+    # restoring any auth.json that was already in the checkout.
+    - name: Remove Composer credentials for licensed plugins
+      if: always() && steps.credentials.outputs.written == 'true'
+      shell: bash
+      env:
+        BACKUP: ${{ steps.credentials.outputs.backup }}
+        WORKING_DIRECTORY: ${{ inputs.working-directory }}
+      run: |
+        set -euo pipefail
+        cd "$WORKING_DIRECTORY"
+        if [ -f "$BACKUP" ]; then
+          mv "$BACKUP" auth.json
+        else
+          rm -f auth.json
+        fi
