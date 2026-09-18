@@ -24,35 +24,6 @@ The files that create the `theme.json` can be used to apply custom settings for 
 
 Blocks are built using ACF and core WordPress blocks. Styles for the blocks are located within the block folders.
 
-### Inner block templates (`template.json`)
-
-Many blocks ship a [`template.json`](https://developer.wordpress.org/block-editor/how-to-guides/block-tutorial/nested-blocks-inner-blocks/) file next to `block.json`. That file defines the **default inner block template** (for example, which core Heading, Paragraph, and Button blocks appear inside a CTA).
-
-**Important:** that template is applied when the block is first inserted (or when the inner area is still empty). After the editor saves the page, WordPress stores the full nested block tree in the database. **Updating `template.json` in the theme does not retroactively change existing blocks** on already-saved posts. For sitewide structural updates you can use one or more of:
-
-- **Synced patterns** — the theme ships a prototype CTA inner pattern and a versioned `wp_block` (see below and [`docs/block-structure-strategy.md`](docs/block-structure-strategy.md)).
-- **Migrations** — use `wp wpstarter blocks migrate` with a custom migration when you need to rewrite saved markup.
-- **Server-rendered layout** — move stable structure into `render.php` / Twig so updates deploy with the theme without touching post content.
-
-See [`docs/block-structure-strategy.md`](docs/block-structure-strategy.md) for a per-block recommendation table.
-
-### Synced CTA inner pattern (prototype)
-
-- **Unsynced pattern (inserter):** `patterns/cta-inner-content-only.php` — Group with `templateLock: contentOnly` and the same core blocks as the CTA `template.json`, useful as a curated starting point or reference markup.
-- **Synced `wp_block` (Library):** on theme switch or when an editor loads wp-admin, the theme ensures a published synced pattern titled **“WP Starter: CTA inner (synced)”** exists. When you change its markup in [`inc/synced-patterns.php`](inc/synced-patterns.php), bump `WPSTARTER_SYNCED_CTA_INNER_VERSION` so the next admin request or CLI run refreshes the pattern for all references.
-- **WP-CLI:** `wp wpstarter patterns sync` creates or updates the synced pattern; add `--force` to rewrite content regardless of the stored version option.
-
-### Block content migrations (WP-CLI)
-
-Scaffold command (list migrations, run a placeholder, dry-run):
-
-```bash
-wp wpstarter blocks migrate --dry-run
-wp wpstarter blocks migrate --migration=example_placeholder --post-type=post,page
-```
-
-Implement real transforms inside [`inc/cli/wpstarter-cli.php`](inc/cli/wpstarter-cli.php) using `parse_blocks()` and `serialize_blocks()` when you change inner structure.
-
 * Accordion
 * Alert Banner
 * Breadcrumbs
@@ -66,11 +37,21 @@ Implement real transforms inside [`inc/cli/wpstarter-cli.php`](inc/cli/wpstarter
 * Video Embed
 * Video Player
 
+### Inner block templates (`template.json`)
+
+Many blocks ship a [`template.json`](https://developer.wordpress.org/block-editor/how-to-guides/block-tutorial/nested-blocks-inner-blocks/) file next to `block.json`. That file defines the **default inner block template** (for example, which core Heading, Paragraph, and Button blocks appear inside a CTA).
+
+**Important:** that template is applied when the block is first inserted (or when the inner area is still empty). After the editor saves the page, WordPress stores the full nested block tree in the database. **Updating `template.json` in the theme does not retroactively change existing blocks** on already-saved posts.
+
+For structure you expect to change after launch, put it in `render.php` / Twig instead, so an update deploys with the theme and never touches post content.
+
 ### Creating New Blocks
 
 Block scaffolding is driven by AI assistants. The repo ships an [`AGENTS.md`](../../../AGENTS.md) at the repo root that documents the file layout, naming conventions, render patterns (Timber/Twig + PHP fallback), accessibility expectations, and ACF field group format used by every block in this starter.
 
-To create a new block, point your AI assistant at that guide and describe what you need — a ticket, a design, a data model, or even a casual "build a block for X" / "create a [name] block". Any AI assistant (Cursor, Aider, Continue, Copilot Chat, etc.) can read `AGENTS.md` directly. Claude Code users get an auto-triggering skill at [`.claude/skills/viget-block-generator/SKILL.md`](../../../.claude/skills/viget-block-generator/SKILL.md) that wraps the same instructions.
+To create a new block, point your AI assistant at that guide and describe what you need — a ticket, a design, a data model, or even a casual "build a block for X" / "create a [name] block". Anything that reads `AGENTS.md` works.
+
+The repo also commits a `viget-block-generator` skill that wraps the same instructions and triggers on its own, under `.claude/`, `.codex/`, `.cursor/` and `.github/`. That's separate from `ddev agent-skills-sync`, which fetches the [WordPress/agent-skills](https://github.com/WordPress/agent-skills) pack into those same directories and is gitignored — see [Agent Skills](../../../README.md#agent-skills).
 
 The assistant will:
 
@@ -99,14 +80,16 @@ Tailwind colors are automatically added to `theme.json` via [settings/color.js](
 
 The default spacing is fluid, meaning that it is larger on desktops and smaller on mobile screens.
 
-| Class | Min | Max |
+These are Tailwind spacing tokens, so they work anywhere a spacing utility does - `p-fluid-md`, `gap-fluid-lg`, `mt-fluid-xs`.
+
+| Token | Min | Max |
 |-------|-----|-----|
-| `.fluid-xs` | `2px` | `16px` |
-| `.fluid-sm` | `20px` | `40px` |
-| `.fluid-md` | `32px` | `64px` |
-| `.fluid-lg` | `56px` | `112px` |
-| `.fluid-xl` | `96px` | `160px` |
-| `.fluid-2x` | `144px` | `240px` |
+| `fluid-xs` | `6px` | `12px` |
+| `fluid-sm` | `12px` | `24px` |
+| `fluid-md` | `24px` | `48px` |
+| `fluid-lg` | `48px` | `96px` |
+| `fluid-xl` | `96px` | `128px` |
+| `fluid-2xl` | `128px` | `200px` |
 
 Adjust the spacing as needed from the [spacing.css](src/styles/tailwind/spacing.css) config file.
 

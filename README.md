@@ -23,7 +23,14 @@ Follow the prompts to set up your project with the desired information. You will
 2. **The project slug** (`my-project`): This will be used as the directory name for the theme as well as the local DDEV site name.
 3. **The text domain** (`my-project`): This will be used for internationalization and localization and defaults to the project slug.
 4. **The project Package name** (`MyProject`): This is referenced in the PhpDoc blocks and default project namespace. It defaults to the project name.
-5. The function prefix (`my_project_`): This is used to prefix all custom theme functions and defaults to the project slug.
+5. **The function prefix** (`my_project_`): This is used to prefix all custom theme functions and defaults to the project slug.
+6. **Twig templates** (`Enabled`): Disabling this removes Timber/Twig and leaves the blocks rendering through `render.php`.
+7. **Media proxy domain** (blank): A domain to serve `wp-content/uploads` from when a file is missing locally, usually the live site. Leave it blank to skip.
+8. **Agency branding** (`Viget`): `Viget`, `Custom` or `None`. `Custom` then asks for the agency name and website, which show in the WP Admin footer.
+
+A summary is printed at the end, and answering no to **Does everything look good?** starts the prompts over.
+
+`ddev start` then runs the install wizard, which asks for a database source (install WordPress, or import a file with a search-replace), the site title, tagline and URL, and the admin username, email and password.
 
 ## Automated Setup
 
