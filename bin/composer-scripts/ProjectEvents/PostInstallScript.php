@@ -90,9 +90,11 @@ class PostInstallScript extends ComposerScript {
 
 		if ( self::needsSetup() ) {
 			// Download WordPress
-			self::downloadWordPress();
+			if ( ! self::hasCoreFiles() ) {
+				self::downloadWordPress();
 
-			self::wait( 2 );
+				self::wait( 2 );
+			}
 
 			$sentinelPath = self::translatePath( '.ddev/.created-via-project' );
 			$createdViaProject = file_exists( $sentinelPath );
@@ -173,16 +175,25 @@ class PostInstallScript extends ComposerScript {
 	}
 
 	/**
-	 * Check if the setup is needed.
+	 * Check if WordPress core files are on disk.
 	 *
 	 * @return bool
 	 */
-	private static function needsSetup(): bool {
-		if ( file_exists( self::translatePath( './wp-load.php' ) ) ) {
-			return false;
-		}
+	protected static function hasCoreFiles(): bool {
+		return file_exists( self::translatePath( './wp-load.php' ) );
+	}
 
-		return true;
+	/**
+	 * Check if the setup is needed.
+	 *
+	 * Core files on disk do not mean the site is set up. An interrupted or failed
+	 * first run leaves wp-load.php behind with an empty database, and keying off
+	 * the files alone skips setup from then on.
+	 *
+	 * @return bool
+	 */
+	public static function needsSetup(): bool {
+		return ! static::hasCoreFiles() || ! static::isWordPressDbInstalled();
 	}
 
 	/**
@@ -222,7 +233,7 @@ class PostInstallScript extends ComposerScript {
 
 		self::runCommand( $cmd );
 
-		if ( self::needsSetup() ) {
+		if ( ! self::hasCoreFiles() ) {
 			self::writeError( 'WordPress download seems to have failed. Verify you currently have internet access and try again.' );
 			exit( 1 );
 		}
@@ -493,7 +504,7 @@ class PostInstallScript extends ComposerScript {
 	 *
 	 * @return bool
 	 */
-	private static function isWordPressDbInstalled(): bool {
+	protected static function isWordPressDbInstalled(): bool {
 		// `wp core is-installed` is the most reliable “DB + config are installed” signal.
 		// Using exit codes avoids false positives when PHP deprecations/warnings are printed.
 		$path = self::translatePath( './' );

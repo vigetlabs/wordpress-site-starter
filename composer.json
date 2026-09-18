@@ -32,13 +32,22 @@
     }
   },
   "scripts": {
-      "post-create-project-cmd": [
-        "Viget\\ComposerScripts\\ProjectEventHandler::postCreateProject",
-        "ddev start"
-      ]
+    "post-create-project-cmd": [
+      "Viget\\ComposerScripts\\ProjectEventHandler::postCreateProject",
+      "ddev start"
+    ],
+    "test": [
+      "phpunit"
+    ]
   },
   "require-dev": {
     "composer/composer": "^2.7",
+    "phpunit/phpunit": "^11.5",
     "symfony/console": "^7.0"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Viget\\ComposerScripts\\Tests\\": "tests/"
+    }
   }
 }
