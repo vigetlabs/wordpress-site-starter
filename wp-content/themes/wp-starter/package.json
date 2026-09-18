@@ -20,9 +20,12 @@
     "postcss-prefix-selector": "^2.1.1",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.6.13",
+    "sharp": "^0.35.3",
+    "svgo": "^4.0.2",
     "tailwindcss": "^4.1.18",
     "terser": "^5.46.1",
     "vite": "^8.0.8",
+    "vite-plugin-image-optimizer": "^2.0.3",
     "vite-plugin-live-reload": "^3.1.0"
   },
   "dependencies": {

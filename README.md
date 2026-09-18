@@ -7,7 +7,7 @@ This is a WordPress starter project that includes a basic custom theme, includin
 * [Composer](https://getcomposer.org/) - [Installation](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos)
 * [DDEV](https://ddev.readthedocs.io/en/stable/) - [Installation](https://ddev.readthedocs.io/en/stable/users/install/ddev-installation/)
 * [Docker](https://docs.docker.com/desktop/install/mac-install/) (or compatible container alternative like OrbStack)
-* For ACF Pro, create an `auth.json` file in the project root directory, which can be downloaded from the [ACF Website](https://www.advancedcustomfields.com/my-account/view-licenses/).
+* ACF Pro ships with the starter, so no license key is needed to run it. New projects switch it to Composer instead - see [Licensed plugins](#licensed-plugins).
 
 ## Using this Project
 
@@ -33,12 +33,43 @@ Following the series of prompts, the project will be set up with the following:
 2. **WordPress Core**: The latest version of WordPress will be downloaded.
 3. **Local Development Environment**: A DDEV configuration file will be created and the local environment will be started.
 4. **Theme Setup**: The theme will be set up with the project name and slug.
-5. **ACF Pro**: If an `auth.json` file is present in the project root, ACF Pro will be installed.
+5. **Licensed plugins**: Any plugin registered in the theme's `extra.licensed-repositories` that `auth.json` has credentials for is switched from the committed copy to a Composer dependency. See [Licensed plugins](#licensed-plugins).
 6. **`package.json` Dependencies**: All necessary script and style build dependencies for the theme will be installed and initialized.
 7. **Cleanup**: Any setup files will be removed and the project will be ready for development.
 8. **Agent Skills Sync**: WordPress Agent Skills are synced after `ddev start` and can be refreshed at any time.
 
 After the setup is complete, it is recommended to perform your initial commit and push to your project repository.
+
+## Licensed plugins
+
+The starter ships ACF Pro in `wp-content/plugins/`, so it runs with no license key. A new project switches licensed plugins over to Composer instead, which keeps them out of the project repo and updatable.
+
+Licensed plugins are registered in the theme's `composer.json` under `extra.licensed-repositories`, keyed by the repository host:
+
+```json
+"extra": {
+  "licensed-repositories": {
+    "connect.advancedcustomfields.com": {
+      "name": "ACF Pro",
+      "package": "wpengine/advanced-custom-fields-pro",
+      "secret": "ACF_LICENSE_KEY"
+    }
+  }
+}
+```
+
+* `name` - what the prompt and log output call the plugin.
+* `package` - the Composer package the repository serves. Credentials are only required once the package is, so the starter itself never prompts for a key it doesn't need.
+* `secret` - the GitHub Actions secret holding the license key for CI builds.
+* `password` - optional template for the `auth.json` password, defaulting to `{site_url}`. `{key}` is also available for repositories that expect the license key in both fields.
+
+Three things read that one list:
+
+1. `ddev composer-auth` prompts for any license key `auth.json` is missing and merges it in, leaving the rest of the file alone. `--check` runs on `ddev start` and reports what's missing; `--force` replaces a key that's already there.
+2. `composer create-project` requires each registered package that `auth.json` has credentials for, replacing the committed copy.
+3. `.github/workflows/build.yaml` writes `auth.json` from the matching secrets before installing, and removes it afterward.
+
+Adding another licensed plugin means adding its `repositories` entry, its `extra.licensed-repositories` entry, and the matching GitHub Actions secret - nothing else.
 
 ## Pushing to your Project Repository
 

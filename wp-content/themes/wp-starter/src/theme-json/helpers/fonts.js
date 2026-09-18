@@ -7,46 +7,10 @@ import fs from 'fs';
 import path from 'path';
 import { createRequire } from 'node:module';
 import { toTitleCase } from './strings.js';
+import { fontNames, fontSlugs, SUPPORTED_FILTERS } from './font-scale.cjs';
 
 const require = createRequire(import.meta.url);
 const { getFluidTextDeclMap, tokenFromFluidVar, THEME_ROOT } = require('../../plugins/fluid-font-calculations.cjs');
-
-/** Supported filters for block-specific font sizes (--text-{filter}-*). */
-const SUPPORTED_FILTERS = ['headline', 'ui'];
-
-const fontNames = {
-	zero: 'Zero',
-	tiny: 'Tiny',
-	'2xs': '2X Small',
-	xxs: '2X Small',
-	xs: 'Extra Small',
-	sm: 'Small',
-	base: 'Base',
-	md: 'Medium',
-	lg: 'Large',
-	xl: 'Extra Large',
-	xxl: '2X Large',
-	'2xl': '2X Large',
-	xxxl: '3X Large',
-	'3xl': '3X Large',
-};
-
-const fontSlugs = {
-	zero: 'zero',
-	tiny: 'tiny',
-	'2xs': 'xx-small',
-	xxs: 'xx-small',
-	xs: 'x-small',
-	sm: 'small',
-	base: 'base',
-	md: 'medium',
-	lg: 'large',
-	xl: 'x-large',
-	xxl: '2x-large',
-	'2xl': '2x-large',
-	xxxl: '3x-large',
-	'3xl': '3x-large',
-};
 
 /** Body-scale token names (no filter); derived from fontSlugs keys. */
 const BODY_TOKEN_KEYS = Object.keys(fontSlugs);
@@ -82,10 +46,10 @@ function getFontSizes( filter = '' ) {
 	return matches
 		.filter( ( { token } ) => ( filter ? true : token !== 'zero' ) )
 		.map( ( { token, sizeValue } ) => {
-			const fluidToken = tokenFromFluidVar(sizeValue);
+			const fluidProp = tokenFromFluidVar(sizeValue);
 			const size =
-				fluidToken && fluidClampByProp.has(`--fluid-text-${fluidToken}`)
-					? fluidClampByProp.get(`--fluid-text-${fluidToken}`)
+				fluidProp && fluidClampByProp.has(fluidProp)
+					? fluidClampByProp.get(fluidProp)
 					: sizeValue;
 
 			return {

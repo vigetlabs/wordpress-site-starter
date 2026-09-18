@@ -1,15 +1,24 @@
 import { defineConfig } from 'vite'
 import path from 'path';
 import liveReload from 'vite-plugin-live-reload';
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import generateThemeJSON, { buildJSON } from './src/theme-json/generate.js';
 import viteGlobWatch from './src/plugins/vite-glob-watch.js';
 import viteEditorStyles from './src/plugins/vite-scoped-editor-styles.js';
 
 const THEME = '/wp-content/themes/wp-starter';
+const VITE_PORT = parseInt(process.env.VITE_PRIMARY_PORT ?? '5273');
 
 export default defineConfig(({ command }) => ({
 	root: 'src',
 	base: command === 'serve' ? '' : THEME + '/dist/',
+	// See README.md > Images.
+	publicDir: path.resolve(__dirname, 'src/public'),
+	resolve: {
+		alias: {
+			'@images': path.resolve(__dirname, 'src/public/images'),
+		},
+	},
 	plugins: [
 		generateThemeJSON,
 		liveReload([
@@ -24,12 +33,13 @@ export default defineConfig(({ command }) => ({
 			],
 		}),
 		viteEditorStyles({
-			cssEntry: path.resolve(__dirname, 'src/styles/main.css'),
+			cssEntry: path.resolve(__dirname, 'src/styles/editor.css'),
 			watchPaths: [
 				path.resolve(__dirname, './src/**/*.css'),
 				path.resolve(__dirname, './blocks/**/*.css'),
 			],
 		}),
+		ViteImageOptimizer(),
 	],
 	build: {
 		// output dir for production build
@@ -48,9 +58,9 @@ export default defineConfig(({ command }) => ({
 	},
 	server: {
 		host: "0.0.0.0",
-		origin: "https://wpstarter.ddev.site:5273",
+		origin: `https://wpstarter.ddev.site:${VITE_PORT}`,
 		strictPort: true,
-		port: parseInt(process.env.VITE_PRIMARY_PORT ?? '5273'),
+		port: VITE_PORT,
 		watch: {
 			usePolling: true,
 			interval: 1000,

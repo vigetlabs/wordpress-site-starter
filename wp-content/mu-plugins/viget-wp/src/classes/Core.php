@@ -23,6 +23,7 @@ use VigetWP\Features\DisableComments;
 use VigetWP\Features\Gravatar;
 use VigetWP\Plugins\CreateBlockTheme;
 use VigetWP\Plugins\ACF\GravityForms;
+use VigetWP\Plugins\ACF\InstallNotice;
 use VigetWP\Plugins\ACF\Toolbars;
 
 /**
@@ -173,6 +174,7 @@ class Core {
 		// ACF
 		new Toolbars();
 		new GravityForms();
+		new InstallNotice();
 	}
 
 	/**
