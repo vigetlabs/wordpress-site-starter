@@ -27,7 +27,7 @@
     "ext-json": "*",
     "idleberg/wordpress-vite-assets": "^1.2",
     "timber/timber": "^2.4",
-    "viget/viget-blocks-toolkit": "^1.1",
+    "viget/viget-blocks-toolkit": "^1.1.8",
     "wpackagist-plugin/accessibility-checker": "^1.42",
     "wpackagist-plugin/safe-svg": "^2.4",
     "wpackagist-plugin/seo-by-rank-math": "^1.0",
