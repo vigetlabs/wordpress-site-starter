@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import settings from './settings/_index.js';
 import styles from './styles/_index.js';
+import customTemplates from './custom-templates/_index.js';
 import templateParts from './template-parts/_index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -21,8 +22,17 @@ const FLUID_CSS_WATCH_PATHS = [
 const generateThemeJSON = {
 	name: 'generate-theme-json',
 	configureServer(server) {
+		// Watcher callbacks run outside any request, so a throw here is an
+		// uncaught exception: Node exits and DDEV's supervisord respawns the
+		// vite daemon in a loop instead of showing the error.
 		const rebuild = () => {
-			buildJSON();
+			try {
+				buildJSON();
+			} catch (err) {
+				server.config.logger.error(
+					`[generate-theme-json] theme.json build failed: ${err.message}`
+				);
+			}
 		};
 
 		rebuild();
@@ -73,6 +83,7 @@ function buildJSON() {
 	const data = {
 		settings: settings,
 		styles: styles,
+		customTemplates: customTemplates,
 		templateParts: templateParts,
 		version: 3,
 		$schema: 'https://schemas.wp.org/wp/6.9/theme.json',
