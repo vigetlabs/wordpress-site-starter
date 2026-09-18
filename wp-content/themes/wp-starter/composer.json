@@ -38,7 +38,7 @@
     "squizlabs/php_codesniffer": "^3.13",
     "wp-coding-standards/wpcs": "^3.2",
     "wpackagist-plugin/create-block-theme": "^2.9",
-    "wpackagist-plugin/plugin-check": "^1.9",
+    "wpackagist-plugin/plugin-check": "^2.1",
     "wpackagist-plugin/wp-mail-logging": "^1.16"
   },
   "config": {
