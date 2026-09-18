@@ -26,19 +26,19 @@
     "php": ">=8.2.0",
     "ext-json": "*",
     "idleberg/wordpress-vite-assets": "^1.2",
-    "timber/timber": "^2.4",
+    "timber/timber": "^2.5",
     "viget/viget-blocks-toolkit": "^1.1.8",
-    "wpackagist-plugin/accessibility-checker": "^1.42",
-    "wpackagist-plugin/safe-svg": "^2.4",
+    "wpackagist-plugin/accessibility-checker": "^1.49",
+    "wpackagist-plugin/safe-svg": "^2.5",
     "wpackagist-plugin/seo-by-rank-math": "^1.0",
-    "wpackagist-plugin/wordfence": "^8.2"
+    "wpackagist-plugin/wordfence": "^9.0"
   },
   "require-dev": {
     "phpcompatibility/phpcompatibility-wp": "^2.1",
     "squizlabs/php_codesniffer": "^3.13",
-    "wp-coding-standards/wpcs": "^3.2",
-    "wpackagist-plugin/create-block-theme": "^2.9",
-    "wpackagist-plugin/plugin-check": "^1.9",
+    "wp-coding-standards/wpcs": "^3.4",
+    "wpackagist-plugin/create-block-theme": "^2.10",
+    "wpackagist-plugin/plugin-check": "^2.1",
     "wpackagist-plugin/wp-mail-logging": "^1.16"
   },
   "config": {

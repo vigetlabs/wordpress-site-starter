@@ -133,6 +133,32 @@ ddev stop && ddev delete project-name -O -y && cd ../ && rm -rf project-name
 
 ## Changelog
 
+### v1.1.0
+
+* Added WordPress 7.1 support. `Tested up to` and the generated `theme.json` schema both target 7.1.
+* Corrected `Requires at least` to 6.6, the floor for `theme.json` version 3.
+* Updated Composer packages to latest.
+* Updated `npm` packages to latest.
+* Updated Viget Blocks Toolkit to 1.1.8.
+* Added Composer installation for licensed plugins (ACF Pro) with `ddev composer-auth`.
+* Added `ddev db-sync` to pull a WP Engine database locally.
+* Added an `@images` alias, mirrored `src/images` into `dist/`, and resolved the alias in editor CSS.
+* Added custom page template discovery for `templates/page-*.html`.
+* Added a `colorVar()` helper and palette-driven auto-contrast exclusions.
+* Added a `pageslug-{slug}` body class on pages.
+* Added a build ticket template and corrected the block generation docs.
+* Fixed the Vite dev server exiting on a CSS error, and added file-level error reporting.
+* Fixed editor/scoped styles missing editor-only CSS.
+* Fixed `theme.json` schema validation for `spacingScale` and `blockGap`.
+* Fixed `npm run format` by renaming `prettier.config.js` to `prettier.config.cjs`.
+* Fixed project setup being skipped when WordPress core files exist but the database is empty.
+* Fixed Vite HMR origin/port mismatch and made fluid font-size discovery generic.
+* Fixed Create Block Theme 2.10+ compatibility with `DISALLOW_FILE_EDIT`.
+* Fixed admin login screen logo escaping, with a theme logo fallback.
+* Hid Fonts, Menus, and Widgets from the Appearance menu.
+* Removed the deprecated `acf/accordion` block in favor of `core/accordion`.
+* Removed the WordPress logo from the admin bar.
+
 ### v1.0.24
 
 * Updated Composer packages to latest.
