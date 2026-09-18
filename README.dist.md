@@ -60,6 +60,7 @@ The command `ddev start` will automatically start Vite and sync WordPress Agent 
 ```bash
 ddev start
 ddev composer-auth
+ddev db-sync
 ddev agent-skills-sync
 ddev rebuild
 ddev stop
@@ -67,6 +68,36 @@ ddev stop
 
 `ddev composer-auth` prompts only for license keys that `auth.json` is missing, and merges what you enter into the file rather than replacing it. Use `--check` to see what is missing and `--force` to replace a key that is already there.
 If you do need to run `npm` to troubleshoot something, you need to run it inside of DDEV by running `ddev npm run dev` inside of your custom theme folder.
+
+### Pulling a remote database to your local
+A fresh `ddev start` gives you an empty WordPress install. To work with real content, run:
+
+```bash
+ddev db-sync
+```
+
+That asks which WP Engine environment to pull from, snapshots your current local database, exports the remote one over the SSH Gateway, imports it, rewrites URLs, deactivates any plugins listed in `wpengine.conf`, and flushes caches.
+
+Set the install names in `wpengine.conf` first - `ddev db-sync` tells you which ones are missing.
+
+**One-time prerequisite:** add your public SSH key to your WP Engine account (User Portal, your profile, *SSH Keys*) and make sure *SSH Gateway* is enabled for the environment. Key propagation can take 30-45 minutes. This is your personal key, separate from the Git Push key the deploy workflow uses - a key that works for `git.wpengine.com` does *not* automatically work for the gateway. Check it with:
+
+```bash
+ddev db-sync --check
+```
+
+Flags:
+
+```bash
+ddev db-sync dev --yes        # non-interactive: pick the environment, skip the prompt
+ddev db-sync --check          # run the prerequisite/SSH checks only
+ddev db-sync --no-snapshot    # skip the pre-import snapshot of your local database
+ddev db-sync --keep-dump      # leave the downloaded dump in .db-sync/ (gitignored)
+ddev db-sync --no-compress    # transfer uncompressed, if remote gzip misbehaves
+WPE_SSH_KEY=~/.ssh/other_key ddev db-sync   # use a non-default SSH key
+```
+
+The dump is written to a temp directory and deleted on exit unless you pass `--keep-dump`. Nothing is written to `wpengine.conf` and no credentials are stored - authentication is your SSH key.
 
 ### Agent Skills
 

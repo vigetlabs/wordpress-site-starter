@@ -1,0 +1,281 @@
+#!/usr/bin/env bash
+
+## Description: Pull a WP Engine environment's database into your local site
+## Usage: db-sync [environment] [flags]
+## Example: "ddev db-sync" (pick an environment) or "ddev db-sync dev --yes"
+## Flags: [{"Name":"check","Usage":"only run the prerequisite and SSH Gateway checks, then stop"},{"Name":"yes","Shorthand":"y","Usage":"skip the confirmation prompt"},{"Name":"no-snapshot","Usage":"don't snapshot the local database before importing"},{"Name":"keep-dump","Usage":"keep the downloaded dump in .db-sync/ instead of deleting it"},{"Name":"no-compress","Usage":"transfer the dump uncompressed (if gzip is unavailable on the remote)"}]
+
+set -euo pipefail
+
+APPROOT="${DDEV_APPROOT:-$(pwd)}"
+CONFIG_FILE="$APPROOT/wpengine.conf"
+
+ENVIRONMENT=""
+ASSUME_YES=0
+CHECK_ONLY=0
+TAKE_SNAPSHOT=1
+KEEP_DUMP=0
+COMPRESS=1
+
+if [[ -t 1 ]]; then
+	BOLD=$'\033[1m'
+	DIM=$'\033[2m'
+	RED=$'\033[31m'
+	GREEN=$'\033[32m'
+	YELLOW=$'\033[33m'
+	RESET=$'\033[0m'
+else
+	BOLD="" DIM="" RED="" GREEN="" YELLOW="" RESET=""
+fi
+
+step() { printf '\n%s==>%s %s\n' "$BOLD" "$RESET" "$*"; }
+info() { printf '    %s%s%s\n' "$DIM" "$*" "$RESET"; }
+warn() { printf '%s !  %s%s\n' "$YELLOW" "$*" "$RESET" >&2; }
+fail() { printf '\n%sERROR:%s %s\n' "$RED" "$RESET" "$*" >&2; exit 1; }
+
+config_value() {
+	local var="$1"
+	printf '%s' "${!var:-}"
+}
+
+strip_scheme() {
+	local url="${1#*://}"
+	printf '%s' "${url%/}"
+}
+
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+		--check) CHECK_ONLY=1 ;;
+		-y | --yes) ASSUME_YES=1 ;;
+		--no-snapshot) TAKE_SNAPSHOT=0 ;;
+		--keep-dump) KEEP_DUMP=1 ;;
+		--no-compress) COMPRESS=0 ;;
+		-*) fail "Unknown flag: $1" ;;
+		*)
+			[[ -z "$ENVIRONMENT" ]] || fail "Only one environment can be given (got '$ENVIRONMENT' and '$1')."
+			ENVIRONMENT="$1"
+			;;
+	esac
+	shift
+done
+
+step "Checking prerequisites"
+
+[[ -f "$CONFIG_FILE" ]] || fail "Missing $CONFIG_FILE  -  it holds the environment → install name map."
+
+# shellcheck source=../../../wpengine.conf
+source "$CONFIG_FILE"
+
+[[ -n "${WPE_ENVIRONMENTS:-}" ]] || fail "WPE_ENVIRONMENTS is empty in wpengine.conf."
+
+read -r -a CONFIGURED_ENVIRONMENTS <<<"$WPE_ENVIRONMENTS"
+for env_name in "${CONFIGURED_ENVIRONMENTS[@]}"; do
+	[[ "$env_name" =~ ^[A-Za-z0-9_]+$ ]] ||
+		fail "Invalid environment name '$env_name' in WPE_ENVIRONMENTS - use [A-Za-z0-9_] only."
+	[[ -n "$(config_value "WPE_INSTALL_${env_name}")" ]] ||
+		fail "WPE_INSTALL_${env_name} is empty in wpengine.conf. Add the WP Engine install name for '$env_name'."
+done
+command -v ssh >/dev/null 2>&1 || fail "ssh isn't installed or isn't on your PATH."
+
+if ! ddev exec -- true >/dev/null 2>&1; then
+	fail "Project '${DDEV_PROJECT:-this project}' isn't running. Start it first: ddev start"
+fi
+
+LOCAL_URL="${DDEV_PRIMARY_URL:-}"
+[[ -n "$LOCAL_URL" ]] || fail "DDEV_PRIMARY_URL isn't set  -  run this as 'ddev db-sync', not as a bare script."
+LOCAL_HOST="$(strip_scheme "$LOCAL_URL")"
+
+info "Local site: $LOCAL_URL"
+
+# Environment selection
+AVAILABLE_ENVIRONMENTS=("${CONFIGURED_ENVIRONMENTS[@]}")
+
+if [[ -z "$ENVIRONMENT" ]]; then
+	if [[ ${#AVAILABLE_ENVIRONMENTS[@]} -eq 1 ]]; then
+		ENVIRONMENT="${AVAILABLE_ENVIRONMENTS[0]}"
+		info "Only one environment is configured  -  using '$ENVIRONMENT'."
+	else
+		[[ -t 0 ]] || fail "No terminal to prompt on. Pass an environment: ddev db-sync ${AVAILABLE_ENVIRONMENTS[0]} --yes"
+
+		step "Which environment do you want to pull from?"
+		index=1
+		for env_name in "${AVAILABLE_ENVIRONMENTS[@]}"; do
+			printf '    %d) %-10s %s%s%s\n' "$index" "$env_name" "$DIM" "$(config_value "WPE_INSTALL_${env_name}")" "$RESET"
+			index=$((index + 1))
+		done
+
+		while true; do
+			printf '\n    Choose [1-%d]: ' "${#AVAILABLE_ENVIRONMENTS[@]}"
+			read -r choice
+			if [[ "$choice" =~ ^[0-9]+$ ]] && [[ "$choice" -ge 1 ]] && [[ "$choice" -le ${#AVAILABLE_ENVIRONMENTS[@]} ]]; then
+				ENVIRONMENT="${AVAILABLE_ENVIRONMENTS[$((choice - 1))]}"
+				break
+			fi
+			warn "Enter a number between 1 and ${#AVAILABLE_ENVIRONMENTS[@]}."
+		done
+	fi
+fi
+
+[[ "$ENVIRONMENT" =~ ^[A-Za-z0-9_]+$ ]] || fail "Invalid environment name '$ENVIRONMENT'."
+
+environment_is_known=0
+for env_name in "${AVAILABLE_ENVIRONMENTS[@]}"; do
+	[[ "$env_name" == "$ENVIRONMENT" ]] && environment_is_known=1
+done
+[[ "$environment_is_known" -eq 1 ]] || fail "Unknown environment '$ENVIRONMENT'. Configured: ${WPE_ENVIRONMENTS}"
+
+INSTALL="$(config_value "WPE_INSTALL_${ENVIRONMENT}")"
+[[ -n "$INSTALL" ]] || fail "No WPE_INSTALL_${ENVIRONMENT} set in wpengine.conf."
+
+SSH_TARGET="${INSTALL}@${INSTALL}.ssh.wpengine.net"
+
+# Fail fast instead of falling back to a password prompt WP Engine won't accept.
+# Passphrase-protected keys can still prompt when there's a terminal to prompt on.
+SSH_OPTS=(-o ConnectTimeout=15 -o StrictHostKeyChecking=accept-new
+	-o PasswordAuthentication=no -o KbdInteractiveAuthentication=no)
+[[ -t 0 ]] || SSH_OPTS+=(-o BatchMode=yes)
+if [[ -n "${WPE_SSH_KEY:-}" ]]; then
+	SSH_OPTS+=(-i "$WPE_SSH_KEY" -o IdentitiesOnly=yes)
+	info "Using SSH key: $WPE_SSH_KEY"
+fi
+
+step "Verifying SSH Gateway access to $INSTALL"
+
+ssh_error_file="$(mktemp)"
+trap 'rm -f "$ssh_error_file"' EXIT
+
+if ! REMOTE_URL="$(ssh "${SSH_OPTS[@]}" "$SSH_TARGET" \
+	"wp option get siteurl --skip-plugins --skip-themes" 2>"$ssh_error_file")"; then
+	printf '\n%sERROR:%s Could not run WP-CLI on %s\n\n' "$RED" "$RESET" "$SSH_TARGET" >&2
+	sed 's/^/    /' "$ssh_error_file" >&2
+	cat >&2 <<-CHECKLIST
+
+		    Checklist:
+		      1. Add your public SSH key to WP Engine: User Portal → your profile → SSH Keys.
+		         These are NOT the Git Push keys used by the deploy workflow  -  the gateway
+		         needs its own key on your user account. Propagation takes ~30-45 minutes.
+		         pbcopy < ~/.ssh/id_ed25519.pub
+		      2. Confirm SSH Gateway is enabled for the '${ENVIRONMENT}' install (${INSTALL})
+		         and that your WP Engine account has access to it.
+		      3. Using a non-default key? Point at it for one run:
+		         WPE_SSH_KEY=~/.ssh/your_key ddev db-sync ${ENVIRONMENT}
+		         ...or add a permanent 'Host *.ssh.wpengine.net' block to ~/.ssh/config.
+		      4. Debug the handshake by hand: ssh -v ${SSH_TARGET}
+	CHECKLIST
+	exit 1
+fi
+
+REMOTE_URL="$(printf '%s' "$REMOTE_URL" | tr -d '\r' | tail -n 1)"
+[[ "$REMOTE_URL" == http* ]] || fail "Unexpected siteurl from ${INSTALL}: '${REMOTE_URL}'"
+REMOTE_HOST="$(strip_scheme "$REMOTE_URL")"
+
+info "Remote site: $REMOTE_URL"
+
+if [[ "$CHECK_ONLY" -eq 1 ]]; then
+	step "Checks passed"
+	info "You're set up to run: ddev db-sync ${ENVIRONMENT}"
+	exit 0
+fi
+
+step "Ready to sync"
+info "Source:      ${ENVIRONMENT} (${INSTALL})  -  ${REMOTE_URL}"
+info "Destination: ${LOCAL_URL}  -  the local database will be REPLACED"
+
+if [[ "$ASSUME_YES" -eq 0 ]]; then
+	[[ -t 0 ]] || fail "No terminal to confirm on. Re-run with --yes to skip the prompt."
+	printf '\n    Continue? [Y/n] '
+	read -r reply
+	[[ -z "$reply" || "$reply" =~ ^[Yy]([Ee][Ss])?$ ]] || {
+		echo "    Aborted."
+		exit 1
+	}
+fi
+
+if [[ "$TAKE_SNAPSHOT" -eq 1 ]]; then
+	step "Snapshotting the current local database"
+	snapshot_name="pre-db-sync-$(date +%Y%m%d-%H%M%S)"
+	ddev snapshot --name "$snapshot_name" >/dev/null
+	info "Roll back with: ddev snapshot restore $snapshot_name"
+fi
+
+if [[ "$KEEP_DUMP" -eq 1 ]]; then
+	dump_dir="$APPROOT/.db-sync"
+	mkdir -p "$dump_dir"
+else
+	dump_dir="$(mktemp -d)"
+	trap 'rm -f "$ssh_error_file"; rm -rf "$dump_dir"' EXIT
+fi
+
+dump_file="${dump_dir}/${INSTALL}-$(date +%Y%m%d-%H%M%S).sql"
+[[ "$COMPRESS" -eq 1 ]] && dump_file="${dump_file}.gz"
+
+step "Exporting the ${ENVIRONMENT} database"
+info "This runs in one SSH session, which WP Engine caps at 10 minutes."
+
+export_command="wp db export - --skip-plugins --skip-themes --add-drop-table --default-character-set=utf8mb4 --single-transaction --quick"
+[[ "$COMPRESS" -eq 1 ]] && export_command="${export_command} | gzip -c"
+
+if ! ssh "${SSH_OPTS[@]}" "$SSH_TARGET" "$export_command" >"$dump_file"; then
+	fail "The export failed or the SSH session dropped before it finished. Your local database is untouched."
+fi
+
+[[ -s "$dump_file" ]] || fail "The export came back empty. Try 'ssh ${SSH_TARGET}' then 'wp db size' to check the install."
+
+if [[ "$COMPRESS" -eq 1 ]] && ! gzip -t "$dump_file" 2>/dev/null; then
+	warn "The downloaded file isn't valid gzip. First bytes:"
+	head -c 400 "$dump_file" | sed 's/^/    /' >&2
+	fail "Remote gzip may be unavailable  -  retry with: ddev db-sync ${ENVIRONMENT} --no-compress"
+fi
+
+# gzip exits 0 even when the wp command feeding it failed, so confirm this really
+# is a dump before it overwrites anything locally.
+if [[ "$COMPRESS" -eq 1 ]]; then
+	dump_head="$(gzip -dc "$dump_file" 2>/dev/null | head -c 8000 || true)"
+else
+	dump_head="$(head -c 8000 "$dump_file" || true)"
+fi
+
+if ! printf '%s' "$dump_head" | grep -q "CREATE TABLE"; then
+	warn "The download doesn't look like a SQL dump. First bytes:"
+	printf '%s' "$dump_head" | head -c 400 | sed 's/^/    /' >&2
+	fail "Aborted before touching your local database."
+fi
+
+info "Dump size: $(du -h "$dump_file" | cut -f1)"
+
+step "Importing into the local database"
+ddev import-db --file="$dump_file"
+
+if [[ -n "${WPE_LOCAL_DEACTIVATE_PLUGINS:-}" ]]; then
+	step "Deactivating plugins that can't run locally"
+	for plugin in $WPE_LOCAL_DEACTIVATE_PLUGINS; do
+		if ddev wp plugin deactivate "$plugin" --skip-plugins --skip-themes >/dev/null 2>&1; then
+			info "deactivated ${plugin}"
+		else
+			info "${plugin} wasn't active  -  skipped"
+		fi
+	done
+fi
+
+# The leading '//' keeps this from rewriting email addresses at the same domain;
+# the escaped pass catches JSON-encoded URLs in block markup (https:\/\/host).
+step "Rewriting URLs: //${REMOTE_HOST} → //${LOCAL_HOST}"
+ddev wp search-replace "//${REMOTE_HOST}" "//${LOCAL_HOST}" \
+	--all-tables --skip-columns=guid --report-changed-only --skip-plugins --skip-themes
+ddev wp search-replace "\\/\\/${REMOTE_HOST}" "\\/\\/${LOCAL_HOST}" \
+	--all-tables --skip-columns=guid --report-changed-only --skip-plugins --skip-themes
+ddev wp option update home "$LOCAL_URL" --skip-plugins --skip-themes >/dev/null
+ddev wp option update siteurl "$LOCAL_URL" --skip-plugins --skip-themes >/dev/null
+
+step "Flushing caches and rewrite rules"
+ddev wp cache flush --skip-plugins --skip-themes >/dev/null
+# The rewrite flush must load plugins + theme so custom post types re-register
+# their routes; with --skip-plugins/--skip-themes their archive rules are dropped
+# and every CPT archive 404s until a manual re-flush.
+ddev wp rewrite flush >/dev/null
+
+step "Done"
+printf '    %sPulled the %s database (%s) into %s%s\n' "$GREEN" "$ENVIRONMENT" "$INSTALL" "$LOCAL_URL" "$RESET"
+info "wp-admin now uses the ${ENVIRONMENT} site's logins, not your old local ones."
+[[ "$KEEP_DUMP" -eq 1 ]] && info "Dump kept at ${dump_file#"$APPROOT"/}"
+exit 0

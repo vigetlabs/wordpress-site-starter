@@ -86,6 +86,18 @@ git push -u origin main
 Be sure to update the origin with the correct remote repository URL (and remove the `<>` brackets).
 Information on developing the theme, styling, and building blocks can be found in the theme [README](wp-content/themes/wp-starter/README.md).
 
+## Syncing a remote database
+
+Projects hosted on WP Engine can pull an environment's database into their local install:
+
+```bash
+ddev db-sync
+```
+
+Install names live in `wpengine.conf`, which ships with them blank. `ddev db-sync` reports which ones are missing and stops. It authenticates with your own SSH key over WP Engine's SSH Gateway, so nothing sensitive is stored in the repo.
+
+`ddev db-sync --check` runs the prerequisite and SSH checks without touching any database. Full usage is documented in `README.dist.md`, which is the README a new project keeps.
+
 ## Agent Skills
 
 This starter automatically syncs WordPress Agent Skills on every `ddev start` using:

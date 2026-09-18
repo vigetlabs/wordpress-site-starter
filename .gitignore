@@ -243,6 +243,9 @@ wp-config.php
 # Remove auth.json files as they contain sensitive information
 auth.json
 
+# Database dumps kept by "ddev db-sync --keep-dump"
+/.db-sync/
+
 # Plugin generated folders
 /wp-content/wflogs
 
