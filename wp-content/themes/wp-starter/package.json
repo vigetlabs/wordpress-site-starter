@@ -1,6 +1,6 @@
 {
   "name": "wp-starter",
-  "version": "0.1.0",
+  "version": "1.0.24",
   "type": "module",
   "engines": {
     "node": ">=22.12.0",

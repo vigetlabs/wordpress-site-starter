@@ -35,7 +35,8 @@
       "post-create-project-cmd": [
         "Viget\\ComposerScripts\\ProjectEventHandler::postCreateProject",
         "ddev start"
-      ]
+      ],
+      "sync-version": "node bin/sync-version.mjs"
   },
   "require-dev": {
     "composer/composer": "^2.7",

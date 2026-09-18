@@ -5,6 +5,7 @@
 
 namespace Viget\ComposerScripts\ProjectEvents;
 
+use Composer\Package\Locker;
 use Composer\Script\Event;
 use Viget\ComposerScripts\ComposerScript;
 
@@ -105,6 +106,10 @@ class PostCreateProjectScript extends ComposerScript {
 
 		// Track that this project was created via the project script.
 		self::trackCreatedViaProject();
+
+		// `ddev start` runs next and queries the terminal for its background color and
+		// cursor position. The replies echo back as garbage - TERM=dumb skips the query.
+		putenv( 'TERM=dumb' );
 
 		self::writeInfo( 'All set!' );
 	}
@@ -428,12 +433,100 @@ class PostCreateProjectScript extends ComposerScript {
 		unset( $composerData['require'][$timberPackage] );
 		self::updateComposerData( $composerData, $themePath );
 
-		// Remove Twig files from the theme directory
-		$twigFiles = glob( $themePath . 'blocks/**/*.twig', GLOB_BRACE );
+		// The lock file is committed, so install puts Timber back unless it goes too.
+		self::pruneComposerLock( $themePath );
 
-		foreach ( $twigFiles as $twigFile ) {
+		// Remove Twig files from the theme directory
+		foreach ( self::findTwigFiles( $themePath . 'blocks' ) as $twigFile ) {
 			unlink( $twigFile );
 		}
+	}
+
+	/**
+	 * Drop anything no longer required by composer.json from the lock file.
+	 *
+	 * @param string $themePath
+	 *
+	 * @return void
+	 */
+	private static function pruneComposerLock( string $themePath ): void {
+		$lockPath = $themePath . 'composer.lock';
+
+		if ( ! file_exists( $lockPath ) ) {
+			return;
+		}
+
+		$lock = json_decode( file_get_contents( $lockPath ), true );
+
+		if ( ! is_array( $lock ) ) {
+			self::writeWarning( 'Could not read the theme composer.lock - skipping.' );
+			return;
+		}
+
+		$composerData = self::getComposerData( $themePath );
+		$requires     = [];
+
+		foreach ( array_merge( $lock['packages'] ?? [], $lock['packages-dev'] ?? [] ) as $package ) {
+			$requires[ $package['name'] ] = array_keys( $package['require'] ?? [] );
+		}
+
+		// Walk the tree from what composer.json still requires. Everything else goes.
+		$keep  = [];
+		$queue = array_merge( array_keys( $composerData['require'] ?? [] ), array_keys( $composerData['require-dev'] ?? [] ) );
+
+		while ( $queue ) {
+			$name = array_shift( $queue );
+
+			if ( isset( $keep[ $name ] ) || ! isset( $requires[ $name ] ) ) {
+				continue;
+			}
+
+			$keep[ $name ] = true;
+			$queue         = array_merge( $queue, $requires[ $name ] );
+		}
+
+		foreach ( [ 'packages', 'packages-dev' ] as $key ) {
+			if ( empty( $lock[ $key ] ) ) {
+				continue;
+			}
+
+			$lock[ $key ] = array_values(
+				array_filter(
+					$lock[ $key ],
+					fn( array $package ): bool => isset( $keep[ $package['name'] ] )
+				)
+			);
+		}
+
+		$lock['content-hash'] = Locker::getContentHash( file_get_contents( $themePath . 'composer.json' ) );
+
+		file_put_contents( $lockPath, json_encode( $lock, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . PHP_EOL );
+	}
+
+	/**
+	 * Find every Twig template under a directory.
+	 *
+	 * @param string $path
+	 *
+	 * @return array
+	 */
+	private static function findTwigFiles( string $path ): array {
+		if ( ! is_dir( $path ) ) {
+			return [];
+		}
+
+		$files    = [];
+		$iterator = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator( $path, \FilesystemIterator::SKIP_DOTS )
+		);
+
+		foreach ( $iterator as $file ) {
+			if ( 'twig' === $file->getExtension() ) {
+				$files[] = $file->getPathname();
+			}
+		}
+
+		return $files;
 	}
 
 	/**
@@ -603,6 +696,23 @@ class PostCreateProjectScript extends ComposerScript {
 	}
 
 	/**
+	 * Remove the version sync script.
+	 *
+	 * @return void
+	 */
+	private static function removeVersionSyncScript(): void {
+		$syncScript = self::translatePath( 'bin/sync-version.mjs' );
+
+		if ( ! file_exists( $syncScript ) ) {
+			return;
+		}
+
+		unlink( $syncScript );
+
+		self::writeInfo( 'Version sync script removed!' );
+	}
+
+	/**
 	 * Get all the files that need to be updated.
 	 *
 	 * @param string $themeDir
@@ -654,6 +764,9 @@ class PostCreateProjectScript extends ComposerScript {
 
 		// Remove dev-only packages file.
 		self::removePackagesFile();
+
+		// Remove the version sync script, which reads packages.json.
+		self::removeVersionSyncScript();
 
 		// Remove site-starter composer file
 		self::removeRootComposer();

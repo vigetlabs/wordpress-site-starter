@@ -116,7 +116,8 @@ class ComposerScript {
 			return;
 		}
 
-		$eol = $extraLine ? PHP_EOL : '';
+		$content = self::stripTerminalReports( $content );
+		$eol     = $extraLine ? PHP_EOL : '';
 
 		if ( ! $type ) {
 			self::$event->getIO()->write( $content . $eol );
@@ -124,6 +125,29 @@ class ComposerScript {
 		}
 
 		self::$event->getIO()->write( sprintf( '<%1$s>%2$s</%1$s>' . $eol, $type, $content ) );
+	}
+
+	/**
+	 * Strip terminal query responses from subprocess output.
+	 *
+	 * Subprocesses probe the terminal for its background color (OSC 11) and cursor
+	 * position (CPR). The terminal answers on stdin, and anything not reading in raw
+	 * mode echoes the answer back as visible garbage.
+	 *
+	 * @param string $content
+	 *
+	 * @return string
+	 */
+	protected static function stripTerminalReports( string $content ): string
+	{
+		return preg_replace(
+			[
+				'/\x1b\][^\x07\x1b]*(?:\x07|\x1b\\\\)/', // OSC report, BEL or ST terminated.
+				'/\x1b\[[\d;]*[Rn]/',                     // Cursor position and device status reports.
+			],
+			'',
+			$content
+		);
 	}
 
 	/**

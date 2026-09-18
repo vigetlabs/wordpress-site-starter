@@ -2,7 +2,7 @@
 
 Instructions for AI coding assistants (Claude Code, Cursor, Aider, Continue, Copilot Chat, etc.) working in this WordPress Site Starter repo. The goal is to make this starter quick and reliable to extend, regardless of which assistant a developer uses.
 
-This file is the source of truth. Tool-specific entry points (e.g. `.claude/skills/wp-block-generator/SKILL.md`) are thin wrappers that point here.
+This file is the source of truth. Tool-specific entry points (e.g. `.claude/skills/viget-block-generator/SKILL.md`) are thin wrappers that point here.
 
 ---
 

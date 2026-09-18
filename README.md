@@ -143,6 +143,21 @@ You can quickly remove the project by using:
 ddev stop && ddev delete project-name -O -y && cd ../ && rm -rf project-name
 ```
 
+## Versioning
+
+`packages.json` holds the project version. Everything else is written from it:
+
+```bash
+composer sync-version              # sync the theme to the current version
+node bin/sync-version.mjs 1.1.0    # set a new version, then sync
+```
+
+That covers the theme's `style.css`, `readme.txt` and `package.json`. `node bin/sync-version.mjs --check` reports drift without writing, and runs on every PR.
+
+## License
+
+MIT for the tooling and scaffolding - see [LICENSE](LICENSE). The theme in `wp-content/themes/wp-starter` and the `viget-wp` mu-plugin are GPLv2 or later, since they ship WordPress-derived code.
+
 ## Changelog
 
 ### v1.0.24
