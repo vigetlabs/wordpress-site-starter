@@ -25,7 +25,7 @@
   "require": {
     "php": ">=8.2.0",
     "ext-json": "*",
-    "idleberg/wordpress-vite-assets": "^1.2",
+    "idleberg/wordpress-vite-assets": "^2.0",
     "timber/timber": "^2.4",
     "viget/viget-blocks-toolkit": "^1.1.8",
     "wpackagist-plugin/accessibility-checker": "^1.42",
