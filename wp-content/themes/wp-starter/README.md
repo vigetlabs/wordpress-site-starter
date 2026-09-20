@@ -20,6 +20,14 @@ The files that create the `theme.json` can be used to apply custom settings for 
 - [Theme.json reference](https://developer.wordpress.org/block-editor/reference-guides/theme-json-reference/theme-json-living/)
 - [Global Styles & theme.json](https://fullsiteediting.com/lessons/global-styles/)
 
+### Custom page templates
+
+Any `templates/page-*.html` file is picked up automatically and listed in `theme.json`'s `customTemplates`, which is what puts it in the page editor's **Template** control. Add the file, and it shows up.
+
+This matters beyond the dropdown: a `page-{slug}.html` file matches by slug on its own, but silently, and nothing writes `_wp_page_template` on the post. Choosing a template from the control does write it, which is what lets an ACF field group target that template.
+
+The title is derived from the filename, so `templates/page-landing.html` becomes "Landing". See [helpers/custom-templates.js](src/theme-json/helpers/custom-templates.js).
+
 ## Custom Blocks 🧱
 
 Blocks are built using ACF and core WordPress blocks. Styles for the blocks are located within the block folders.
@@ -94,6 +102,16 @@ The default font settings can be found in [_index.js](src/theme-json/styles/_ind
 You have access to all of [Tailwind's colors](https://tailwindcss.com/docs/customizing-colors), but feel free to create your own custom colors in the [Tailwind config](src/styles/tailwind/colors.css).
 
 Tailwind colors are automatically added to `theme.json` via [settings/color.js](src/theme-json/settings/color.js) and are available to use in WordPress. Some colors are automatically prefixed with `dark-` to identify automated style adjustments.
+
+When referencing a color from a `theme-json` file, use `colorVar()` rather than writing the CSS variable by hand:
+
+```js
+import { colorVar } from '../helpers/colors.js';
+
+colorVar('gray-600'); // 'var(--wp--preset--color--dark-gray-600)'
+```
+
+The `dark-` prefix is derived from the color's luminance, so a hardcoded `var(--wp--preset--color--gray-600)` silently stops resolving the day that color is lightened past the threshold. `colorVar()` looks the slug up instead, and warns on a token that doesn't exist.
 
 ### Spacing
 

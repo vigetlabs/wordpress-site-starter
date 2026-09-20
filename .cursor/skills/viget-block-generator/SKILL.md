@@ -30,8 +30,9 @@ Trigger on any request that asks for a new block — including:
 ## Before generating
 
 1. **Detect the active theme** — there is exactly one directory under `wp-content/themes/`. Use that slug. Read `Text Domain:` from its `style.css`. Derive the PHP namespace and `@package` from existing `render.php` / `block.php` files in that theme.
-2. **Detect Twig on/off** — look for any `wp-content/themes/<theme-slug>/blocks/**/render.twig`. If none exist, Twig is disabled (the developer opted out at project setup) — generate `render.php` only, with inline HTML.
-3. **Read at least one existing block** in the active theme as a ground-truth reference, especially when the request is unusual. Existing blocks live at `wp-content/themes/<theme-slug>/blocks/`.
+2. **Detect Twig on/off** — look for any `wp-content/themes/<theme-slug>/blocks/**/render.twig`. If none exist, Twig is disabled (the developer opted out at project setup) — a block that needs a render file gets `render.php` only, with inline HTML.
+3. **Decide whether the block needs a render file at all** — an InnerBlocks-only block gets none. Viget Blocks Toolkit renders any block with `"supports": { "jsx": true }` and no render file through its own `views/jsx.php`. Most blocks in this theme have no `render.php`.
+4. **Read at least one existing block** in the active theme as a ground-truth reference, especially when the request is unusual. Existing blocks live at `wp-content/themes/<theme-slug>/blocks/`.
 
 ## Output
 
