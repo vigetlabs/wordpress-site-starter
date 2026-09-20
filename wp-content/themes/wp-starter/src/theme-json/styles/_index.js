@@ -10,7 +10,7 @@ const styles = {
 	},
 	elements: elements,
 	spacing: {
-		blockGap: 0,
+		blockGap: '0',
 		padding: {
 			left: 'var(--wp--preset--spacing--20)',
 			right: 'var(--wp--preset--spacing--20)',
