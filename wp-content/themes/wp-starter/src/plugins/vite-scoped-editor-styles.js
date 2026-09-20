@@ -11,6 +11,8 @@
  *   - Injects unscoped CSS directly into the Gutenberg editor iframe (no
  *     prefix needed inside the iframe).
  *   - Copies cross-origin font <link> tags into the iframe.
+ *   - Rewrites url('@images/...') to a public URL so inlined editor CSS
+ *     does not resolve against /wp-admin/.
  *
  * Nested @import-glob: postcss-import-ext-glob only expands globs in the file
  * it processes. Before Tailwind runs, we recursively inline local @imports
@@ -28,10 +30,11 @@
  */
 
 import path from 'path';
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, readdirSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { createRequire } from 'node:module';
 import postcss from 'postcss';
+import { getImagesUrlPrefix, rewriteImageAliasUrls } from './rewrite-image-alias-urls.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -39,6 +42,59 @@ const { postcssPlugin: postcssFfFluidFonts } = require('./fluid-font-calculation
 
 /** Absolute path to fluid math + PostCSS plugin (used for explicit watch). */
 const FLUID_FONT_CALCULATIONS = path.join(__dirname, 'fluid-font-calculations.cjs');
+
+/** Theme root (this file lives in `src/plugins`). */
+const THEME_ROOT = path.resolve(__dirname, '../..');
+
+const UNKNOWN_UTILITY_RE = /unknown utility class `([^`]+)`/;
+const LOCATE_SKIP_DIRS = new Set(['node_modules', 'dist', 'vendor', '.git']);
+
+function collectCssFiles(dir, out = []) {
+	let entries;
+	try {
+		entries = readdirSync(dir, { withFileTypes: true });
+	} catch (_e) {
+		return out;
+	}
+	for (const entry of entries) {
+		if (entry.isDirectory()) {
+			if (!LOCATE_SKIP_DIRS.has(entry.name)) collectCssFiles(path.join(dir, entry.name), out);
+		} else if (entry.name.endsWith('.css')) {
+			out.push(path.join(dir, entry.name));
+		}
+	}
+	return out;
+}
+
+/**
+ * Tailwind reports unknown-utility errors against the flattened entry
+ * (editor.css:1:1), which points at nothing useful. Grep the theme's CSS for
+ * the offending class so the log line and the browser overlay name the file
+ * that actually uses it.
+ */
+function locateUnknownUtility(message) {
+	const utility = message.match(UNKNOWN_UTILITY_RE)?.[1];
+	if (!utility) return null;
+
+	for (const file of collectCssFiles(THEME_ROOT)) {
+		const lines = readFileSync(file, 'utf-8').split('\n');
+		for (let i = 0; i < lines.length; i++) {
+			const column = lines[i].indexOf(utility);
+			if (column === -1) continue;
+			// Skip substring hits (`p-fluid-md` inside `p-fluid-md-alt`).
+			if (/[\w-]/.test(lines[i][column + utility.length] ?? '')) continue;
+
+			const start = Math.max(0, i - 2);
+			const frame = lines
+				.slice(start, i + 3)
+				.map((line, n) => `${start + n === i ? '>' : ' '} ${start + n + 1} | ${line}`)
+				.join('\n');
+
+			return { utility, file, line: i + 1, column: column + 1, frame };
+		}
+	}
+	return null;
+}
 
 const VIRTUAL_MODULE_ID = 'virtual:editor-scoped-styles';
 const RESOLVED_ID = '\0' + VIRTUAL_MODULE_ID;
@@ -206,10 +262,13 @@ export default function viteEditorStyles(options = {}) {
 	// Persistent processor so @tailwindcss/postcss retains its IncrementalCompiler
 	// between HMR cycles, enabling incremental rebuilds instead of full rebuilds.
 	let cssProcessor = null;
+	let imagesUrlPrefix = '';
 
 	let cssVariantsPromise = null;
 	let buildInFlight = false;
 	let buildPendingAfterCurrent = false;
+	let lastGoodCss = null;
+	let devServer = null;
 
 	async function getCssProcessor() {
 		if (cssProcessor) return cssProcessor;
@@ -279,7 +338,7 @@ export default function viteEditorStyles(options = {}) {
 		const flattenedCss = await expandNestedImportGlobs(rawCss, cssEntryPath);
 		const processor = await getCssProcessor();
 		const result = await processor.process(flattenedCss, { from: cssEntryPath });
-		const unscopedCss = result.css;
+		const unscopedCss = rewriteImageAliasUrls(result.css, imagesUrlPrefix);
 
 		const deps = new Set(
 			result.messages
@@ -290,7 +349,7 @@ export default function viteEditorStyles(options = {}) {
 		let scopedCss;
 		try {
 			const scoped = await postcss([makeScopePlugin(SCOPE)]).process(unscopedCss, { from: cssEntryPath });
-			scopedCss = scoped.css;
+			scopedCss = rewriteImageAliasUrls(scoped.css, imagesUrlPrefix);
 		} catch (err) {
 			console.warn('[vite-scoped-editor-styles] Scoping failed, using unscoped CSS:', err.message);
 			scopedCss = unscopedCss;
@@ -299,8 +358,49 @@ export default function viteEditorStyles(options = {}) {
 		return { scopedCss, unscopedCss, deps };
 	}
 
+	/**
+	 * Surface a failed CSS build without killing the dev server.
+	 *
+	 * Logs one line (not the full PostCSS error object, which dumps the entire
+	 * flattened stylesheet) and pushes the error to the browser overlay so the
+	 * editor behaves like a normal Vite CSS failure.
+	 */
+	function reportBuildError(err) {
+		const message = err.reason ?? err.message ?? String(err);
+		const located = locateUnknownUtility(message);
+		const loc = located
+			? { file: located.file, line: located.line, column: located.column }
+			: err.file
+				? { file: err.file, line: err.line ?? 1, column: err.column ?? 1 }
+				: null;
+
+		const where = loc ? `${loc.file}:${loc.line}:${loc.column}` : cssEntry;
+		console.error(`\n[vite-scoped-editor-styles] ${message}\n  at ${where}\n`);
+		if (located?.frame) console.error(`${located.frame}\n`);
+
+		const hot = devServer?.hot ?? devServer?.ws;
+		hot?.send({
+			type: 'error',
+			err: {
+				message,
+				stack: '',
+				plugin: 'vite-scoped-editor-styles',
+				id: loc?.file ?? cssEntry,
+				loc: loc ?? undefined,
+				frame: located?.frame ?? '',
+			},
+		});
+	}
+
 	// Serialised build queue: at most one build runs at a time, one more queued.
 	// Prevents concurrent access to the persistent PostCSS processor.
+	//
+	// This promise must never reject. buildStart() and the `listening` pre-warm
+	// start builds that nothing awaits, so a rejection there is an unhandled
+	// rejection — Node exits, DDEV's supervisord respawns `npm ci && npm run dev`
+	// (autorestart=true, startretries=15), and the log scrolls with restarts
+	// instead of showing the error. On failure we report and serve the last good
+	// CSS so the server stays up and the overlay names the broken file.
 	function triggerBuild() {
 		if (buildInFlight) {
 			buildPendingAfterCurrent = true;
@@ -311,9 +411,13 @@ export default function viteEditorStyles(options = {}) {
 		buildPendingAfterCurrent = false;
 
 		cssVariantsPromise = buildCssVariants(cssEntry)
+			.then(result => {
+				lastGoodCss = result;
+				return result;
+			})
 			.catch(err => {
-				cssVariantsPromise = null;
-				throw err;
+				reportBuildError(err);
+				return lastGoodCss ?? { scopedCss: '', unscopedCss: '', deps: new Set() };
 			})
 			.finally(() => {
 				buildInFlight = false;
@@ -328,6 +432,10 @@ export default function viteEditorStyles(options = {}) {
 
 	return {
 		name: 'vite-scoped-editor-styles',
+
+		configResolved(config) {
+			imagesUrlPrefix = getImagesUrlPrefix(config);
+		},
 
 		buildStart() {
 			if (!cssVariantsPromise) triggerBuild();
@@ -388,6 +496,8 @@ export default function viteEditorStyles(options = {}) {
 		},
 
 		configureServer(server) {
+			devServer = server;
+
 			if (watchPaths.length) {
 				server.watcher.add(watchPaths);
 			}
