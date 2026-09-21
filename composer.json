@@ -42,7 +42,7 @@
   },
   "require-dev": {
     "composer/composer": "^2.7",
-    "phpunit/phpunit": "^11.5",
+    "phpunit/phpunit": "^13.3",
     "symfony/console": "^7.0"
   },
   "autoload-dev": {
