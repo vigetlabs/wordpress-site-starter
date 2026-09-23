@@ -1,0 +1,69 @@
+{#
+  Block: Dialog
+#}
+
+{% set cbx_id = 'dialog-' ~ random() %}
+{% set button_text = block.data['button_text'] %}
+
+{% if function('is_admin') == true %}
+	<input type="checkbox" id="{{ cbx_id }}" class="acfbt-dialog-checkbox">
+	<label for="{{ cbx_id }}" class="acfbt-dialog-label">Toggle Dialog</label>
+{% endif %}
+
+<div
+{% if function('is_admin') == false %}
+	x-data="{
+		openDialog: false,
+
+		// Close the dialog when the user clicks backdrop
+		handleDialogClick(event) {
+			(event.target === $refs.dialogRef) && this.handleDialogClose();
+		},
+
+		// Delay close to allow for animation
+		handleDialogClose() {
+			if (!this.openDialog) return;
+			this.openDialog = false;
+			$refs.dialogRef.close();
+		}
+	}"
+{% endif %}
+>
+
+	<dialog
+		{{ block_attrs( block ) }}
+		{% if function('is_admin') == false %}
+			x-ref="dialogRef"
+			@keydown.escape.prevent="handleDialogClose()"
+			@click="handleDialogClick(event)"
+		{% endif %}
+	>
+		{% if function('is_admin') == false %}
+			<button
+				class="acf-dialog-close"
+				@click="handleDialogClose()"
+			>
+				<span class="sr-only">Close</span>
+			</button>
+		{% endif %}
+
+		<div class="inner">
+			{% if function('is_admin') == true %}
+				<label for="{{ cbx_id }}" class="acfbt-dialog-close">
+					<span class="sr-only">Close</span>
+				</label>
+			{% endif %}
+			{{ inner_blocks() }}
+		</div>
+	</dialog>
+
+
+	<button
+		class="btn-default"
+		{% if function('is_admin') == false %}
+			@click="$refs.dialogRef.showModal(), openDialog = true"
+		{% endif %}
+	>
+		{{ button_text ? button_text : 'Open' }}
+	</button>
+</div>
