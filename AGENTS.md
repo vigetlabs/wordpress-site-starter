@@ -21,7 +21,7 @@ Before generating any code, derive these values from the repo (do not assume):
 |---|---|
 | `<theme-slug>` | The single directory under `wp-content/themes/` |
 | `<text-domain>` | `Text Domain:` line in `wp-content/themes/<theme-slug>/style.css` (usually equals the slug) |
-| `<function-prefix>` | `<text-domain>` with dashes → underscores, plus a trailing `_` (e.g. `wp-starter` → `wp_starter_`, but the project also uses a no-dash form for Twig fn names — see "Naming conventions" below) |
+| `<function-prefix>` | `<text-domain>` with dashes → underscores, plus a trailing `_` (e.g. `acme-museum` → `acme_museum_`, but a project may also use a no-dash form for Twig fn names — see "Naming conventions" below) |
 | `<Namespace>` | The PHP namespace root used in existing block files (`@package` and `namespace` declarations in any `blocks/*/render.php` or `blocks/*/block.php`). Typically PascalCase of the slug. |
 | `<twig-enabled>` | True if any `wp-content/themes/<theme-slug>/blocks/**/render.twig` exists |
 
@@ -384,7 +384,7 @@ add_filter(
 );
 ```
 
-Twig function naming: `<function-prefix><blockslugnodashes>_<functionname>` (e.g. for text domain `wp-starter` and block `alert-banner`: `wp_starter_alertbanner_my_helper`). Match whatever the rest of the theme is using — read existing `block.php` files first.
+Twig function naming: `<function-prefix><blockslugnodashes>_<functionname>` (e.g. for text domain `acme-museum` and block `alert-banner`: `acme_museum_alertbanner_my_helper`). Match whatever the rest of the theme is using — read existing `block.php` files first.
 
 For a complete real-world example with `$persist()` Alpine state, see [`blocks/alert-banner/block.php`](wp-content/themes/wp-starter/blocks/alert-banner/block.php).
 
@@ -512,7 +512,7 @@ Project-specific helpers (singletons, taxonomy accessors, icon registries, etc.)
 | PHP namespace | `<Namespace>\PascalCase` | `WPStarter\MyNewBlock` |
 | `@package` tag | `<Namespace>` | `WPStarter` |
 | CSS selector | `.acf-block-<slug>` | `.acf-block-my-new-block` |
-| Twig function names | `<function-prefix><slugnodashes>_<fn>` | `wp_starter_mynewblock_get_id` |
+| Twig function names | `<function-prefix><slugnodashes>_<fn>` | `acme_museum_mynewblock_get_id` |
 | Twig template path | `blocks/<slug>/render.twig` | `blocks/my-new-block/render.twig` |
 | ACF field group JSON key | `group_<8hex>` | `group_a1b2c3d4` |
 | ACF field key | `field_<8hex>` | `field_e5f6a7b8` |
