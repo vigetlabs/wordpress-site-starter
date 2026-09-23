@@ -20,6 +20,8 @@ The version lives in `packages.json`. The theme stays at `0.1.0` - see [Versioni
 * Added a `colorVar()` helper and palette-driven auto-contrast exclusions.
 * Added a `pageslug-{slug}` body class on pages.
 * Added a build ticket template and corrected the block generation docs.
+* Added `bin/sync-version.mjs`, which sets `packages.json`, asserts the theme has not drifted off `0.1.0`, and requires a `CHANGELOG.md` entry for the version. Runs on every pull request.
+* Moved the changelog out of `README.md` into `CHANGELOG.md`, which `create-project` removes alongside `packages.json`.
 * Fixed the Vite dev server exiting on a CSS error, and added file-level error reporting.
 * Fixed editor/scoped styles missing editor-only CSS.
 * Fixed `theme.json` schema validation for `spacingScale` and `blockGap`.
@@ -28,6 +30,11 @@ The version lives in `packages.json`. The theme stays at `0.1.0` - see [Versioni
 * Fixed Vite HMR origin/port mismatch and made fluid font-size discovery generic.
 * Fixed Create Block Theme 2.10+ compatibility with `DISALLOW_FILE_EDIT`.
 * Fixed admin login screen logo escaping, with a theme logo fallback.
+* Fixed `create-project` installing over locally cloned plugins and themes. The handler a generated project actually runs had no `preInstall`/`preUpdate`, so Composer printed a "not callable" notice and carried on; the protection now covers any plugin, mu-plugin or theme directory holding a `.git`.
+* Fixed choosing PHP templates leaving Timber and Twig in the theme's `vendor/`, since installs resolve from the committed lock rather than `composer.json`. The `.twig` cleanup also globbed one level too shallow and left nested block templates behind.
+* Fixed DDEV's terminal background-colour and cursor-position queries leaking escape codes into `create-project` output.
+* Fixed the agent skill path in `AGENTS.md` and the theme README, which pointed at `wp-block-generator` rather than `viget-block-generator`.
+* Clarified licensing: MIT for the tooling and scaffolding, GPLv2-or-later for the theme and the `viget-wp` mu-plugin, which ship WordPress-derived code.
 * Hid Fonts, Menus, and Widgets from the Appearance menu.
 * Removed the deprecated `acf/accordion` block in favor of `core/accordion`.
 * Removed the WordPress logo from the admin bar.
