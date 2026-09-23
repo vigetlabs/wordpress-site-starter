@@ -2,7 +2,7 @@
 
 Instructions for AI coding assistants (Claude Code, Cursor, Aider, Continue, Copilot Chat, etc.) working in this WordPress Site Starter repo. The goal is to make this starter quick and reliable to extend, regardless of which assistant a developer uses.
 
-This file is the source of truth. Tool-specific entry points (e.g. `.claude/skills/wp-block-generator/SKILL.md`) are thin wrappers that point here.
+This file is the source of truth. Tool-specific entry points (e.g. `.claude/skills/viget-block-generator/SKILL.md`) are thin wrappers that point here.
 
 ---
 
@@ -181,7 +181,7 @@ Defines default inner block structure. The `"template"` key is an array of block
 
 Use `"templateLock": "all"` (or `"contentOnly"`) in the block's `attributes` when the inner block structure should be locked — see [`blocks/cta/block.json`](wp-content/themes/wp-starter/blocks/cta/block.json) for the `contentOnly` pattern.
 
-> **Important:** `template.json` is applied when a block is first inserted (or while the inner area is empty). Editing it does **not** retroactively change blocks already saved in posts. For sitewide structural updates, use synced patterns or migrations — see [`docs/block-structure-strategy.md`](wp-content/themes/wp-starter/docs/block-structure-strategy.md) when generating blocks that may need future migrations.
+> **Important:** `template.json` is applied when a block is first inserted (or while the inner area is empty). Editing it does **not** retroactively change blocks already saved in posts. Structure you expect to change after launch belongs in `render.php` / Twig, where an update deploys with the theme.
 
 #### `render.php` (Twig enabled — preferred)
 
@@ -570,6 +570,7 @@ Do not invent API surfaces. If you're not sure, fetch and cite, or ask the devel
 ## Gotchas
 
 - Never edit `theme.json` directly — it's generated from `src/theme-json/`.
+- The theme's version stays at `0.1.0` in `style.css`, `readme.txt` and `package.json`. It's the starting version for a generated project, not a bug. Starter releases are tracked in `packages.json` and `CHANGELOG.md` only.
 - `"supports.mode": false` is always set — disables ACF's block mode switcher.
 - The `acf-json/` folder (when present) auto-syncs ACF field groups; placing JSON there is preferred over manual import.
 - `render.php` and `render.twig` are kept in sync when Twig is enabled.

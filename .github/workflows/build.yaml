@@ -48,6 +48,14 @@ jobs:
           npm install -g npm@11
           npm --version
 
+      - name: Check versions and event handlers
+        run: |
+          set -euo pipefail
+          if [ -f bin/sync-version.mjs ]; then
+            node bin/sync-version.mjs --check
+          fi
+          php bin/check-event-handlers.php
+
       # Set up composer caching
       - name: Cache Composer dependencies
         uses: actions/cache@v4

@@ -36,6 +36,7 @@
       "Viget\\ComposerScripts\\ProjectEventHandler::postCreateProject",
       "ddev start"
     ],
+    "sync-version": "node bin/sync-version.mjs",
     "test": [
       "phpunit"
     ]
