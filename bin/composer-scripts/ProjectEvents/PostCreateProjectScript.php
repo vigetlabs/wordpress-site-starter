@@ -749,7 +749,6 @@ class PostCreateProjectScript extends ComposerScript {
 			self::translatePath( '.gitattributes' ),
 			self::translatePath( 'AGENTS.md' ),
 			self::translatePath( 'bin/check-event-handlers.php' ),
-			self::translatePath( 'bin/composer-scripts/ProjectEvents/PostInstallScript.php' ),
 			$themeDir . '/.phpcs.xml',
 			$themeDir . '/readme.txt',
 			$themeDir . '/README.md',
