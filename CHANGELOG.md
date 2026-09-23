@@ -5,6 +5,10 @@ Releases of the site starter itself. `composer create-project` removes this file
 The version lives in `packages.json`. The theme stays at `0.1.0` - see [Versioning](README.md#versioning).
 
 
+## v1.1.0
+
+* Added `.gitattributes`. ACF Pro is marked `linguist-vendored` and `theme.json` and the `viget-wp` POT file `linguist-generated`, so they collapse in pull request diffs and stay out of the repo's language stats. `create-project` is unaffected - `linguist-*` attributes are not read by `git archive`.
+
 ## v1.0.24
 
 * Updated Composer packages to latest.
