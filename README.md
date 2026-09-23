@@ -107,20 +107,8 @@ Install names live in `wpengine.conf`, which ships with them blank. `ddev db-syn
 
 ## Agent Skills
 
-This starter automatically syncs WordPress Agent Skills on every `ddev start` using:
-
-```bash
-ddev agent-skills-sync
-```
-
-The synced skill directories are intentionally ignored from git:
-
-- `.codex/skills/`
-- `.cursor/skills/`
-- `.claude/skills/`
-- `.github/skills/`
-
-You can manually refresh skills any time:
+WordPress Agent Skills sync on every `ddev start`. Run it manually any time to
+refresh them:
 
 ```bash
 ddev agent-skills-sync
