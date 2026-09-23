@@ -30,7 +30,11 @@ jobs:
       - name: Use Node.js 22
         uses: actions/setup-node@v7
         with:
-          node-version: 22.12.0
+          # Read from .nvmrc, which matches .ddev/config.yaml's nodejs_version.
+          # CI was on 22.12.0, which ships npm 10.9 - below the theme's own
+          # engines.npm >=11.0.0 - so CI built with a toolchain the theme says it
+          # does not support, and one DDEV never uses.
+          node-version-file: .nvmrc
           cache: npm
           cache-dependency-path: wp-content/themes/wp-starter/package-lock.json
 
