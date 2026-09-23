@@ -61,6 +61,8 @@ if ( ! class_exists( 'acf_field_gallery' ) ) :
 
 			add_action( 'wp_ajax_acf/fields/gallery/get_sort_order', array( $this, 'ajax_get_sort_order' ) );
 			add_action( 'wp_ajax_nopriv_acf/fields/gallery/get_sort_order', array( $this, 'ajax_get_sort_order' ) );
+
+			add_filter( 'acf/validate_attachment/type=gallery', 'acf_validate_is_image_attachment', 10, 5 );
 		}
 
 		/**
@@ -102,7 +104,7 @@ if ( ! class_exists( 'acf_field_gallery' ) ) :
 			);
 
 			// Validate request.
-			if ( ! acf_verify_ajax( $args['nonce'], $args['field_key'], true ) ) {
+			if ( ! acf_verify_ajax( $args['nonce'], $args['field_key'], true, 'gallery' ) ) {
 				die();
 			}
 
@@ -140,7 +142,7 @@ if ( ! class_exists( 'acf_field_gallery' ) ) :
 				)
 			);
 
-			if ( ! acf_verify_ajax( $args['nonce'], $args['field_key'], true ) ) {
+			if ( ! acf_verify_ajax( $args['nonce'], $args['field_key'], true, 'gallery' ) ) {
 				wp_send_json_error();
 			}
 
@@ -219,7 +221,7 @@ if ( ! class_exists( 'acf_field_gallery' ) ) :
 				)
 			);
 
-			if ( ! acf_verify_ajax( $args['nonce'], $args['field_key'], true ) ) {
+			if ( ! acf_verify_ajax( $args['nonce'], $args['field_key'], true, 'gallery' ) ) {
 				wp_send_json_error();
 			}
 
@@ -789,8 +791,18 @@ if ( ! class_exists( 'acf_field_gallery' ) ) :
 		 */
 		function validate_value( $valid, $value, $field, $input ) {
 
+			if ( $valid !== true ) {
+				return $valid;
+			}
+
 			if ( empty( $value ) || ! is_array( $value ) ) {
 				$value = array();
+			}
+
+			foreach ( $value as $attachment_id ) {
+				if ( is_numeric( $attachment_id ) && ! wp_attachment_is_image( $attachment_id ) ) {
+					return __( 'File must be a valid image.', 'acf' );
+				}
 			}
 
 			if ( count( $value ) < $field['min'] ) {
