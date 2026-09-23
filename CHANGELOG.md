@@ -14,7 +14,7 @@ The version lives in `packages.json`. The theme stays at `0.1.0` - see [Versioni
 * Updated `npm` packages to latest.
 * Updated Viget Blocks Toolkit to 1.1.9.
 * Updated the bundled ACF Pro to 6.8.10.
-* Fixed `create-project` leaving `wp-starter` references in `.gitattributes`, `.github/dependabot.yml`, `AGENTS.md`, `bin/check-event-handlers.php` and `PostInstallScript.php`. All five are renamed to the project slug now.
+* Fixed `create-project` leaving `wp-starter` references in `.gitattributes`, `.github/dependabot.yml`, `AGENTS.md` and `bin/check-event-handlers.php`. All four are renamed to the project slug now, and the naming examples in `AGENTS.md` resolve to the project's own prefix rather than the starter's.
 * Added Composer installation for licensed plugins (ACF Pro) with `ddev composer-auth`.
 * Added `ddev db-sync` to pull a WP Engine database locally.
 * Added an `@images` alias, mirrored `src/images` into `dist/`, and resolved the alias in editor CSS.
