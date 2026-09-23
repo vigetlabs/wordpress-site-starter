@@ -41,8 +41,11 @@
       "phpunit"
     ]
   },
+  "require": {
+    "php": ">=8.2"
+  },
   "require-dev": {
-    "composer/composer": "^2.7",
+    "composer/composer": "^2.10",
     "phpunit/phpunit": "^11.5",
     "symfony/console": "^7.0"
   },
