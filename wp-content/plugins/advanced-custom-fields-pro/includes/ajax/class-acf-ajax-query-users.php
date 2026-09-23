@@ -48,7 +48,7 @@ if ( ! class_exists( 'ACF_Ajax_Query_Users' ) ) :
 				$field_action = false;
 			}
 
-			if ( ! acf_verify_ajax( $nonce, $action, $field_action ) ) {
+			if ( ! acf_verify_ajax( $nonce, $action, $field_action, 'user' ) ) {
 				return new WP_Error( 'acf_invalid_nonce', __( 'Invalid nonce.', 'acf' ), array( 'status' => 404 ) );
 			}
 

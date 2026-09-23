@@ -590,16 +590,16 @@
         },
         {
             "name": "viget/viget-blocks-toolkit",
-            "version": "v1.1.8",
+            "version": "v1.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vigetlabs/viget-blocks-toolkit.git",
-                "reference": "548ed20b41a949fd333ee76ea13ebf44fa3862d8"
+                "reference": "2d158c34e86be942117ad29ec21185255bac298b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vigetlabs/viget-blocks-toolkit/zipball/548ed20b41a949fd333ee76ea13ebf44fa3862d8",
-                "reference": "548ed20b41a949fd333ee76ea13ebf44fa3862d8",
+                "url": "https://api.github.com/repos/vigetlabs/viget-blocks-toolkit/zipball/2d158c34e86be942117ad29ec21185255bac298b",
+                "reference": "2d158c34e86be942117ad29ec21185255bac298b",
                 "shasum": ""
             },
             "require": {
@@ -629,9 +629,9 @@
             ],
             "support": {
                 "issues": "https://github.com/vigetlabs/viget-blocks-toolkit/issues",
-                "source": "https://github.com/vigetlabs/viget-blocks-toolkit/tree/v1.1.8"
+                "source": "https://github.com/vigetlabs/viget-blocks-toolkit/tree/v1.1.9"
             },
-            "time": "2026-08-31T02:32:47+00:00"
+            "time": "2026-09-23T16:58:23+00:00"
         },
         {
             "name": "wpackagist-plugin/accessibility-checker",

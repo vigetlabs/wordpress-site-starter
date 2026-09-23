@@ -8,6 +8,39 @@ The version lives in `packages.json`. The theme stays at `0.1.0` - see [Versioni
 ## v1.1.0
 
 * Added `.gitattributes`. ACF Pro is marked `linguist-vendored` and `theme.json` and the `viget-wp` POT file `linguist-generated`, so they collapse in pull request diffs and stay out of the repo's language stats. `create-project` is unaffected - `linguist-*` attributes are not read by `git archive`.
+* Added WordPress 7.1 support. `Tested up to` and the generated `theme.json` schema both target 7.1.
+* Corrected `Requires at least` to 6.6, the floor for `theme.json` version 3.
+* Updated Composer packages to latest.
+* Updated `npm` packages to latest.
+* Updated Viget Blocks Toolkit to 1.1.9.
+* Updated the bundled ACF Pro to 6.8.10.
+* Fixed `create-project` leaving `wp-starter` references in `.gitattributes`, `.github/dependabot.yml`, `AGENTS.md` and `bin/check-event-handlers.php`. All four are renamed to the project slug now, and the naming examples in `AGENTS.md` resolve to the project's own prefix rather than the starter's.
+* Added Composer installation for licensed plugins (ACF Pro) with `ddev composer-auth`.
+* Added `ddev db-sync` to pull a WP Engine database locally.
+* Added an `@images` alias, mirrored `src/images` into `dist/`, and resolved the alias in editor CSS.
+* Added custom page template discovery for `templates/page-*.html`.
+* Added a `colorVar()` helper and palette-driven auto-contrast exclusions.
+* Added a `pageslug-{slug}` body class on pages.
+* Added a build ticket template and corrected the block generation docs.
+* Added `bin/sync-version.mjs`, which sets `packages.json`, asserts the theme has not drifted off `0.1.0`, and requires a `CHANGELOG.md` entry for the version. Runs on every pull request.
+* Moved the changelog out of `README.md` into `CHANGELOG.md`, which `create-project` removes alongside `packages.json`.
+* Fixed the Vite dev server exiting on a CSS error, and added file-level error reporting.
+* Fixed editor/scoped styles missing editor-only CSS.
+* Fixed `theme.json` schema validation for `spacingScale` and `blockGap`.
+* Fixed `npm run format` by renaming `prettier.config.js` to `prettier.config.cjs`.
+* Fixed project setup being skipped when WordPress core files exist but the database is empty.
+* Fixed Vite HMR origin/port mismatch and made fluid font-size discovery generic.
+* Fixed Create Block Theme 2.10+ compatibility with `DISALLOW_FILE_EDIT`.
+* Fixed admin login screen logo escaping, with a theme logo fallback.
+* Fixed `create-project` installing over locally cloned plugins and themes. The handler a generated project actually runs had no `preInstall`/`preUpdate`, so Composer printed a "not callable" notice and carried on; the protection now covers any plugin, mu-plugin or theme directory holding a `.git`.
+* Fixed choosing PHP templates leaving Timber and Twig in the theme's `vendor/`, since installs resolve from the committed lock rather than `composer.json`. The `.twig` cleanup also globbed one level too shallow and left nested block templates behind.
+* Fixed DDEV's terminal background-colour and cursor-position queries leaking escape codes into `create-project` output.
+* Fixed the agent skill path in `AGENTS.md` and the theme README, which pointed at `wp-block-generator` rather than `viget-block-generator`.
+* Clarified licensing: MIT for the tooling and scaffolding, GPLv2-or-later for the theme and the `viget-wp` mu-plugin, which ship WordPress-derived code.
+* Hid Fonts, Menus, and Widgets from the Appearance menu.
+* Removed the deprecated `acf/accordion` block in favor of `core/accordion`.
+* Removed the WordPress logo from the admin bar.
+* Declared a `>=8.2` PHP requirement on the root package, so Composer enforces the floor `create-project` already assumed.
 
 ## v1.0.24
 
