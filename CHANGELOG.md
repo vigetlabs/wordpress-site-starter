@@ -13,6 +13,7 @@ The version lives in `packages.json`. The theme stays at `0.1.0` - see [Versioni
 * Updated Composer packages to latest.
 * Updated `npm` packages to latest.
 * Updated Viget Blocks Toolkit to 1.1.9.
+* Updated the bundled ACF Pro to 6.8.10.
 * Added Composer installation for licensed plugins (ACF Pro) with `ddev composer-auth`.
 * Added `ddev db-sync` to pull a WP Engine database locally.
 * Added an `@images` alias, mirrored `src/images` into `dist/`, and resolved the alias in editor CSS.
