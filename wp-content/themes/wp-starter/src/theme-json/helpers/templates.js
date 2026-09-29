@@ -7,7 +7,7 @@ import { toTitleCase } from './strings.js';
  * and format them for use in theme.json
  */
 function getTemplateParts() {
-	const dir = path.resolve(__dirname, '../../../parts');
+	const dir = path.resolve(import.meta.dirname, '../../../parts');
 	const files = fs
 		.readdirSync(dir)
 		.filter((file) => /\.(php|html)$/.test(file));
