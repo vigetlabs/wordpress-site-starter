@@ -13,7 +13,7 @@ import { toTitleCase } from './strings.js';
  * Discovered from `templates/page-*.html`, excluding `page.html` itself.
  */
 function getCustomTemplates() {
-	const dir = path.resolve(__dirname, '../../../templates');
+	const dir = path.resolve(import.meta.dirname, '../../../templates');
 
 	return fs
 		.readdirSync(dir)

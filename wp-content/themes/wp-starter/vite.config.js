@@ -7,6 +7,7 @@ import viteGlobWatch from './src/plugins/vite-glob-watch.js';
 import viteEditorStyles from './src/plugins/vite-scoped-editor-styles.js';
 import rewriteImagesAlias from './src/plugins/rewrite-image-alias-urls.js';
 
+const dirname = import.meta.dirname;
 const THEME = '/wp-content/themes/wp-starter';
 const VITE_PORT = parseInt(process.env.VITE_PRIMARY_PORT ?? '5273');
 
@@ -14,30 +15,30 @@ export default defineConfig(({ command }) => ({
 	root: 'src',
 	base: command === 'serve' ? '' : THEME + '/dist/',
 	// See README.md > Images.
-	publicDir: path.resolve(__dirname, 'src/public'),
+	publicDir: path.resolve(dirname, 'src/public'),
 	resolve: {
 		alias: {
-			'@images': path.resolve(__dirname, 'src/public/images'),
+			'@images': path.resolve(dirname, 'src/public/images'),
 		},
 	},
 	plugins: [
 		generateThemeJSON,
 		liveReload([
-			path.resolve(__dirname, './blocks/**/*.twig'),
-			path.resolve(__dirname, './theme.json'),
-			path.resolve(__dirname, './**/*.php'),
+			path.resolve(dirname, './blocks/**/*.twig'),
+			path.resolve(dirname, './theme.json'),
+			path.resolve(dirname, './**/*.php'),
 		]),
 		viteGlobWatch({
 			watchPaths: [
-				path.resolve(__dirname, './src/**/*.css'),
-				path.resolve(__dirname, './blocks/**/*.css'),
+				path.resolve(dirname, './src/**/*.css'),
+				path.resolve(dirname, './blocks/**/*.css'),
 			],
 		}),
 		viteEditorStyles({
-			cssEntry: path.resolve(__dirname, 'src/styles/editor.css'),
+			cssEntry: path.resolve(dirname, 'src/styles/editor.css'),
 			watchPaths: [
-				path.resolve(__dirname, './src/**/*.css'),
-				path.resolve(__dirname, './blocks/**/*.css'),
+				path.resolve(dirname, './src/**/*.css'),
+				path.resolve(dirname, './blocks/**/*.css'),
 			],
 		}),
 		rewriteImagesAlias(),
@@ -52,9 +53,9 @@ export default defineConfig(({ command }) => ({
 		minify: 'terser',
 		rollupOptions: {
 			input: {
-				main:   path.resolve(__dirname, 'src/main.js'),
-				admin:  path.resolve(__dirname, 'src/admin.js'),
-				editor: path.resolve(__dirname, 'src/editor.js'),
+				main:   path.resolve(dirname, 'src/main.js'),
+				admin:  path.resolve(dirname, 'src/admin.js'),
+				editor: path.resolve(dirname, 'src/editor.js'),
 			},
 		},
 	},
