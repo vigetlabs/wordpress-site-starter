@@ -13,6 +13,7 @@ use VigetWP\Admin\Assets;
 use VigetWP\Admin\Blocks;
 use VigetWP\Admin\ColorScheme;
 use VigetWP\Admin\DashboardWidgets;
+use VigetWP\Admin\EditorBodyClasses;
 use VigetWP\Admin\FileEditors;
 use VigetWP\Admin\Footer;
 use VigetWP\Admin\CustomScripts;
@@ -169,6 +170,7 @@ class Core {
 		new TinyMCE();
 		new DashboardWidgets();
 		new FileEditors();
+		new EditorBodyClasses();
 
 		// Plugins
 		new CreateBlockTheme();
