@@ -1,0 +1,32 @@
+name: Starter Tests
+
+# Tests for the starter's own Composer scripts. They need the root composer.json,
+# so create-project removes this workflow along with tests/ and phpunit.xml.dist.
+on:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: starter-tests-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Composer Scripts Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          coverage: none
+
+      - name: Install Dependencies
+        run: composer install --no-interaction --no-progress --no-scripts
+
+      - name: Run Tests
+        run: composer test

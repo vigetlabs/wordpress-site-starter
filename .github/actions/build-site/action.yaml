@@ -1,0 +1,78 @@
+name: Build Site
+description: >-
+  Install Composer dependencies for the theme and the viget-wp mu-plugin and
+  build the theme's assets with Vite. Shared by the PR build check and the
+  deploy workflow so both produce the same output.
+
+inputs:
+  site-url:
+    description: URL licensed plugins are activated against (see composer-install).
+    required: true
+  secrets-json:
+    description: toJSON(secrets) from the calling workflow - license keys are looked up by name.
+    required: false
+    default: "{}"
+  php-version:
+    description: PHP version to install Composer dependencies with. Defaults to .ddev/config.yaml's php_version.
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Resolve PHP version
+      id: php
+      shell: bash
+      env:
+        PHP_VERSION: ${{ inputs.php-version }}
+      run: |
+        set -euo pipefail
+        version="${PHP_VERSION:-$(sed -n 's/^php_version: *"\{0,1\}\([0-9.]*\).*/\1/p' .ddev/config.yaml | head -1)}"
+        if [ -z "$version" ]; then
+          echo "::error file=.ddev/config.yaml::php_version is not set."
+          exit 1
+        fi
+        echo "PHP ${version}"
+        echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v7
+      with:
+        # .nvmrc matches .ddev/config.yaml's nodejs_version.
+        node-version-file: .nvmrc
+        cache: npm
+        cache-dependency-path: wp-content/themes/wp-starter/package-lock.json
+
+    # The theme's engines.npm is >=11; the Node in .nvmrc ships an older npm.
+    - name: Use npm 11
+      shell: bash
+      run: |
+        npm install -g npm@11
+        npm --version
+
+    - name: Cache Composer dependencies
+      uses: actions/cache@v6
+      with:
+        path: /tmp/composer-cache
+        key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+
+    - name: Install theme dependencies
+      uses: ./.github/actions/composer-install
+      with:
+        working-directory: wp-content/themes/wp-starter
+        site-url: ${{ inputs.site-url }}
+        secrets-json: ${{ inputs.secrets-json }}
+        php-version: ${{ steps.php.outputs.version }}
+
+    - name: Build theme assets
+      shell: bash
+      working-directory: wp-content/themes/wp-starter
+      run: |
+        npm ci
+        npm run build
+
+    - name: Install viget-wp dependencies
+      uses: ./.github/actions/composer-install
+      with:
+        working-directory: wp-content/mu-plugins/viget-wp
+        php-version: ${{ steps.php.outputs.version }}
