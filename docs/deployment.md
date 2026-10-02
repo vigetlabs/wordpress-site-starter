@@ -32,3 +32,4 @@ To redeploy a branch without a new commit, run the Deploy workflow from the Acti
 2. **GitHub secret:** `WPE_SSHG_KEY_PRIVATE` holds that user's private key. A repository secret covers all environments.
 3. **GitHub environments:** `dev`, `staging` and `production` are created on their first deploy. Add required reviewers to `production` so a merge waits for approval before it goes live. Set the environment variable `SITE_URL` when the public URL differs from `https://<install>.wpenginepowered.com`; it is used for the deployment link and for licensed-plugin activation.
 4. **`wpengine.conf`:** fill in the install name for each environment as it is created.
+5. **PHP version:** set `php_version` in `.ddev/config.yaml` to match the installs. The build installs Composer dependencies with it.

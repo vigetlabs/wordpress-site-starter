@@ -13,13 +13,28 @@ inputs:
     required: false
     default: "{}"
   php-version:
-    description: PHP version to install Composer dependencies with. Match the WP Engine installs.
+    description: PHP version to install Composer dependencies with. Defaults to .ddev/config.yaml's php_version.
     required: false
-    default: "8.4"
+    default: ""
 
 runs:
   using: composite
   steps:
+    - name: Resolve PHP version
+      id: php
+      shell: bash
+      env:
+        PHP_VERSION: ${{ inputs.php-version }}
+      run: |
+        set -euo pipefail
+        version="${PHP_VERSION:-$(sed -n 's/^php_version: *"\{0,1\}\([0-9.]*\).*/\1/p' .ddev/config.yaml | head -1)}"
+        if [ -z "$version" ]; then
+          echo "::error file=.ddev/config.yaml::php_version is not set."
+          exit 1
+        fi
+        echo "PHP ${version}"
+        echo "version=${version}" >> "$GITHUB_OUTPUT"
+
     - name: Set up Node.js
       uses: actions/setup-node@v7
       with:
@@ -47,7 +62,7 @@ runs:
         working-directory: wp-content/themes/wp-starter
         site-url: ${{ inputs.site-url }}
         secrets-json: ${{ inputs.secrets-json }}
-        php-version: ${{ inputs.php-version }}
+        php-version: ${{ steps.php.outputs.version }}
 
     - name: Build theme assets
       shell: bash
@@ -60,4 +75,4 @@ runs:
       uses: ./.github/actions/composer-install
       with:
         working-directory: wp-content/mu-plugins/viget-wp
-        php-version: ${{ inputs.php-version }}
+        php-version: ${{ steps.php.outputs.version }}
