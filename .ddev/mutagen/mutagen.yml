@@ -1,0 +1,33 @@
+# Customized from the DDEV default, so DDEV no longer regenerates it.
+# Run `ddev mutagen reset && ddev start` after changing this file.
+# See https://docs.ddev.com/en/stable/users/install/performance/#mutagen
+# and https://mutagen.io/documentation/synchronization/ignores
+sync:
+  defaults:
+    mode: "two-way-resolved"
+    stageMode: "neighboring"
+    ignore:
+      paths:
+        # DDEV defaults. .git is bind-mounted where possible.
+        - "/.git"
+        - "/.tarballs"
+        - "/.ddev/db_snapshots"
+        - "/.ddev/.importdb*"
+        - ".DS_Store"
+        - ".idea"
+
+        # Bind-mounted by DDEV as an upload dir.
+        - "/wp-content/uploads"
+
+        # Plugin repos cloned for local development install their own
+        # node_modules, which can run to several GB. The theme's stays synced
+        # for the vite daemon.
+        - "/wp-content/plugins/*/node_modules"
+        - "/wp-content/mu-plugins/*/node_modules"
+
+        # WordPress runtime files.
+        - "/wp-content/cache"
+        - "/wp-content/upgrade"
+        - "/wp-content/upgrade-temp-backup"
+    symlink:
+      mode: "posix-raw"
