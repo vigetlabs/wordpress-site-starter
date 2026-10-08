@@ -1,5 +1,5 @@
 .acf-block-text-icon-cards {
-	@apply flex flex-wrap justify-start gap-x-24 gap-y-32;
+	@apply flex flex-wrap justify-start gap-x-24 gap-y-32 px-fluid-sm py-fluid-md;
 
 	.acf-innerblocks-container {
 		@apply contents;
