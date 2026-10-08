@@ -53,9 +53,6 @@
     "lock": {
       "move": true,
       "remove": false
-    },
-    "spacing": {
-      "padding": [ "top", "bottom" ]
     }
   },
   "acf": {
