@@ -21,7 +21,7 @@ export default {
 					fontStyle: 'normal',
 					fontWeight: '300 900',
 					// Fonts have to be woff2 to work with WP's font loader.
-					src: ['file:./src/fonts/RobotoCondensed-VariableFont_wght.woff2'],
+					src: ['file:./dist/fonts/RobotoCondensed-VariableFont_wght.woff2'],
 				},
 				{
 					fontFamily: 'Roboto Condensed Italic',
@@ -30,7 +30,7 @@ export default {
 					fontWeight: '300 900',
 					// Fonts have to be woff2 to work with WP's font loader.
 					src: [
-						'file:./src/fonts/RobotoCondensed-Italic-VariableFont_wght.woff2',
+						'file:./dist/fonts/RobotoCondensed-Italic-VariableFont_wght.woff2',
 					],
 				},
 			],
@@ -47,7 +47,7 @@ export default {
 					fontStretch: 'normal',
 					fontStyle: 'normal',
 					fontWeight: '300 900',
-					src: ['file:./src/fonts/FONT_NAME_HERE.woff2'],
+					src: ['file:./dist/fonts/FONT_NAME_HERE.woff2'],
 				},
 			],*/
 		},
