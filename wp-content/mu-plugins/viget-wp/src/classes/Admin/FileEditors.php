@@ -43,6 +43,7 @@ class FileEditors {
 		);
 
 		// When DISALLOW_FILE_EDIT is skipped, still hide WP's built-in file editors.
+		// Core adds them at priority 101, under Tools for block themes.
 		add_action(
 			'admin_menu',
 			function () {
@@ -50,9 +51,12 @@ class FileEditors {
 					return;
 				}
 
-				remove_submenu_page( 'themes.php', 'theme-editor.php' );
-				remove_submenu_page( 'plugins.php', 'plugin-editor.php' );
-			}
+				foreach ( [ 'tools.php', 'themes.php', 'plugins.php' ] as $parent ) {
+					remove_submenu_page( $parent, 'theme-editor.php' );
+					remove_submenu_page( $parent, 'plugin-editor.php' );
+				}
+			},
+			110
 		);
 
 		// Disable Plugin Editor.
