@@ -1,5 +1,5 @@
 .btn-default{
-  background: #1A4155;
+  background: var(--vigetwp-color-primary);
   border-radius: 0px 20px 20px 20px;
   color: #fff;
   display: inline-block;
@@ -18,9 +18,9 @@
 
 .btn-secondary{
   background: #ffffff;
-  border: 1px solid #1A4155;
+  border: 1px solid var(--vigetwp-color-primary);
   border-radius: 0px 20px 20px 20px;
-  color: #1A4155;
+  color: var(--vigetwp-color-primary);
   display: inline-block;
   padding: 5px 20px;
   text-decoration: none;
@@ -28,9 +28,9 @@
 
 .mce-content-body a.btn-secondary[data-mce-selected] {
   background: #cccccc;
-  border: 1px solid #1A4155;
+  border: 1px solid var(--vigetwp-color-primary);
   border-radius: 0px 20px 20px 20px;
-  color: #1A4155;
+  color: var(--vigetwp-color-primary);
   display: inline-block;
   padding: 5px 20px;
   text-decoration: none;
