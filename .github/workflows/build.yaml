@@ -4,6 +4,20 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - 'wp-content/themes/**'
+      - 'wp-content/mu-plugins/viget-wp/**'
+      - 'bin/**'
+      - 'tests/**'
+      - 'phpunit.xml.dist'
+      - 'composer.json'
+      - 'composer.lock'
+      - 'packages.json'
+      - 'CHANGELOG.md'
+      - '.nvmrc'
+      - '.ddev/config.yaml'
+      - '.github/workflows/build.yaml'
+      - '.github/actions/**'
 
 concurrency:
   group: build-${{ github.head_ref }}
