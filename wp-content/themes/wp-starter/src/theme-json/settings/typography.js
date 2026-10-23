@@ -9,6 +9,8 @@ export default {
 	customFontSize: true,
 	fontFamilies: [
 		// For more info about loading fonts see https://fullsiteediting.com/lessons/theme-json-typography-options/
+		// Font files go in src/public/fonts/. The build copies them to dist/fonts/, so point src there.
+		// In dev, the theme serves them from src/public/fonts/.
 		{
 			// Set this to be your body font family.
 			fontFamily: 'Roboto Condensed',
