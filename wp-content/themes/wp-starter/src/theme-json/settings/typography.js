@@ -9,6 +9,8 @@ export default {
 	customFontSize: true,
 	fontFamilies: [
 		// For more info about loading fonts see https://fullsiteediting.com/lessons/theme-json-typography-options/
+		// Font files go in src/public/fonts/. The build copies them to dist/fonts/, so point src there.
+		// In dev, the theme serves them from src/public/fonts/.
 		{
 			// Set this to be your body font family.
 			fontFamily: 'Roboto Condensed',
@@ -21,7 +23,7 @@ export default {
 					fontStyle: 'normal',
 					fontWeight: '300 900',
 					// Fonts have to be woff2 to work with WP's font loader.
-					src: ['file:./src/fonts/RobotoCondensed-VariableFont_wght.woff2'],
+					src: ['file:./dist/fonts/RobotoCondensed-VariableFont_wght.woff2'],
 				},
 				{
 					fontFamily: 'Roboto Condensed Italic',
@@ -30,7 +32,7 @@ export default {
 					fontWeight: '300 900',
 					// Fonts have to be woff2 to work with WP's font loader.
 					src: [
-						'file:./src/fonts/RobotoCondensed-Italic-VariableFont_wght.woff2',
+						'file:./dist/fonts/RobotoCondensed-Italic-VariableFont_wght.woff2',
 					],
 				},
 			],
@@ -47,7 +49,7 @@ export default {
 					fontStretch: 'normal',
 					fontStyle: 'normal',
 					fontWeight: '300 900',
-					src: ['file:./src/fonts/FONT_NAME_HERE.woff2'],
+					src: ['file:./dist/fonts/FONT_NAME_HERE.woff2'],
 				},
 			],*/
 		},

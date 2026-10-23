@@ -74,7 +74,7 @@ After the block is generated, set the block's icon in `block.json` — pick one 
 
 ### Fonts
 
-Fonts are pulled in by [typography.js](src/theme-json/settings/typography.js). Update the `src` to point to the font files in `/src/fonts/` directory. For more info on setting up WordPress fonts, check out [fullsiteediting](https://fullsiteediting.com/lessons/creating-theme-json/#h-typography).
+Fonts are pulled in by [typography.js](src/theme-json/settings/typography.js). Font files go in `/src/public/fonts/`, which the build copies to `/dist/fonts/`. Point each `src` at `file:./dist/fonts/`, since `dist/` is what deploys. In dev, the theme loads them from `/src/public/fonts/` instead. For more info on setting up WordPress fonts, check out [fullsiteediting](https://fullsiteediting.com/lessons/creating-theme-json/#h-typography).
 
 The default font settings can be found in [_index.js](src/theme-json/styles/_index.js).
 
