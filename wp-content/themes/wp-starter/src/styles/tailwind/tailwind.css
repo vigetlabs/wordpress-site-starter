@@ -9,6 +9,17 @@
 @custom-variant mobile-menu-closed (body:has(.menu-closed[style]) &);
 @custom-variant mobile-menu-open (body:has(.menu-open[style]) &);
 
+/* Desktop header styles. The editor always gets them: its canvas is narrower than the window. */
+@custom-variant mobile-menu {
+	@media (width >= --theme(--breakpoint-mobile-menu)) {
+		@slot;
+	}
+
+	:where(.editor-styles-wrapper) & {
+		@slot;
+	}
+}
+
 /*
 	Check the css files in the tailwind folder for more variables
 	Add more variables here, but if they start to get long, move them to their own file.
