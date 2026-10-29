@@ -46,6 +46,14 @@
 	&.is-style-icon-only {
 		.wp-block-button__link {
 			@apply text-zero gap-0;
+
+			/* The toolkit's editor icon is sized in em, which text-zero shrinks to nothing. Rendered previews inline it instead. */
+			&:not(:has(> .wp-block-button__link-icon)) {
+				&::before,
+				&::after {
+					@apply size-20;
+				}
+			}
 		}
 	}
 
