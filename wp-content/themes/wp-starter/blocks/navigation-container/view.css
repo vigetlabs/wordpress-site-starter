@@ -12,7 +12,7 @@
 	}
 
 	button.navigation-toggle[aria-rel='mobile-toggle'] {
-		@apply absolute z-50 inset-y-0 right-0 flex h-32 w-32 items-center justify-center text-black dark:text-white;
+		@apply absolute z-50 inset-y-0 right-0 flex h-32 w-32 cursor-pointer items-center justify-center text-black dark:text-white;
 		@apply mobile-menu:hidden;
 		@apply mobile-menu-open:fixed;
 	}
