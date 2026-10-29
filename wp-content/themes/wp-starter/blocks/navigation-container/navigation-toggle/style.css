@@ -1,4 +1,4 @@
 .acf-block-navigation-toggle {
-	@apply relative z-50 flex h-32 w-32 items-center justify-center text-black dark:text-white;
+	@apply relative z-50 flex h-32 w-32 cursor-pointer items-center justify-center text-black dark:text-white;
 	@apply mobile-menu:hidden;
 }
