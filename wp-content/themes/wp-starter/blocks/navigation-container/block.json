@@ -8,7 +8,7 @@
   "keywords": [ "menu", "mobile", "group", "toggle" ],
   "supports": {
     "jsx": true,
-    "innerContainer": true,
+    "innerContainer": false,
     "layout": {
       "default": {
         "type": "flex",
@@ -18,7 +18,6 @@
       "allowCustomContentAndWideSize": false
     }
   },
-  "editorStyle": "file:./editor.css",
   "acf": {
     "mode": "preview"
   }
