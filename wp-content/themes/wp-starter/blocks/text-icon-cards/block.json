@@ -33,6 +33,7 @@
     }
   },
   "supports": {
+    "motion": true,
     "jsx": true,
     "mode": false,
     "alignWide": true,

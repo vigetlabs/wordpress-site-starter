@@ -1,0 +1,54 @@
+{
+	"enabled": true,
+	"tokens": {
+		"duration": {
+			"fast": "200ms",
+			"base": "600ms",
+			"slow": "900ms"
+		},
+		"easing": {
+			"standard": "cubic-bezier(0.2, 0, 0, 1)",
+			"emphasized": "cubic-bezier(0.3, 0, 0, 1.2)",
+			"linear": "linear"
+		},
+		"distance": {
+			"sm": "0.75rem",
+			"md": "1.5rem",
+			"lg": "3rem"
+		}
+	},
+	"pageTransition": {
+		"enabled": true,
+		"effect": "fade",
+		"duration": "fast",
+		"easing": "standard"
+	},
+	"reveal": {
+		"threshold": 0.15,
+		"rootMargin": "0px 0px -10% 0px",
+		"once": true,
+		"staggerLimit": 8,
+		"reducedMotion": "none"
+	},
+	"defaults": {
+		"duration": "base",
+		"easing": "standard",
+		"distance": "md",
+		"stagger": "80ms",
+		"delay": "0ms"
+	},
+	"blocks": {
+		"core/template-part": false,
+		"core/navigation": false,
+		"core/heading": { "effect": "fade-up" },
+		"core/paragraph": { "effect": "fade-up" },
+		"core/list": { "effect": "fade-up" },
+		"core/quote": { "effect": "fade-up" },
+		"core/button": { "effect": "fade-up", "distance": "sm" },
+		"core/image": { "effect": "zoom-in", "duration": "slow" },
+		"core/video": { "effect": "fade", "duration": "slow" },
+		"core/embed": { "effect": "fade", "duration": "slow" },
+		"core/separator": { "effect": "wipe", "duration": "slow" },
+		"core/columns": { "scope": true }
+	}
+}
