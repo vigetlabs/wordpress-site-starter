@@ -23,8 +23,8 @@ $attrs   = []; // phpcs:ignore
 if ( ! is_admin() ) {
 	$attrs['x-data']          = '{menuIsOpen : false}'; // phpcs:ignore
 	$attrs['x-id']            = "['navigation-content']"; // phpcs:ignore
-	$attrs['x-trap']          = 'menuIsOpen'; // phpcs:ignore
-	$attrs['@keydown.escape'] = 'menuIsOpen = false'; // phpcs:ignore
+	$attrs['x-trap.noreturn'] = 'menuIsOpen'; // phpcs:ignore
+	$attrs['@keydown.escape'] = 'menuIsOpen && $refs.menuToggle.focus(); menuIsOpen = false'; // phpcs:ignore
 }
 
 ?>

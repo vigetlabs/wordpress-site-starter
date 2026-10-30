@@ -12,10 +12,11 @@ $attrs = [ // phpcs:ignore
 ];
 
 if ( ! is_admin() ) {
+	$attrs['x-ref']          = 'menuToggle'; // phpcs:ignore
 	$attrs['aria-expanded']  = 'false'; // phpcs:ignore
 	$attrs[':aria-expanded'] = 'menuIsOpen.toString()'; // phpcs:ignore
 	$attrs[':aria-controls'] = "\$id('navigation-content')"; // phpcs:ignore
-	$attrs['@click']         = 'menuIsOpen = !menuIsOpen'; // phpcs:ignore
+	$attrs['@click']         = 'menuIsOpen = !menuIsOpen; $el.focus()'; // phpcs:ignore
 }
 
 ?>
