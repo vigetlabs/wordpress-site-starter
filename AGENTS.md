@@ -580,3 +580,22 @@ Do not invent API surfaces. If you're not sure, fetch and cite, or ask the devel
 - Blocks do not render an html `id` by default. If markup or JS needs to reference the wrapper by id, either declare `"supports": { "autoId": true }` or pass one explicitly: `block_attrs( $block, '', [ 'id' => $id ] )` — see [`blocks/alert-banner/render.php`](wp-content/themes/wp-starter/blocks/alert-banner/render.php). Prefer an Alpine `x-ref` over an id for scripting.
 - Child block `block.json` files must include `"parent": ["acf/<parent-slug>"]`.
 - Always add a dev fallback in `render.twig` for blocks that pull dynamic data (taxonomies, CPT queries) so the block looks good before real data exists.
+- **Excerpt length** is set in the theme's `inc/blocks.php` with two filters on one constant: `excerpt_length` for auto-generated excerpts, and `block_type_metadata` for `core/post-excerpt`'s default `excerptLength`, which the block trims to instead. A block with its own length keeps it.
+
+  ```php
+  const EXCERPT_LENGTH = 28;
+
+  add_filter( 'excerpt_length', fn() => EXCERPT_LENGTH );
+
+  // core/post-excerpt trims to its own excerptLength attribute instead.
+  add_filter(
+  	'block_type_metadata',
+  	function ( array $metadata ): array {
+  		if ( 'core/post-excerpt' === ( $metadata['name'] ?? '' ) ) {
+  			$metadata['attributes']['excerptLength']['default'] = EXCERPT_LENGTH;
+  		}
+
+  		return $metadata;
+  	}
+  );
+  ```
