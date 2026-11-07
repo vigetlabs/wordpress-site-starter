@@ -27,6 +27,12 @@ Before generating any code, derive these values from the repo (do not assume):
 
 When in doubt, read an existing block (e.g. [`blocks/alert-banner/`](wp-content/themes/wp-starter/blocks/alert-banner/)) and mirror its conventions — those are the standard.
 
+### Client names
+
+Never name a client in this repo: code, comments, commit messages, PR titles and descriptions, or docs. Describe the pattern itself, without where it came from.
+
+In a project built from this starter, the project's own client name is fine. Never name another client.
+
 ---
 
 ## Scope of this guide
