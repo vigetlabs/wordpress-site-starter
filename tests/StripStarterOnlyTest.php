@@ -1,6 +1,6 @@
 <?php
 /**
- * Tests for the AGENTS.md starter-only and project-only markers.
+ * Tests for PostCreateProjectScript::stripStarterOnly().
  *
  * @package ComposerScripts
  */
@@ -32,21 +32,5 @@ class StripStarterOnlyTest extends TestCase {
 
 		$this->assertStringNotContainsString( 'starter-only', $stripped );
 		$this->assertStringNotContainsString( 'stays at `0.1.0`', $stripped );
-	}
-
-	public function testUnwrapsProjectOnlyBlocks(): void {
-		$content = "- One\n<!-- project-only\n- Project note\n/project-only -->\n- Two\n";
-
-		$this->assertSame( "- One\n- Project note\n- Two\n", PostCreateProjectScript::unwrapProjectOnly( $content ) );
-	}
-
-	public function testPreparesTheRealAgentsFile(): void {
-		$agents = PostCreateProjectScript::unwrapProjectOnly(
-			PostCreateProjectScript::stripStarterOnly( file_get_contents( dirname( __DIR__ ) . '/AGENTS.md' ) )
-		);
-
-		$this->assertStringNotContainsString( 'project-only', $agents );
-		$this->assertStringNotContainsString( 'Never name a client in this repo', $agents );
-		$this->assertStringContainsString( 'WP Site Starter is the only client named in this repo.', $agents );
 	}
 }

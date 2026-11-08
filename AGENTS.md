@@ -29,12 +29,9 @@ When in doubt, read an existing block (e.g. [`blocks/alert-banner/`](wp-content/
 
 ### Client names
 
-<!-- starter-only -->
 Never name a client in this repo: code, comments, commit messages, PR titles and descriptions, or docs. Describe the pattern itself, without where it came from.
-<!-- /starter-only -->
-<!-- project-only
-WP Site Starter is the only client named in this repo. Never name another client in code, comments, commit messages, PR titles and descriptions, or docs. Describe a pattern from another project without where it came from.
-/project-only -->
+
+In a project built from this starter, the project's own client name is fine. Never name another client.
 
 ---
 
