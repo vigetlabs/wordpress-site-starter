@@ -40,5 +40,7 @@ class AgentsFileTest extends TestCase {
 		$this->assertStringNotContainsString( 'starter-only', $agents );
 		$this->assertStringNotContainsString( 'stays at `0.1.0`', $agents );
 		$this->assertStringContainsString( '## Project notes', $agents );
+		$this->assertStringNotContainsString( 'Never name a client in this repo', $agents );
+		$this->assertStringContainsString( 'WP Site Starter is the only client named in this repo.', $agents );
 	}
 }
