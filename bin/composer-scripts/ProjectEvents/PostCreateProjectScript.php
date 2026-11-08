@@ -713,20 +713,35 @@ class PostCreateProjectScript extends ComposerScript {
 	}
 
 	/**
-	 * Remove the AGENTS.md notes that only apply to the starter.
+	 * Build the project's AGENTS.md: the starter's without its starter-only notes, then AGENTS.dist.md.
 	 *
 	 * @return void
 	 */
-	private static function removeStarterOnlyNotes(): void {
+	private static function buildAgentsFile(): void {
 		$agents = self::translatePath( 'AGENTS.md' );
+		$dist   = self::translatePath( 'AGENTS.dist.md' );
 
-		if ( ! file_exists( $agents ) ) {
+		if ( ! file_exists( $agents ) || ! file_exists( $dist ) ) {
+			self::writeWarning( 'Missing one or more AGENTS files - Skipping AGENTS.md build.' );
 			return;
 		}
 
-		file_put_contents( $agents, self::stripStarterOnly( file_get_contents( $agents ) ) );
+		file_put_contents( $agents, self::combineAgents( file_get_contents( $agents ), file_get_contents( $dist ) ) );
+		unlink( $dist );
 
-		self::writeInfo( 'Starter-only notes removed from AGENTS.md!' );
+		self::writeInfo( 'AGENTS.md built.' );
+	}
+
+	/**
+	 * Combine the starter's AGENTS.md, minus its starter-only notes, with AGENTS.dist.md.
+	 *
+	 * @param string $agents The starter's AGENTS.md.
+	 * @param string $dist   AGENTS.dist.md.
+	 *
+	 * @return string
+	 */
+	public static function combineAgents( string $agents, string $dist ): string {
+		return rtrim( self::stripStarterOnly( $agents ) ) . PHP_EOL . PHP_EOL . ltrim( $dist );
 	}
 
 	/**
@@ -776,6 +791,7 @@ class PostCreateProjectScript extends ComposerScript {
 			self::translatePath( '.github/dependabot.yml' ),
 			self::translatePath( '.gitattributes' ),
 			self::translatePath( 'AGENTS.md' ),
+			self::translatePath( 'AGENTS.dist.md' ),
 			self::translatePath( 'bin/check-event-handlers.php' ),
 			$themeDir . '/.phpcs.xml',
 			$themeDir . '/readme.txt',
@@ -820,8 +836,8 @@ class PostCreateProjectScript extends ComposerScript {
 		// Remove the starter's changelog. The project tracks its own.
 		self::removeChangelog();
 
-		// Remove the AGENTS.md notes that only apply to the starter.
-		self::removeStarterOnlyNotes();
+		// Build the project's AGENTS.md from the starter's and AGENTS.dist.md.
+		self::buildAgentsFile();
 
 		// Remove site-starter composer file
 		self::removeRootComposer();
