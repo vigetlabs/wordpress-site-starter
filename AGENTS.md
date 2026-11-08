@@ -576,7 +576,9 @@ Do not invent API surfaces. If you're not sure, fetch and cite, or ask the devel
 ## Gotchas
 
 - Never edit `theme.json` directly — it's generated from `src/theme-json/`.
+<!-- starter-only -->
 - The theme's version stays at `0.1.0` in `style.css`, `readme.txt` and `package.json`. It's the starting version for a generated project, not a bug. Starter releases are tracked in `packages.json` and `CHANGELOG.md` only.
+<!-- /starter-only -->
 - `"supports.mode": false` is always set — disables ACF's block mode switcher.
 - The `acf-json/` folder (when present) auto-syncs ACF field groups; placing JSON there is preferred over manual import.
 - `render.php` and `render.twig` are kept in sync when Twig is enabled.
