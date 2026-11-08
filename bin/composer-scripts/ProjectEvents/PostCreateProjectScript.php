@@ -713,7 +713,7 @@ class PostCreateProjectScript extends ComposerScript {
 	}
 
 	/**
-	 * Remove the AGENTS.md notes that only apply to the starter.
+	 * Remove the AGENTS.md notes that only apply to the starter, and unwrap the project-only notes.
 	 *
 	 * @return void
 	 */
@@ -724,9 +724,9 @@ class PostCreateProjectScript extends ComposerScript {
 			return;
 		}
 
-		file_put_contents( $agents, self::stripStarterOnly( file_get_contents( $agents ) ) );
+		file_put_contents( $agents, self::unwrapProjectOnly( self::stripStarterOnly( file_get_contents( $agents ) ) ) );
 
-		self::writeInfo( 'Starter-only notes removed from AGENTS.md!' );
+		self::writeInfo( 'AGENTS.md notes updated for the project!' );
 	}
 
 	/**
@@ -738,6 +738,17 @@ class PostCreateProjectScript extends ComposerScript {
 	 */
 	public static function stripStarterOnly( string $content ): string {
 		return preg_replace( '#^<!-- starter-only -->\R.*?^<!-- /starter-only -->\R?#ms', '', $content );
+	}
+
+	/**
+	 * Keep the notes between `<!-- project-only` and `/project-only -->`, removing the markers.
+	 *
+	 * @param string $content Markdown.
+	 *
+	 * @return string
+	 */
+	public static function unwrapProjectOnly( string $content ): string {
+		return preg_replace( '#^<!-- project-only\R(.*?)^/project-only -->\R?#ms', '$1', $content );
 	}
 
 	/**
@@ -820,7 +831,7 @@ class PostCreateProjectScript extends ComposerScript {
 		// Remove the starter's changelog. The project tracks its own.
 		self::removeChangelog();
 
-		// Remove the AGENTS.md notes that only apply to the starter.
+		// Remove the starter-only notes from AGENTS.md and unwrap the project-only ones.
 		self::removeStarterOnlyNotes();
 
 		// Remove site-starter composer file
