@@ -56,10 +56,10 @@
 	}
 }
 
+/* For WYSIWYG editors. */
 .btn-default {
 	@apply btn-default no-underline;
 }
-
 .btn-secondary {
 	@apply btn-outline no-underline;
 }
