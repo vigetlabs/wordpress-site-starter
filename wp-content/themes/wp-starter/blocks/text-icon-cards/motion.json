@@ -1,0 +1,6 @@
+{
+	"stagger": "120ms",
+	"children": {
+		"acf/text-icon-card": { "effect": "zoom-in" }
+	}
+}

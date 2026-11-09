@@ -1,0 +1,74 @@
+/* Effects read token vars printed from motion.json (inc/class-motion.php). */
+
+[data-motion='fade'] { --motion-keyframes: motion-fade; }
+[data-motion='fade-up'] { --motion-keyframes: motion-fade-up; }
+[data-motion='fade-down'] { --motion-keyframes: motion-fade-down; }
+[data-motion='fade-left'] { --motion-keyframes: motion-fade-left; }
+[data-motion='fade-right'] { --motion-keyframes: motion-fade-right; }
+[data-motion='zoom-in'] { --motion-keyframes: motion-zoom-in; }
+[data-motion='zoom-out'] { --motion-keyframes: motion-zoom-out; }
+[data-motion='blur'] { --motion-keyframes: motion-blur; }
+[data-motion='wipe'] { --motion-keyframes: motion-wipe; }
+
+/* Hidden until revealed. Gated on .has-motion so no-JS and the editor always show content. */
+.has-motion [data-motion]:not([data-motion-in]) {
+	opacity: 0;
+}
+
+.has-motion:not(.motion-reduced) {
+	[data-motion='fade-up']:not([data-motion-in]) { translate: 0 var(--motion-distance); }
+	[data-motion='fade-down']:not([data-motion-in]) { translate: 0 calc(var(--motion-distance) * -1); }
+	[data-motion='fade-left']:not([data-motion-in]) { translate: var(--motion-distance) 0; }
+	[data-motion='fade-right']:not([data-motion-in]) { translate: calc(var(--motion-distance) * -1) 0; }
+	[data-motion='zoom-in']:not([data-motion-in]) { scale: 0.94; }
+	[data-motion='zoom-out']:not([data-motion-in]) { scale: 1.06; }
+	[data-motion='blur']:not([data-motion-in]) { filter: blur(0.5rem); }
+	[data-motion='wipe']:not([data-motion-in]) { clip-path: inset(0 100% 0 0); }
+}
+
+/* `backwards` fill holds the start frame through the stagger delay, then hands styles back to the element. */
+.has-motion [data-motion][data-motion-in] {
+	animation: var(--motion-keyframes) var(--motion-duration) var(--motion-easing) backwards;
+	animation-delay: calc(var(--motion-delay) + min(var(--motion-index, 0), var(--motion-stagger-limit)) * var(--motion-stagger));
+}
+
+.motion-reduced [data-motion][data-motion-in] {
+	animation-name: motion-fade;
+}
+
+@keyframes motion-fade { from { opacity: 0; } }
+@keyframes motion-fade-up { from { opacity: 0; translate: 0 var(--motion-distance); } }
+@keyframes motion-fade-down { from { opacity: 0; translate: 0 calc(var(--motion-distance) * -1); } }
+@keyframes motion-fade-left { from { opacity: 0; translate: var(--motion-distance) 0; } }
+@keyframes motion-fade-right { from { opacity: 0; translate: calc(var(--motion-distance) * -1) 0; } }
+@keyframes motion-zoom-in { from { opacity: 0; scale: 0.94; } }
+@keyframes motion-zoom-out { from { opacity: 0; scale: 1.06; } }
+@keyframes motion-blur { from { opacity: 0; filter: blur(0.5rem); } }
+@keyframes motion-wipe {
+	from { opacity: 0; clip-path: inset(0 100% 0 0); }
+	to { opacity: 1; clip-path: inset(0 0 0 0); }
+}
+
+/* Page transitions (cross-document View Transitions; browsers without support just navigate). */
+::view-transition-old(root) {
+	animation: var(--motion-page-out) var(--motion-page-duration) var(--motion-page-easing) both;
+}
+
+::view-transition-new(root) {
+	animation: var(--motion-page-in) var(--motion-page-duration) var(--motion-page-easing) both;
+}
+
+@keyframes motion-page-fade-out { to { opacity: 0; } }
+@keyframes motion-page-fade-in { from { opacity: 0; } }
+@keyframes motion-page-slide-up-out { to { opacity: 0; translate: 0 -1rem; } }
+@keyframes motion-page-slide-up-in { from { opacity: 0; translate: 0 1rem; } }
+
+@media print {
+	.has-motion [data-motion] {
+		opacity: 1 !important;
+		translate: none !important;
+		scale: none !important;
+		filter: none !important;
+		clip-path: none !important;
+	}
+}

@@ -35,5 +35,9 @@ require_once get_stylesheet_directory() . '/inc/blocks.php';
 // Custom Icons.
 require_once get_stylesheet_directory() . '/inc/icons.php';
 
+// Motion.
+require_once get_stylesheet_directory() . '/inc/class-motion.php';
+Motion::get_instance();
+
 // Initialize the Core theme.
 WPStarter();
