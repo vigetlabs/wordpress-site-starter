@@ -1,9 +1,3 @@
-:root {
-    --vigetwp-color-primary: #1a4155;
-    --vigetwp-color-secondary: #265f7c;
-    --vigetwp-color-accent: #f26628;
-}
-
 #dashboard-widgets .viget-widget__header {
   font-weight: 700;
 }

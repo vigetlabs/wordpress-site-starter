@@ -41,11 +41,7 @@ class LoginScreen {
 
 				$brand_colors = apply_filters(
 					'vigetwp_brand_colors',
-					[
-						'primary'   => '#1596BB',
-						'secondary' => '#0e6d88',
-						'accent'    => '#f26628',
-					]
+					ColorScheme::colors()
 				);
 				?>
 				<style>
