@@ -94,6 +94,8 @@ colorVar('gray-600'); // 'var(--wp--preset--color--dark-gray-600)'
 
 The `dark-` prefix is derived from the color's luminance, so a hardcoded `var(--wp--preset--color--gray-600)` silently stops resolving the day that color is lightened past the threshold. `colorVar()` looks the slug up instead, and warns on a token that doesn't exist.
 
+Use the `dark-bg:` variant for content on a dark background color or gradient, like `dark-bg:text-white`. It matches `[class*="has-dark-"].has-background`, the block and everything inside it. In nested CSS, use `@variant dark-bg { ... }`.
+
 ### Spacing
 
 The default spacing is fluid, meaning that it is larger on desktops and smaller on mobile screens.
