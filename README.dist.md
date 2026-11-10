@@ -26,7 +26,10 @@ You are all ready to start working on the site.
 Information on developing the theme, styling, and building blocks can be found in the theme [README](wp-content/themes/#UPDATETHIS/README.md).
 
 ### Build for production
-The deploy script should build the files for production, but if you want to test that out on your local server you can change the DDEV config.yaml `ENVIRONMENT` to `prod` and then `cd` into your custom theme folder and run `ddev npm run build`. This will build the JS and CSS files in the dist folder and out put a manifest file.
+The deploy workflow builds the files for production, but if you want to test that out on your local server you can change the DDEV config.yaml `ENVIRONMENT` to `prod` and then `cd` into your custom theme folder and run `ddev npm run build`. This will build the JS and CSS files in the dist folder and out put a manifest file.
+
+## Deployment
+Each environment deploys from the branch of the same name (`dev`, `staging`, `production`) to the WP Engine install set in `wpengine.conf`. See [Deployment](docs/deployment.md) for what ships and the one-time setup.
 
 ## Plugins
 * [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/)
@@ -80,7 +83,7 @@ That asks which WP Engine environment to pull from, snapshots your current local
 
 Set the install names in `wpengine.conf` first - `ddev db-sync` tells you which ones are missing.
 
-**One-time prerequisite:** add your public SSH key to your WP Engine account (User Portal, your profile, *SSH Keys*) and make sure *SSH Gateway* is enabled for the environment. Key propagation can take 30-45 minutes. This is your personal key, separate from the Git Push key the deploy workflow uses - a key that works for `git.wpengine.com` does *not* automatically work for the gateway. Check it with:
+**One-time prerequisite:** add your public SSH key to your WP Engine account (User Portal, your profile, *SSH Keys*) and make sure *SSH Gateway* is enabled for the environment. Key propagation can take 30-45 minutes. This is your personal key, separate from the deploy user's key the Deploy workflow uses (see [Deployment](docs/deployment.md#one-time-setup)). Check it with:
 
 ```bash
 ddev db-sync --check

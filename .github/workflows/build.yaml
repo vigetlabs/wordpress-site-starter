@@ -4,53 +4,21 @@ on:
   pull_request:
     branches:
       - main
+      - dev
+      - staging
+      - production
 
 concurrency:
   group: build-${{ github.head_ref }}
   cancel-in-progress: true
 
 jobs:
-  test:
-    name: Composer Scripts Tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.2"
-          coverage: none
-
-      - name: Install Dependencies
-        run: composer install --no-interaction --no-progress --no-scripts
-
-      - name: Run Tests
-        run: composer test
-
   build:
     name: Build Theme
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-
-      - name: Use Node.js 22
-        uses: actions/setup-node@v7
-        with:
-          # Read from .nvmrc, which matches .ddev/config.yaml's nodejs_version.
-          # CI was on 22.12.0, which ships npm 10.9 - below the theme's own
-          # engines.npm >=11.0.0 - so CI built with a toolchain the theme says it
-          # does not support, and one DDEV never uses.
-          node-version-file: .nvmrc
-          cache: npm
-          cache-dependency-path: wp-content/themes/wp-starter/package-lock.json
-
-      - name: Use npm 11
-        run: |
-          npm install -g npm@11
-          npm --version
 
       - name: Check versions and event handlers
         run: |
@@ -59,13 +27,6 @@ jobs:
             node bin/sync-version.mjs --check
           fi
           php bin/check-event-handlers.php
-
-      # Set up composer caching
-      - name: Cache Composer dependencies
-        uses: actions/cache@v6
-        with:
-          path: /tmp/composer-cache
-          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
       # This check has no deploy target, so licensed plugins are activated
       # against the local ddev URL - a free, unlimited dev activation. Set the
@@ -84,25 +45,13 @@ jobs:
         env:
           LICENSE_SITE_URL: ${{ vars.LICENSE_SITE_URL }}
 
-      # Build theme
-      - name: Install Theme Dependencies
-        uses: ./.github/actions/composer-install
+      # Same steps the deploy workflow runs, so a green check here means the
+      # branch will build when it is deployed.
+      - name: Build site
+        uses: ./.github/actions/build-site
         with:
-          working-directory: wp-content/themes/wp-starter
           site-url: ${{ steps.license.outputs.site_url }}
           secrets-json: ${{ toJSON(secrets) }}
-
-      - name: Build Theme
-        run: |
-          npm ci
-          npm run build
-        working-directory: wp-content/themes/wp-starter
-
-      # Install viget-wp composer dependencies
-      - name: Install viget-wp Dependencies
-        uses: ./.github/actions/composer-install
-        with:
-          working-directory: wp-content/mu-plugins/viget-wp
 
       - name: Build Success
         run: echo "✅ Theme build completed successfully!"

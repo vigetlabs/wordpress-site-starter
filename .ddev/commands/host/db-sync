@@ -152,8 +152,8 @@ if ! REMOTE_URL="$(ssh "${SSH_OPTS[@]}" "$SSH_TARGET" \
 
 		    Checklist:
 		      1. Add your public SSH key to WP Engine: User Portal → your profile → SSH Keys.
-		         These are NOT the Git Push keys used by the deploy workflow  -  the gateway
-		         needs its own key on your user account. Propagation takes ~30-45 minutes.
+		         This is your personal key. The deploy workflow uses the deploy user's key,
+		         so the gateway needs this one on your own account. Propagation takes ~30-45 minutes.
 		         pbcopy < ~/.ssh/id_ed25519.pub
 		      2. Confirm SSH Gateway is enabled for the '${ENVIRONMENT}' install (${INSTALL})
 		         and that your WP Engine account has access to it.

@@ -1,0 +1,20 @@
+# Paths rsync skips on every deploy. Read by .github/workflows/deploy.yaml
+# through --exclude-from, so this is rsync filter syntax: a leading slash
+# anchors a pattern to the directory being synced (the theme, mu-plugins/ or
+# plugins/), a trailing slash matches directories only.
+#
+# Never add ".*" or ".vite" here. dist/.vite/manifest.json is how the theme
+# finds its built CSS and JS.
+
+node_modules/
+
+# Theme build tooling. The compiled output in dist/ is what ships.
+/src/
+/package.json
+/package-lock.json
+/vite.config.js
+/postcss.config.cjs
+/prettier.config.cjs
+/.editorconfig
+/.phpcs.xml
+/README.md

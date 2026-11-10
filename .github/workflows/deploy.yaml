@@ -1,106 +1,111 @@
-name: Build and Deploy
+name: Deploy
 
+# Each environment deploys from the branch of the same name. The branch name
+# is also the GitHub environment (for approvals and per-environment variables)
+# and the key into wpengine.conf for the WP Engine install name.
 on:
   push:
     branches:
-      - main
+      - dev
+      - staging
+      - production
+  # Redeploy a branch without a new commit: Actions tab, pick the branch.
+  workflow_dispatch:
 
+# One deploy per environment at a time. Never cancel a running one: a
+# half-finished rsync is worse than a late one.
 concurrency:
-  group: deploy
-  cancel-in-progress: true
+  group: deploy-${{ github.ref_name }}
+  cancel-in-progress: false
 
 jobs:
-  build_deploy:
-    name: Build and Deploy
+  deploy:
+    name: Deploy to ${{ github.ref_name }}
+    # A manual run from any other branch would create a stray GitHub environment.
+    if: contains(fromJSON('["dev", "staging", "production"]'), github.ref_name)
     runs-on: ubuntu-latest
-    env:
-      SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+    environment:
+      name: ${{ github.ref_name }}
+      url: ${{ steps.target.outputs.site_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Setup SSH key and known_hosts
+      - name: Resolve WP Engine install
+        id: target
+        env:
+          # Optional per-environment variable. Defaults to the install's
+          # wpenginepowered.com URL. Used for the deployment link and as the
+          # site licensed plugins are activated against.
+          SITE_URL: ${{ vars.SITE_URL }}
         run: |
-          mkdir -p -m 700 ~/.ssh
-          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          ssh-add - <<< "${{ secrets.DEPLOY_KEY }}"
-          ssh-keyscan ${{ secrets.DEPLOY_TARGET }} >> ~/.ssh/known_hosts
-          ssh-keyscan ${{ secrets.DEPLOY_KIT_TARGET }} >> ~/.ssh/known_hosts
+          set -euo pipefail
 
-      - name: Use Node.js 22
-        uses: actions/setup-node@v7
+          case "$GITHUB_REF_NAME" in
+            dev|staging|production) ;;
+            *)
+              echo "::error::'$GITHUB_REF_NAME' is not a deployable branch. Use dev, staging or production."
+              exit 1
+              ;;
+          esac
+
+          # shellcheck source=../../wpengine.conf
+          source ./wpengine.conf
+          install_var="WPE_INSTALL_${GITHUB_REF_NAME}"
+          install="${!install_var:-}"
+          if [ -z "$install" ]; then
+            echo "::error file=wpengine.conf::${install_var} is empty. Add the WP Engine install name for '${GITHUB_REF_NAME}'."
+            exit 1
+          fi
+
+          site_url="${SITE_URL:-https://${install}.wpenginepowered.com}"
+          echo "Deploying ${GITHUB_REF_NAME} to install '${install}' (${site_url%/}/)"
+          {
+            echo "install=${install}"
+            echo "site_url=${site_url%/}/"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build site
+        uses: ./.github/actions/build-site
         with:
-          # Read from .nvmrc, which matches .ddev/config.yaml's nodejs_version.
-          # CI was on 22.12.0, which ships npm 10.9 - below the theme's own
-          # engines.npm >=11.0.0 - so CI built with a toolchain the theme says it
-          # does not support, and one DDEV never uses.
-          node-version-file: .nvmrc
-          cache: npm
-          cache-dependency-path: wp-content/themes/wp-starter/package-lock.json
+          site-url: ${{ steps.target.outputs.site_url }}
+          secrets-json: ${{ toJSON(secrets) }}
 
-      - name: Use npm 11
-        run: |
-          npm install -g npm@11
-          npm --version
-
-      # Set up composer caching
-      - name: Cache Composer dependencies
-        uses: actions/cache@v6
+      # Three scoped syncs rather than one wp-content/ sync. The theme is fully
+      # owned by this repo, so --delete makes the install match the build and
+      # clears out old hashed assets. mu-plugins/ and plugins/ sync without
+      # --delete: WP Engine drops its own files into mu-plugins/, and a plugin
+      # installed from wp-admin would otherwise vanish on the next deploy.
+      #
+      # The action's default flags exclude every dotfile, which would drop
+      # dist/.vite/manifest.json and ship the theme with no CSS or JS. These
+      # flags replace that with .deployignore.
+      - name: Deploy theme
+        uses: wpengine/github-action-wpe-site-deploy@v3
         with:
-          path: /tmp/composer-cache
-          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+          WPE_SSHG_KEY_PRIVATE: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
+          WPE_ENV: ${{ steps.target.outputs.install }}
+          SRC_PATH: wp-content/themes/wp-starter/
+          REMOTE_PATH: wp-content/themes/wp-starter/
+          FLAGS: -azvr --inplace --delete --exclude-from=.deployignore
+          CACHE_CLEAR: FALSE
 
-      # Build theme
-      - name: Install Theme Dependencies
-        uses: "php-actions/composer@v6"
+      - name: Deploy mu-plugins
+        uses: wpengine/github-action-wpe-site-deploy@v3
         with:
-          php_version: "8.2"
-          dev: no
-          args: "--optimize-autoloader"
-          working_dir: wp-content/themes/wp-starter
+          WPE_SSHG_KEY_PRIVATE: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
+          WPE_ENV: ${{ steps.target.outputs.install }}
+          SRC_PATH: wp-content/mu-plugins/
+          REMOTE_PATH: wp-content/mu-plugins/
+          FLAGS: -azvr --inplace --exclude-from=.deployignore
+          CACHE_CLEAR: FALSE
 
-      - name: Build Theme
-        run: |
-          npm ci
-          npm run build
-        working-directory: wp-content/themes/wp-starter
-
-      # Install viget-wp composer dependencies
-      - name: Install viget-wp Dependencies
-        uses: "php-actions/composer@v6"
+      - name: Deploy plugins and clear cache
+        uses: wpengine/github-action-wpe-site-deploy@v3
         with:
-          php_version: "8.2"
-          dev: no
-          args: "--optimize-autoloader"
-          working_dir: wp-content/mu-plugins/viget-wp
-
-      # Deploy code
-      - name: Deploy Starter
-        run: |
-
-          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_TARGET }} "\
-            sudo chown -R ${{ secrets.DEPLOY_USER }}:${{ secrets.DEPLOY_DAEMON }} ${{ secrets.APP_PATH }}/wp-content &&\
-            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/themes/wp-starter &&\
-            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp &&\
-            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp.php &&\
-            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/safe-svg &&\
-            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/advanced-custom-fields-pro"
-          rsync -rlptzv --exclude="node_modules" ./wp-content/ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_TARGET }}:${{ secrets.APP_PATH }}/wp-content/
-          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_TARGET }} "\
-            sudo chown -R ${{ secrets.DEPLOY_USER }}:${{ secrets.DEPLOY_DAEMON }} ${{ secrets.APP_PATH }}/wp-content &&\
-            sudo chown -R ${{ secrets.DEPLOY_DAEMON }}:${{ secrets.DEPLOY_DAEMON }} ${{ secrets.APP_PATH }}/wp-content/plugins"
-
-      - name: Deploy Kit
-        run: |
-
-          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_KIT_TARGET }} "\
-            sudo chown -R ${{ secrets.DEPLOY_USER }}:${{ secrets.DEPLOY_DAEMON }} ${{ secrets.APP_PATH }}/wp-content &&\
-            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/themes/wp-starter &&\
-            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp &&\
-            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/mu-plugins/viget-wp.php &&\
-            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/safe-svg &&\
-            sudo rm -rf ${{ secrets.APP_PATH }}/wp-content/plugins/advanced-custom-fields-pro"
-          rsync -rlptzv --exclude="node_modules" ./wp-content/ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_KIT_TARGET }}:${{ secrets.APP_PATH }}/wp-content/
-          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_KIT_TARGET }} "\
-            sudo chown -R ${{ secrets.DEPLOY_USER }}:${{ secrets.DEPLOY_DAEMON }} ${{ secrets.APP_PATH }}/wp-content &&\
-            sudo chown -R ${{ secrets.DEPLOY_DAEMON }}:${{ secrets.DEPLOY_DAEMON }} ${{ secrets.APP_PATH }}/wp-content/plugins"
+          WPE_SSHG_KEY_PRIVATE: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
+          WPE_ENV: ${{ steps.target.outputs.install }}
+          SRC_PATH: wp-content/plugins/
+          REMOTE_PATH: wp-content/plugins/
+          FLAGS: -azvr --inplace --exclude-from=.deployignore
+          CACHE_CLEAR: TRUE

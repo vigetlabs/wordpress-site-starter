@@ -744,7 +744,10 @@ class PostCreateProjectScript extends ComposerScript {
 			self::translatePath( '.ddev/config.yaml' ),
 			self::translatePath( '.ddev/commands/host/composer-auth' ),
 			self::translatePath( 'README.md' ),
+			self::translatePath( 'docs/deployment.md' ),
 			self::translatePath( '.github/workflows/build.yaml' ),
+			self::translatePath( '.github/workflows/deploy.yaml' ),
+			self::translatePath( '.github/actions/build-site/action.yaml' ),
 			self::translatePath( '.github/dependabot.yml' ),
 			self::translatePath( '.gitattributes' ),
 			self::translatePath( 'AGENTS.md' ),
@@ -798,6 +801,9 @@ class PostCreateProjectScript extends ComposerScript {
 		// Remove site-starter vendor files
 		self::removeRootVendorDir();
 
+		// Remove the Composer script tests, which run against the root composer.json.
+		self::removeStarterTests();
+
 		// Remove site-starter related Github integrated files.
 		self::removeGithubFiles();
 
@@ -825,20 +831,55 @@ class PostCreateProjectScript extends ComposerScript {
 	}
 
 	/**
-	 * Remove the deployment script.
+	 * Remove the starter's Composer script tests.
+	 *
+	 * @return void
+	 */
+	private static function removeStarterTests(): void {
+		self::writeLine( 'Removing starter tests...' );
+
+		$testsDir = self::translatePath( 'tests' );
+
+		if ( is_dir( $testsDir ) ) {
+			self::deleteDirectory( $testsDir );
+		}
+
+		foreach ( [ 'phpunit.xml.dist', '.phpunit.result.cache' ] as $file ) {
+			$path = self::translatePath( $file );
+
+			if ( file_exists( $path ) ) {
+				unlink( $path );
+			}
+		}
+
+		self::writeInfo( 'Starter tests removed.' );
+	}
+
+	/**
+	 * Remove the starter's own workflows and templates.
 	 *
 	 * @return void
 	 */
 	private static function removeGithubFiles(): void {
 		self::writeLine( 'Removing GitHub integration files...' );
 
-		$deployFile = self::translatePath( '.github/workflows/deploy.yaml' );
+		// deploy.yaml stays: it's the project's WP Engine deploy.
+		$deployFile = self::translatePath( '.github/workflows/deploy-starter.yaml' );
 
 		if ( ! file_exists( $deployFile ) ) {
-			self::writeWarning( sprintf( 'Deployment script not found (%s). Skipping removal.', $deployFile ) );
+			self::writeWarning( sprintf( 'Starter deployment script not found (%s). Skipping removal.', $deployFile ) );
 		} else {
 			unlink( $deployFile );
-			self::writeInfo( 'Deployment script removed.' );
+			self::writeInfo( 'Starter deployment script removed.' );
+		}
+
+		$testsWorkflow = self::translatePath( '.github/workflows/starter-tests.yaml' );
+
+		if ( ! file_exists( $testsWorkflow ) ) {
+			self::writeWarning( sprintf( 'Starter tests workflow not found (%s). Skipping removal.', $testsWorkflow ) );
+		} else {
+			unlink( $testsWorkflow );
+			self::writeInfo( 'Starter tests workflow removed.' );
 		}
 
 		$componentTemplate = self::translatePath( '.github/ISSUE_TEMPLATE/new-component-ticket.md' );
