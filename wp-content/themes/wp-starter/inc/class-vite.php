@@ -175,6 +175,11 @@ class Vite {
 		// Add type="module" crossorigin to all Vite-owned script tags.
 		add_filter( 'script_loader_tag', [ $this, 'script_loader_tag' ], 10, 3 );
 
+		// theme.json loads fonts from dist/, which may not be built in dev.
+		if ( $this->is_dev() ) {
+			add_filter( 'theme_file_uri', [ $this, 'dev_font_uri' ], 10, 2 );
+		}
+
 		// Enqueue each entry on the appropriate WordPress hook.
 		add_action( 'wp_enqueue_scripts',         fn() => $this->enqueue_entry( 'default' ) );
 		add_action( 'admin_enqueue_scripts',       fn() => $this->enqueue_entry( 'admin' ) );
@@ -394,6 +399,21 @@ class Vite {
 		}
 
 		return str_replace( '<script ', '<script type="module" crossorigin ', $tag );
+	}
+
+	/**
+	 * Dev mode: load theme.json fonts from src/public/fonts/, the source of dist/fonts/.
+	 *
+	 * @param string $url  Theme file URL.
+	 * @param string $file Path relative to the theme.
+	 * @return string
+	 */
+	public function dev_font_uri( string $url, string $file ): string {
+		if ( ! str_starts_with( $file, 'dist/fonts/' ) ) {
+			return $url;
+		}
+
+		return get_template_directory_uri() . '/src/public/fonts/' . substr( $file, strlen( 'dist/fonts/' ) );
 	}
 
 	// -------------------------------------------------------------------------
