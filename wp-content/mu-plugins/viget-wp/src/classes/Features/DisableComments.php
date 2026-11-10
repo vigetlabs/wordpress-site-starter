@@ -114,6 +114,19 @@ class DisableComments {
 			'init',
 			fn() => remove_action( 'admin_bar_menu', 'wp_admin_bar_comments_menu', 60 )
 		);
+
+		// Multisite: My Sites gives each site a "Manage Comments" link (blog-{id}-c), added at priority 20.
+		add_action(
+			'admin_bar_menu',
+			function ( \WP_Admin_Bar $admin_bar ): void {
+				foreach ( $admin_bar->get_nodes() ?? [] as $node ) {
+					if ( preg_match( '/^blog-\d+-c$/', $node->id ) ) {
+						$admin_bar->remove_node( $node->id );
+					}
+				}
+			},
+			21
+		);
 	}
 
 	/**
