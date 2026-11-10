@@ -1,0 +1,17 @@
+{
+  "name": "navigation-toggle",
+  "title": "Navigation Toggle",
+  "description": "Opens and closes the Navigation Content on small screens.",
+  "icon": "menu",
+  "category": "components",
+  "textdomain": "wp-starter",
+  "keywords": [ "menu", "mobile", "toggle", "hamburger" ],
+  "ancestor": [ "acf/navigation-container" ],
+  "supports": {
+    "jsx": false,
+    "mode": false
+  },
+  "acf": {
+    "mode": "preview"
+  }
+}

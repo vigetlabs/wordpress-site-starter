@@ -1,0 +1,26 @@
+{
+  "name": "navigation-content",
+  "title": "Navigation Content",
+  "description": "The part of the Navigation Container the toggle opens and closes on small screens.",
+  "icon": "align-full-width",
+  "category": "components",
+  "textdomain": "wp-starter",
+  "keywords": [ "menu", "mobile", "panel", "content" ],
+  "parent": [ "acf/navigation-container" ],
+  "supports": {
+    "jsx": true,
+    "mode": false,
+    "innerContainer": false,
+    "layout": {
+      "default": {
+        "type": "flex",
+        "justifyContent": "left"
+      },
+      "allowOrientation": true,
+      "allowCustomContentAndWideSize": false
+    }
+  },
+  "acf": {
+    "mode": "preview"
+  }
+}

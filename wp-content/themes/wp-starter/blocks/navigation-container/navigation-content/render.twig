@@ -1,0 +1,33 @@
+{#
+	Block: Navigation Content
+#}
+
+{% set allowed = [
+	'core/group',
+	'core/paragraph',
+	'core/site-logo',
+	'core/buttons',
+	'core/button',
+	'core/navigation',
+	'core/search',
+	'core/spacer',
+	'core/separator'
+] %}
+{% set inner = {
+	template: block.template ?? [],
+	allowedBlocks: allowed
+} %}
+{% set attrs = {} %}
+
+{% if function('is_admin') == false %}
+	{% set attrs = {
+		'x-show': 'menuIsOpen',
+		':id': "$id('navigation-content')",
+		':class': "{ 'menu-hidden': !menuIsOpen }",
+		'@click.outside': 'menuIsOpen = false'
+	} %}
+{% endif %}
+
+<div {{ block_attrs( block, 'navigation-content', attrs ) }}>
+	{{ inner_blocks( inner ) }}
+</div>

@@ -1,5 +1,6 @@
 {
   "template": [
-    [ "core/navigation" ]
+    [ "acf/navigation-toggle" ],
+    [ "acf/navigation-content" ]
   ]
 }

@@ -1,0 +1,35 @@
+{#
+	Block: Navigation Toggle
+#}
+
+{% set is_admin = function('is_admin') %}
+{% set attrs = {
+	'type': 'button',
+} %}
+
+{% if not is_admin %}
+	{% set attrs = attrs|merge({
+		'aria-expanded': 'false',
+		':aria-expanded': 'menuIsOpen.toString()',
+		':aria-controls': "$id('navigation-content')",
+		'@click': 'menuIsOpen = !menuIsOpen',
+	}) %}
+{% endif %}
+
+<button {{ block_attrs( block, '', attrs ) }}>
+	<span class="sr-only">{{ __( 'Menu', 'wp-starter' ) }}</span>
+	<svg
+		{% if not is_admin %}
+			x-show="!menuIsOpen"
+		{% endif %}
+		class="m-2 menu-open" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="27" height="18" viewBox="0 0 27 18" fill="currentColor">
+		<path d="M26.8059 1H0.805908" stroke="currentColor" stroke-width="1.5"></path>
+		<path d="M26.8059 17H0.805908" stroke="currentColor" stroke-width="1.5"></path>
+		<path d="M26.8059 9H0.805908" stroke="currentColor" stroke-width="1.5"></path>
+	</svg>
+	{% if not is_admin %}
+		<svg x-show="menuIsOpen" x-cloak class="m-2 menu-close" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="21" height="20" fill="currentColor">
+			<path d="M19.192 19.192.808.808M1 19.192 19.385.808" stroke="currentColor" stroke-width="2"></path>
+		</svg>
+	{% endif %}
+</button>

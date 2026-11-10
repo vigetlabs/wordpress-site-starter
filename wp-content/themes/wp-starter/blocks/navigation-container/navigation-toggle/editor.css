@@ -1,0 +1,4 @@
+/* Block CSS also lands in main.css, so scope this to the editor. */
+.editor-styles-wrapper .acf-block-navigation-toggle {
+	display: flex;
+}
