@@ -1,5 +1,5 @@
 .acf-block-logo-grid {
-	@apply flex flex-wrap justify-center gap-24;
+	@apply flex flex-wrap justify-center gap-24 px-fluid-sm py-fluid-md;
 
 	> .acf-innerblocks-container {
 		@apply contents;

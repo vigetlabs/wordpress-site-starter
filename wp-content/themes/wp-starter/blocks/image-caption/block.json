@@ -28,9 +28,6 @@
     "lock": {
       "move": true,
       "remove": false
-    },
-    "spacing": {
-      "margin": [ "top", "bottom" ]
     }
   },
   "acf": {

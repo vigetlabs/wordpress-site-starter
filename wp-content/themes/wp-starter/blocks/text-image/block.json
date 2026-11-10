@@ -20,9 +20,6 @@
     "color": {
       "background": true
     },
-    "spacing": {
-      "padding": [ "top", "bottom" ]
-    },
     "layout": {
       "default": {
         "type": "constrained"
