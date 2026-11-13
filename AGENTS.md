@@ -438,9 +438,11 @@ Where the file goes depends on what the fields are attached to:
     "hide_on_screen": "",
     "active": true,
     "description": "",
-    "show_in_rest": 0
+    "show_in_rest": 1
 }
 ```
+
+Keep `show_in_rest` and `allow_in_bindings` on. Turn them off only for a field that shouldn't be public.
 
 **Common ACF field types and their extra properties:**
 
