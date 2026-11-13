@@ -27,6 +27,12 @@ Before generating any code, derive these values from the repo (do not assume):
 
 When in doubt, read an existing block (e.g. [`blocks/alert-banner/`](wp-content/themes/wp-starter/blocks/alert-banner/)) and mirror its conventions — those are the standard.
 
+<!-- starter-only -->
+### Client names
+
+Never name a client in this repo: code, comments, commit messages, PR titles and descriptions, or docs. Describe the pattern itself, without where it came from.
+
+<!-- /starter-only -->
 ---
 
 ## Scope of this guide
@@ -432,9 +438,11 @@ Where the file goes depends on what the fields are attached to:
     "hide_on_screen": "",
     "active": true,
     "description": "",
-    "show_in_rest": 0
+    "show_in_rest": 1
 }
 ```
+
+Keep `show_in_rest` and `allow_in_bindings` on. Turn them off only for a field that shouldn't be public.
 
 **Common ACF field types and their extra properties:**
 
@@ -570,7 +578,9 @@ Do not invent API surfaces. If you're not sure, fetch and cite, or ask the devel
 ## Gotchas
 
 - Never edit `theme.json` directly — it's generated from `src/theme-json/`.
+<!-- starter-only -->
 - The theme's version stays at `0.1.0` in `style.css`, `readme.txt` and `package.json`. It's the starting version for a generated project, not a bug. Starter releases are tracked in `packages.json` and `CHANGELOG.md` only.
+<!-- /starter-only -->
 - `"supports.mode": false` is always set — disables ACF's block mode switcher.
 - The `acf-json/` folder (when present) auto-syncs ACF field groups; placing JSON there is preferred over manual import.
 - `render.php` and `render.twig` are kept in sync when Twig is enabled.
@@ -580,3 +590,22 @@ Do not invent API surfaces. If you're not sure, fetch and cite, or ask the devel
 - Blocks do not render an html `id` by default. If markup or JS needs to reference the wrapper by id, either declare `"supports": { "autoId": true }` or pass one explicitly: `block_attrs( $block, '', [ 'id' => $id ] )` — see [`blocks/alert-banner/render.php`](wp-content/themes/wp-starter/blocks/alert-banner/render.php). Prefer an Alpine `x-ref` over an id for scripting.
 - Child block `block.json` files must include `"parent": ["acf/<parent-slug>"]`.
 - Always add a dev fallback in `render.twig` for blocks that pull dynamic data (taxonomies, CPT queries) so the block looks good before real data exists.
+- **Excerpt length** is set in the theme's `inc/blocks.php` with two filters on one constant: `excerpt_length` for auto-generated excerpts, and `block_type_metadata` for `core/post-excerpt`'s default `excerptLength`, which the block trims to instead. A block with its own length keeps it.
+
+  ```php
+  const EXCERPT_LENGTH = 28;
+
+  add_filter( 'excerpt_length', fn() => EXCERPT_LENGTH );
+
+  // core/post-excerpt trims to its own excerptLength attribute instead.
+  add_filter(
+  	'block_type_metadata',
+  	function ( array $metadata ): array {
+  		if ( 'core/post-excerpt' === ( $metadata['name'] ?? '' ) ) {
+  			$metadata['attributes']['excerptLength']['default'] = EXCERPT_LENGTH;
+  		}
+
+  		return $metadata;
+  	}
+  );
+  ```
