@@ -43,9 +43,10 @@
 		}
 	}
 
+	/* The text shows in the editor so it can be edited. On the front end it's wrapped for screen readers only. */
 	&.is-style-icon-only {
-		.wp-block-button__link {
-			@apply text-zero gap-0;
+		.wp-block-button__link-text {
+			@apply sr-only;
 		}
 	}
 

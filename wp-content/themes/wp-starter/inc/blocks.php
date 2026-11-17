@@ -124,3 +124,38 @@ add_filter(
 		);
 	}
 );
+
+// Wrap an Icon Only button's text for screen readers only, before Viget Blocks Toolkit adds the icon at 10.
+add_filter(
+	'render_block_core/button',
+	function ( string $block_content, array $block ): string {
+		if (
+			! in_array( 'is-style-icon-only', explode( ' ', $block['attrs']['className'] ?? '' ), true )
+			|| str_contains( $block_content, 'wp-block-button__link-text' )
+		) {
+			return $block_content;
+		}
+
+		return (string) preg_replace_callback(
+			'/(<(a|button)\b[^>]*>)(.*?)(<\/\2>)/s',
+			function ( array $link ): string {
+				// Leave out an icon already in the link.
+				$icon = '<span\b[^>]*\bwp-block-button__link-icon\b[^>]*>.*?<\/span>';
+
+				if ( ! preg_match( '/^(\s*' . $icon . ')?(.*?)(' . $icon . '\s*)?$/s', $link[3], $parts ) ) {
+					return $link[0];
+				}
+
+				if ( '' === trim( wp_strip_all_tags( $parts[2] ) ) ) {
+					return $link[0];
+				}
+
+				return $link[1] . ( $parts[1] ?? '' ) . '<span class="wp-block-button__link-text">' . $parts[2] . '</span>' . ( $parts[3] ?? '' ) . $link[4];
+			},
+			$block_content,
+			1
+		);
+	},
+	9,
+	2
+);
