@@ -73,6 +73,7 @@ Licensed plugins are registered in the theme's `composer.json` under `extra.lice
 Three things read that one list:
 
 1. `ddev composer-auth` prompts for any license key `auth.json` is missing and merges it in, leaving the rest of the file alone. `--check` runs on `ddev start` and reports what's missing; `--force` replaces a key that's already there.
+   If you have admin access and `gh` is installed, it also offers to save the key as its GitHub Actions secret. It only offers when the key downloads its plugin and the secret isn't set, or when you entered a new key with `--force`.
 2. `composer create-project` requires each registered package that `auth.json` has credentials for, replacing the committed copy.
 3. `.github/workflows/build.yaml` writes `auth.json` from the matching secrets before installing, and removes it afterward.
 
