@@ -161,11 +161,12 @@ dist_url() {
 	jq -r --arg package "$1" '.packages[]? | select( .name == $package ) | .dist.url // empty' "$THEME_DIR/composer.lock" 2>/dev/null
 }
 
-# Composer metadata loads without a valid key, so download the plugin itself.
+# Composer metadata loads without a valid key, so request the download itself.
+# A valid key redirects to the file, which counts without following it.
 verify_key() {
 	local code
 	code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 -r 0-0 -u "$2:$3" "$1" 2>/dev/null)"
-	[[ "$code" == 2* ]]
+	[[ "$code" == [23]* ]]
 }
 
 while IFS=$'\t' read -r host name _password_template secret package <&3; do
