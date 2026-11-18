@@ -58,7 +58,7 @@ repos="$(jq -r --argjson required "$CHECK_ONLY" '
 	| .extra["licensed-repositories"] // {}
 	| to_entries[]
 	| select( $required == 0 or ( .value.package // "" ) == "" or $installed[ .value.package ] )
-	| [ .key, ( .value.name // .key ), ( .value.password // "{site_url}" ) ]
+	| [ .key, ( .value.name // .key ), ( .value.password // "{site_url}" ), ( .value.secret // "" ), ( .value.package // "" ) ]
 	| @tsv
 ' "$COMPOSER_FILE")"
 
@@ -90,9 +90,10 @@ set_credentials() {
 
 missing=0
 prompted=0
+entered=" "
 
 # Read the repository list on FD 3 so prompts still read from the terminal.
-while IFS=$'\t' read -r host name password_template <&3; do
+while IFS=$'\t' read -r host name password_template _secret _package <&3; do
 	[[ -n "$host" ]] || continue
 
 	if has_credentials "$host" && [[ "$FORCE" -eq 0 ]]; then
@@ -132,6 +133,7 @@ while IFS=$'\t' read -r host name password_template <&3; do
 
 	set_credentials "$host" "$license_key" "$password"
 	prompted=$(( prompted + 1 ))
+	entered+="$host "
 	done_msg "Added $name credentials for $SITE_URL"
 done 3<<< "$repos"
 
@@ -140,13 +142,62 @@ if [[ "$CHECK_ONLY" -eq 1 ]]; then
 	exit 1
 fi
 
-if [[ "$prompted" -eq 0 ]]; then
-	[[ "$missing" -eq 0 ]] && done_msg "All licensed plugin credentials are already in auth.json."
-	exit 0
+if [[ "$prompted" -gt 0 ]]; then
+	mkdir -p "$THEME_DIR"
+	umask 077
+	printf '%s\n' "$auth_json" > "$AUTH_FILE"
+	done_msg "Wrote wp-content/themes/wp-starter/auth.json"
+elif [[ "$missing" -eq 0 ]]; then
+	done_msg "All licensed plugin credentials are already in auth.json."
 fi
 
-mkdir -p "$THEME_DIR"
-umask 077
-printf '%s\n' "$auth_json" > "$AUTH_FILE"
+# Builds and deploys read each key from a GitHub Actions secret. Offer to save it,
+# for devs with gh and admin access, once the key is verified against the repository.
+[[ -t 0 ]] && command -v gh >/dev/null 2>&1 || exit 0
+secrets="$(cd "$APPROOT" && gh secret list --json name,updatedAt -q '.[] | "\(.name)\t\(.updatedAt[:10])"' 2>/dev/null)" || exit 0
 
-done_msg "Wrote wp-content/themes/wp-starter/auth.json"
+# The package's download URL in composer.lock. Empty until the project requires it.
+dist_url() {
+	jq -r --arg package "$1" '.packages[]? | select( .name == $package ) | .dist.url // empty' "$THEME_DIR/composer.lock" 2>/dev/null
+}
+
+# Composer metadata loads without a valid key, so request the download itself.
+# A valid key redirects to the file, which counts without following it.
+verify_key() {
+	local code
+	code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 -r 0-0 -u "$2:$3" "$1" 2>/dev/null)"
+	[[ "$code" == [23]* ]]
+}
+
+while IFS=$'\t' read -r host name _password_template secret package <&3; do
+	[[ -n "$host" && -n "$secret" ]] && has_credentials "$host" || continue
+	url="$(dist_url "$package")"
+	[[ -n "$url" ]] || continue
+
+	# Secret values can't be read back, so an existing one is only replaced with a key entered now.
+	updated="$(printf '%s\n' "$secrets" | awk -F'\t' -v name="$secret" '$1 == name { print $2 }')"
+	if [[ -n "$updated" && "$entered" != *" $host "* ]]; then
+		continue
+	fi
+
+	key="$(printf '%s' "$auth_json" | jq -r --arg host "$host" '.["http-basic"][$host].username')"
+	password="$(printf '%s' "$auth_json" | jq -r --arg host "$host" '.["http-basic"][$host].password')"
+	if ! verify_key "$url" "$key" "$password"; then
+		warn "Couldn't verify the $name key, so it wasn't saved as the $secret secret."
+		continue
+	fi
+
+	if [[ -n "$updated" ]]; then
+		question="Replace the $secret secret (updated $updated) with this key? [y/N] "
+	else
+		question="The $secret secret isn't set. Save this key for builds and deploys? [y/N] "
+	fi
+	read -r -p "    $question" answer || true
+	[[ "$answer" =~ ^[Yy] ]] || continue
+
+	if printf '%s' "$key" | (cd "$APPROOT" && gh secret set "$secret" >/dev/null 2>&1); then
+		done_msg "Saved the $secret secret."
+	else
+		warn "Couldn't save the $secret secret. Ask a repo admin to run 'gh secret set $secret'."
+	fi
+done 3<<< "$repos"
