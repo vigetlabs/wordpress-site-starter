@@ -430,9 +430,10 @@ class PostInstallScript extends ComposerScript {
 		$defaultDescription = sprintf( 'A custom WordPress site for %s', $name );
 
 		$brandingName = 'Viget';
-		if ( 'custom' === self::$env['PROJECT_BRANDING'] && ! empty( self::$env['PROJECT_BRANDING_NAME']) ) {
+		$branding     = self::$env['PROJECT_BRANDING'] ?? '';
+		if ( 'custom' === $branding && ! empty( self::$env['PROJECT_BRANDING_NAME']) ) {
 			$brandingName = self::$env['PROJECT_BRANDING_NAME'];
-		} elseif ( 'none' === self::$env['PROJECT_BRANDING'] ) {
+		} elseif ( 'none' === $branding ) {
 			$brandingName = '';
 		}
 
@@ -933,9 +934,10 @@ class PostInstallScript extends ComposerScript {
 	 */
 	private static function getDefaultAdminUsername(): string {
 		$defaultUsername = self::DEFAULT_ADMIN_USER;
-		if ( 'none' === self::$env['PROJECT_BRANDING'] ) {
+		$branding        = self::$env['PROJECT_BRANDING'] ?? '';
+		if ( 'none' === $branding ) {
 			$defaultUsername = 'root';
-		} elseif( 'custom' === self::$env['PROJECT_BRANDING'] && ! empty( self::$env['PROJECT_BRANDING_NAME'] ) ) {
+		} elseif( 'custom' === $branding && ! empty( self::$env['PROJECT_BRANDING_NAME'] ) ) {
 			$defaultUsername = self::slugify( self::$env['PROJECT_BRANDING_NAME'] );
 		}
 		return $defaultUsername;
@@ -950,9 +952,10 @@ class PostInstallScript extends ComposerScript {
 	 */
 	private static function getDefaultAdminEmail( string $defaultUsername ): string {
 		$defaultEmail = self::DEFAULT_ADMIN_EMAIL;
-		if ( 'none' === self::$env['PROJECT_BRANDING'] ) {
+		$branding     = self::$env['PROJECT_BRANDING'] ?? '';
+		if ( 'none' === $branding ) {
 			$defaultEmail = 'your@domain.tld';
-		} elseif( 'custom' === self::$env['PROJECT_BRANDING'] && ! empty( self::$env['PROJECT_BRANDING_WEBSITE'] ) ) {
+		} elseif( 'custom' === $branding && ! empty( self::$env['PROJECT_BRANDING_WEBSITE'] ) ) {
 			$domain = parse_url( self::$env['PROJECT_BRANDING_WEBSITE'], PHP_URL_HOST );
 			$defaultEmail = $defaultUsername . '@' . $domain;
 		}
